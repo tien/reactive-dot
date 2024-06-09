@@ -1,17 +1,44 @@
-import { kusama, polkadot } from "@polkadot-api/descriptors";
+import { kusama, polkadot, westend } from "@polkadot-api/descriptors";
+import { IDLE, MutationError, PENDING } from "@reactive-dot/core";
 import {
   ReDotChainProvider,
   ReDotProvider,
+  useMutation,
   useQuery,
 } from "@reactive-dot/react";
+import { Config } from "@reactive-dot/types";
+import { Binary } from "polkadot-api";
 import {
-  ksmcc3 as kusamaChainSpec,
-  polkadot as polkadotChainSpec,
-} from "polkadot-api/chains";
+  InjectedPolkadotAccount,
+  connectInjectedExtension,
+  getInjectedExtensions,
+} from "polkadot-api/pjs-signer";
 import { getSmProvider } from "polkadot-api/sm-provider";
 import { startFromWorker } from "polkadot-api/smoldot/from-worker";
-import SmWorker from "polkadot-api/smoldot/worker?worker";
-import { Suspense } from "react";
+import { Suspense, useEffect, useMemo, useState } from "react";
+
+const useInjectedAccounts = () => {
+  const [accounts, setAccounts] = useState<InjectedPolkadotAccount[]>([]);
+
+  useEffect(() => {
+    const extensions = getInjectedExtensions();
+    const firstExtension = extensions?.at(0);
+
+    if (firstExtension === undefined) {
+      return;
+    }
+
+    const unsubscribePromise = connectInjectedExtension(firstExtension).then(
+      (extension) => extension.subscribe(setAccounts),
+    );
+
+    return () => {
+      unsubscribePromise.then((unsubscribe) => unsubscribe());
+    };
+  }, []);
+
+  return accounts;
+};
 
 const Example = () => {
   const [
@@ -35,6 +62,14 @@ const Example = () => {
     activeEra === undefined
       ? undefined
       : builder.readStorage("Staking", "ErasTotalStake", [activeEra.index]),
+  );
+
+  const accounts = useInjectedAccounts();
+
+  const [remarkState, remark] = useMutation(
+    (tx) =>
+      tx.System.remark({ remark: Binary.fromText("Hello from reactive-dot!") }),
+    { chainId: "polkadot", signer: accounts.at(0)?.polkadotSigner },
   );
 
   return (
@@ -67,31 +102,72 @@ const Example = () => {
           <p key={index}>{x.asText()}</p>
         ))}
       </article>
+      <article>
+        <h3>Remark</h3>
+        <button onClick={() => remark()} disabled={accounts.length === 0}>
+          Hello
+        </button>
+        <p>
+          {useMemo(() => {
+            switch (remarkState) {
+              case IDLE:
+                return null;
+              case PENDING:
+                return "Submitting transaction...";
+              default:
+                if (remarkState instanceof MutationError) {
+                  return "Error submitting transaction";
+                }
+
+                return (
+                  <span>
+                    Submitted tx {remarkState.txHash} is {remarkState.type}
+                  </span>
+                );
+            }
+          }, [remarkState])}
+        </p>
+      </article>
     </div>
   );
 };
 
-const smoldot = startFromWorker(new SmWorker());
+const createSmoldotWorker = () =>
+  new Worker(new URL("polkadot-api/smoldot/worker", import.meta.url), {
+    type: "module",
+  });
+
+const config: Config = {
+  chains: {
+    polkadot: {
+      descriptor: polkadot,
+      provider: getSmProvider(
+        import("polkadot-api/chains/polkadot").then(({ chainSpec }) =>
+          startFromWorker(createSmoldotWorker()).addChain({ chainSpec }),
+        ),
+      ),
+    },
+    kusama: {
+      descriptor: kusama,
+      provider: getSmProvider(
+        import("polkadot-api/chains/ksmcc3").then(({ chainSpec }) =>
+          startFromWorker(createSmoldotWorker()).addChain({ chainSpec }),
+        ),
+      ),
+    },
+    westend: {
+      descriptor: westend,
+      provider: getSmProvider(
+        import("polkadot-api/chains/westend2").then(({ chainSpec }) =>
+          startFromWorker(createSmoldotWorker()).addChain({ chainSpec }),
+        ),
+      ),
+    },
+  },
+};
 
 const App = () => (
-  <ReDotProvider
-    config={{
-      chains: {
-        polkadot: {
-          descriptor: polkadot,
-          provider: getSmProvider(
-            smoldot.addChain({ chainSpec: polkadotChainSpec }),
-          ),
-        },
-        kusama: {
-          descriptor: kusama,
-          provider: getSmProvider(
-            smoldot.addChain({ chainSpec: kusamaChainSpec }),
-          ),
-        },
-      },
-    }}
-  >
+  <ReDotProvider config={config}>
     <ReDotChainProvider chainId="polkadot">
       <Suspense fallback={<h2>Loading Polkadot...</h2>}>
         <h2>Polkadot</h2>
@@ -101,6 +177,12 @@ const App = () => (
     <ReDotChainProvider chainId="kusama">
       <Suspense fallback={<h2>Loading Kusama...</h2>}>
         <h2>Kusama</h2>
+        <Example />
+      </Suspense>
+    </ReDotChainProvider>
+    <ReDotChainProvider chainId="westend">
+      <Suspense fallback={<h2>Loading Westend...</h2>}>
+        <h2>Westend</h2>
         <Example />
       </Suspense>
     </ReDotChainProvider>

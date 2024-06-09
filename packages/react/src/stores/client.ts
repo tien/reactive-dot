@@ -1,5 +1,6 @@
 import { chainConfigsAtom } from "./config.js";
 import type { JsonRpcProvider } from "@polkadot-api/json-rpc-provider";
+import { ReDotError } from "@reactive-dot/core";
 import type { ChainId } from "@reactive-dot/types";
 import { atom } from "jotai";
 import { atomFamily } from "jotai/utils";
@@ -12,7 +13,7 @@ export const clientAtomFamily = atomFamily((chainId: ChainId) =>
     const chainConfig = get(chainConfigsAtom)[chainId];
 
     if (chainConfig === undefined) {
-      throw new Error(`No config provided for ${chainId}`);
+      throw new ReDotError(`No config provided for ${chainId}`);
     }
 
     const providerOrGetter = await chainConfig.provider;
@@ -33,7 +34,7 @@ export const typedApiAtomFamily = atomFamily((chainId: ChainId) =>
     const config = get(chainConfigsAtom)[chainId];
 
     if (config === undefined) {
-      throw new Error(`No config provided for chain ${chainId}`);
+      throw new ReDotError(`No config provided for chain ${chainId}`);
     }
 
     const client = await get(clientAtomFamily(chainId));

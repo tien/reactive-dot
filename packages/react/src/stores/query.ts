@@ -1,6 +1,10 @@
 import { stringify } from "../utils.js";
 import { chainIdAtom, typedApiAtomFamily } from "./client.js";
-import { QueryInstruction, MultiInstruction } from "@reactive-dot/core";
+import {
+  QueryInstruction,
+  MultiInstruction,
+  QueryError,
+} from "@reactive-dot/core";
 import type { ChainId } from "@reactive-dot/types";
 import { atom } from "jotai";
 import { atomFamily, atomWithObservable } from "jotai/utils";
@@ -83,7 +87,7 @@ export const queryAtomFamily = (param: {
     const chainId = param.chainId ?? get(chainIdAtom);
 
     if (chainId === undefined) {
-      throw new Error("No chain Id provided");
+      throw new QueryError("No chain Id provided");
     }
 
     if (!("multi" in param.instruction)) {

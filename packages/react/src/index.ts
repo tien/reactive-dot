@@ -1,4 +1,5 @@
 export { ReDotChainProvider, ReDotProvider } from "./context.js";
 export { useClient } from "./hooks/useClient.js";
+export { useMutation } from "./hooks/useMutation.js";
 export { useQuery } from "./hooks/useQuery.js";
 export { useTypedApi } from "./hooks/useTypedApi.js";

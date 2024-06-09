@@ -4,6 +4,9 @@
     "@tsconfig/strictest/tsconfig.json",
     "@tsconfig/vite-react/tsconfig.json"
   ],
+  "compilerOptions": {
+    "exactOptionalPropertyTypes": false
+  },
   "include": ["src"],
   "references": [{ "path": "./tsconfig.node.json" }]
 }

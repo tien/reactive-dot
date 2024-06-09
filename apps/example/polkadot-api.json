@@ -6,5 +6,9 @@
   "kusama": {
     "chain": "ksmcc3",
     "metadata": "kusama.scale"
+  },
+  "westend": {
+    "chain": "westend2",
+    "metadata": "westend.scale"
   }
 }

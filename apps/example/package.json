@@ -7,7 +7,8 @@
     "dev": "vite",
     "build": "tsc && vite build",
     "lint": "eslint src",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "postinstall": "npx papi"
   },
   "dependencies": {
     "@reactive-dot/react": "workspace:^",
