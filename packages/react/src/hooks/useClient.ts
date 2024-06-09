@@ -1,5 +1,5 @@
 import { chainIdAtom, clientAtomFamily } from "../stores/client.js";
-import { ChainId } from "../types.js";
+import type { ChainId } from "@reactive-dot/types";
 import { useAtomValue } from "jotai";
 
 export const useClient = (options?: { chainId?: ChainId }) => {

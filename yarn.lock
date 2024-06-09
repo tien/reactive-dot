@@ -1184,9 +1184,19 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@reactive-dot/core@workspace:packages/core":
+"@reactive-dot/core@workspace:^, @reactive-dot/core@workspace:packages/core":
   version: 0.0.0-use.local
   resolution: "@reactive-dot/core@workspace:packages/core"
+  dependencies:
+    "@reactive-dot/eslint-config": "workspace:^"
+    "@reactive-dot/types": "workspace:^"
+    "@tsconfig/recommended": "npm:^1.0.6"
+    "@tsconfig/strictest": "npm:^2.0.5"
+    eslint: "npm:^9.4.0"
+    polkadot-api: "npm:^0.8.0"
+    typescript: "npm:^5.4.5"
+  peerDependencies:
+    polkadot-api: ^0.8.0
   languageName: unknown
   linkType: soft
 
@@ -1210,6 +1220,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@reactive-dot/react@workspace:packages/react"
   dependencies:
+    "@reactive-dot/core": "workspace:^"
     "@reactive-dot/eslint-config": "workspace:^"
     "@tsconfig/recommended": "npm:^1.0.6"
     "@tsconfig/strictest": "npm:^2.0.5"
@@ -1219,10 +1230,20 @@ __metadata:
     jotai-scope: "npm:^0.6.0"
     polkadot-api: "npm:^0.8.0"
     react: "npm:^18.3.1"
-    tsup: "npm:^8.1.0"
     typescript: "npm:^5.4.5"
-  peerDependencies:
-    polkadot-api: ^0.8.0
+  languageName: unknown
+  linkType: soft
+
+"@reactive-dot/types@workspace:^, @reactive-dot/types@workspace:packages/types":
+  version: 0.0.0-use.local
+  resolution: "@reactive-dot/types@workspace:packages/types"
+  dependencies:
+    "@reactive-dot/eslint-config": "workspace:^"
+    "@tsconfig/recommended": "npm:^1.0.6"
+    "@tsconfig/strictest": "npm:^2.0.5"
+    eslint: "npm:^9.4.0"
+    polkadot-api: "npm:^0.8.0"
+    typescript: "npm:^5.4.5"
   languageName: unknown
   linkType: soft
 
@@ -5963,7 +5984,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"tsup@npm:^8.0.2, tsup@npm:^8.1.0":
+"tsup@npm:^8.0.2":
   version: 8.1.0
   resolution: "tsup@npm:8.1.0"
   dependencies:

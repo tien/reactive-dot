@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { ReDotDescriptor } from "./types.js";
+import type { ReDotDescriptor } from "@reactive-dot/types";
 import type {
   TypedApi,
   StorageEntry,

@@ -1,10 +1,12 @@
-import QueryBuilder, {
-  InferQueryBuilder,
-  QueryInstruction,
-} from "../QueryBuilder.js";
 import { compoundQueryAtomFamily } from "../stores/query.js";
-import type { Falsy, FalsyGuard, FlatHead, ReDotDescriptor } from "../types.js";
+import type { Falsy, FalsyGuard, FlatHead } from "../types.js";
 import { flatHead, stringify } from "../utils.js";
+import {
+  QueryBuilder,
+  QueryInstruction,
+  InferQueryBuilder,
+} from "@reactive-dot/core";
+import type { ReDotDescriptor } from "@reactive-dot/types";
 import { atom, useAtomValue } from "jotai";
 import { ChainDefinition } from "polkadot-api";
 import { useMemo } from "react";

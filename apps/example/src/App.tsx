@@ -3,7 +3,6 @@ import {
   ReDotChainProvider,
   ReDotProvider,
   useQuery,
-  useTypedApi,
 } from "@reactive-dot/react";
 import {
   ksmcc3 as kusamaChainSpec,
@@ -37,8 +36,6 @@ const Example = () => {
       ? undefined
       : builder.readStorage("Staking", "ErasTotalStake", [activeEra.index]),
   );
-
-  const client = useTypedApi({ chainId: "kusama" });
 
   return (
     <div>

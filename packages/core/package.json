@@ -2,9 +2,29 @@
   "name": "@reactive-dot/core",
   "version": "0.0.0",
   "type": "module",
-  "exports": "./dist/index.js",
+  "files": [
+    "src",
+    "build"
+  ],
+  "exports": {
+    "default": "./build/index.js",
+    "types": "./src/index.ts"
+  },
   "scripts": {
-    "dev": "tsup-node --watch",
-    "build": "tsup-node"
+    "dev": "tsc --build --watch",
+    "build": "rm -rf build && tsc --build",
+    "lint": "eslint src"
+  },
+  "devDependencies": {
+    "@reactive-dot/eslint-config": "workspace:^",
+    "@reactive-dot/types": "workspace:^",
+    "@tsconfig/recommended": "^1.0.6",
+    "@tsconfig/strictest": "^2.0.5",
+    "eslint": "^9.4.0",
+    "polkadot-api": "^0.8.0",
+    "typescript": "^5.4.5"
+  },
+  "peerDependencies": {
+    "polkadot-api": "^0.8.0"
   }
 }

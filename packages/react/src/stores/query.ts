@@ -1,7 +1,7 @@
-import { MultiInstruction, QueryInstruction } from "../QueryBuilder.js";
-import { ChainId } from "../types.js";
 import { stringify } from "../utils.js";
 import { chainIdAtom, typedApiAtomFamily } from "./client.js";
+import { QueryInstruction, MultiInstruction } from "@reactive-dot/core";
+import type { ChainId } from "@reactive-dot/types";
 import { atom } from "jotai";
 import { atomFamily, atomWithObservable } from "jotai/utils";
 import { from, type Observable } from "rxjs";

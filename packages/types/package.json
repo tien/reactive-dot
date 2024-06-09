@@ -1,6 +1,7 @@
 {
-  "name": "@reactive-dot/react",
-  "version": "0.0.0",
+  "name": "@reactive-dot/types",
+  "version": "1.0.0",
+  "description": "",
   "type": "module",
   "files": [
     "src",
@@ -15,19 +16,12 @@
     "build": "rm -rf build && tsc --build",
     "lint": "eslint src"
   },
-  "dependencies": {
-    "@reactive-dot/core": "workspace:^",
-    "jotai": "^2.8.3",
-    "jotai-scope": "^0.6.0"
-  },
   "devDependencies": {
     "@reactive-dot/eslint-config": "workspace:^",
     "@tsconfig/recommended": "^1.0.6",
     "@tsconfig/strictest": "^2.0.5",
-    "@types/react": "^18.3.3",
     "eslint": "^9.4.0",
     "polkadot-api": "^0.8.0",
-    "react": "^18.3.1",
     "typescript": "^5.4.5"
   }
 }

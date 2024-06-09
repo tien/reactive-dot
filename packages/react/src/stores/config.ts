@@ -1,4 +1,5 @@
-import type { ChainConfig, ChainId } from "../types.js";
+import type { ChainConfig, ChainId } from "@reactive-dot/types";
 import { atom } from "jotai";
 
-export const chainConfigsAtom = atom<Record<ChainId, ChainConfig>>({});
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export const chainConfigsAtom = atom<Record<ChainId, ChainConfig>>({} as any);

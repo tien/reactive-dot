@@ -1,6 +1,6 @@
-import type { ChainId } from "../types.js";
 import { chainConfigsAtom } from "./config.js";
 import type { JsonRpcProvider } from "@polkadot-api/json-rpc-provider";
+import type { ChainId } from "@reactive-dot/types";
 import { atom } from "jotai";
 import { atomFamily } from "jotai/utils";
 import { createClient } from "polkadot-api";
