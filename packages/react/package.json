@@ -1,0 +1,28 @@
+{
+  "name": "@reactive-dot/react",
+  "version": "0.0.0",
+  "type": "module",
+  "exports": "./dist/index.js",
+  "scripts": {
+    "dev": "tsup-node --watch",
+    "build": "tsup-node"
+  },
+  "dependencies": {
+    "jotai": "^2.8.3",
+    "jotai-scope": "^0.6.0"
+  },
+  "devDependencies": {
+    "@reactive-dot/eslint-config": "workspace:^",
+    "@tsconfig/recommended": "^1.0.6",
+    "@tsconfig/strictest": "^2.0.5",
+    "@types/react": "^18.3.3",
+    "eslint": "^9.4.0",
+    "polkadot-api": "^0.8.0",
+    "react": "^18.3.1",
+    "tsup": "^8.1.0",
+    "typescript": "^5.4.5"
+  },
+  "peerDependencies": {
+    "polkadot-api": "^0.8.0"
+  }
+}

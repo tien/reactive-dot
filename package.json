@@ -1,0 +1,35 @@
+{
+  "name": "reactive-dot",
+  "description": "Reactive library for building Substrate front-end",
+  "keywords": [
+    "substrate",
+    "polkadot",
+    "react"
+  ],
+  "homepage": "https://github.com/tien/reactive-dot#readme",
+  "bugs": {
+    "url": "https://github.com/tien/reactive-dot/issues",
+    "email": "tien.nguyenkhac@icloud.com"
+  },
+  "license": "GPL-3.0-or-later",
+  "author": "Tiến Nguyễn Khắc <tien.nguyenkhac@icloud.com> (https://tien.zone/)",
+  "repository": "github:tien/reactive-dot",
+  "private": true,
+  "type": "module",
+  "packageManager": "yarn@4.2.2",
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ],
+  "scripts": {
+    "dev": "nx run-many -t dev",
+    "build": "nx run-many -t build",
+    "lint": "nx run-many -t lint",
+    "test": "nx run-many -t test"
+  },
+  "devDependencies": {
+    "@trivago/prettier-plugin-sort-imports": "^4.3.0",
+    "nx": "19.2.2",
+    "prettier": "^3.3.1"
+  }
+}

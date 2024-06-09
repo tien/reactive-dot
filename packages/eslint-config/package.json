@@ -1,0 +1,21 @@
+{
+  "name": "@reactive-dot/eslint-config",
+  "version": "0.0.0",
+  "type": "module",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "devDependencies": {
+    "@eslint/compat": "^1.0.3",
+    "@eslint/js": "^9.4.0",
+    "@types/eslint__js": "^8.42.3",
+    "eslint-plugin-react": "^7.34.2",
+    "eslint-plugin-react-hooks": "^4.6.2",
+    "typescript": "^5.4.5",
+    "typescript-eslint": "^7.12.0"
+  },
+  "peerDependencies": {
+    "eslint": "*"
+  }
+}

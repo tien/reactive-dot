@@ -1,0 +1,30 @@
+{
+  "name": "example",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc && vite build",
+    "lint": "eslint src",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "@reactive-dot/react": "workspace:^",
+    "polkadot-api": "^0.8.0",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1"
+  },
+  "devDependencies": {
+    "@reactive-dot/eslint-config": "workspace:^",
+    "@tsconfig/recommended": "^1.0.6",
+    "@tsconfig/strictest": "^2.0.5",
+    "@tsconfig/vite-react": "^3.0.2",
+    "@types/react": "^18.3.3",
+    "@types/react-dom": "^18.3.0",
+    "@vitejs/plugin-react": "^4.2.1",
+    "eslint": "^9.4.0",
+    "typescript": "^5.4.5",
+    "vite": "^5.2.13"
+  }
+}
