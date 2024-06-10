@@ -1,4 +1,8 @@
-export { ReDotChainProvider, ReDotProvider } from "./context.js";
+export {
+  ReDotChainProvider,
+  ReDotProvider,
+  ReDotSignerProvider,
+} from "./context.js";
 export { useAccounts } from "./hooks/useAccounts.js";
 export { useClient } from "./hooks/useClient.js";
 export { useMutation } from "./hooks/useMutation.js";

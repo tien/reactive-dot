@@ -4,6 +4,7 @@ import { Connector, Wallet } from "@reactive-dot/core/wallets.js";
 import type { ChainId, Config } from "@reactive-dot/types";
 import { ScopeProvider } from "jotai-scope";
 import { useHydrateAtoms } from "jotai/utils";
+import { PolkadotSigner } from "polkadot-api";
 import { PropsWithChildren, createContext, useMemo } from "react";
 
 export type ReDotProviderProps = PropsWithChildren<{ config: Config }>;
@@ -53,4 +54,18 @@ export const ReDotChainProvider = (props: ReDotChainProviderProps) => (
   <ChainIdContext.Provider value={props.chainId}>
     {props.children}
   </ChainIdContext.Provider>
+);
+
+export const SignerContext = createContext<PolkadotSigner | undefined>(
+  undefined,
+);
+
+export type ReDotSignerProviderProps = PropsWithChildren<{
+  signer: PolkadotSigner | undefined;
+}>;
+
+export const ReDotSignerProvider = (props: ReDotSignerProviderProps) => (
+  <SignerContext.Provider value={props.signer}>
+    {props.children}
+  </SignerContext.Provider>
 );

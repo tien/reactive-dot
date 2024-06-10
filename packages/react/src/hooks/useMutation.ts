@@ -1,6 +1,5 @@
-import { ChainIdContext } from "../context.js";
+import { ChainIdContext, SignerContext } from "../context.js";
 import { typedApiAtomFamily } from "../stores/client.js";
-import { signerAtom } from "../stores/signer.js";
 import { IDLE, MutationError, PENDING } from "@reactive-dot/core";
 import type { ChainId, Chains, ReDotDescriptor } from "@reactive-dot/types";
 import { useAtomCallback } from "jotai/utils";
@@ -41,6 +40,8 @@ export const useMutation = <
   },
 ) => {
   const contextChainId = useContext(ChainIdContext);
+  const contextSigner = useContext(SignerContext);
+
   const [state, setState] = useState<Payload>(IDLE);
 
   const submit = useAtomCallback<
@@ -50,6 +51,12 @@ export const useMutation = <
     useCallback(
       async (get, _set, submitSigner, submitOptions) => {
         setState(PENDING);
+
+        const signer = submitSigner ?? options?.signer ?? contextSigner;
+
+        if (signer === undefined) {
+          throw new MutationError("No signer provided");
+        }
 
         const chainId = options?.chainId ?? contextChainId;
 
@@ -63,10 +70,7 @@ export const useMutation = <
 
         return new Promise((resolve, reject) =>
           transaction
-            .signSubmitAndWatch(
-              submitSigner ?? options?.signer ?? get(signerAtom),
-              submitOptions ?? options?.txOptions,
-            )
+            .signSubmitAndWatch(signer, submitOptions ?? options?.txOptions)
             .subscribe({
               next: setState,
               error: (error) => {
@@ -80,6 +84,7 @@ export const useMutation = <
       [
         action,
         contextChainId,
+        contextSigner,
         options?.chainId,
         options?.signer,
         options?.txOptions,
