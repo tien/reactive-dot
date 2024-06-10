@@ -4,6 +4,7 @@ export {
   ReDotSignerProvider,
 } from "./context.js";
 export { useAccounts } from "./hooks/useAccounts.js";
+export { useBlock } from "./hooks/useBlock.js";
 export { useClient } from "./hooks/useClient.js";
 export { useMutation } from "./hooks/useMutation.js";
 export { useQuery } from "./hooks/useQuery.js";

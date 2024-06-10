@@ -4,6 +4,7 @@ import {
   ReDotChainProvider,
   ReDotProvider,
   useAccounts,
+  useBlock,
   useConnectedWallets,
   useMutation,
   useQuery,
@@ -14,12 +15,13 @@ import { Binary } from "polkadot-api";
 import { Suspense, useState } from "react";
 
 const Query = () => {
+  const block = useBlock();
+
   const [
     expectedBlockTime,
     epochDuration,
     sessionsPerEra,
     bondingDuration,
-    currentBlock,
     timestamp,
     totalIssuance,
     activeEra,
@@ -31,7 +33,6 @@ const Query = () => {
       .fetchConstant("Babe", "EpochDuration")
       .fetchConstant("Staking", "SessionsPerEra")
       .fetchConstant("Staking", "BondingDuration")
-      .readStorage("System", "Number", [])
       .readStorage("Timestamp", "Now", [])
       .readStorage("Balances", "TotalIssuance", [])
       .readStorage("Staking", "ActiveEra", [])
@@ -59,7 +60,7 @@ const Query = () => {
       <article>
         <h4>Current block</h4>
         <p>
-          {currentBlock} @ {new Date(Number(timestamp)).toLocaleString()}
+          {block.number} @ {new Date(Number(timestamp)).toLocaleString()}
         </p>
       </article>
       <article>
