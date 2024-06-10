@@ -2,6 +2,7 @@ import { ChainIdContext } from "../context.js";
 import { compoundQueryAtomFamily } from "../stores/query.js";
 import type { Falsy, FalsyGuard, FlatHead } from "../types.js";
 import { flatHead, stringify } from "../utils.js";
+import type { ChainHookOptions } from "./types.js";
 import {
   InferQueryBuilder,
   QueryBuilder,
@@ -12,6 +13,13 @@ import type { ChainId, Chains, ReDotDescriptor } from "@reactive-dot/types";
 import { atom, useAtomValue } from "jotai";
 import { useContext, useMemo } from "react";
 
+/**
+ * Hook for querying data from chain, and returning the response.
+ *
+ * @param builder - The function to create the query
+ * @param options - Additional options
+ * @returns The data response
+ */
 export const useQuery = <
   TQuery extends
     | ((
@@ -24,7 +32,7 @@ export const useQuery = <
   TChainId extends ChainId | void = void,
 >(
   builder: TQuery,
-  options?: { chainId?: TChainId },
+  options?: ChainHookOptions,
 ): TQuery extends false
   ? undefined
   : FalsyGuard<

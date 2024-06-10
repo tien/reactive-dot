@@ -1,5 +1,6 @@
 import { ChainIdContext, SignerContext } from "../context.js";
 import { typedApiAtomFamily } from "../stores/client.js";
+import type { ChainHookOptions } from "./types.js";
 import { IDLE, MutationError, PENDING } from "@reactive-dot/core";
 import type { ChainId, Chains, ReDotDescriptor } from "@reactive-dot/types";
 import { useAtomCallback } from "jotai/utils";
@@ -23,6 +24,13 @@ type TxOptions<T extends Transaction<any, any, any, any>> = Parameters<
   >
 >[1];
 
+/**
+ * Hook for sending transactions to chains.
+ *
+ * @param action - The function to create the transaction
+ * @param options - Additional options
+ * @returns The current transaction state & submit function
+ */
 export const useMutation = <
   TAction extends (
     builder: TypedApi<
@@ -33,11 +41,16 @@ export const useMutation = <
   TChainId extends ChainId | void = void,
 >(
   action: TAction,
-  options?: {
-    chainId?: TChainId;
+  options?: ChainHookOptions<{
+    /**
+     * Override default signer
+     */
     signer?: PolkadotSigner;
+    /**
+     * Additional transaction options
+     */
     txOptions?: TxOptions<ReturnType<TAction>>;
-  },
+  }>,
 ) => {
   const contextChainId = useContext(ChainIdContext);
   const contextSigner = useContext(SignerContext);

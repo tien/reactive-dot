@@ -1,14 +1,21 @@
 import { ChainIdContext } from "../context.js";
 import { typedApiAtomFamily } from "../stores/client.js";
+import type { ChainHookOptions } from "./types.js";
 import { ReDotError } from "@reactive-dot/core";
 import type { Chains, ChainId, ReDotDescriptor } from "@reactive-dot/types";
 import { useAtomValue } from "jotai";
 import { TypedApi } from "polkadot-api";
 import { useContext } from "react";
 
-export const useTypedApi = <TChainId extends ChainId | void = void>(options?: {
-  chainId?: TChainId;
-}): TypedApi<
+/**
+ * Hook for getting Polkadot-API typed API.
+ *
+ * @param options - Additional options
+ * @returns Polkadot-API typed API
+ */
+export const useTypedApi = <TChainId extends ChainId | void = void>(
+  options?: ChainHookOptions,
+): TypedApi<
   TChainId extends void ? ReDotDescriptor : Chains[Exclude<TChainId, void>]
 > => {
   const contextChainId = useContext(ChainIdContext);

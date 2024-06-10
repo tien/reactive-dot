@@ -1,11 +1,17 @@
 import { ChainIdContext } from "../context.js";
 import { clientAtomFamily } from "../stores/client.js";
+import type { ChainHookOptions } from "./types.js";
 import { ReDotError } from "@reactive-dot/core";
-import type { ChainId } from "@reactive-dot/types";
 import { useAtomValue } from "jotai";
 import { useContext } from "react";
 
-export const useClient = (options?: { chainId?: ChainId }) => {
+/**
+ * Hook for getting Polkadot-API client instance.
+ *
+ * @param options - Additional options
+ * @returns Polkadot-API client
+ */
+export const useClient = (options?: ChainHookOptions) => {
   const defaultChainId = useContext(ChainIdContext);
   const chainId = options?.chainId ?? defaultChainId;
 

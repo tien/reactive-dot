@@ -7,7 +7,12 @@ import { useHydrateAtoms } from "jotai/utils";
 import { PolkadotSigner } from "polkadot-api";
 import { PropsWithChildren, createContext, useMemo } from "react";
 
-export type ReDotProviderProps = PropsWithChildren<{ config: Config }>;
+export type ReDotProviderProps = PropsWithChildren<{
+  /**
+   * Global config used by Reactive DOT
+   */
+  config: Config;
+}>;
 
 const ReDotHydrator = (props: ReDotProviderProps) => {
   useHydrateAtoms(
@@ -37,6 +42,12 @@ const ReDotHydrator = (props: ReDotProviderProps) => {
   return null;
 };
 
+/**
+ * React context provider for Reactive DOT
+ *
+ * @param props - Component props
+ * @returns React element
+ */
 export const ReDotProvider = (props: ReDotProviderProps) => (
   <ScopeProvider atoms={[chainConfigsAtom]}>
     <ReDotHydrator {...props} />
@@ -50,6 +61,12 @@ export type ReDotChainProviderProps = PropsWithChildren<{
   chainId: ChainId;
 }>;
 
+/**
+ * React context provider for scoping to a specific chain
+ *
+ * @param props - Component props
+ * @returns React element
+ */
 export const ReDotChainProvider = (props: ReDotChainProviderProps) => (
   <ChainIdContext.Provider value={props.chainId}>
     {props.children}
@@ -61,9 +78,18 @@ export const SignerContext = createContext<PolkadotSigner | undefined>(
 );
 
 export type ReDotSignerProviderProps = PropsWithChildren<{
+  /**
+   * The default signer
+   */
   signer: PolkadotSigner | undefined;
 }>;
 
+/**
+ * React context provider to assign a default signer
+ *
+ * @param props - Component props
+ * @returns React element
+ */
 export const ReDotSignerProvider = (props: ReDotSignerProviderProps) => (
   <SignerContext.Provider value={props.signer}>
     {props.children}

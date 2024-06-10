@@ -1,4 +1,5 @@
 import eslint from "@eslint/js";
+import tsdoc from "eslint-plugin-tsdoc";
 import tseslint from "typescript-eslint";
 
 export default tseslint.config(
@@ -15,6 +16,14 @@ export default tseslint.config(
           ignoreRestSiblings: true,
         },
       ],
+    },
+  },
+  {
+    plugins: {
+      tsdoc,
+    },
+    rules: {
+      "tsdoc/syntax": "warn",
     },
   },
 );
