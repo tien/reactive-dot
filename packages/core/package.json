@@ -7,8 +7,14 @@
     "build"
   ],
   "exports": {
-    "default": "./build/index.js",
-    "types": "./src/index.ts"
+    ".": {
+      "default": "./build/index.js",
+      "types": "./src/index.ts"
+    },
+    "./wallets.js": {
+      "default": "./build/wallets/index.js",
+      "types": "./src/wallets/index.ts"
+    }
   },
   "scripts": {
     "dev": "tsc --build --watch",

@@ -1,4 +1,5 @@
-import { chainIdAtom, typedApiAtomFamily } from "../stores/client.js";
+import { ChainIdContext } from "../context.js";
+import { typedApiAtomFamily } from "../stores/client.js";
 import { signerAtom } from "../stores/signer.js";
 import { IDLE, MutationError, PENDING } from "@reactive-dot/core";
 import type { ChainId, Chains, ReDotDescriptor } from "@reactive-dot/types";
@@ -10,7 +11,7 @@ import type {
   TxObservable,
   TypedApi,
 } from "polkadot-api";
-import { useCallback, useState } from "react";
+import { useCallback, useContext, useState } from "react";
 
 type Payload = typeof IDLE | typeof PENDING | MutationError | TxEvent;
 
@@ -39,6 +40,7 @@ export const useMutation = <
     txOptions?: TxOptions<ReturnType<TAction>>;
   },
 ) => {
+  const contextChainId = useContext(ChainIdContext);
   const [state, setState] = useState<Payload>(IDLE);
 
   const submit = useAtomCallback<
@@ -49,8 +51,7 @@ export const useMutation = <
       async (get, _set, submitSigner, submitOptions) => {
         setState(PENDING);
 
-        const defaultChainId = get(chainIdAtom);
-        const chainId = options?.chainId ?? defaultChainId;
+        const chainId = options?.chainId ?? contextChainId;
 
         if (chainId === undefined) {
           throw new MutationError("No chain ID provided");
@@ -76,7 +77,13 @@ export const useMutation = <
             }),
         );
       },
-      [action, options?.chainId, options?.signer, options?.txOptions],
+      [
+        action,
+        contextChainId,
+        options?.chainId,
+        options?.signer,
+        options?.txOptions,
+      ],
     ),
   );
 

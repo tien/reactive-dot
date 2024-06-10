@@ -1,17 +1,34 @@
-import { chainIdAtom } from "./stores/client.js";
 import { chainConfigsAtom } from "./stores/config.js";
+import { connectorsAtom, directWalletsAtom } from "./stores/wallets.js";
+import { Connector, Wallet } from "@reactive-dot/core/wallets.js";
 import type { ChainId, Config } from "@reactive-dot/types";
 import { ScopeProvider } from "jotai-scope";
 import { useHydrateAtoms } from "jotai/utils";
-import { PropsWithChildren, useMemo } from "react";
+import { PropsWithChildren, createContext, useMemo } from "react";
 
 export type ReDotProviderProps = PropsWithChildren<{ config: Config }>;
 
 const ReDotHydrator = (props: ReDotProviderProps) => {
   useHydrateAtoms(
-    // @ts-expect-error TODO: weird TypeScript error, need to investigate further
     useMemo(
-      () => new Map([[chainConfigsAtom, props.config.chains]]),
+      () =>
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        new Map<any, any>([
+          [chainConfigsAtom, props.config.chains],
+          [
+            directWalletsAtom,
+            props.config.wallets?.filter(
+              (wallet): wallet is Wallet => wallet instanceof Wallet,
+            ) ?? [],
+          ],
+          [
+            connectorsAtom,
+            props.config.wallets?.filter(
+              (connector): connector is Connector =>
+                connector instanceof Connector,
+            ) ?? [],
+          ],
+        ]),
       [props.config],
     ),
   );
@@ -26,21 +43,14 @@ export const ReDotProvider = (props: ReDotProviderProps) => (
   </ScopeProvider>
 );
 
+export const ChainIdContext = createContext<ChainId | undefined>(undefined);
+
 export type ReDotChainProviderProps = PropsWithChildren<{
   chainId: ChainId;
 }>;
 
-const ReDotChainHydrator = (props: ReDotChainProviderProps) => {
-  useHydrateAtoms(
-    useMemo(() => new Map([[chainIdAtom, props.chainId]]), [props.chainId]),
-  );
-
-  return null;
-};
-
 export const ReDotChainProvider = (props: ReDotChainProviderProps) => (
-  <ScopeProvider atoms={[chainIdAtom]}>
-    <ReDotChainHydrator {...props} />
+  <ChainIdContext.Provider value={props.chainId}>
     {props.children}
-  </ScopeProvider>
+  </ChainIdContext.Provider>
 );

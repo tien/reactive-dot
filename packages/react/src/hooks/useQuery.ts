@@ -1,3 +1,4 @@
+import { ChainIdContext } from "../context.js";
 import { compoundQueryAtomFamily } from "../stores/query.js";
 import type { Falsy, FalsyGuard, FlatHead } from "../types.js";
 import { flatHead, stringify } from "../utils.js";
@@ -5,11 +6,12 @@ import {
   QueryBuilder,
   QueryInstruction,
   InferQueryBuilder,
+  QueryError,
 } from "@reactive-dot/core";
 import type { ReDotDescriptor } from "@reactive-dot/types";
 import { atom, useAtomValue } from "jotai";
 import { ChainDefinition } from "polkadot-api";
-import { useMemo } from "react";
+import { useContext, useMemo } from "react";
 
 export const useQuery = <
   TQuery extends
@@ -28,6 +30,12 @@ export const useQuery = <
         InferQueryBuilder<Exclude<ReturnType<Exclude<TQuery, Falsy>>, Falsy>>
       >
     > => {
+  const chainId = useContext(ChainIdContext);
+
+  if (chainId === undefined) {
+    throw new QueryError("No chain ID provided");
+  }
+
   const query = useMemo(
     () => (!builder ? undefined : builder(new QueryBuilder([]))),
     [builder],
@@ -45,7 +53,10 @@ export const useQuery = <
         () =>
           !query
             ? atom(undefined)
-            : compoundQueryAtomFamily({ instructions: query.instructions }),
+            : compoundQueryAtomFamily({
+                chainId,
+                instructions: query.instructions,
+              }),
         // eslint-disable-next-line react-hooks/exhaustive-deps
         [hashKey],
       ),

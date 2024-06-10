@@ -6,8 +6,6 @@ import { atom } from "jotai";
 import { atomFamily } from "jotai/utils";
 import { createClient } from "polkadot-api";
 
-export const chainIdAtom = atom<ChainId | undefined>(undefined);
-
 export const clientAtomFamily = atomFamily((chainId: ChainId) =>
   atom(async (get) => {
     const chainConfig = get(chainConfigsAtom)[chainId];

@@ -1,5 +1,5 @@
 import { stringify } from "../utils.js";
-import { chainIdAtom, typedApiAtomFamily } from "./client.js";
+import { typedApiAtomFamily } from "./client.js";
 import {
   QueryInstruction,
   MultiInstruction,
@@ -80,18 +80,16 @@ const _queryAtomFamily = atomFamily(
 );
 
 export const queryAtomFamily = (param: {
-  chainId?: ChainId;
+  chainId: ChainId;
   instruction: QueryInstruction;
 }) =>
   atom((get) => {
-    const chainId = param.chainId ?? get(chainIdAtom);
-
-    if (chainId === undefined) {
+    if (param.chainId === undefined) {
       throw new QueryError("No chain Id provided");
     }
 
     if (!("multi" in param.instruction)) {
-      return get(_queryAtomFamily({ ...param, chainId }));
+      return get(_queryAtomFamily({ ...param, chainId: param.chainId }));
     }
 
     const { multi: _, ...query } = param.instruction;
@@ -100,7 +98,7 @@ export const queryAtomFamily = (param: {
       param.instruction.args.map((args: unknown[]) =>
         get(
           _queryAtomFamily({
-            chainId,
+            chainId: param.chainId,
             instruction: { ...query, args },
           }),
         ),
@@ -111,7 +109,7 @@ export const queryAtomFamily = (param: {
 // TODO: should be memoized within render function instead
 // https://github.com/pmndrs/jotai/discussions/1553
 export const compoundQueryAtomFamily = atomFamily(
-  (param: { chainId?: ChainId; instructions: readonly QueryInstruction[] }) =>
+  (param: { chainId: ChainId; instructions: readonly QueryInstruction[] }) =>
     atom((get) =>
       Promise.all(
         param.instructions.map((instruction) =>
