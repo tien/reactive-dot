@@ -3,14 +3,13 @@ import { compoundQueryAtomFamily } from "../stores/query.js";
 import type { Falsy, FalsyGuard, FlatHead } from "../types.js";
 import { flatHead, stringify } from "../utils.js";
 import {
-  QueryBuilder,
-  QueryInstruction,
   InferQueryBuilder,
+  QueryBuilder,
   QueryError,
+  QueryInstruction,
 } from "@reactive-dot/core";
-import type { ReDotDescriptor } from "@reactive-dot/types";
+import type { ChainId, Chains, ReDotDescriptor } from "@reactive-dot/types";
 import { atom, useAtomValue } from "jotai";
-import { ChainDefinition } from "polkadot-api";
 import { useContext, useMemo } from "react";
 
 export const useQuery = <
@@ -19,9 +18,13 @@ export const useQuery = <
         builder: QueryBuilder<[], TDescriptor>,
       ) => QueryBuilder<QueryInstruction<TDescriptor>[], TDescriptor> | Falsy)
     | Falsy,
-  TDescriptor extends ChainDefinition = ReDotDescriptor,
+  TDescriptor extends TChainId extends void
+    ? ReDotDescriptor
+    : Chains[Exclude<TChainId, void>],
+  TChainId extends ChainId | void = void,
 >(
   builder: TQuery,
+  options?: { chainId?: TChainId },
 ): TQuery extends false
   ? undefined
   : FalsyGuard<
@@ -30,7 +33,8 @@ export const useQuery = <
         InferQueryBuilder<Exclude<ReturnType<Exclude<TQuery, Falsy>>, Falsy>>
       >
     > => {
-  const chainId = useContext(ChainIdContext);
+  const contextChainId = useContext(ChainIdContext);
+  const chainId = options?.chainId ?? contextChainId;
 
   if (chainId === undefined) {
     throw new QueryError("No chain ID provided");
