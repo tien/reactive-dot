@@ -1,6 +1,5 @@
-import { kusama, polkadot, westend } from "@polkadot-api/descriptors";
+import config from "./config";
 import { IDLE, MutationError, PENDING } from "@reactive-dot/core";
-import { InjectedConnector } from "@reactive-dot/core/wallets.js";
 import {
   ReDotChainProvider,
   ReDotProvider,
@@ -10,14 +9,16 @@ import {
   useQuery,
   useWallets,
 } from "@reactive-dot/react";
-import { Config } from "@reactive-dot/types";
+import { formatDistance } from "date-fns";
 import { Binary } from "polkadot-api";
-import { getSmProvider } from "polkadot-api/sm-provider";
-import { startFromWorker } from "polkadot-api/smoldot/from-worker";
-import { Suspense, useMemo, useState } from "react";
+import { Suspense, useState } from "react";
 
 const Query = () => {
   const [
+    expectedBlockTime,
+    epochDuration,
+    sessionsPerEra,
+    bondingDuration,
     currentBlock,
     timestamp,
     totalIssuance,
@@ -26,6 +27,10 @@ const Query = () => {
     poolMetadatum,
   ] = useQuery((builder) =>
     builder
+      .fetchConstant("Babe", "ExpectedBlockTime")
+      .fetchConstant("Babe", "EpochDuration")
+      .fetchConstant("Staking", "SessionsPerEra")
+      .fetchConstant("Staking", "BondingDuration")
       .readStorage("System", "Number", [])
       .readStorage("Timestamp", "Now", [])
       .readStorage("Balances", "TotalIssuance", [])
@@ -33,6 +38,12 @@ const Query = () => {
       .readStorage("NominationPools", "TotalValueLocked", [])
       .readStorages("NominationPools", "Metadata", [[0], [1], [2], [3], [4]]),
   );
+
+  const bondingDurationMs =
+    Number(expectedBlockTime) *
+    Number(epochDuration) *
+    sessionsPerEra *
+    bondingDuration;
 
   const totalStaked = useQuery((builder) =>
     activeEra === undefined
@@ -58,6 +69,10 @@ const Query = () => {
       <article>
         <h4>Total issuance</h4>
         <p>{totalIssuance.toString()} planck</p>
+      </article>
+      <article>
+        <h4>Bonding duration</h4>
+        <p>{formatDistance(0, bondingDurationMs)}</p>
       </article>
       <article>
         <h4>Total value staked</h4>
@@ -185,41 +200,6 @@ const Example = () => (
     <Mutation />
   </div>
 );
-
-const createSmoldotWorker = () =>
-  new Worker(new URL("polkadot-api/smoldot/worker", import.meta.url), {
-    type: "module",
-  });
-
-const config: Config = {
-  chains: {
-    polkadot: {
-      descriptor: polkadot,
-      provider: getSmProvider(
-        import("polkadot-api/chains/polkadot").then(({ chainSpec }) =>
-          startFromWorker(createSmoldotWorker()).addChain({ chainSpec }),
-        ),
-      ),
-    },
-    kusama: {
-      descriptor: kusama,
-      provider: getSmProvider(
-        import("polkadot-api/chains/ksmcc3").then(({ chainSpec }) =>
-          startFromWorker(createSmoldotWorker()).addChain({ chainSpec }),
-        ),
-      ),
-    },
-    westend: {
-      descriptor: westend,
-      provider: getSmProvider(
-        import("polkadot-api/chains/westend2").then(({ chainSpec }) =>
-          startFromWorker(createSmoldotWorker()).addChain({ chainSpec }),
-        ),
-      ),
-    },
-  },
-  wallets: [new InjectedConnector()],
-};
 
 const App = () => (
   <ReDotProvider config={config}>
