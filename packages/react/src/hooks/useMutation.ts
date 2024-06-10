@@ -12,7 +12,7 @@ import type {
 } from "polkadot-api";
 import { useCallback, useContext, useState } from "react";
 
-type Payload = typeof IDLE | typeof PENDING | MutationError | TxEvent;
+type MutationState = typeof IDLE | typeof PENDING | MutationError | TxEvent;
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 type TxOptions<T extends Transaction<any, any, any, any>> = Parameters<
@@ -42,7 +42,7 @@ export const useMutation = <
   const contextChainId = useContext(ChainIdContext);
   const contextSigner = useContext(SignerContext);
 
-  const [state, setState] = useState<Payload>(IDLE);
+  const [state, setState] = useState<MutationState>(IDLE);
 
   const submit = useAtomCallback<
     void,
