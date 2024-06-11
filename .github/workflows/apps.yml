@@ -1,0 +1,25 @@
+name: Applications
+
+on:
+  push:
+    branches: [main]
+
+jobs:
+  deploy-documentation:
+    runs-on: ubuntu-latest
+
+    permissions:
+      contents: read
+
+    steps:
+      - uses: actions/checkout@v4
+      - uses: ./.github/actions/setup
+
+      - run: yarn build
+
+      - uses: cloudflare/pages-action@v1
+        with:
+          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          projectName: reactive-dot
+          directory: apps/docs/build
