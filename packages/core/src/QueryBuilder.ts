@@ -1,31 +1,29 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import type { ReDotDescriptor } from "@reactive-dot/types";
 import type { ChainDefinition, TypedApi } from "polkadot-api";
-import { Observable } from "rxjs";
+import type { Observable } from "rxjs";
 
 type InferPapiStorageEntry<T> = T extends {
-  watchValue: (...args: infer Args) => Observable<infer Payload>;
+  watchValue: (...args: infer Args) => infer Response;
 }
-  ? { args: Args; payload: Payload }
-  : { args: unknown[]; payload: unknown };
+  ? { args: Args; response: Response }
+  : { args: unknown[]; response: unknown };
 
 type InferPapiStorageEntryWithKeys<T> = T extends {
-  getEntries: (...args: infer Args) => Promise<infer Payload>;
+  getEntries: (...args: infer Args) => infer Response;
 }
-  ? { args: Args; payload: Payload }
-  : { args: unknown[]; payload: unknown };
+  ? { args: Args; response: Response }
+  : { args: unknown[]; response: unknown };
 
-type InferPapiRuntimeCall<T> = T extends (
-  ...args: infer Args
-) => Promise<infer Payload>
-  ? { args: Args; payload: Payload }
-  : { args: unknown[]; payload: unknown };
+type InferPapiRuntimeCall<T> = T extends (...args: infer Args) => infer Response
+  ? { args: Args; response: Response }
+  : { args: unknown[]; response: unknown };
 
 type InferPapiConstantEntry<T> = T extends {
   (): Promise<infer Payload>;
   (runtime: infer _): infer Payload;
 }
-  ? Payload
+  ? Promise<Payload>
   : unknown;
 
 type BaseInstruction<T extends string> = {
@@ -109,7 +107,7 @@ type StorageReadPayload<
   TDescriptor extends ChainDefinition = ReDotDescriptor,
 > = InferPapiStorageEntry<
   TypedApi<TDescriptor>["query"][TInstruction["pallet"]][TInstruction["storage"]]
->["payload"];
+>["response"];
 
 type StorageEntriesReadPayload<
   TInstruction extends StorageEntriesReadInstruction<
@@ -121,7 +119,7 @@ type StorageEntriesReadPayload<
   TDescriptor extends ChainDefinition = ReDotDescriptor,
 > = InferPapiStorageEntryWithKeys<
   TypedApi<TDescriptor>["query"][TInstruction["pallet"]][TInstruction["storage"]]
->["payload"];
+>["response"];
 
 type ApiCallPayload<
   TInstruction extends
@@ -130,9 +128,9 @@ type ApiCallPayload<
   TDescriptor extends ChainDefinition = ReDotDescriptor,
 > = InferPapiRuntimeCall<
   TypedApi<TDescriptor>["apis"][TInstruction["pallet"]][TInstruction["api"]]
->["payload"];
+>["response"];
 
-export type InferInstruction<
+export type InferInstructionResponse<
   TInstruction extends QueryInstruction,
   TDescriptor extends ChainDefinition = ReDotDescriptor,
 > =
@@ -164,22 +162,61 @@ export type InferInstruction<
               ? ApiCallPayload<TInstruction, TDescriptor>
               : never;
 
-export type InferInstructions<
+export type InferInstructionPayload<
+  TInstruction extends QueryInstruction,
+  TDescriptor extends ChainDefinition = ReDotDescriptor,
+> =
+  InferInstructionResponse<TInstruction, TDescriptor> extends Promise<
+    infer Payload
+  >
+    ? Payload
+    : InferInstructionResponse<TInstruction, TDescriptor> extends Observable<
+          infer Payload
+        >
+      ? Payload
+      : InferInstructionResponse<TInstruction, TDescriptor>;
+
+export type InferInstructionsResponse<
   TInstructions extends QueryInstruction[],
   TDescriptor extends ChainDefinition = ReDotDescriptor,
 > = {
-  [P in keyof TInstructions]: InferInstruction<TInstructions[P], TDescriptor>;
+  [P in keyof TInstructions]: InferInstructionResponse<
+    TInstructions[P],
+    TDescriptor
+  >;
 };
 
-export type InferQueryBuilder<T extends QueryBuilder> =
+export type InferInstructionsPayload<
+  TInstructions extends QueryInstruction[],
+  TDescriptor extends ChainDefinition = ReDotDescriptor,
+> = {
+  [P in keyof TInstructions]: InferInstructionPayload<
+    TInstructions[P],
+    TDescriptor
+  >;
+};
+
+export type InferQueryBuilderResponse<T extends QueryBuilder> =
   T extends QueryBuilder<infer Instructions, infer Descriptor>
-    ? InferInstructions<Instructions, Descriptor>
+    ? InferInstructionsResponse<Instructions, Descriptor>
     : never;
+
+export type InferQueryBuilderPayload<T extends QueryBuilder> =
+  T extends QueryBuilder<infer Instructions, infer Descriptor>
+    ? InferInstructionsPayload<Instructions, Descriptor>
+    : never;
+
+export type Query<
+  TInstructions extends QueryInstruction[] = QueryInstruction[],
+> = {
+  readonly instructions: TInstructions;
+};
 
 export default class QueryBuilder<
   const TInstructions extends QueryInstruction[] = QueryInstruction[],
   TDescriptor extends ChainDefinition = ReDotDescriptor,
-> {
+> implements Query<TInstructions>
+{
   #instructions: TInstructions;
 
   constructor(instructions: TInstructions) {

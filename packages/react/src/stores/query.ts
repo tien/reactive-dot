@@ -1,15 +1,15 @@
 import { stringify } from "../utils.js";
 import { typedApiAtomFamily } from "./client.js";
 import {
-  QueryInstruction,
   MultiInstruction,
   QueryError,
+  QueryInstruction,
+  query,
 } from "@reactive-dot/core";
 import type { ChainId } from "@reactive-dot/types";
 import { atom } from "jotai";
 import { atomFamily, atomWithObservable } from "jotai/utils";
-import { from, type Observable } from "rxjs";
-import { switchMap } from "rxjs/operators";
+import { from, switchMap, type Observable } from "rxjs";
 
 const _queryAtomFamily = atomFamily(
   (param: {
@@ -20,62 +20,17 @@ const _queryAtomFamily = atomFamily(
       // eslint-disable-next-line @typescript-eslint/ban-types
       {}>
     >;
-  }) => {
-    switch (param.instruction.instruction) {
-      case "fetch-constant": {
-        const { pallet, constant } = param.instruction;
-
-        return atom(async (get) => {
-          const api = await get(typedApiAtomFamily(param.chainId));
-
-          // eslint-disable-next-line @typescript-eslint/no-explicit-any
-          return (api as any).constants[pallet][constant]() as Promise<unknown>;
-        });
-      }
-
-      case "read-storage": {
-        const { pallet, storage, args } = param.instruction;
-
-        return atomWithObservable((get) =>
-          from(get(typedApiAtomFamily(param.chainId))).pipe(
-            switchMap(
-              (api) =>
-                // eslint-disable-next-line @typescript-eslint/no-explicit-any
-                (api as any).query[pallet][storage].watchValue(
-                  ...args,
-                ) as Observable<unknown>,
-            ),
-          ),
-        );
-      }
-
-      case "read-storage-entries": {
-        const { pallet, storage, args } = param.instruction;
-
-        return atom(async (get, { signal }) => {
-          const api = await get(typedApiAtomFamily(param.chainId));
-
-          // eslint-disable-next-line @typescript-eslint/no-explicit-any
-          return (api as any).query[pallet][storage].getEntries(...args, {
-            signal,
-          });
-        });
-      }
-
-      case "call-api": {
-        const { pallet, api, args } = param.instruction;
-
-        return atom(async (get, { signal }) => {
-          const typedApi = await get(typedApiAtomFamily(param.chainId));
-
-          // eslint-disable-next-line @typescript-eslint/no-explicit-any
-          return (typedApi as any).apis[pallet][api](...args, {
-            signal,
-          }) as Promise<unknown>;
-        });
-      }
-    }
-  },
+  }) =>
+    atomWithObservable((get) =>
+      from(get(typedApiAtomFamily(param.chainId))).pipe(
+        switchMap(
+          (api) =>
+            query(api, param.instruction) as
+              | Promise<unknown>
+              | Observable<unknown>,
+        ),
+      ),
+    ),
   (a, b) => stringify(a) === stringify(b),
 );
 

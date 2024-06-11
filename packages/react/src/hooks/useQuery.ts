@@ -4,10 +4,10 @@ import type { Falsy, FalsyGuard, FlatHead } from "../types.js";
 import { flatHead, stringify } from "../utils.js";
 import type { ChainHookOptions } from "./types.js";
 import {
-  InferQueryBuilder,
   QueryBuilder,
   QueryError,
   QueryInstruction,
+  type InferQueryBuilderPayload,
 } from "@reactive-dot/core";
 import type { ChainId, Chains, ReDotDescriptor } from "@reactive-dot/types";
 import { atom, useAtomValue } from "jotai";
@@ -38,7 +38,9 @@ export const useQuery = <
   : FalsyGuard<
       ReturnType<Exclude<TQuery, Falsy>>,
       FlatHead<
-        InferQueryBuilder<Exclude<ReturnType<Exclude<TQuery, Falsy>>, Falsy>>
+        InferQueryBuilderPayload<
+          Exclude<ReturnType<Exclude<TQuery, Falsy>>, Falsy>
+        >
       >
     > => {
   const contextChainId = useContext(ChainIdContext);
