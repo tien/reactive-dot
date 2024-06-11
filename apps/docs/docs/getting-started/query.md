@@ -58,3 +58,34 @@ const MultiQuery = () => {
   );
 };
 ```
+
+## Dependent queries
+
+Result of a query can be used as variables in subsequent queries.
+
+```tsx
+const Query = () => {
+  const pools = useQuery((builder) =>
+    builder.readStorageEntries("NominationPools", "BondedPools", []),
+  );
+
+  const poolMetadatum = useQuery((builder) =>
+    builder.readStorages(
+      "NominationPools",
+      "Metadata",
+      pools.map(({ keyArgs: [poolId] }) => [poolId] as const),
+    ),
+  );
+
+  return (
+    <section>
+      <h1>Pool names</h1>
+      <ul>
+        {poolMetadatum.map((metadata, index) => (
+          <li key={index}>{metadata.asText()}</li>
+        ))}
+      </ul>
+    </section>
+  );
+};
+```
