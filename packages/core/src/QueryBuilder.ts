@@ -9,6 +9,10 @@ import type {
   ConstantEntry,
 } from "polkadot-api";
 
+type PossibleParents<A extends Array<any>> = A extends [...infer Left, any]
+  ? Left | PossibleParents<Left>
+  : [];
+
 type BaseInstruction<T extends string> = {
   instruction: T;
 };
@@ -121,10 +125,13 @@ type StorageEntriesReadPayload<
   TDescriptor extends ChainDefinition = ReDotDescriptor,
 > =
   TypedApi<TDescriptor>["query"][TInstruction["pallet"]][TInstruction["storage"]] extends StorageEntryWithKeys<
-    any,
+    infer Args,
     infer Payload
   >
-    ? Payload[]
+    ? Array<{
+        keyArgs: Args;
+        value: NonNullable<Payload>;
+      }>
     : unknown;
 
 type ApiCallPayload<
@@ -250,7 +257,7 @@ export default class QueryBuilder<
         infer Args,
         any
       >
-        ? Args
+        ? PossibleParents<Args>
         : unknown[],
   >(pallet: TPallet, storage: TStorage, args: TArguments) {
     return new QueryBuilder([
