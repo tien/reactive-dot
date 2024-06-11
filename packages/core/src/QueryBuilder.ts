@@ -196,23 +196,17 @@ export type InferInstructionsPayload<
   >;
 };
 
-export type InferQueryBuilderResponse<T extends QueryBuilder> =
-  T extends QueryBuilder<infer Instructions, infer Descriptor>
+export type InferQueryResponse<T extends Query> =
+  T extends Query<infer Instructions, infer Descriptor>
     ? InferInstructionsResponse<Instructions, Descriptor>
     : never;
 
-export type InferQueryBuilderPayload<T extends QueryBuilder> =
-  T extends QueryBuilder<infer Instructions, infer Descriptor>
+export type InferQueryPayload<T extends Query> =
+  T extends Query<infer Instructions, infer Descriptor>
     ? InferInstructionsPayload<Instructions, Descriptor>
     : never;
 
-export type Query<
-  TInstructions extends QueryInstruction[] = QueryInstruction[],
-> = {
-  readonly instructions: TInstructions;
-};
-
-export default class QueryBuilder<
+export default class Query<
   const TInstructions extends QueryInstruction[] = QueryInstruction[],
   TDescriptor extends ChainDefinition = ReDotDescriptor,
 > implements Query<TInstructions>
@@ -231,7 +225,7 @@ export default class QueryBuilder<
     TPallet extends keyof TypedApi<TDescriptor>["constants"],
     TConstant extends keyof TypedApi<TDescriptor>["constants"][TPallet],
   >(pallet: TPallet, constant: TConstant) {
-    return new QueryBuilder([
+    return new Query([
       ...this.#instructions,
       { instruction: "fetch-constant", pallet, constant },
     ]);
@@ -244,7 +238,7 @@ export default class QueryBuilder<
       TypedApi<TDescriptor>["query"][TPallet][TStorage]
     >["args"],
   >(pallet: TPallet, storage: TStorage, args: TArguments) {
-    return new QueryBuilder([
+    return new Query([
       ...this.#instructions,
       { instruction: "read-storage", pallet, storage, args },
     ]);
@@ -257,7 +251,7 @@ export default class QueryBuilder<
       TypedApi<TDescriptor>["query"][TPallet][TStorage]
     >["args"],
   >(pallet: TPallet, storage: TStorage, args: TArguments[]) {
-    return new QueryBuilder([
+    return new Query([
       ...this.#instructions,
       { instruction: "read-storage", pallet, storage, args, multi: true },
     ]);
@@ -272,7 +266,7 @@ export default class QueryBuilder<
       >["args"]
     >,
   >(pallet: TPallet, storage: TStorage, args: TArguments) {
-    return new QueryBuilder([
+    return new Query([
       ...this.#instructions,
       { instruction: "read-storage-entries", pallet, storage, args },
     ]);
@@ -285,7 +279,7 @@ export default class QueryBuilder<
       TypedApi<TDescriptor>["apis"][TPallet][TApi]
     >["args"],
   >(pallet: TPallet, api: TApi, args: TArguments) {
-    return new QueryBuilder([
+    return new Query([
       ...this.#instructions,
       { instruction: "call-api", pallet, api, args },
     ]);
@@ -298,7 +292,7 @@ export default class QueryBuilder<
       TypedApi<TDescriptor>["apis"][TPallet][TApi]
     >["args"],
   >(pallet: TPallet, api: TApi, args: TArguments[]) {
-    return new QueryBuilder([
+    return new Query([
       ...this.#instructions,
       { instruction: "call-api", pallet, api, args, multi: true },
     ]);

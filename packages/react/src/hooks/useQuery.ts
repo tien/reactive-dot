@@ -4,10 +4,10 @@ import type { Falsy, FalsyGuard, FlatHead } from "../types.js";
 import { flatHead, stringify } from "../utils.js";
 import type { ChainHookOptions } from "./types.js";
 import {
-  QueryBuilder,
+  Query,
   QueryError,
   QueryInstruction,
-  type InferQueryBuilderPayload,
+  type InferQueryPayload,
 } from "@reactive-dot/core";
 import type { ChainId, Chains, ReDotDescriptor } from "@reactive-dot/types";
 import { atom, useAtomValue } from "jotai";
@@ -23,8 +23,8 @@ import { useContext, useMemo } from "react";
 export const useQuery = <
   TQuery extends
     | ((
-        builder: QueryBuilder<[], TDescriptor>,
-      ) => QueryBuilder<QueryInstruction<TDescriptor>[], TDescriptor> | Falsy)
+        builder: Query<[], TDescriptor>,
+      ) => Query<QueryInstruction<TDescriptor>[], TDescriptor> | Falsy)
     | Falsy,
   TDescriptor extends TChainId extends void
     ? ReDotDescriptor
@@ -38,9 +38,7 @@ export const useQuery = <
   : FalsyGuard<
       ReturnType<Exclude<TQuery, Falsy>>,
       FlatHead<
-        InferQueryBuilderPayload<
-          Exclude<ReturnType<Exclude<TQuery, Falsy>>, Falsy>
-        >
+        InferQueryPayload<Exclude<ReturnType<Exclude<TQuery, Falsy>>, Falsy>>
       >
     > => {
   const contextChainId = useContext(ChainIdContext);
@@ -51,7 +49,7 @@ export const useQuery = <
   }
 
   const query = useMemo(
-    () => (!builder ? undefined : builder(new QueryBuilder([]))),
+    () => (!builder ? undefined : builder(new Query([]))),
     [builder],
   );
 

@@ -1,7 +1,7 @@
 export {
-  default as QueryBuilder,
-  type InferQueryBuilderPayload,
-  type InferQueryBuilderResponse,
+  default as Query,
+  type InferQueryPayload,
+  type InferQueryResponse,
   type MultiInstruction,
   type QueryInstruction,
 } from "./QueryBuilder.js";
