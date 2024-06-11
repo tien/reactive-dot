@@ -87,7 +87,7 @@ export const useMutation = <
             .subscribe({
               next: setState,
               error: (error) => {
-                setState(new MutationError(undefined, { cause: error }));
+                setState(MutationError.from(error));
                 reject(error);
               },
               complete: resolve,
