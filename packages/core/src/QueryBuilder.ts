@@ -1,17 +1,32 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import type { ReDotDescriptor } from "@reactive-dot/types";
-import type {
-  TypedApi,
-  StorageEntry,
-  StorageEntryWithKeys,
-  ChainDefinition,
-  RuntimeCall,
-  ConstantEntry,
-} from "polkadot-api";
+import type { ChainDefinition, TypedApi } from "polkadot-api";
+import { Observable } from "rxjs";
 
-type PossibleParents<A extends Array<any>> = A extends [...infer Left, any]
-  ? Left | PossibleParents<Left>
-  : [];
+type InferPapiStorageEntry<T> = T extends {
+  watchValue: (...args: infer Args) => Observable<infer Payload>;
+}
+  ? { args: Args; payload: Payload }
+  : { args: unknown[]; payload: unknown };
+
+type InferPapiStorageEntryWithKeys<T> = T extends {
+  getEntries: (...args: infer Args) => Promise<infer Payload>;
+}
+  ? { args: Args; payload: Payload }
+  : { args: unknown[]; payload: unknown };
+
+type InferPapiRuntimeCall<T> = T extends (
+  ...args: infer Args
+) => Promise<infer Payload>
+  ? { args: Args; payload: Payload }
+  : { args: unknown[]; payload: unknown };
+
+type InferPapiConstantEntry<T> = T extends {
+  (): Promise<infer Payload>;
+  (runtime: infer _): infer Payload;
+}
+  ? Payload
+  : unknown;
 
 type BaseInstruction<T extends string> = {
   instruction: T;
@@ -29,13 +44,9 @@ export type ConstantFetchInstruction<
 export type StorageReadInstruction<
   TPallet extends keyof TypedApi<TDescriptor>["query"],
   TStorage extends keyof TypedApi<TDescriptor>["query"][TPallet],
-  TArguments extends
-    TypedApi<TDescriptor>["query"][TPallet][TStorage] extends StorageEntry<
-      infer Args,
-      any
-    >
-      ? Args
-      : unknown[],
+  TArguments extends InferPapiStorageEntry<
+    TypedApi<TDescriptor>["query"][TPallet][TStorage]
+  >["args"],
   TDescriptor extends ChainDefinition = ReDotDescriptor,
 > = BaseInstruction<"read-storage"> & {
   pallet: TPallet;
@@ -46,13 +57,9 @@ export type StorageReadInstruction<
 export type StorageEntriesReadInstruction<
   TPallet extends keyof TypedApi<TDescriptor>["query"],
   TStorage extends keyof TypedApi<TDescriptor>["query"][TPallet],
-  TArguments extends
-    TypedApi<TDescriptor>["query"][TPallet][TStorage] extends StorageEntry<
-      infer Args,
-      any
-    >
-      ? Args
-      : unknown[],
+  TArguments extends InferPapiStorageEntryWithKeys<
+    TypedApi<TDescriptor>["query"][TPallet][TStorage]
+  >["args"],
   TDescriptor extends ChainDefinition = ReDotDescriptor,
 > = BaseInstruction<"read-storage-entries"> & {
   pallet: TPallet;
@@ -63,13 +70,9 @@ export type StorageEntriesReadInstruction<
 export type ApiCallInstruction<
   TPallet extends keyof TypedApi<TDescriptor>["apis"],
   TApi extends keyof TypedApi<TDescriptor>["apis"][TPallet],
-  TArguments extends
-    TypedApi<TDescriptor>["apis"][TPallet][TApi] extends RuntimeCall<
-      infer Args,
-      any
-    >
-      ? Args
-      : unknown[],
+  TArguments extends InferPapiRuntimeCall<
+    TypedApi<TDescriptor>["apis"][TPallet][TApi]
+  >["args"],
   TDescriptor extends ChainDefinition = ReDotDescriptor,
 > = BaseInstruction<"call-api"> & {
   pallet: TPallet;
@@ -95,25 +98,18 @@ export type QueryInstruction<
 type ConstantFetchPayload<
   TInstruction extends ConstantFetchInstruction<any, any, TDescriptor>,
   TDescriptor extends ChainDefinition = ReDotDescriptor,
-> =
-  TypedApi<TDescriptor>["constants"][TInstruction["pallet"]][TInstruction["constant"]] extends ConstantEntry<
-    infer Payload
-  >
-    ? Payload
-    : never;
+> = InferPapiConstantEntry<
+  TypedApi<TDescriptor>["constants"][TInstruction["pallet"]][TInstruction["constant"]]
+>;
 
 type StorageReadPayload<
   TInstruction extends
     | StorageReadInstruction<any, any, any, TDescriptor>
     | MultiInstruction<StorageReadInstruction<any, any, any, TDescriptor>>,
   TDescriptor extends ChainDefinition = ReDotDescriptor,
-> =
-  TypedApi<TDescriptor>["query"][TInstruction["pallet"]][TInstruction["storage"]] extends StorageEntry<
-    any,
-    infer Payload
-  >
-    ? Payload
-    : unknown;
+> = InferPapiStorageEntry<
+  TypedApi<TDescriptor>["query"][TInstruction["pallet"]][TInstruction["storage"]]
+>["payload"];
 
 type StorageEntriesReadPayload<
   TInstruction extends StorageEntriesReadInstruction<
@@ -123,29 +119,18 @@ type StorageEntriesReadPayload<
     TDescriptor
   >,
   TDescriptor extends ChainDefinition = ReDotDescriptor,
-> =
-  TypedApi<TDescriptor>["query"][TInstruction["pallet"]][TInstruction["storage"]] extends StorageEntryWithKeys<
-    infer Args,
-    infer Payload
-  >
-    ? Array<{
-        keyArgs: Args;
-        value: NonNullable<Payload>;
-      }>
-    : unknown;
+> = InferPapiStorageEntryWithKeys<
+  TypedApi<TDescriptor>["query"][TInstruction["pallet"]][TInstruction["storage"]]
+>["payload"];
 
 type ApiCallPayload<
   TInstruction extends
     | ApiCallInstruction<any, any, any, TDescriptor>
     | MultiInstruction<ApiCallInstruction<any, any, any, TDescriptor>>,
   TDescriptor extends ChainDefinition = ReDotDescriptor,
-> =
-  TypedApi<TDescriptor>["apis"][TInstruction["pallet"]][TInstruction["api"]] extends RuntimeCall<
-    any,
-    infer Payload
-  >
-    ? Payload
-    : unknown;
+> = InferPapiRuntimeCall<
+  TypedApi<TDescriptor>["apis"][TInstruction["pallet"]][TInstruction["api"]]
+>["payload"];
 
 export type InferInstruction<
   TInstruction extends QueryInstruction,
@@ -218,13 +203,9 @@ export default class QueryBuilder<
   readStorage<
     TPallet extends keyof TypedApi<TDescriptor>["query"],
     TStorage extends keyof TypedApi<TDescriptor>["query"][TPallet],
-    TArguments extends
-      TypedApi<TDescriptor>["query"][TPallet][TStorage] extends StorageEntry<
-        infer Args,
-        any
-      >
-        ? Args
-        : unknown[],
+    TArguments extends InferPapiStorageEntry<
+      TypedApi<TDescriptor>["query"][TPallet][TStorage]
+    >["args"],
   >(pallet: TPallet, storage: TStorage, args: TArguments) {
     return new QueryBuilder([
       ...this.#instructions,
@@ -235,13 +216,9 @@ export default class QueryBuilder<
   readStorages<
     TPallet extends keyof TypedApi<TDescriptor>["query"],
     TStorage extends keyof TypedApi<TDescriptor>["query"][TPallet],
-    TArguments extends
-      TypedApi<TDescriptor>["query"][TPallet][TStorage] extends StorageEntry<
-        infer Args,
-        any
-      >
-        ? Args
-        : unknown[],
+    TArguments extends InferPapiStorageEntry<
+      TypedApi<TDescriptor>["query"][TPallet][TStorage]
+    >["args"],
   >(pallet: TPallet, storage: TStorage, args: TArguments[]) {
     return new QueryBuilder([
       ...this.#instructions,
@@ -252,13 +229,11 @@ export default class QueryBuilder<
   readStorageEntries<
     TPallet extends keyof TypedApi<TDescriptor>["query"],
     TStorage extends keyof TypedApi<TDescriptor>["query"][TPallet],
-    TArguments extends
-      TypedApi<TDescriptor>["query"][TPallet][TStorage] extends StorageEntryWithKeys<
-        infer Args,
-        any
-      >
-        ? PossibleParents<Args>
-        : unknown[],
+    TArguments extends Array<
+      InferPapiStorageEntryWithKeys<
+        TypedApi<TDescriptor>["query"][TPallet][TStorage]
+      >["args"]
+    >,
   >(pallet: TPallet, storage: TStorage, args: TArguments) {
     return new QueryBuilder([
       ...this.#instructions,
@@ -269,13 +244,9 @@ export default class QueryBuilder<
   callApi<
     TPallet extends keyof TypedApi<TDescriptor>["apis"],
     TApi extends keyof TypedApi<TDescriptor>["apis"][TPallet],
-    TArguments extends
-      TypedApi<TDescriptor>["apis"][TPallet][TApi] extends RuntimeCall<
-        infer Args,
-        any
-      >
-        ? Args
-        : unknown[],
+    TArguments extends InferPapiRuntimeCall<
+      TypedApi<TDescriptor>["apis"][TPallet][TApi]
+    >["args"],
   >(pallet: TPallet, api: TApi, args: TArguments) {
     return new QueryBuilder([
       ...this.#instructions,
@@ -286,13 +257,9 @@ export default class QueryBuilder<
   callApis<
     TPallet extends keyof TypedApi<TDescriptor>["apis"],
     TApi extends keyof TypedApi<TDescriptor>["apis"][TPallet],
-    TArguments extends
-      TypedApi<TDescriptor>["apis"][TPallet][TApi] extends RuntimeCall<
-        infer Args,
-        any
-      >
-        ? Args
-        : unknown[],
+    TArguments extends InferPapiRuntimeCall<
+      TypedApi<TDescriptor>["apis"][TPallet][TApi]
+    >["args"],
   >(pallet: TPallet, api: TApi, args: TArguments[]) {
     return new QueryBuilder([
       ...this.#instructions,

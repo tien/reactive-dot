@@ -26,7 +26,7 @@
     "@tsconfig/strictest": "^2.0.5",
     "@types/react": "^18.3.3",
     "eslint": "^9.4.0",
-    "polkadot-api": "patch:polkadot-api@npm%3A0.8.0#~/.yarn/patches/polkadot-api-npm-0.8.0-ef17b11e20.patch",
+    "polkadot-api": "^0.8.0",
     "react": "^18.3.1",
     "typescript": "^5.4.5"
   }
