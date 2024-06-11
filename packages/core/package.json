@@ -21,9 +21,11 @@
     "build": "rm -rf build && tsc --build",
     "lint": "eslint src"
   },
+  "dependencies": {
+    "@reactive-dot/types": "workspace:^"
+  },
   "devDependencies": {
     "@reactive-dot/eslint-config": "workspace:^",
-    "@reactive-dot/types": "workspace:^",
     "@tsconfig/recommended": "^1.0.6",
     "@tsconfig/strictest": "^2.0.5",
     "eslint": "^9.4.0",
