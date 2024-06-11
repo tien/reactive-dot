@@ -1,0 +1,141 @@
+---
+sidebar_position: 1
+---
+
+import TabItem from "@theme/TabItem";
+import Tabs from "@theme/Tabs";
+
+# Setup
+
+This walks you through the process of creating a simple Reactive DOT application.
+
+## Installation
+
+First add React DOT, along with required packages as dependencies to your React project.
+
+{/* prettier-ignore-start */}
+
+<Tabs>
+  <TabItem value="npm" label="npm" default>
+    ```sh
+    npm add @reactive-dot/react polkadot-api
+    ```
+  </TabItem>
+  <TabItem value="yarn" label="yarn">
+    ```sh
+    yarn add @reactive-dot/react polkadot-api
+    ```
+  </TabItem>
+    <TabItem value="pnpm" label="pnpm">
+    ```sh
+    pnpm add @reactive-dot/react polkadot-api
+    ```
+  </TabItem>
+</Tabs>
+
+{/* prettier-ignore-end */}
+
+## Download & sync metadata
+
+Next, download the latest metadata from the chain you want to connect to and generate the types
+
+```sh
+# `papi add` is the command
+# `dot` is the name we're giving to this chain (can be any JS variable name)
+# `-n polkadot` specifies to download the metadata from the well-known chain polkadot
+npx papi add dot -n polkadot
+# Wait for the latest metadata to download, then generate the types:
+npx papi
+```
+
+## Add type information
+
+The records of `ChainId` -> `Descriptor` here will be used to provided you with the right type definitions when using hooks.
+
+```ts title="redot.d.ts"
+import type { dot } from "@polkadot-api/descriptors";
+
+declare module "@reactive-dot/types" {
+  export interface Chains {
+    polkadot: typeof dot;
+  }
+}
+```
+
+## Create config
+
+```ts title="config.ts"
+import { dot } from "@polkadot-api/descriptors";
+import { InjectedConnector } from "@reactive-dot/core/wallets.js";
+import type { Config } from "@reactive-dot/types";
+import { chainSpec } from "polkadot-api/chains/polkadot";
+import { getSmProvider } from "polkadot-api/sm-provider";
+import { startFromWorker } from "polkadot-api/smoldot/from-worker";
+
+const smoldot = startFromWorker(new SmWorker());
+const chain = smoldot.addChain({ chainSpec });
+
+const config: Config = {
+  chains: {
+    polkadot: {
+      descriptor: polkadot,
+      provider: getSmProvider(chain),
+    },
+  },
+  wallets: [new InjectedConnector()],
+};
+
+export default config;
+```
+
+## Wrap app in context providers
+
+```tsx title="app.tsx"
+import { config } from "./config";
+import { ReDotChainProvider, ReDotProvider } from "@reactive-dot/react";
+import { Suspense } from "react";
+
+const App = () => (
+  <ReDotProvider config={config}>
+    <ReDotChainProvider chainId="polkadot">
+      {/** Make sure there is at least one Suspense boundary wrapping the app */}
+      <Suspense>{/** ... */}</Suspense>
+    </ReDotChainProvider>
+  </ReDotProvider>
+);
+```
+
+## Use Reactive DOT
+
+```tsx title="query.tsx"
+import { config } from "./config";
+import { useQuery, useAccounts } from "@reactive-dot/react";
+
+const App = () => {
+  const accounts = useAccounts();
+  const [timestamp, totalIssuance] = useQuery((builder) =>
+    builder
+      .readStorage("Timestamp", "Now", [])
+      .readStorage("Balances", "TotalIssuance", []),
+  );
+
+  return (
+    <div>
+      <ul>
+        {accounts.map((account, index) => (
+          <li key={index}>
+            <div>Address: {account.address}</div>
+            {account.name && <div>Name: {account.name}</div>}
+          </li>
+        ))}
+      </ul>
+      <section>
+        <div>
+          Latest block timestamp: {new Date(Number(timestamp)).toLocaleString()}
+        </div>
+        <div>Total issuance: {totalIssuance.toString()}</div>
+      </section>
+    </div>
+  );
+};
+```

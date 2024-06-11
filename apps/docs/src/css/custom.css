@@ -1,0 +1,35 @@
+@import url("https://fonts.googleapis.com/css2?family=Inter:slnt,wght@-10..0,100..900&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Fira+Code:wght@300..700&display=swap");
+
+@font-face {
+  font-family: "Unbounded";
+  src: url("/font/Unbounded-Variable.woff2");
+}
+
+:root {
+  --docusaurus-highlighted-code-line-bg: rgba(0, 0, 0, 0.1);
+  --ifm-color-primary: #ff2c9c;
+  --ifm-color-primary-dark: #ff0a8c;
+  --ifm-color-primary-darker: #fd0086;
+  --ifm-color-primary-darkest: #e6007a;
+  --ifm-color-primary-light: #cf006e;
+  --ifm-color-primary-lighter: #c40068;
+  --ifm-color-primary-lightest: #a10055;
+  --ifm-code-font-size: 95%;
+  --ifm-font-family-monospace: "Fira Code";
+  --ifm-heading-font-family: "Unbounded", sans-serif;
+
+  font-family: "Inter", sans-serif;
+}
+
+/* For readability concerns, you should choose a lighter palette in dark mode. */
+[data-theme="dark"] {
+  --docusaurus-highlighted-code-line-bg: rgba(0, 0, 0, 0.3);
+  --ifm-color-primary: #ff91c2;
+  --ifm-color-primary-dark: #ff63a9;
+  --ifm-color-primary-darker: #ff54a0;
+  --ifm-color-primary-darkest: #ff358f;
+  --ifm-color-primary-light: #ff167e;
+  --ifm-color-primary-lighter: #ff0775;
+  --ifm-color-primary-lightest: #d80060;
+}
