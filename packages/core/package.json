@@ -27,7 +27,7 @@
     "@tsconfig/recommended": "^1.0.6",
     "@tsconfig/strictest": "^2.0.5",
     "eslint": "^9.4.0",
-    "polkadot-api": "^0.8.0",
+    "polkadot-api": "patch:polkadot-api@npm%3A0.8.0#~/.yarn/patches/polkadot-api-npm-0.8.0-ef17b11e20.patch",
     "typescript": "^5.4.5"
   },
   "peerDependencies": {

@@ -13,7 +13,7 @@
   "dependencies": {
     "@reactive-dot/react": "workspace:^",
     "date-fns": "^3.6.0",
-    "polkadot-api": "^0.8.0",
+    "polkadot-api": "patch:polkadot-api@npm%3A0.8.0#~/.yarn/patches/polkadot-api-npm-0.8.0-ef17b11e20.patch",
     "react": "^18.3.1",
     "react-dom": "^18.3.1"
   },
