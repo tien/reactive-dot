@@ -5,7 +5,7 @@ import { themes as prismThemes } from "prism-react-renderer";
 
 const config: Config = {
   title: "Reactive DOT",
-  tagline: "A reactive library for building Substrate front-end",
+  tagline: "A reactive library for building Substrate front-ends",
   favicon: "img/favicon.ico",
 
   url: "https://reactive-dot.tien.zone",
