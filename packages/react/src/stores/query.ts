@@ -1,16 +1,15 @@
 import { stringify } from "../utils.js";
 import { typedApiAtomFamily } from "./client.js";
 import {
-  type MultiInstruction,
-  type Query,
-  QueryError,
   QueryInstruction,
   preflight,
   query,
+  type MultiInstruction,
+  type Query,
 } from "@reactive-dot/core";
 import type { ChainId } from "@reactive-dot/types";
-import { atom } from "jotai";
-import { atomFamily, atomWithObservable } from "jotai/utils";
+import { type Atom, type WritableAtom, atom } from "jotai";
+import { atomFamily, atomWithObservable, atomWithRefresh } from "jotai/utils";
 import { from, switchMap, type Observable } from "rxjs";
 
 const instructionPayloadAtomFamily = atomFamily(
@@ -22,13 +21,13 @@ const instructionPayloadAtomFamily = atomFamily(
       // eslint-disable-next-line @typescript-eslint/ban-types
       {}>
     >;
-  }) => {
+  }): Atom<unknown> | WritableAtom<Promise<unknown>, [], void> => {
     switch (preflight(param.instruction)) {
       case "promise":
-        return atom(async (get, { signal }) => {
+        return atomWithRefresh(async (get, { signal }) => {
           const api = await get(typedApiAtomFamily(param.chainId));
 
-          return query(api, param.instruction, { signal }) as Promise<unknown>;
+          return query(api, param.instruction, { signal });
         });
       case "observable":
         return atomWithObservable((get) =>
@@ -43,41 +42,45 @@ const instructionPayloadAtomFamily = atomFamily(
   (a, b) => stringify(a) === stringify(b),
 );
 
+export const getQueryInstructionPayloadAtoms = (
+  chainId: ChainId,
+  query: Query,
+) =>
+  query.instructions.map((instruction) => {
+    if (!("multi" in instruction)) {
+      return instructionPayloadAtomFamily({
+        chainId: chainId,
+        instruction,
+      });
+    }
+
+    return (instruction.args as unknown[]).map((args) => {
+      const { multi, ...rest } = instruction;
+
+      return instructionPayloadAtomFamily({
+        chainId: chainId,
+        instruction: { ...rest, args },
+      });
+    });
+  });
+
 // TODO: should be memoized within render function instead
 // https://github.com/pmndrs/jotai/discussions/1553
 export const queryPayloadAtomFamily = atomFamily(
   (param: { chainId: ChainId; query: Query }) =>
-    atom((get) =>
-      Promise.all(
-        param.query.instructions.map((instruction) => {
-          if (param.chainId === undefined) {
-            throw new QueryError("No chain Id provided");
+    atom((get) => {
+      const atoms = getQueryInstructionPayloadAtoms(param.chainId, param.query);
+
+      return Promise.all(
+        atoms.map((atomOrAtoms) => {
+          if (Array.isArray(atomOrAtoms)) {
+            return Promise.all(atomOrAtoms.map(get));
           }
 
-          if (!("multi" in instruction)) {
-            return get(
-              instructionPayloadAtomFamily({
-                chainId: param.chainId,
-                instruction,
-              }),
-            );
-          }
-
-          const { multi: _, ...query } = instruction;
-
-          return Promise.all(
-            instruction.args.map((args: unknown[]) =>
-              get(
-                instructionPayloadAtomFamily({
-                  chainId: param.chainId,
-                  instruction: { ...query, args },
-                }),
-              ),
-            ),
-          );
+          return get(atomOrAtoms);
         }),
-      ),
-    ),
+      );
+    }),
   (a, b) =>
     a.chainId === b.chainId &&
     stringify(a.query.instructions) === stringify(b.query.instructions),

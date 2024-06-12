@@ -89,3 +89,30 @@ const Query = () => {
   );
 };
 ```
+
+## Refreshing queries
+
+Certain query, like runtime API calls & reading of storage entries doesn't create any subscriptions. In order to get the latest data, they must be manually refreshed with the [`useQueryWithRefresh`](/api/react/function/useQueryWithRefresh) hook.
+
+```tsx
+import { useTransition } from "react";
+
+const QueryWithRefresh = () => {
+  const [isPending, startTransition] = useTransition();
+  const [pendingRewards, refreshPendingRewards] = useQueryWithRefresh(
+    (builder) => builder.callApi("NominationPoolsApi", "pending_rewards", []),
+  );
+
+  return (
+    <div>
+      <p>{pendingRewards.toLocaleString()}</p>
+      <button
+        onClick={() => startTransition(() => refreshPendingRewards())}
+        disabled={isPending}
+      >
+        Refresh
+      </button>
+    </div>
+  );
+};
+```

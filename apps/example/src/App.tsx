@@ -8,11 +8,51 @@ import {
   useConnectedWallets,
   useMutation,
   useQuery,
+  useQueryWithRefresh,
   useWallets,
 } from "@reactive-dot/react";
 import { formatDistance } from "date-fns";
 import { Binary } from "polkadot-api";
-import { Suspense, useState } from "react";
+import { Suspense, useState, useTransition } from "react";
+
+const PendingPoolRewards = () => {
+  const accounts = useAccounts();
+
+  const [isPending, startTransition] = useTransition();
+  const [pendingRewards, refreshPendingRewards] = useQueryWithRefresh(
+    (builder) =>
+      builder.callApis(
+        "NominationPoolsApi",
+        "pending_rewards",
+        accounts.map((account) => [account.address] as const),
+      ),
+  );
+
+  if (accounts.length === 0) {
+    return (
+      <article>
+        <h4>Pending rewards</h4>
+        <p>Please connect accounts to see pending rewards</p>
+      </article>
+    );
+  }
+
+  return (
+    <article>
+      <h4>Pending rewards</h4>
+      <button onClick={() => startTransition(() => refreshPendingRewards())}>
+        {isPending ? "Refreshing..." : "Refresh"}
+      </button>
+      <ul>
+        {pendingRewards.map((rewards, index) => (
+          <li key={index}>
+            {accounts.at(index)?.address}: {rewards.toLocaleString()} planck
+          </li>
+        ))}
+      </ul>
+    </article>
+  );
+};
 
 const Query = () => {
   const block = useBlock();
@@ -69,7 +109,7 @@ const Query = () => {
       </article>
       <article>
         <h4>Total issuance</h4>
-        <p>{totalIssuance.toString()} planck</p>
+        <p>{totalIssuance.toLocaleString()} planck</p>
       </article>
       <article>
         <h4>Bonding duration</h4>
@@ -77,11 +117,11 @@ const Query = () => {
       </article>
       <article>
         <h4>Total value staked</h4>
-        <p>{totalStaked?.toString()} planck</p>
+        <p>{totalStaked?.toLocaleString()} planck</p>
       </article>
       <article>
         <h4>Total value locked in nomination Pools</h4>
-        <p>{totalValueLocked.toString()} planck</p>
+        <p>{totalValueLocked.toLocaleString()} planck</p>
       </article>
       <article>
         <h4>First 4 pools</h4>
@@ -89,6 +129,7 @@ const Query = () => {
           <p key={index}>{x.asText()}</p>
         ))}
       </article>
+      <PendingPoolRewards />
     </section>
   );
 };
