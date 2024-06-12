@@ -37,8 +37,7 @@ const Query = () => {
       .readStorage("Balances", "TotalIssuance", [])
       .readStorage("Staking", "ActiveEra", [])
       .readStorage("NominationPools", "TotalValueLocked", [])
-      .readStorages("NominationPools", "Metadata", [[0], [1], [2], [3], [4]])
-      .readStorage("Treasury", "ProposalCount", []),
+      .readStorages("NominationPools", "Metadata", [[0], [1], [2], [3], [4]]),
   );
 
   const bondingDurationMs =

@@ -100,7 +100,7 @@ type ConstantFetchPayload<
   TypedApi<TDescriptor>["constants"][TInstruction["pallet"]][TInstruction["constant"]]
 >;
 
-type StorageReadPayload<
+type StorageReadResponse<
   TInstruction extends
     | StorageReadInstruction<any, any, any, TDescriptor>
     | MultiInstruction<StorageReadInstruction<any, any, any, TDescriptor>>,
@@ -109,7 +109,7 @@ type StorageReadPayload<
   TypedApi<TDescriptor>["query"][TInstruction["pallet"]][TInstruction["storage"]]
 >["response"];
 
-type StorageEntriesReadPayload<
+type StorageEntriesReadResponse<
   TInstruction extends StorageEntriesReadInstruction<
     any,
     any,
@@ -121,7 +121,7 @@ type StorageEntriesReadPayload<
   TypedApi<TDescriptor>["query"][TInstruction["pallet"]][TInstruction["storage"]]
 >["response"];
 
-type ApiCallPayload<
+type ApiCallResponse<
   TInstruction extends
     | ApiCallInstruction<any, any, any, TDescriptor>
     | MultiInstruction<ApiCallInstruction<any, any, any, TDescriptor>>,
@@ -139,42 +139,42 @@ export type InferInstructionResponse<
     : TInstruction extends MultiInstruction<
           StorageReadInstruction<any, any, any, TDescriptor>
         >
-      ? Array<StorageReadPayload<TInstruction, TDescriptor>>
+      ? Array<StorageReadResponse<TInstruction, TDescriptor>>
       : TInstruction extends StorageReadInstruction<any, any, any, TDescriptor>
-        ? StorageReadPayload<TInstruction, TDescriptor>
+        ? StorageReadResponse<TInstruction, TDescriptor>
         : TInstruction extends StorageEntriesReadInstruction<
               any,
               any,
               any,
               TDescriptor
             >
-          ? StorageEntriesReadPayload<TInstruction, TDescriptor>
+          ? StorageEntriesReadResponse<TInstruction, TDescriptor>
           : TInstruction extends MultiInstruction<
                 ApiCallInstruction<any, any, any, TDescriptor>
               >
-            ? Array<ApiCallPayload<TInstruction, TDescriptor>>
+            ? Array<ApiCallResponse<TInstruction, TDescriptor>>
             : TInstruction extends ApiCallInstruction<
                   any,
                   any,
                   any,
                   TDescriptor
                 >
-              ? ApiCallPayload<TInstruction, TDescriptor>
+              ? ApiCallResponse<TInstruction, TDescriptor>
               : never;
+
+type ResponsePayload<T> =
+  T extends Promise<infer Payload>
+    ? Payload
+    : T extends Observable<infer Payload>
+      ? Payload
+      : T extends Array<infer Element>
+        ? Array<ResponsePayload<Element>>
+        : unknown;
 
 export type InferInstructionPayload<
   TInstruction extends QueryInstruction,
   TDescriptor extends ChainDefinition = ReDotDescriptor,
-> =
-  InferInstructionResponse<TInstruction, TDescriptor> extends Promise<
-    infer Payload
-  >
-    ? Payload
-    : InferInstructionResponse<TInstruction, TDescriptor> extends Observable<
-          infer Payload
-        >
-      ? Payload
-      : InferInstructionResponse<TInstruction, TDescriptor>;
+> = ResponsePayload<InferInstructionResponse<TInstruction, TDescriptor>>;
 
 export type InferInstructionsResponse<
   TInstructions extends QueryInstruction[],
