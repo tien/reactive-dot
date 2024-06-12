@@ -1,9 +1,16 @@
-@import url("https://fonts.googleapis.com/css2?family=Inter:slnt,wght@-10..0,100..900&display=swap");
-@import url("https://fonts.googleapis.com/css2?family=Fira+Code:wght@300..700&display=swap");
+@font-face {
+  font-family: "Inter";
+  src: url("/font/Inter.ttf");
+}
 
 @font-face {
   font-family: "Unbounded";
-  src: url("/font/Unbounded-Variable.woff2");
+  src: url("/font/Unbounded.woff2");
+}
+
+@font-face {
+  font-family: "Fira Code";
+  src: url("/font/FiraCode.ttf");
 }
 
 :root {
