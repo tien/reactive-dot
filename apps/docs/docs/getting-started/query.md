@@ -90,6 +90,31 @@ const Query = () => {
 };
 ```
 
+## Conditional query
+
+Use a falsy value (`undefined`, `null` or `false`) to conditionally fetch data. If the query builder returns or it self is a falsy value, Reactive DOT will not execute the query.
+
+```ts
+const conditionalReturn = useQuery((builder) =>
+  account === undefined
+    ? undefined
+    : builder.callApi("NominationPoolsApi", "pending_rewards", [
+        account.address,
+      ]),
+);
+
+// Or
+
+const conditionalFunction = useQuery(
+  account === undefined
+    ? undefined
+    : (builder) =>
+        builder.callApi("NominationPoolsApi", "pending_rewards", [
+          account.address,
+        ]),
+);
+```
+
 ## Refreshing queries
 
 Certain query, like runtime API calls & reading of storage entries doesn't create any subscriptions. In order to get the latest data, they must be manually refreshed with the [`useQueryWithRefresh`](/api/react/function/useQueryWithRefresh) hook.
