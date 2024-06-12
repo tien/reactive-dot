@@ -27,7 +27,7 @@ const config: Config = {
       "typedoc-api",
       {
         projectRoot: path.join(__dirname, "../.."),
-        tsconfigName: "tsconfig.doc.json",
+        tsconfigName: "tsconfig.typedoc.json",
         packages: ["packages/core", "packages/react"],
       },
     ],
