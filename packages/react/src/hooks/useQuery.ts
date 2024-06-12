@@ -4,7 +4,7 @@ import {
   queryPayloadAtomFamily,
 } from "../stores/query.js";
 import type { Falsy, FalsyGuard, FlatHead } from "../types.js";
-import { flatHead, stringify } from "../utils.js";
+import { flatHead, stringify } from "../utils/vanilla.js";
 import type { ChainHookOptions } from "./types.js";
 import {
   Query,

@@ -20,7 +20,7 @@ There are multiple way to select the account used for signing.
 import { ReDotSignerProvider } from "@reactive-dot/react";
 
 const App = () => (
-  <ReDotSignerProvider signer={someSigner}>{/** ... */}</ReDotSignerProvider>
+  <ReDotSignerProvider signer={someSigner}>{/* ... */}</ReDotSignerProvider>
 );
 ```
 

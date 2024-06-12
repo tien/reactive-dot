@@ -3411,6 +3411,7 @@ __metadata:
     polkadot-api: "npm:^0.8.0"
     react: "npm:^18.3.1"
     react-dom: "npm:^18.3.1"
+    react-error-boundary: "npm:^4.0.13"
     typescript: "npm:^5.4.5"
     vite: "npm:^5.2.13"
   languageName: unknown
@@ -12788,6 +12789,17 @@ __metadata:
   peerDependencies:
     react: ^18.3.1
   checksum: 10c0/a752496c1941f958f2e8ac56239172296fcddce1365ce45222d04a1947e0cc5547df3e8447f855a81d6d39f008d7c32eab43db3712077f09e3f67c4874973e85
+  languageName: node
+  linkType: hard
+
+"react-error-boundary@npm:^4.0.13":
+  version: 4.0.13
+  resolution: "react-error-boundary@npm:4.0.13"
+  dependencies:
+    "@babel/runtime": "npm:^7.12.5"
+  peerDependencies:
+    react: ">=16.13.1"
+  checksum: 10c0/6f3e0e4d7669f680ccf49c08c9571519c6e31f04dcfc30a765a7136c7e6fbbbe93423dd5a9fce12107f8166e54133e9dd5c2079a00c7a38201ac811f7a28b8e7
   languageName: node
   linkType: hard
 

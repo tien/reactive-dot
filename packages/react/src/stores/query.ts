@@ -1,4 +1,5 @@
-import { stringify } from "../utils.js";
+import { withAtomFamilyErrorCatcher } from "../utils/jotai.js";
+import { stringify } from "../utils/vanilla.js";
 import { typedApiAtomFamily } from "./client.js";
 import {
   QueryInstruction,
@@ -24,13 +25,21 @@ const instructionPayloadAtomFamily = atomFamily(
   }): Atom<unknown> | WritableAtom<Promise<unknown>, [], void> => {
     switch (preflight(param.instruction)) {
       case "promise":
-        return atomWithRefresh(async (get, { signal }) => {
+        return withAtomFamilyErrorCatcher(
+          instructionPayloadAtomFamily,
+          param,
+          atomWithRefresh,
+        )(async (get, { signal }) => {
           const api = await get(typedApiAtomFamily(param.chainId));
 
           return query(api, param.instruction, { signal });
         });
       case "observable":
-        return atomWithObservable((get) =>
+        return withAtomFamilyErrorCatcher(
+          instructionPayloadAtomFamily,
+          param,
+          atomWithObservable,
+        )((get) =>
           from(get(typedApiAtomFamily(param.chainId))).pipe(
             switchMap(
               (api) => query(api, param.instruction) as Observable<unknown>,
@@ -67,8 +76,12 @@ export const getQueryInstructionPayloadAtoms = (
 // TODO: should be memoized within render function instead
 // https://github.com/pmndrs/jotai/discussions/1553
 export const queryPayloadAtomFamily = atomFamily(
-  (param: { chainId: ChainId; query: Query }) =>
-    atom((get) => {
+  (param: { chainId: ChainId; query: Query }): Atom<unknown> =>
+    withAtomFamilyErrorCatcher(
+      queryPayloadAtomFamily,
+      param,
+      atom,
+    )((get) => {
       const atoms = getQueryInstructionPayloadAtoms(param.chainId, param.query);
 
       return Promise.all(

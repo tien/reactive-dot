@@ -3,6 +3,7 @@ import { IDLE, MutationError, PENDING } from "@reactive-dot/core";
 import {
   ReDotChainProvider,
   ReDotProvider,
+  useResetQueryError,
   useAccounts,
   useBlock,
   useConnectedWallets,
@@ -14,6 +15,7 @@ import {
 import { formatDistance } from "date-fns";
 import { Binary } from "polkadot-api";
 import { Suspense, useState, useTransition } from "react";
+import { ErrorBoundary, type FallbackProps } from "react-error-boundary";
 
 const PendingPoolRewards = () => {
   const accounts = useAccounts();
@@ -236,12 +238,40 @@ const Mutation = () => {
   );
 };
 
-const Example = () => (
-  <div>
-    <Query />
-    <Mutation />
-  </div>
+const ErrorFallback = (props: FallbackProps) => (
+  <article>
+    <header>
+      <strong>Oops, something went wrong!</strong>
+    </header>
+    <button onClick={() => props.resetErrorBoundary(props.error)}>Retry</button>
+  </article>
 );
+
+type ExampleProps = { chainName: string };
+
+const Example = (props: ExampleProps) => {
+  const resetQueryError = useResetQueryError();
+
+  return (
+    <div>
+      <ErrorBoundary
+        FallbackComponent={ErrorFallback}
+        onReset={(details) => {
+          if (details.reason === "imperative-api") {
+            const [error] = details.args;
+            resetQueryError(error);
+          }
+        }}
+      >
+        <Suspense fallback={<h2>Loading {props.chainName}...</h2>}>
+          <h2>{props.chainName}</h2>
+          <Query />
+          <Mutation />
+        </Suspense>
+      </ErrorBoundary>
+    </div>
+  );
+};
 
 const App = () => (
   <ReDotProvider config={config}>
@@ -249,21 +279,16 @@ const App = () => (
       <WalletConnection />
     </Suspense>
     <ReDotChainProvider chainId="polkadot">
-      <Suspense fallback={<h2>Loading Polkadot...</h2>}>
-        <h2>Polkadot</h2>
-        <Example />
-      </Suspense>
+      <Example chainName="Polkadot" />
     </ReDotChainProvider>
     <ReDotChainProvider chainId="kusama">
       <Suspense fallback={<h2>Loading Kusama...</h2>}>
-        <h2>Kusama</h2>
-        <Example />
+        <Example chainName="Kusama" />
       </Suspense>
     </ReDotChainProvider>
     <ReDotChainProvider chainId="westend">
       <Suspense fallback={<h2>Loading Westend...</h2>}>
-        <h2>Westend</h2>
-        <Example />
+        <Example chainName="Westend" />
       </Suspense>
     </ReDotChainProvider>
   </ReDotProvider>

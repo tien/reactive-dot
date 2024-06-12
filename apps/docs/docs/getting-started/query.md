@@ -116,3 +116,37 @@ const QueryWithRefresh = () => {
   );
 };
 ```
+
+## Retry failed query
+
+Error from queries can be caught and reset using `ErrorBoundary` & [`useResetQueryError`](/api/react/function/useResetQueryError) hook.
+
+```tsx
+import { useResetQueryError } from "@reactive-dot/react";
+import { ErrorBoundary, type FallbackProps } from "react-error-boundary";
+
+const ErrorFallback = (props: FallbackProps) => (
+  <article>
+    <header>Oops, something went wrong!</header>
+    <button onClick={() => props.resetErrorBoundary(props.error)}>Retry</button>
+  </article>
+);
+
+const AppErrorBoundary = () => {
+  const resetQueryError = useResetQueryError();
+
+  return (
+    <ErrorBoundary
+      FallbackComponent={ErrorFallback}
+      onReset={(details) => {
+        if (details.reason === "imperative-api") {
+          const [error] = details.args;
+          resetQueryError(error);
+        }
+      }}
+    >
+      {/* ... */}
+    </ErrorBoundary>
+  );
+};
+```
