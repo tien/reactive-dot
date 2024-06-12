@@ -1,5 +1,5 @@
 import { ChainIdContext } from "../context.js";
-import { compoundQueryAtomFamily } from "../stores/query.js";
+import { queryPayloadAtomFamily } from "../stores/query.js";
 import type { Falsy, FalsyGuard, FlatHead } from "../types.js";
 import { flatHead, stringify } from "../utils.js";
 import type { ChainHookOptions } from "./types.js";
@@ -65,9 +65,9 @@ export const useQuery = <
         () =>
           !query
             ? atom(undefined)
-            : compoundQueryAtomFamily({
+            : queryPayloadAtomFamily({
                 chainId,
-                instructions: query.instructions,
+                query,
               }),
         // eslint-disable-next-line react-hooks/exhaustive-deps
         [hashKey],

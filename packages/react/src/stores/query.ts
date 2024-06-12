@@ -1,7 +1,8 @@
 import { stringify } from "../utils.js";
 import { typedApiAtomFamily } from "./client.js";
 import {
-  MultiInstruction,
+  type MultiInstruction,
+  type Query,
   QueryError,
   QueryInstruction,
   preflight,
@@ -12,7 +13,7 @@ import { atom } from "jotai";
 import { atomFamily, atomWithObservable } from "jotai/utils";
 import { from, switchMap, type Observable } from "rxjs";
 
-const _queryAtomFamily = atomFamily(
+const instructionPayloadAtomFamily = atomFamily(
   (param: {
     chainId: ChainId;
     instruction: Exclude<
@@ -42,48 +43,42 @@ const _queryAtomFamily = atomFamily(
   (a, b) => stringify(a) === stringify(b),
 );
 
-export const queryAtomFamily = (param: {
-  chainId: ChainId;
-  instruction: QueryInstruction;
-}) =>
-  atom((get) => {
-    if (param.chainId === undefined) {
-      throw new QueryError("No chain Id provided");
-    }
-
-    if (!("multi" in param.instruction)) {
-      return get(_queryAtomFamily({ ...param, chainId: param.chainId }));
-    }
-
-    const { multi: _, ...query } = param.instruction;
-
-    return Promise.all(
-      param.instruction.args.map((args: unknown[]) =>
-        get(
-          _queryAtomFamily({
-            chainId: param.chainId,
-            instruction: { ...query, args },
-          }),
-        ),
-      ),
-    );
-  });
-
 // TODO: should be memoized within render function instead
 // https://github.com/pmndrs/jotai/discussions/1553
-export const compoundQueryAtomFamily = atomFamily(
-  (param: { chainId: ChainId; instructions: readonly QueryInstruction[] }) =>
+export const queryPayloadAtomFamily = atomFamily(
+  (param: { chainId: ChainId; query: Query }) =>
     atom((get) =>
       Promise.all(
-        param.instructions.map((instruction) =>
-          get(
-            queryAtomFamily({
-              ...param,
-              instruction,
-            }),
-          ),
-        ),
+        param.query.instructions.map((instruction) => {
+          if (param.chainId === undefined) {
+            throw new QueryError("No chain Id provided");
+          }
+
+          if (!("multi" in instruction)) {
+            return get(
+              instructionPayloadAtomFamily({
+                chainId: param.chainId,
+                instruction,
+              }),
+            );
+          }
+
+          const { multi: _, ...query } = instruction;
+
+          return Promise.all(
+            instruction.args.map((args: unknown[]) =>
+              get(
+                instructionPayloadAtomFamily({
+                  chainId: param.chainId,
+                  instruction: { ...query, args },
+                }),
+              ),
+            ),
+          );
+        }),
       ),
     ),
-  (a, b) => stringify(a) === stringify(b),
+  (a, b) =>
+    a.chainId === b.chainId &&
+    stringify(a.query.instructions) === stringify(b.query.instructions),
 );
