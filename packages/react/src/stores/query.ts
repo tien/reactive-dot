@@ -4,6 +4,7 @@ import {
   MultiInstruction,
   QueryError,
   QueryInstruction,
+  preflight,
   query,
 } from "@reactive-dot/core";
 import type { ChainId } from "@reactive-dot/types";
@@ -20,17 +21,24 @@ const _queryAtomFamily = atomFamily(
       // eslint-disable-next-line @typescript-eslint/ban-types
       {}>
     >;
-  }) =>
-    atomWithObservable((get) =>
-      from(get(typedApiAtomFamily(param.chainId))).pipe(
-        switchMap(
-          (api) =>
-            query(api, param.instruction) as
-              | Promise<unknown>
-              | Observable<unknown>,
-        ),
-      ),
-    ),
+  }) => {
+    switch (preflight(param.instruction)) {
+      case "promise":
+        return atom(async (get, { signal }) => {
+          const api = await get(typedApiAtomFamily(param.chainId));
+
+          return query(api, param.instruction, { signal }) as Promise<unknown>;
+        });
+      case "observable":
+        return atomWithObservable((get) =>
+          from(get(typedApiAtomFamily(param.chainId))).pipe(
+            switchMap(
+              (api) => query(api, param.instruction) as Observable<unknown>,
+            ),
+          ),
+        );
+    }
+  },
   (a, b) => stringify(a) === stringify(b),
 );
 

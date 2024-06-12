@@ -5,6 +5,29 @@ import type {
 import type { ReDotDescriptor } from "@reactive-dot/types";
 import type { ChainDefinition, TypedApi } from "polkadot-api";
 
+export const preflight = <TInstruction extends QueryInstruction>(
+  instruction: TInstruction,
+) => {
+  type Return = TInstruction["instruction"] extends "fetch-constant"
+    ? "promise"
+    : TInstruction["instruction"] extends "call-api"
+      ? "promise"
+      : TInstruction["instruction"] extends "read-storage-entries"
+        ? "promise"
+        : TInstruction["instruction"] extends "read-storage"
+          ? "observable"
+          : "promise" | "observable";
+
+  switch (instruction.instruction) {
+    case "fetch-constant":
+    case "call-api":
+    case "read-storage-entries":
+      return "promise" as Return;
+    case "read-storage":
+      return "observable" as Return;
+  }
+};
+
 const query = <
   TInstruction extends QueryInstruction,
   TDescriptor extends ChainDefinition = ReDotDescriptor,
