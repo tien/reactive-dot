@@ -24,7 +24,7 @@ const config: Config = {
 
   plugins: [
     [
-      "docusaurus-plugin-typedoc-api",
+      "typedoc-api",
       {
         projectRoot: path.join(__dirname, "../.."),
         tsconfigName: "tsconfig.doc.json",
