@@ -8,7 +8,7 @@ const config: Config = {
   tagline: "A reactive library for building Substrate front-ends",
   favicon: "img/favicon.ico",
 
-  url: "https://reactive-dot.tien.zone",
+  url: "https://reactivedot.dev",
   baseUrl: "/",
 
   organizationName: "tien",
