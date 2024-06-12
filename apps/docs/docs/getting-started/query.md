@@ -59,6 +59,24 @@ const MultiQuery = () => {
 };
 ```
 
+Multiple queries of the same type can also be fetched using [`callApis`](/api/core/class/Query#callApis) & [`readStorages`](/api/core/class/Query#readStorages).
+
+```tsx
+const [rewards, metadatum] = useQuery((builder) =>
+  builder
+    .callApis("NominationPoolsApi", "pending_rewards", [
+      [ADDRESS_1],
+      [ADDRESS_2],
+      [ADDRESS_3],
+    ])
+    .readStorages("NominationPools", "Metadata", [
+      [POOL_ID_1],
+      [POOL_ID_2],
+      [POOL_ID_3],
+    ]),
+);
+```
+
 ## Dependent queries
 
 Result of a query can be used as variables in subsequent queries.
