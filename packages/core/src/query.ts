@@ -2,7 +2,7 @@ import type {
   InferInstructionResponse,
   QueryInstruction,
 } from "./QueryBuilder.js";
-import type { ReDotDescriptor } from "@reactive-dot/types";
+import { ReDotDescriptor } from "./types/index.js";
 import type { ChainDefinition, TypedApi } from "polkadot-api";
 
 export const preflight = <TInstruction extends QueryInstruction>(

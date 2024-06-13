@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import type { ReDotDescriptor } from "@reactive-dot/types";
+import { ReDotDescriptor } from "./types/index.js";
 import type { ChainDefinition, TypedApi } from "polkadot-api";
 import type { Observable } from "rxjs";
 

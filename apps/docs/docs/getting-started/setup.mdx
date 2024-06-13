@@ -55,7 +55,7 @@ The records of `ChainId` -> `Descriptor` here will be used to provided you with 
 ```ts title="redot.d.ts"
 import type { dot } from "@polkadot-api/descriptors";
 
-declare module "@reactive-dot/types" {
+declare module "@reactive-dot/core/types.js" {
   export interface Chains {
     polkadot: typeof dot;
   }
@@ -66,8 +66,8 @@ declare module "@reactive-dot/types" {
 
 ```ts title="config.ts"
 import { dot } from "@polkadot-api/descriptors";
+import type { Config } from "@reactive-dot/core/types.js";
 import { InjectedConnector } from "@reactive-dot/core/wallets.js";
-import type { Config } from "@reactive-dot/types";
 import { chainSpec } from "polkadot-api/chains/polkadot";
 import { getSmProvider } from "polkadot-api/sm-provider";
 import { startFromWorker } from "polkadot-api/smoldot/from-worker";

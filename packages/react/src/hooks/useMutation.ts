@@ -2,7 +2,11 @@ import { ChainIdContext, SignerContext } from "../context.js";
 import { typedApiAtomFamily } from "../stores/client.js";
 import type { ChainHookOptions } from "./types.js";
 import { IDLE, MutationError, PENDING } from "@reactive-dot/core";
-import type { ChainId, Chains, ReDotDescriptor } from "@reactive-dot/types";
+import type {
+  ChainId,
+  Chains,
+  ReDotDescriptor,
+} from "@reactive-dot/core/types.js";
 import { useAtomCallback } from "jotai/utils";
 import type {
   PolkadotSigner,

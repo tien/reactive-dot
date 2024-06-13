@@ -14,15 +14,16 @@
     "./wallets.js": {
       "default": "./build/wallets/index.js",
       "types": "./src/wallets/index.ts"
+    },
+    "./types.js": {
+      "default": "./build/types/index.js",
+      "types": "./src/types/index.ts"
     }
   },
   "scripts": {
     "dev": "tsc --build --watch",
     "build": "rm -rf build && tsc --build",
     "lint": "eslint src"
-  },
-  "dependencies": {
-    "@reactive-dot/types": "workspace:^"
   },
   "devDependencies": {
     "@reactive-dot/eslint-config": "workspace:^",

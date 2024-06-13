@@ -1,7 +1,7 @@
 import { chainConfigsAtom } from "./stores/config.js";
 import { connectorsAtom, directWalletsAtom } from "./stores/wallets.js";
+import type { ChainId, Config } from "@reactive-dot/core/types.js";
 import { Connector, Wallet } from "@reactive-dot/core/wallets.js";
-import type { ChainId, Config } from "@reactive-dot/types";
 import { ScopeProvider } from "jotai-scope";
 import { useHydrateAtoms } from "jotai/utils";
 import { PolkadotSigner } from "polkadot-api";

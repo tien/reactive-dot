@@ -12,7 +12,11 @@ import {
   QueryInstruction,
   type InferQueryPayload,
 } from "@reactive-dot/core";
-import type { ChainId, Chains, ReDotDescriptor } from "@reactive-dot/types";
+import type {
+  ChainId,
+  Chains,
+  ReDotDescriptor,
+} from "@reactive-dot/core/types.js";
 import { atom, useAtomValue } from "jotai";
 import { useAtomCallback } from "jotai/utils";
 import { useCallback, useContext, useMemo } from "react";

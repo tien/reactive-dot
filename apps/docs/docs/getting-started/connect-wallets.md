@@ -9,8 +9,8 @@ Wallets & accounts connection can by managed via [`useWallets`](/api/react/funct
 ## Add wallet connector to the config
 
 ```ts title="config.ts"
+import type { Config } from "@reactive-dot/core/types.js";
 import { InjectedConnector } from "@reactive-dot/core/wallets.js";
-import type { Config } from "@reactive-dot/types";
 
 const config: Config = {
   // ...

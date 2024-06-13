@@ -1,4 +1,4 @@
-import type { Wallet as IWallet } from "@reactive-dot/types";
+import type { Wallet as IWallet } from "../types/index.js";
 import type { InjectedPolkadotAccount } from "polkadot-api/pjs-signer";
 import type { Observable } from "rxjs";
 
