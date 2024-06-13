@@ -7,7 +7,7 @@ import {
   WalletConnectModal,
   type WalletConnectModalConfig,
 } from "@walletconnect/modal";
-import type { ISignClient, SessionTypes } from "@walletconnect/types";
+import type { SessionTypes, ISignClient } from "@walletconnect/types";
 import {
   UniversalProvider,
   type IUniversalProvider,
@@ -24,7 +24,9 @@ export default class WalletConnect extends Wallet {
 
   readonly #modal: WalletConnectModal;
 
-  readonly #connectOptions: Parameters<ISignClient["connect"]>[0];
+  readonly #chainIds: string[];
+
+  readonly #optionalChainIds: string[];
 
   readonly #session = new BehaviorSubject<SessionTypes.Struct | undefined>(
     undefined,
@@ -38,7 +40,8 @@ export default class WalletConnect extends Wallet {
     projectId?: string;
     providerOptions: Omit<UniversalProviderOpts, "projectId">;
     modalOptions?: Omit<WalletConnectModalConfig, "projectId">;
-    connectOptions: Parameters<ISignClient["connect"]>[0];
+    chainIds: string[];
+    optionalChainIds?: string[];
   }) {
     super();
 
@@ -47,12 +50,13 @@ export default class WalletConnect extends Wallet {
         ? options.providerOptions
         : { ...options.providerOptions, projectId: options.projectId };
 
-    this.#connectOptions = options.connectOptions;
-
     this.#modal = new WalletConnectModal({
       ...(options.modalOptions ?? {}),
       projectId: options.projectId,
     });
+
+    this.#chainIds = options.chainIds;
+    this.#optionalChainIds = options.optionalChainIds ?? [];
   }
 
   override readonly connected$ = this.#session.pipe(
@@ -70,9 +74,28 @@ export default class WalletConnect extends Wallet {
       throw new ReDotError("Wallet connect provider doesn't have any client");
     }
 
-    const { uri, approval } = await this.#provider.client.connect(
-      this.#connectOptions,
-    );
+    const connectOptions: Parameters<ISignClient["connect"]>[0] = {
+      requiredNamespaces: {
+        polkadot: {
+          methods: ["polkadot_signTransaction", "polkadot_signMessage"],
+          chains: this.#chainIds,
+          events: ['chainChanged", "accountsChanged'],
+        },
+      },
+    };
+
+    if (this.#optionalChainIds.length > 0) {
+      connectOptions.optionalNamespaces = {
+        polkadot: {
+          methods: ["polkadot_signTransaction", "polkadot_signMessage"],
+          chains: this.#optionalChainIds,
+          events: ['chainChanged", "accountsChanged'],
+        },
+      };
+    }
+
+    const { uri, approval } =
+      await this.#provider.client.connect(connectOptions);
 
     if (uri === undefined) {
       throw new ReDotError("Client connection doesn't return any URI");
