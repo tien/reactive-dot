@@ -198,7 +198,7 @@ const Mutation = () => {
           >
             {accounts.map((account, index) => (
               <option key={index} value={index}>
-                {account.name}
+                {account.name ?? account.address}
               </option>
             ))}
           </select>

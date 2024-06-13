@@ -1,14 +1,38 @@
+import { withAtomFamilyErrorCatcher } from "../utils/jotai.js";
+import { chainSpecDataAtomFamily } from "./client.js";
 import { walletsAtom } from "./wallets.js";
-import { atomWithObservable } from "jotai/utils";
+import { ChainId } from "@reactive-dot/core/types.js";
+import type { Atom } from "jotai";
+import { atomFamily, atomWithObservable } from "jotai/utils";
+import { InjectedPolkadotAccount } from "polkadot-api/pjs-signer";
 import { combineLatest, from } from "rxjs";
 import { map, switchMap } from "rxjs/operators";
 
-export const accountsAtom = atomWithObservable((get) =>
-  from(get(walletsAtom))
-    .pipe(
-      switchMap((wallets) =>
-        combineLatest(wallets.map((wallet) => wallet.accounts$)),
+export const accountsAtom = atomFamily(
+  (
+    chainId: ChainId,
+  ): Atom<InjectedPolkadotAccount[] | Promise<InjectedPolkadotAccount[]>> =>
+    withAtomFamilyErrorCatcher(
+      accountsAtom,
+      chainId,
+      atomWithObservable,
+    )((get) =>
+      from(
+        Promise.all([get(chainSpecDataAtomFamily(chainId)), get(walletsAtom)]),
+      ).pipe(
+        switchMap(([chainSpec, wallets]) =>
+          combineLatest(wallets.map((wallet) => wallet.accounts$))
+            .pipe(map((wallets) => wallets.flat()))
+            .pipe(
+              map((accounts) =>
+                accounts.filter(
+                  (account) =>
+                    !account.genesisHash ||
+                    chainSpec.genesisHash.includes(account.genesisHash),
+                ),
+              ),
+            ),
+        ),
       ),
-    )
-    .pipe(map((wallets) => wallets.flat())),
+    ),
 );

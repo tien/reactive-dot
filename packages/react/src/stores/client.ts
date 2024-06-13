@@ -27,6 +27,14 @@ export const clientAtomFamily = atomFamily((chainId: ChainId) =>
   }),
 );
 
+export const chainSpecDataAtomFamily = atomFamily((chainId: ChainId) =>
+  atom(async (get) => {
+    const client = await get(clientAtomFamily(chainId));
+
+    return client.getChainSpecData();
+  }),
+);
+
 export const typedApiAtomFamily = atomFamily((chainId: ChainId) =>
   atom(async (get) => {
     const config = get(chainConfigsAtom)[chainId];

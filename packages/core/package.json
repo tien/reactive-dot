@@ -29,11 +29,23 @@
     "@reactive-dot/eslint-config": "workspace:^",
     "@tsconfig/recommended": "^1.0.6",
     "@tsconfig/strictest": "^2.0.5",
+    "@walletconnect/modal": "^2.6.2",
+    "@walletconnect/universal-provider": "^2.13.2",
     "eslint": "^9.4.0",
     "polkadot-api": "^0.8.0",
     "typescript": "^5.4.5"
   },
   "peerDependencies": {
-    "polkadot-api": "^0.8.0"
+    "@walletconnect/modal": "2.x",
+    "@walletconnect/universal-provider": "2.x",
+    "polkadot-api": "0.8.x"
+  },
+  "peerDependenciesMeta": {
+    "@walletconnect/modal": {
+      "optional": true
+    },
+    "@walletconnect/universal-provider": {
+      "optional": true
+    }
   }
 }
