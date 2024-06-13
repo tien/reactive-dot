@@ -101,9 +101,11 @@ export default class WalletConnect extends Wallet {
       throw new ReDotError("Client connection doesn't return any URI");
     }
 
-    this.#modal.openModal({ uri });
+    await this.#modal.openModal({ uri });
 
     this.#session.next(await approval());
+
+    this.#modal.closeModal();
   };
 
   override readonly disconnect = async () => {
