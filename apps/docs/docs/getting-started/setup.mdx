@@ -93,8 +93,8 @@ export default config;
 
 ## Wrap app in context providers
 
-```tsx title="app.tsx"
-import { config } from "./config";
+```tsx title="App.tsx"
+import config from "./config";
 import { ReDotChainProvider, ReDotProvider } from "@reactive-dot/react";
 import { Suspense } from "react";
 
@@ -106,15 +106,17 @@ const App = () => (
     </ReDotChainProvider>
   </ReDotProvider>
 );
+
+export default App;
 ```
 
 ## Use Reactive DOT
 
-```tsx title="query.tsx"
+```tsx title="MyComponent.tsx"
 import { config } from "./config";
 import { useQuery, useAccounts } from "@reactive-dot/react";
 
-const App = () => {
+const MyComponent = () => {
   const accounts = useAccounts();
   const [timestamp, totalIssuance] = useQuery((builder) =>
     builder
@@ -141,4 +143,6 @@ const App = () => {
     </div>
   );
 };
+
+export default MyComponent;
 ```
