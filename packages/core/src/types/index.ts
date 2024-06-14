@@ -1,4 +1,4 @@
-import { Connector, Wallet } from "../wallets/index.js";
+import { WalletAggregator, Wallet } from "../wallets/index.js";
 import type { JsonRpcProvider } from "@polkadot-api/json-rpc-provider";
 import type { ChainDefinition } from "polkadot-api";
 
@@ -19,5 +19,5 @@ export type ChainConfig = {
 
 export type Config = {
   readonly chains: Record<ChainId, ChainConfig>;
-  readonly wallets?: Array<Connector | Wallet>;
+  readonly wallets?: Array<WalletAggregator | Wallet>;
 };

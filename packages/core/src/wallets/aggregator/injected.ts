@@ -1,10 +1,10 @@
 import { KeyedStorage } from "../../storage.js";
 import InjectedWallet from "../injected.js";
-import Connector from "./connector.js";
+import WalletAggregator from "./aggregator.js";
 import { getInjectedExtensions } from "polkadot-api/pjs-signer";
 import { BehaviorSubject } from "rxjs";
 
-export default class InjectedConnector extends Connector {
+export default class InjectedAggregator extends WalletAggregator {
   #storage: KeyedStorage | undefined;
 
   constructor(options?: { storage?: KeyedStorage }) {

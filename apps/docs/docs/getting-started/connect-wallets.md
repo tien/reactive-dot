@@ -6,19 +6,19 @@ sidebar_position: 3
 
 Wallets & accounts connection can by managed via [`useWallets`](/api/react/function/useWallets), [`useConnectedWallets`](/api/react/function/useConnectedWallets) & [`useAccounts`](/api/react/function/useAccounts) hooks.
 
-## Add wallet connector to the config
+## Add wallets to the config
 
 ```ts title="config.ts"
 import type { Config } from "@reactive-dot/core/types.js";
 import {
-  InjectedConnector,
+  InjectedAggregator,
   WalletConnect,
 } from "@reactive-dot/core/wallets.js";
 
 const config: Config = {
   // ...
   wallets: [
-    new InjectedConnector(),
+    new InjectedAggregator(),
     new WalletConnect({
       projectId: "WALLET_CONNECT_PROJECT_ID",
       providerOptions: {

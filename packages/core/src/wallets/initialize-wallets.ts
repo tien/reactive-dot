@@ -1,15 +1,15 @@
-import { Connector } from "./connectors/index.js";
+import { WalletAggregator } from "./aggregator/index.js";
 import Wallet from "./wallet.js";
 
 export const initializeWallets = async (
-  walletsOrConnectors: Array<Wallet | Connector>,
+  walletsOrAggregators: Array<Wallet | WalletAggregator>,
 ) => {
   const wallets = (
     await Promise.all(
-      walletsOrConnectors.map((walletOrConnector) =>
-        walletOrConnector instanceof Connector
-          ? walletOrConnector.getWallets()
-          : [walletOrConnector],
+      walletsOrAggregators.map((walletOrAggregator) =>
+        walletOrAggregator instanceof WalletAggregator
+          ? walletOrAggregator.getWallets()
+          : [walletOrAggregator],
       ),
     )
   ).flat();

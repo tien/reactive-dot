@@ -1,4 +1,4 @@
-export * from "./connectors/index.js";
+export * from "./aggregator/index.js";
 export { initializeWallets } from "./initialize-wallets.js";
 export { default as InjectedWallet } from "./injected.js";
 export { default as WalletConnect } from "./wallet-connect/index.js";

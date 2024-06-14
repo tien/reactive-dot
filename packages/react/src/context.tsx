@@ -1,8 +1,8 @@
 import { useReconnectWallets } from "./hooks/useReconnectWallets.js";
 import { chainConfigsAtom } from "./stores/config.js";
-import { connectorsAtom, directWalletsAtom } from "./stores/wallets.js";
+import { aggregatorAtom, directWalletsAtom } from "./stores/wallets.js";
 import type { ChainId, Config } from "@reactive-dot/core/types.js";
-import { Connector, Wallet } from "@reactive-dot/core/wallets.js";
+import { WalletAggregator, Wallet } from "@reactive-dot/core/wallets.js";
 import { ScopeProvider } from "jotai-scope";
 import { useHydrateAtoms } from "jotai/utils";
 import { PolkadotSigner } from "polkadot-api";
@@ -40,10 +40,10 @@ const ReDotHydrator = (props: ReDotProviderProps) => {
             ) ?? [],
           ],
           [
-            connectorsAtom,
+            aggregatorAtom,
             props.config.wallets?.filter(
-              (connector): connector is Connector =>
-                connector instanceof Connector,
+              (aggregator): aggregator is WalletAggregator =>
+                aggregator instanceof WalletAggregator,
             ) ?? [],
           ],
         ]),
