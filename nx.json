@@ -14,8 +14,9 @@
       "cache": true
     },
     "test": {
+      "dependsOn": ["^build"],
       "cache": true
     }
   },
-  "parallel": 5
+  "parallel": 6
 }

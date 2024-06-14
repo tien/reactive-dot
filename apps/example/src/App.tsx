@@ -11,11 +11,30 @@ import {
   useQuery,
   useQueryWithRefresh,
   useWallets,
+  useChainSpecData,
 } from "@reactive-dot/react";
+import { DenominatedNumber } from "@reactive-dot/utils";
 import { formatDistance } from "date-fns";
 import { Binary } from "polkadot-api";
 import { Suspense, useState, useTransition } from "react";
 import { ErrorBoundary, type FallbackProps } from "react-error-boundary";
+
+const useNativeTokenNumberWithPlanck = (planck: bigint) => {
+  const chainSpecData = useChainSpecData();
+
+  return new DenominatedNumber(
+    planck,
+    chainSpecData.properties.tokenDecimals,
+    chainSpecData.properties.tokenSymbol,
+  );
+};
+
+const PendingRewards = (props: { address: string; rewards: bigint }) => (
+  <li>
+    {props.address}:{" "}
+    {useNativeTokenNumberWithPlanck(props.rewards).toLocaleString()}
+  </li>
+);
 
 const PendingPoolRewards = () => {
   const accounts = useAccounts();
@@ -47,9 +66,11 @@ const PendingPoolRewards = () => {
       </button>
       <ul>
         {pendingRewards.map((rewards, index) => (
-          <li key={index}>
-            {accounts.at(index)?.address}: {rewards.toLocaleString()} planck
-          </li>
+          <PendingRewards
+            key={index}
+            address={accounts.at(index)?.address ?? ""}
+            rewards={rewards}
+          />
         ))}
       </ul>
     </article>
@@ -111,7 +132,7 @@ const Query = () => {
       </article>
       <article>
         <h4>Total issuance</h4>
-        <p>{totalIssuance.toLocaleString()} planck</p>
+        <p>{useNativeTokenNumberWithPlanck(totalIssuance).toLocaleString()}</p>
       </article>
       <article>
         <h4>Bonding duration</h4>
@@ -119,11 +140,15 @@ const Query = () => {
       </article>
       <article>
         <h4>Total value staked</h4>
-        <p>{totalStaked?.toLocaleString()} planck</p>
+        <p>
+          {useNativeTokenNumberWithPlanck(totalStaked ?? 0n).toLocaleString()}
+        </p>
       </article>
       <article>
         <h4>Total value locked in nomination Pools</h4>
-        <p>{totalValueLocked.toLocaleString()} planck</p>
+        <p>
+          {useNativeTokenNumberWithPlanck(totalValueLocked).toLocaleString()}
+        </p>
       </article>
       <article>
         <h4>First 4 pools</h4>

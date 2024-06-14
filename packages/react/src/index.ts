@@ -9,6 +9,7 @@ export {
 export type { ChainHookOptions } from "./hooks/types.js";
 export { useAccounts } from "./hooks/useAccounts.js";
 export { useBlock } from "./hooks/useBlock.js";
+export { useChainSpecData } from "./hooks/useChainSpecData.js";
 export { useClient } from "./hooks/useClient.js";
 export { useMutation } from "./hooks/useMutation.js";
 export { useQuery, useQueryWithRefresh } from "./hooks/useQuery.js";

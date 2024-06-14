@@ -47,5 +47,8 @@
     "@walletconnect/universal-provider": {
       "optional": true
     }
+  },
+  "dependencies": {
+    "@reactive-dot/utils": "workspace:^"
   }
 }
