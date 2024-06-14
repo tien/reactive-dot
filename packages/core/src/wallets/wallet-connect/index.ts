@@ -59,18 +59,22 @@ export default class WalletConnect extends Wallet {
     this.#optionalChainIds = options.optionalChainIds ?? [];
   }
 
-  override readonly connected$ = this.#session.pipe(
-    map((session) => session !== undefined),
-  );
-
-  override readonly connect = async () => {
+  override readonly initialize = async () => {
     this.#provider ??= await UniversalProvider.init(this.#providerOptions);
 
     if (this.#provider.session !== undefined) {
       return this.#session.next(this.#provider.session);
     }
+  };
 
-    if (this.#provider.client === undefined) {
+  override readonly connected$ = this.#session.pipe(
+    map((session) => session !== undefined),
+  );
+
+  override readonly connect = async () => {
+    this.initialize();
+
+    if (this.#provider?.client === undefined) {
       throw new ReDotError("Wallet connect provider doesn't have any client");
     }
 

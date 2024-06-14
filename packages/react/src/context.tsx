@@ -1,3 +1,4 @@
+import { useReconnectWallets } from "./hooks/useReconnectWallets.js";
 import { chainConfigsAtom } from "./stores/config.js";
 import { connectorsAtom, directWalletsAtom } from "./stores/wallets.js";
 import type { ChainId, Config } from "@reactive-dot/core/types.js";
@@ -5,13 +6,24 @@ import { Connector, Wallet } from "@reactive-dot/core/wallets.js";
 import { ScopeProvider } from "jotai-scope";
 import { useHydrateAtoms } from "jotai/utils";
 import { PolkadotSigner } from "polkadot-api";
-import { PropsWithChildren, createContext, useMemo } from "react";
+import {
+  PropsWithChildren,
+  Suspense,
+  createContext,
+  useEffect,
+  useMemo,
+} from "react";
 
 export type ReDotProviderProps = PropsWithChildren<{
   /**
-   * Global config used by Reactive DOT
+   * Global config used by Reactive DOT.
    */
   config: Config;
+
+  /**
+   * Whether or not to reconnect previously connected wallets on mount.
+   */
+  autoReconnectWallets?: boolean;
 }>;
 
 const ReDotHydrator = (props: ReDotProviderProps) => {
@@ -42,15 +54,33 @@ const ReDotHydrator = (props: ReDotProviderProps) => {
   return null;
 };
 
+const WalletsReconnector = () => {
+  const [_, reconnect] = useReconnectWallets();
+
+  useEffect(() => {
+    reconnect();
+  }, [reconnect]);
+
+  return null;
+};
+
 /**
- * React context provider for Reactive DOT
+ * React context provider for Reactive DOT.
  *
  * @param props - Component props
  * @returns React element
  */
-export const ReDotProvider = (props: ReDotProviderProps) => (
+export const ReDotProvider = ({
+  autoReconnectWallets = true,
+  ...props
+}: ReDotProviderProps) => (
   <ScopeProvider atoms={[chainConfigsAtom]}>
     <ReDotHydrator {...props} />
+    {autoReconnectWallets && (
+      <Suspense>
+        <WalletsReconnector />
+      </Suspense>
+    )}
     {props.children}
   </ScopeProvider>
 );
@@ -62,7 +92,7 @@ export type ReDotChainProviderProps = PropsWithChildren<{
 }>;
 
 /**
- * React context provider for scoping to a specific chain
+ * React context provider for scoping to a specific chain.
  *
  * @param props - Component props
  * @returns React element
@@ -85,7 +115,7 @@ export type ReDotSignerProviderProps = PropsWithChildren<{
 }>;
 
 /**
- * React context provider to assign a default signer
+ * React context provider to assign a default signer.
  *
  * @param props - Component props
  * @returns React element

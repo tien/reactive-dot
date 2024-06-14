@@ -12,6 +12,7 @@ export { useBlock } from "./hooks/useBlock.js";
 export { useClient } from "./hooks/useClient.js";
 export { useMutation } from "./hooks/useMutation.js";
 export { useQuery, useQueryWithRefresh } from "./hooks/useQuery.js";
+export { useReconnectWallets } from "./hooks/useReconnectWallets.js";
+export { useResetQueryError } from "./hooks/useResetQueryError.js";
 export { useTypedApi } from "./hooks/useTypedApi.js";
 export { useConnectedWallets, useWallets } from "./hooks/useWallets.js";
-export { useResetQueryError } from "./hooks/useResetQueryError.js";

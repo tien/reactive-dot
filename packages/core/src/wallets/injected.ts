@@ -1,12 +1,13 @@
 import { ReDotError } from "../errors.js";
+import { KeyedStorage } from "../storage.js";
 import Wallet from "./wallet.js";
 import {
   connectInjectedExtension,
   type InjectedExtension,
   type InjectedPolkadotAccount,
 } from "polkadot-api/pjs-signer";
-import { Observable, BehaviorSubject } from "rxjs";
-import { switchMap, map } from "rxjs/operators";
+import { BehaviorSubject, Observable } from "rxjs";
+import { map, switchMap } from "rxjs/operators";
 
 export default class InjectedWallet extends Wallet {
   readonly #extension$ = new BehaviorSubject<InjectedExtension | undefined>(
@@ -17,9 +18,22 @@ export default class InjectedWallet extends Wallet {
     return `injected/${this.name}`;
   }
 
-  constructor(public readonly name: string) {
+  constructor(
+    public readonly name: string,
+    options?: { storage?: KeyedStorage },
+  ) {
     super();
+
+    if (options?.storage !== undefined) {
+      this.storage = options?.storage;
+    }
   }
+
+  override readonly initialize = async () => {
+    if (this.storage.getItem(`wallet/${this.id}/connected`) !== null) {
+      await this.connect();
+    }
+  };
 
   override connected$ = this.#extension$.pipe(
     map((extension) => extension !== undefined),
@@ -28,12 +42,14 @@ export default class InjectedWallet extends Wallet {
   override readonly connect = async () => {
     if (this.#extension$.getValue() === undefined) {
       this.#extension$.next(await connectInjectedExtension(this.name));
+      this.storage.setItem(`wallet/${this.id}/connected`, JSON.stringify(true));
     }
   };
 
   override readonly disconnect = () => {
     this.#extension$.getValue()?.disconnect();
     this.#extension$.next(undefined);
+    this.storage.removeItem(`wallet/${this.id}/connected`);
   };
 
   override readonly accounts$ = this.#extension$.pipe(
