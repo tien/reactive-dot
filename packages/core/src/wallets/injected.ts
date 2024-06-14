@@ -53,15 +53,18 @@ export default class InjectedWallet extends Wallet {
   };
 
   override readonly accounts$ = this.#extension$.pipe(
-    switchMap((extension) =>
-      extension === undefined
-        ? []
-        : new Observable<InjectedPolkadotAccount[]>((subscriber) => {
+    switchMap(
+      (extension) =>
+        new Observable<InjectedPolkadotAccount[]>((subscriber) => {
+          if (extension === undefined) {
+            subscriber.next([]);
+          } else {
             subscriber.next(extension.getAccounts());
             subscriber.add(
               extension.subscribe((accounts) => subscriber.next(accounts)),
             );
-          }),
+          }
+        }),
     ),
   );
 
