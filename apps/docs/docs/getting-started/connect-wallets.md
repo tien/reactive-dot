@@ -10,11 +10,32 @@ Wallets & accounts connection can by managed via [`useWallets`](/api/react/funct
 
 ```ts title="config.ts"
 import type { Config } from "@reactive-dot/core/types.js";
-import { InjectedConnector } from "@reactive-dot/core/wallets.js";
+import {
+  InjectedConnector,
+  WalletConnect,
+} from "@reactive-dot/core/wallets.js";
 
 const config: Config = {
   // ...
-  wallets: [new InjectedConnector()],
+  wallets: [
+    new InjectedConnector(),
+    new WalletConnect({
+      projectId: "WALLET_CONNECT_PROJECT_ID",
+      providerOptions: {
+        metadata: {
+          name: "APP_NAME",
+          description: "APP_DESCRIPTION",
+          url: "APP_URL",
+          icons: ["APP_ICON"],
+        },
+      },
+      chainIds: [
+        // https://github.com/ChainAgnostic/CAIPs/blob/main/CAIPs/caip-13.md
+        "polkadot:91b171bb158e2d3848fa23a9f1c25182", // Polkadot
+        // ...
+      ],
+    }),
+  ],
 };
 
 export default config;
