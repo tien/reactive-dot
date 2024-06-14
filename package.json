@@ -1,6 +1,6 @@
 {
   "name": "reactive-dot",
-  "description": "Reactive library for building Substrate front-ends",
+  "description": "A reactive library for building Substrate front-ends",
   "keywords": [
     "substrate",
     "polkadot",
