@@ -3,15 +3,14 @@ import Wallet from "../wallet.js";
 import { getPolkadotSignerFromPjs } from "./from-pjs-account.js";
 import "@polkadot-api/pjs-signer";
 import { AccountId } from "@polkadot-api/substrate-bindings";
-import {
+import type {
   WalletConnectModal,
-  type WalletConnectModalConfig,
+  WalletConnectModalConfig,
 } from "@walletconnect/modal";
-import type { SessionTypes, ISignClient } from "@walletconnect/types";
-import {
-  UniversalProvider,
-  type IUniversalProvider,
-  type UniversalProviderOpts,
+import type { ISignClient, SessionTypes } from "@walletconnect/types";
+import type {
+  IUniversalProvider,
+  UniversalProviderOpts,
 } from "@walletconnect/universal-provider";
 import { InjectedPolkadotAccount } from "polkadot-api/pjs-signer";
 import { BehaviorSubject, lastValueFrom } from "rxjs";
@@ -22,7 +21,9 @@ export default class WalletConnect extends Wallet {
 
   #provider: IUniversalProvider | undefined;
 
-  readonly #modal: WalletConnectModal;
+  #modal: WalletConnectModal | undefined;
+
+  readonly #modalOptions: WalletConnectModalConfig;
 
   readonly #chainIds: string[];
 
@@ -50,16 +51,20 @@ export default class WalletConnect extends Wallet {
         ? options.providerOptions
         : { ...options.providerOptions, projectId: options.projectId };
 
-    this.#modal = new WalletConnectModal({
+    this.#modalOptions = {
       ...(options.modalOptions ?? {}),
       projectId: options.projectId,
-    });
+    };
 
     this.#chainIds = options.chainIds;
     this.#optionalChainIds = options.optionalChainIds ?? [];
   }
 
   override readonly initialize = async () => {
+    const { UniversalProvider } = await import(
+      "@walletconnect/universal-provider"
+    );
+
     this.#provider ??= await UniversalProvider.init(this.#providerOptions);
 
     if (this.#provider.session !== undefined) {
@@ -105,11 +110,13 @@ export default class WalletConnect extends Wallet {
       throw new ReDotError("Client connection doesn't return any URI");
     }
 
-    await this.#modal.openModal({ uri });
+    const modal = await this.#getModal();
+
+    await modal.openModal({ uri });
 
     this.#session.next(await approval());
 
-    this.#modal.closeModal();
+    modal.closeModal();
   };
 
   override readonly disconnect = async () => {
@@ -160,4 +167,16 @@ export default class WalletConnect extends Wallet {
   );
 
   override readonly getAccounts = () => lastValueFrom(this.accounts$);
+
+  readonly #getModal = async () => {
+    if (this.#modal !== undefined) {
+      return this.#modal;
+    }
+
+    const { WalletConnectModal } = await import("@walletconnect/modal");
+
+    this.#modal = new WalletConnectModal(this.#modalOptions);
+
+    return this.#modal;
+  };
 }
