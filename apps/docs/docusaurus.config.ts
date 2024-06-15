@@ -68,6 +68,10 @@ const config: Config = {
           label: "API",
         },
         {
+          to: "try",
+          label: "Try",
+        },
+        {
           href: "https://github.com/tien/reactive-dot",
           label: "GitHub",
           position: "right",
