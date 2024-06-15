@@ -8,7 +8,7 @@ The `useMutation` hook allow you to sign & submit transaction to a chain.
 
 ## Connect wallet & accounts
 
-Follow the [Connect wallets](./connect-wallets.md) guide to get this set up.
+Follow the [Connect wallets](./connect-wallets.mdx) guide to get this set up.
 
 ## Choose the signer
 
