@@ -3733,6 +3733,7 @@ __metadata:
     "@docusaurus/tsconfig": "npm:3.4.0"
     "@docusaurus/types": "npm:3.4.0"
     "@mdx-js/react": "npm:^3.0.1"
+    "@stackblitz/sdk": "npm:^1.10.0"
     clsx: "npm:^2.1.1"
     docusaurus-plugin-typedoc-api: "npm:^4.2.0"
     prism-react-renderer: "npm:^2.3.1"
@@ -4156,6 +4157,13 @@ __metadata:
     "@stablelib/random": "npm:^1.0.2"
     "@stablelib/wipe": "npm:^1.0.1"
   checksum: 10c0/d8afe8a120923a434359d7d1c6759780426fed117a84a6c0f84d1a4878834cb4c2d7da78a1fa7cf227ce3924fdc300cd6ed6e46cf2508bf17b1545c319ab8418
+  languageName: node
+  linkType: hard
+
+"@stackblitz/sdk@npm:^1.10.0":
+  version: 1.10.0
+  resolution: "@stackblitz/sdk@npm:1.10.0"
+  checksum: 10c0/a2a4c9067553b88d755a449675bdccec34b03a9f1b6335da8c35e4218c70ad4dbc1bb5f8ab466a9df55c5ff669a6c3bb748b7114bf583e4590efbab0dc6f7315
   languageName: node
   linkType: hard
 
