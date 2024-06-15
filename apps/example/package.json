@@ -11,7 +11,7 @@
     "postinstall": "npx papi"
   },
   "dependencies": {
-    "@reactive-dot/react": "workspace:^",
+    "@reactive-dot/react": "workspace:*",
     "@walletconnect/modal": "^2.6.2",
     "@walletconnect/universal-provider": "^2.13.2",
     "date-fns": "^3.6.0",
@@ -21,7 +21,7 @@
     "react-error-boundary": "^4.0.13"
   },
   "devDependencies": {
-    "@reactive-dot/eslint-config": "workspace:^",
+    "@reactive-dot/eslint-config": "workspace:*",
     "@tsconfig/recommended": "^1.0.6",
     "@tsconfig/strictest": "^2.0.5",
     "@tsconfig/vite-react": "^3.0.2",

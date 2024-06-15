@@ -3588,12 +3588,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@reactive-dot/core@workspace:^, @reactive-dot/core@workspace:packages/core":
+"@reactive-dot/core@workspace:*, @reactive-dot/core@workspace:packages/core":
   version: 0.0.0-use.local
   resolution: "@reactive-dot/core@workspace:packages/core"
   dependencies:
-    "@reactive-dot/eslint-config": "workspace:^"
-    "@reactive-dot/utils": "workspace:^"
+    "@reactive-dot/eslint-config": "workspace:*"
+    "@reactive-dot/utils": "workspace:*"
     "@tsconfig/recommended": "npm:^1.0.6"
     "@tsconfig/strictest": "npm:^2.0.5"
     "@walletconnect/modal": "npm:^2.6.2"
@@ -3632,7 +3632,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@reactive-dot/eslint-config@workspace:^, @reactive-dot/eslint-config@workspace:packages/eslint-config":
+"@reactive-dot/eslint-config@workspace:*, @reactive-dot/eslint-config@workspace:packages/eslint-config":
   version: 0.0.0-use.local
   resolution: "@reactive-dot/eslint-config@workspace:packages/eslint-config"
   dependencies:
@@ -3653,8 +3653,8 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@reactive-dot/example@workspace:apps/example"
   dependencies:
-    "@reactive-dot/eslint-config": "workspace:^"
-    "@reactive-dot/react": "workspace:^"
+    "@reactive-dot/eslint-config": "workspace:*"
+    "@reactive-dot/react": "workspace:*"
     "@tsconfig/recommended": "npm:^1.0.6"
     "@tsconfig/strictest": "npm:^2.0.5"
     "@tsconfig/vite-react": "npm:^3.0.2"
@@ -3674,12 +3674,12 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@reactive-dot/react@workspace:^, @reactive-dot/react@workspace:packages/react":
+"@reactive-dot/react@workspace:*, @reactive-dot/react@workspace:packages/react":
   version: 0.0.0-use.local
   resolution: "@reactive-dot/react@workspace:packages/react"
   dependencies:
-    "@reactive-dot/core": "workspace:^"
-    "@reactive-dot/eslint-config": "workspace:^"
+    "@reactive-dot/core": "workspace:*"
+    "@reactive-dot/eslint-config": "workspace:*"
     "@tsconfig/recommended": "npm:^1.0.6"
     "@tsconfig/strictest": "npm:^2.0.5"
     "@types/react": "npm:^18.3.3"
@@ -3692,11 +3692,11 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@reactive-dot/utils@workspace:^, @reactive-dot/utils@workspace:packages/utils":
+"@reactive-dot/utils@workspace:*, @reactive-dot/utils@workspace:packages/utils":
   version: 0.0.0-use.local
   resolution: "@reactive-dot/utils@workspace:packages/utils"
   dependencies:
-    "@reactive-dot/eslint-config": "workspace:^"
+    "@reactive-dot/eslint-config": "workspace:*"
     "@tsconfig/recommended": "npm:^1.0.6"
     "@tsconfig/strictest": "npm:^2.0.5"
     eslint: "npm:^9.4.0"

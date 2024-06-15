@@ -16,12 +16,12 @@
     "lint": "eslint src"
   },
   "dependencies": {
-    "@reactive-dot/core": "workspace:^",
+    "@reactive-dot/core": "workspace:*",
     "jotai": "^2.8.3",
     "jotai-scope": "^0.6.0"
   },
   "devDependencies": {
-    "@reactive-dot/eslint-config": "workspace:^",
+    "@reactive-dot/eslint-config": "workspace:*",
     "@tsconfig/recommended": "^1.0.6",
     "@tsconfig/strictest": "^2.0.5",
     "@types/react": "^18.3.3",

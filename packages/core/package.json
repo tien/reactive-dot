@@ -25,8 +25,11 @@
     "build": "rm -rf build && tsc --build",
     "lint": "eslint src"
   },
+  "dependencies": {
+    "@reactive-dot/utils": "workspace:*"
+  },
   "devDependencies": {
-    "@reactive-dot/eslint-config": "workspace:^",
+    "@reactive-dot/eslint-config": "workspace:*",
     "@tsconfig/recommended": "^1.0.6",
     "@tsconfig/strictest": "^2.0.5",
     "@walletconnect/modal": "^2.6.2",
@@ -47,8 +50,5 @@
     "@walletconnect/universal-provider": {
       "optional": true
     }
-  },
-  "dependencies": {
-    "@reactive-dot/utils": "workspace:^"
   }
 }
