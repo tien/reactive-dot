@@ -1,7 +1,8 @@
 import { ChainIdContext, SignerContext } from "../context.js";
 import { typedApiAtomFamily } from "../stores/client.js";
 import type { ChainHookOptions } from "./types.js";
-import { AsyncState, IDLE, MutationError, PENDING } from "@reactive-dot/core";
+import { useAsyncState } from "./useAsyncState.js";
+import { MutationError, PENDING } from "@reactive-dot/core";
 import type {
   ChainId,
   Chains,
@@ -15,7 +16,7 @@ import type {
   TxObservable,
   TypedApi,
 } from "polkadot-api";
-import { useCallback, useContext, useState } from "react";
+import { useCallback, useContext } from "react";
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 type TxOptions<T extends Transaction<any, any, any, any>> = Parameters<
@@ -57,7 +58,7 @@ export const useMutation = <
   const contextChainId = useContext(ChainIdContext);
   const contextSigner = useContext(SignerContext);
 
-  const [state, setState] = useState<AsyncState<TxEvent, MutationError>>(IDLE);
+  const [state, setState] = useAsyncState<TxEvent>();
 
   const submit = useAtomCallback<
     void,
@@ -103,6 +104,7 @@ export const useMutation = <
         options?.chainId,
         options?.signer,
         options?.txOptions,
+        setState,
       ],
     ),
   );

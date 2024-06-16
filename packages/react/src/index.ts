@@ -11,6 +11,8 @@ export { useAccounts } from "./hooks/useAccounts.js";
 export { useBlock } from "./hooks/useBlock.js";
 export { useChainSpecData } from "./hooks/useChainSpecData.js";
 export { useClient } from "./hooks/useClient.js";
+export { useConnectWallet } from "./hooks/useConnectWallet.js";
+export { useDisconnectWallet } from "./hooks/useDisconnectWallet.js";
 export { useMutation } from "./hooks/useMutation.js";
 export { useQuery, useQueryWithRefresh } from "./hooks/useQuery.js";
 export { useReconnectWallets } from "./hooks/useReconnectWallets.js";

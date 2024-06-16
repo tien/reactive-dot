@@ -1,17 +1,20 @@
 import config from "./config";
 import { IDLE, MutationError, PENDING } from "@reactive-dot/core";
+import { Wallet } from "@reactive-dot/core/wallets.js";
 import {
   ReDotChainProvider,
   ReDotProvider,
-  useResetQueryError,
   useAccounts,
   useBlock,
+  useChainSpecData,
+  useConnectWallet,
   useConnectedWallets,
+  useDisconnectWallet,
   useMutation,
   useQuery,
   useQueryWithRefresh,
+  useResetQueryError,
   useWallets,
-  useChainSpecData,
 } from "@reactive-dot/react";
 import { DenominatedNumber } from "@reactive-dot/utils";
 import { formatDistance } from "date-fns";
@@ -161,9 +164,40 @@ const Query = () => {
   );
 };
 
+type WalletItemProps = {
+  wallet: Wallet;
+};
+
+const WalletItem = (props: WalletItemProps) => {
+  const connectedWallets = useConnectedWallets();
+
+  const [connectingState, connect] = useConnectWallet(props.wallet);
+  const [disconnectingState, disconnect] = useDisconnectWallet(props.wallet);
+
+  return (
+    <li>
+      {props.wallet.name}:{" "}
+      {connectedWallets.includes(props.wallet) ? (
+        <button
+          onClick={() => disconnect()}
+          disabled={disconnectingState === PENDING}
+        >
+          Disconnect{disconnectingState === PENDING && <>...</>}
+        </button>
+      ) : (
+        <button
+          onClick={() => connect()}
+          disabled={connectingState === PENDING}
+        >
+          Connect{connectingState === PENDING && <>...</>}
+        </button>
+      )}
+    </li>
+  );
+};
+
 const WalletConnection = () => {
   const wallets = useWallets();
-  const connectedWallets = useConnectedWallets();
 
   return (
     <section>
@@ -174,14 +208,7 @@ const WalletConnection = () => {
         <h4>Wallets</h4>
         <ul>
           {wallets.map((wallet) => (
-            <li key={wallet.id}>
-              {wallet.name}:{" "}
-              {connectedWallets.includes(wallet) ? (
-                <button onClick={() => wallet.disconnect()}>Disconnect</button>
-              ) : (
-                <button onClick={() => wallet.connect()}>Connect</button>
-              )}
-            </li>
+            <WalletItem key={wallet.id} wallet={wallet} />
           ))}
         </ul>
       </article>

@@ -75,11 +75,18 @@ export default config;
 ## Connect to wallets
 
 ```tsx title="Wallets.tsx"
-import { useConnectedWallets, useWallets } from "@reactive-dot/react";
+import {
+  useConnectedWallets,
+  useWallets,
+  useConnectWallet,
+} from "@reactive-dot/react";
 
 const Wallets = () => {
   const wallets = useWallets();
   const connectedWallets = useConnectedWallets();
+
+  const [_, connectWallet] = useConnectWallet();
+  const [__, disconnectWallet] = useDisconnectWallet();
 
   return (
     <section>
@@ -94,11 +101,11 @@ const Wallets = () => {
               <div>{wallet.name}</div>
               <div>
                 {connectedWallets.includes(wallet) ? (
-                  <button onClick={() => wallet.disconnect()}>
+                  <button onClick={() => disconnectWallet(wallet)}>
                     Disconnect
                   </button>
                 ) : (
-                  <button onClick={() => wallet.connect()}>Connect</button>
+                  <button onClick={() => connectWallet(wallet)}>Connect</button>
                 )}
               </div>
             </li>
