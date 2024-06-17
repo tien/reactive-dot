@@ -1,18 +1,12 @@
 import Wallet from "./wallet.js";
 
-type ConnectionHandshake<T> = {
+type ConnectionHandshake = {
   uri: string;
-  wait: () => Promise<T>;
+  settled: Promise<void>;
 };
 
-export default abstract class DeepLinkWallet<
-  THandshakeResponse,
-> extends Wallet {
+export default abstract class DeepLinkWallet extends Wallet {
   abstract readonly initiateConnectionHandshake: () =>
-    | ConnectionHandshake<THandshakeResponse>
-    | Promise<ConnectionHandshake<THandshakeResponse>>;
-
-  abstract readonly completeConnectionHandshake: (
-    response: THandshakeResponse,
-  ) => void | Promise<void>;
+    | ConnectionHandshake
+    | Promise<ConnectionHandshake>;
 }

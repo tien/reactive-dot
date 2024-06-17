@@ -16,7 +16,7 @@ import { InjectedPolkadotAccount } from "polkadot-api/pjs-signer";
 import { BehaviorSubject, lastValueFrom } from "rxjs";
 import { map } from "rxjs/operators";
 
-export default class WalletConnect extends DeepLinkWallet<SessionTypes.Struct> {
+export default class WalletConnect extends DeepLinkWallet {
   readonly #providerOptions: UniversalProviderOpts;
 
   #provider: IUniversalProvider | undefined;
@@ -112,41 +112,35 @@ export default class WalletConnect extends DeepLinkWallet<SessionTypes.Struct> {
 
     return {
       uri,
-      wait: approval,
+      settled: approval().then((session) => this.#session.next(session)),
     };
   };
 
-  override readonly completeConnectionHandshake = (
-    response: SessionTypes.Struct,
-  ) => this.#session.next(response);
-
   override readonly connect = async () => {
-    const { uri, wait } = await this.initiateConnectionHandshake();
+    const { uri, settled } = await this.initiateConnectionHandshake();
+
+    const connectedPromise = settled.then(() => true as const);
 
     const modal = await this.#getModal();
 
     await modal.openModal({ uri });
 
-    const modalClosePromise = new Promise<void>((resolve) => {
+    const modalClosePromise = new Promise<false>((resolve) => {
       const unsubscribe = modal.subscribeModal(
         (modalState: { open: boolean }) => {
           if (!modalState.open) {
-            resolve();
+            resolve(false);
             unsubscribe();
           }
         },
       );
     });
 
-    const sessionPromise = wait();
+    const connected = await Promise.race([connectedPromise, modalClosePromise]);
 
-    const session = await Promise.race([sessionPromise, modalClosePromise]);
-
-    if (session === undefined) {
+    if (!connected) {
       throw new ReDotError("Modal was closed");
     }
-
-    this.completeConnectionHandshake(session);
 
     modal.closeModal();
   };
