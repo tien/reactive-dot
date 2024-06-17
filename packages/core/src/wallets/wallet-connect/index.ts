@@ -116,8 +116,9 @@ export default class WalletConnect extends DeepLinkWallet<SessionTypes.Struct> {
     };
   };
 
-  override completeConnectionHandshake = (response: SessionTypes.Struct) =>
-    this.#session.next(response);
+  override readonly completeConnectionHandshake = (
+    response: SessionTypes.Struct,
+  ) => this.#session.next(response);
 
   override readonly connect = async () => {
     const { uri, wait } = await this.initiateConnectionHandshake();
@@ -127,12 +128,14 @@ export default class WalletConnect extends DeepLinkWallet<SessionTypes.Struct> {
     await modal.openModal({ uri });
 
     const modalClosePromise = new Promise<void>((resolve) => {
-      const unsubscribe = modal.subscribeModal((modalState) => {
-        if (!modalState.open) {
-          resolve();
-          unsubscribe();
-        }
-      });
+      const unsubscribe = modal.subscribeModal(
+        (modalState: { open: boolean }) => {
+          if (!modalState.open) {
+            resolve();
+            unsubscribe();
+          }
+        },
+      );
     });
 
     const sessionPromise = wait();
