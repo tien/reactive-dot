@@ -77,7 +77,7 @@ export default class WalletConnect extends Wallet {
   );
 
   override readonly connect = async () => {
-    this.initialize();
+    await this.initialize();
 
     if (this.#provider?.client === undefined) {
       throw new ReDotError("Wallet connect provider doesn't have any client");
