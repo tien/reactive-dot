@@ -5,7 +5,7 @@ import { ReDotError } from "@reactive-dot/core";
 import type {
   Chains,
   ChainId,
-  ReDotDescriptor,
+  CommonDescriptor,
 } from "@reactive-dot/core/types.js";
 import { useAtomValue } from "jotai";
 import { TypedApi } from "polkadot-api";
@@ -20,7 +20,7 @@ import { useContext } from "react";
 export const useTypedApi = <TChainId extends ChainId | void = void>(
   options?: ChainHookOptions,
 ): TypedApi<
-  TChainId extends void ? ReDotDescriptor : Chains[Exclude<TChainId, void>]
+  TChainId extends void ? CommonDescriptor : Chains[Exclude<TChainId, void>]
 > => {
   const contextChainId = useContext(ChainIdContext);
   const chainId = options?.chainId ?? contextChainId;

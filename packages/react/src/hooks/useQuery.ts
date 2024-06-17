@@ -15,7 +15,7 @@ import {
 import type {
   ChainId,
   Chains,
-  ReDotDescriptor,
+  CommonDescriptor,
 } from "@reactive-dot/core/types.js";
 import { atom, useAtomValue } from "jotai";
 import { useAtomCallback } from "jotai/utils";
@@ -35,7 +35,7 @@ export const useQueryWithRefresh = <
       ) => Query<QueryInstruction<TDescriptor>[], TDescriptor> | Falsy)
     | Falsy,
   TDescriptor extends TChainId extends void
-    ? ReDotDescriptor
+    ? CommonDescriptor
     : Chains[Exclude<TChainId, void>],
   TChainId extends ChainId | void = void,
 >(
@@ -125,7 +125,7 @@ export const useQuery = <
       ) => Query<QueryInstruction<TDescriptor>[], TDescriptor> | Falsy)
     | Falsy,
   TDescriptor extends TChainId extends void
-    ? ReDotDescriptor
+    ? CommonDescriptor
     : Chains[Exclude<TChainId, void>],
   TChainId extends ChainId | void = void,
 >(

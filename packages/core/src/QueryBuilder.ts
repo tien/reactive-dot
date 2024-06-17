@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { ReDotDescriptor } from "./types/index.js";
+import { CommonDescriptor } from "./types/index.js";
 import type { ChainDefinition, TypedApi } from "polkadot-api";
 import type { Observable } from "rxjs";
 
@@ -33,7 +33,7 @@ type BaseInstruction<T extends string> = {
 export type ConstantFetchInstruction<
   TPallet extends keyof TypedApi<TDescriptor>["constants"],
   TConstant extends keyof TypedApi<TDescriptor>["constants"][TPallet],
-  TDescriptor extends ChainDefinition = ReDotDescriptor,
+  TDescriptor extends ChainDefinition = CommonDescriptor,
 > = BaseInstruction<"fetch-constant"> & {
   pallet: TPallet;
   constant: TConstant;
@@ -45,7 +45,7 @@ export type StorageReadInstruction<
   TArguments extends InferPapiStorageEntry<
     TypedApi<TDescriptor>["query"][TPallet][TStorage]
   >["args"],
-  TDescriptor extends ChainDefinition = ReDotDescriptor,
+  TDescriptor extends ChainDefinition = CommonDescriptor,
 > = BaseInstruction<"read-storage"> & {
   pallet: TPallet;
   storage: TStorage;
@@ -58,7 +58,7 @@ export type StorageEntriesReadInstruction<
   TArguments extends InferPapiStorageEntryWithKeys<
     TypedApi<TDescriptor>["query"][TPallet][TStorage]
   >["args"],
-  TDescriptor extends ChainDefinition = ReDotDescriptor,
+  TDescriptor extends ChainDefinition = CommonDescriptor,
 > = BaseInstruction<"read-storage-entries"> & {
   pallet: TPallet;
   storage: TStorage;
@@ -71,7 +71,7 @@ export type ApiCallInstruction<
   TArguments extends InferPapiRuntimeCall<
     TypedApi<TDescriptor>["apis"][TPallet][TApi]
   >["args"],
-  TDescriptor extends ChainDefinition = ReDotDescriptor,
+  TDescriptor extends ChainDefinition = CommonDescriptor,
 > = BaseInstruction<"call-api"> & {
   pallet: TPallet;
   api: TApi;
@@ -84,7 +84,7 @@ export type MultiInstruction<TInstruction extends BaseInstruction<string>> =
   };
 
 export type QueryInstruction<
-  TDescriptor extends ChainDefinition = ReDotDescriptor,
+  TDescriptor extends ChainDefinition = CommonDescriptor,
 > =
   | ConstantFetchInstruction<any, any, TDescriptor>
   | StorageReadInstruction<any, any, any, TDescriptor>
@@ -95,7 +95,7 @@ export type QueryInstruction<
 
 type ConstantFetchPayload<
   TInstruction extends ConstantFetchInstruction<any, any, TDescriptor>,
-  TDescriptor extends ChainDefinition = ReDotDescriptor,
+  TDescriptor extends ChainDefinition = CommonDescriptor,
 > = InferPapiConstantEntry<
   TypedApi<TDescriptor>["constants"][TInstruction["pallet"]][TInstruction["constant"]]
 >;
@@ -104,7 +104,7 @@ type StorageReadResponse<
   TInstruction extends
     | StorageReadInstruction<any, any, any, TDescriptor>
     | MultiInstruction<StorageReadInstruction<any, any, any, TDescriptor>>,
-  TDescriptor extends ChainDefinition = ReDotDescriptor,
+  TDescriptor extends ChainDefinition = CommonDescriptor,
 > = InferPapiStorageEntry<
   TypedApi<TDescriptor>["query"][TInstruction["pallet"]][TInstruction["storage"]]
 >["response"];
@@ -116,7 +116,7 @@ type StorageEntriesReadResponse<
     any,
     TDescriptor
   >,
-  TDescriptor extends ChainDefinition = ReDotDescriptor,
+  TDescriptor extends ChainDefinition = CommonDescriptor,
 > = InferPapiStorageEntryWithKeys<
   TypedApi<TDescriptor>["query"][TInstruction["pallet"]][TInstruction["storage"]]
 >["response"];
@@ -125,14 +125,14 @@ type ApiCallResponse<
   TInstruction extends
     | ApiCallInstruction<any, any, any, TDescriptor>
     | MultiInstruction<ApiCallInstruction<any, any, any, TDescriptor>>,
-  TDescriptor extends ChainDefinition = ReDotDescriptor,
+  TDescriptor extends ChainDefinition = CommonDescriptor,
 > = InferPapiRuntimeCall<
   TypedApi<TDescriptor>["apis"][TInstruction["pallet"]][TInstruction["api"]]
 >["response"];
 
 export type InferInstructionResponse<
   TInstruction extends QueryInstruction,
-  TDescriptor extends ChainDefinition = ReDotDescriptor,
+  TDescriptor extends ChainDefinition = CommonDescriptor,
 > =
   TInstruction extends ConstantFetchInstruction<any, any, TDescriptor>
     ? ConstantFetchPayload<TInstruction, TDescriptor>
@@ -173,12 +173,12 @@ type ResponsePayload<T> =
 
 export type InferInstructionPayload<
   TInstruction extends QueryInstruction,
-  TDescriptor extends ChainDefinition = ReDotDescriptor,
+  TDescriptor extends ChainDefinition = CommonDescriptor,
 > = ResponsePayload<InferInstructionResponse<TInstruction, TDescriptor>>;
 
 export type InferInstructionsResponse<
   TInstructions extends QueryInstruction[],
-  TDescriptor extends ChainDefinition = ReDotDescriptor,
+  TDescriptor extends ChainDefinition = CommonDescriptor,
 > = {
   [P in keyof TInstructions]: InferInstructionResponse<
     TInstructions[P],
@@ -188,7 +188,7 @@ export type InferInstructionsResponse<
 
 export type InferInstructionsPayload<
   TInstructions extends QueryInstruction[],
-  TDescriptor extends ChainDefinition = ReDotDescriptor,
+  TDescriptor extends ChainDefinition = CommonDescriptor,
 > = {
   [P in keyof TInstructions]: InferInstructionPayload<
     TInstructions[P],
@@ -208,7 +208,7 @@ export type InferQueryPayload<T extends Query> =
 
 export default class Query<
   const TInstructions extends QueryInstruction[] = QueryInstruction[],
-  TDescriptor extends ChainDefinition = ReDotDescriptor,
+  TDescriptor extends ChainDefinition = CommonDescriptor,
 > implements Query<TInstructions>
 {
   #instructions: TInstructions;

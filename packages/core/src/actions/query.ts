@@ -2,7 +2,7 @@ import type {
   InferInstructionResponse,
   QueryInstruction,
 } from "../QueryBuilder.js";
-import { ReDotDescriptor } from "../types/index.js";
+import { CommonDescriptor } from "../types/index.js";
 import type { ChainDefinition, TypedApi } from "polkadot-api";
 
 export const preflight = <TInstruction extends QueryInstruction>(
@@ -30,7 +30,7 @@ export const preflight = <TInstruction extends QueryInstruction>(
 
 export const query = <
   TInstruction extends QueryInstruction,
-  TDescriptor extends ChainDefinition = ReDotDescriptor,
+  TDescriptor extends ChainDefinition = CommonDescriptor,
 >(
   api: TypedApi<TDescriptor>,
   instruction: TInstruction,

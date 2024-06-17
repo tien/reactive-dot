@@ -8,7 +8,7 @@ export interface Chains {}
 
 export type ChainId = keyof Chains;
 
-export type ReDotDescriptor = Chains[keyof Chains] extends never
+export type CommonDescriptor = Chains[keyof Chains] extends never
   ? ChainDefinition
   : Chains[keyof Chains];
 

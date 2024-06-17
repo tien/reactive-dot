@@ -6,7 +6,7 @@ import { MutationError, PENDING } from "@reactive-dot/core";
 import type {
   ChainId,
   Chains,
-  ReDotDescriptor,
+  CommonDescriptor,
 } from "@reactive-dot/core/types.js";
 import { useAtomCallback } from "jotai/utils";
 import type {
@@ -37,7 +37,7 @@ type TxOptions<T extends Transaction<any, any, any, any>> = Parameters<
 export const useMutation = <
   TAction extends (
     builder: TypedApi<
-      TChainId extends void ? ReDotDescriptor : Chains[Exclude<TChainId, void>]
+      TChainId extends void ? CommonDescriptor : Chains[Exclude<TChainId, void>]
     >["tx"],
   ) => // eslint-disable-next-line @typescript-eslint/no-explicit-any
   Transaction<any, any, any, any>,
