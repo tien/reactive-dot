@@ -1,5 +1,5 @@
 import { ReDotError } from "../../errors.js";
-import Wallet from "../wallet.js";
+import DeepLinkWallet from "../deep-link.js";
 import { getPolkadotSignerFromPjs } from "./from-pjs-account.js";
 import "@polkadot-api/pjs-signer";
 import { AccountId } from "@polkadot-api/substrate-bindings";
@@ -16,7 +16,7 @@ import { InjectedPolkadotAccount } from "polkadot-api/pjs-signer";
 import { BehaviorSubject, lastValueFrom } from "rxjs";
 import { map } from "rxjs/operators";
 
-export default class WalletConnect extends Wallet {
+export default class WalletConnect extends DeepLinkWallet<SessionTypes.Struct> {
   readonly #providerOptions: UniversalProviderOpts;
 
   #provider: IUniversalProvider | undefined;
@@ -76,7 +76,7 @@ export default class WalletConnect extends Wallet {
     map((session) => session !== undefined),
   );
 
-  override readonly connect = async () => {
+  override readonly initiateConnectionHandshake = async () => {
     await this.initialize();
 
     if (this.#provider?.client === undefined) {
@@ -107,14 +107,43 @@ export default class WalletConnect extends Wallet {
       await this.#provider.client.connect(connectOptions);
 
     if (uri === undefined) {
-      throw new ReDotError("Client connection doesn't return any URI");
+      throw new ReDotError("No URI provided by connection");
     }
+
+    return {
+      uri,
+      wait: approval,
+    };
+  };
+
+  override completeConnectionHandshake = (response: SessionTypes.Struct) =>
+    this.#session.next(response);
+
+  override readonly connect = async () => {
+    const { uri, wait } = await this.initiateConnectionHandshake();
 
     const modal = await this.#getModal();
 
     await modal.openModal({ uri });
 
-    this.#session.next(await approval());
+    const modalClosePromise = new Promise<void>((resolve) => {
+      const unsubscribe = modal.subscribeModal((modalState) => {
+        if (!modalState.open) {
+          resolve();
+          unsubscribe();
+        }
+      });
+    });
+
+    const sessionPromise = wait();
+
+    const session = await Promise.race([sessionPromise, modalClosePromise]);
+
+    if (session === undefined) {
+      throw new ReDotError("Modal was closed");
+    }
+
+    this.completeConnectionHandshake(session);
 
     modal.closeModal();
   };
