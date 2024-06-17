@@ -143,7 +143,10 @@ import { useTransition } from "react";
 const QueryWithRefresh = () => {
   const [isPending, startTransition] = useTransition();
   const [pendingRewards, refreshPendingRewards] = useQueryWithRefresh(
-    (builder) => builder.callApi("NominationPoolsApi", "pending_rewards", []),
+    (builder) =>
+      builder.callApi("NominationPoolsApi", "pending_rewards", [
+        ACCOUNT_ADDRESS,
+      ]),
   );
 
   return (
@@ -151,6 +154,37 @@ const QueryWithRefresh = () => {
       <p>{pendingRewards.toLocaleString()}</p>
       <button
         onClick={() => startTransition(() => refreshPendingRewards())}
+        disabled={isPending}
+      >
+        Refresh
+      </button>
+    </div>
+  );
+};
+```
+
+The above will refresh all refreshable data in the query. If you want to target specific data to refresh, a separate [`useRefreshQuery`](/api/react/function/useRefreshQuery) hook can be used.
+
+```tsx
+const QueryWithRefresh = () => {
+  const [isPending, startTransition] = useTransition();
+  const [account1Rewards, account2Rewards] = useQuery((builder) =>
+    builder
+      .callApi("NominationPoolsApi", "pending_rewards", [ACCOUNT_ADDRESS_1])
+      .callApi("NominationPoolsApi", "pending_rewards", [ACCOUNT_ADDRESS_2]),
+  );
+  const refreshAccount2Rewards = useRefreshQuery((builder) =>
+    builder.callApi("NominationPoolsApi", "pending_rewards", [
+      ACCOUNT_ADDRESS_2,
+    ]),
+  );
+
+  return (
+    <div>
+      {/* ... */}
+      <button
+        // Only the 2nd account rewards will be refreshed
+        onClick={() => startTransition(() => refreshAccount2Rewards())}
         disabled={isPending}
       >
         Refresh

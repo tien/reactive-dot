@@ -22,6 +22,62 @@ import { useAtomCallback } from "jotai/utils";
 import { useCallback, useContext, useMemo } from "react";
 
 /**
+ * Hook for refreshing cached query.
+ *
+ * @param builder - The function to create the query
+ * @param options - Additional options
+ * @returns The function to refresh the query
+ */
+export const useRefreshQuery = <
+  TQuery extends
+    | ((
+        builder: Query<[], TDescriptor>,
+      ) => Query<QueryInstruction<TDescriptor>[], TDescriptor> | Falsy)
+    | Falsy,
+  TDescriptor extends TChainId extends void
+    ? CommonDescriptor
+    : Chains[Exclude<TChainId, void>],
+  TChainId extends ChainId | void = void,
+>(
+  builder: TQuery,
+  options?: ChainHookOptions,
+) => {
+  const contextChainId = useContext(ChainIdContext);
+  const chainId = options?.chainId ?? contextChainId;
+
+  const refresh = useAtomCallback(
+    useCallback(
+      (_, set) => {
+        if (chainId === undefined) {
+          throw new QueryError("No chain ID provided");
+        }
+
+        if (!builder) {
+          return;
+        }
+
+        const query = builder(new Query([]));
+
+        if (!query) {
+          return;
+        }
+
+        const atoms = getQueryInstructionPayloadAtoms(chainId, query).flat();
+
+        for (const atom of atoms) {
+          if ("write" in atom) {
+            set(atom);
+          }
+        }
+      },
+      [builder, chainId],
+    ),
+  );
+
+  return refresh;
+};
+
+/**
  * Hook for querying data from chain, returning the response & a refresher function.
  *
  * @param builder - The function to create the query
@@ -85,24 +141,7 @@ export const useQueryWithRefresh = <
     ),
   );
 
-  const refresh = useAtomCallback(
-    useCallback(
-      (_, set) => {
-        if (!query) {
-          return;
-        }
-
-        const atoms = getQueryInstructionPayloadAtoms(chainId, query).flat();
-
-        for (const atom of atoms) {
-          if ("write" in atom) {
-            set(atom);
-          }
-        }
-      },
-      [chainId, query],
-    ),
-  );
+  const refresh = useRefreshQuery(builder, options);
 
   return [
     // @ts-expect-error complex type
