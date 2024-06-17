@@ -125,20 +125,24 @@ export const useQueryWithRefresh = <
     [query],
   );
 
-  const data = flatHead(
-    useAtomValue(
-      useMemo(
-        () =>
-          !query
-            ? atom(undefined)
-            : queryPayloadAtomFamily({
-                chainId,
-                query,
-              }),
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-        [hashKey],
-      ),
+  const rawData = useAtomValue(
+    useMemo(
+      () =>
+        !query
+          ? atom(undefined)
+          : queryPayloadAtomFamily({
+              chainId,
+              query,
+            }),
+      // eslint-disable-next-line react-hooks/exhaustive-deps
+      [hashKey],
     ),
+  );
+
+  const data = useMemo(
+    () =>
+      query && query.instructions.length === 1 ? flatHead(rawData) : rawData,
+    [query, rawData],
   );
 
   const refresh = useRefreshQuery(builder, options);
