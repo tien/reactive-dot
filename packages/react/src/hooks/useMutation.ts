@@ -3,11 +3,7 @@ import { typedApiAtomFamily } from "../stores/client.js";
 import type { ChainHookOptions } from "./types.js";
 import { useAsyncState } from "./useAsyncState.js";
 import { MutationError, PENDING } from "@reactive-dot/core";
-import type {
-  ChainId,
-  Chains,
-  CommonDescriptor,
-} from "@reactive-dot/core/types.js";
+import type { ChainId, Chains, CommonDescriptor } from "@reactive-dot/core";
 import { useAtomCallback } from "jotai/utils";
 import type {
   PolkadotSigner,

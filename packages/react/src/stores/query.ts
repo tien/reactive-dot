@@ -8,7 +8,7 @@ import {
   type MultiInstruction,
   type Query,
 } from "@reactive-dot/core";
-import type { ChainId } from "@reactive-dot/core/types.js";
+import type { ChainId } from "@reactive-dot/core";
 import { type Atom, type WritableAtom, atom } from "jotai";
 import { atomFamily, atomWithObservable, atomWithRefresh } from "jotai/utils";
 import { from, switchMap, type Observable } from "rxjs";

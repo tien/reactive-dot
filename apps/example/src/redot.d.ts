@@ -1,6 +1,6 @@
 import type { polkadot, kusama, westend } from "@polkadot-api/descriptors";
 
-declare module "@reactive-dot/core/types.js" {
+declare module "@reactive-dot/core" {
   export interface Chains {
     polkadot: typeof polkadot;
     kusama: typeof kusama;

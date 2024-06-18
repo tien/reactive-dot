@@ -1,5 +1,5 @@
 import { clientAtomFamily } from "./client.js";
-import { ChainId } from "@reactive-dot/core/types.js";
+import { ChainId } from "@reactive-dot/core";
 import { atomFamily, atomWithObservable } from "jotai/utils";
 import { from } from "rxjs";
 import { switchMap, map } from "rxjs/operators";

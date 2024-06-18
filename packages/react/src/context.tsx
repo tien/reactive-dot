@@ -1,7 +1,7 @@
 import { useReconnectWallets } from "./hooks/useReconnectWallets.js";
 import { chainConfigsAtom } from "./stores/config.js";
 import { aggregatorAtom, directWalletsAtom } from "./stores/wallets.js";
-import type { ChainId, Config } from "@reactive-dot/core/types.js";
+import type { ChainId, Config } from "@reactive-dot/core";
 import { WalletAggregator, Wallet } from "@reactive-dot/core/wallets.js";
 import { ScopeProvider } from "jotai-scope";
 import { useHydrateAtoms } from "jotai/utils";

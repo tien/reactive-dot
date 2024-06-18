@@ -14,10 +14,6 @@
     "./wallets.js": {
       "default": "./build/wallets/index.js",
       "types": "./src/wallets/index.ts"
-    },
-    "./types.js": {
-      "default": "./build/types/index.js",
-      "types": "./src/types/index.ts"
     }
   },
   "scripts": {

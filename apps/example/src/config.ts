@@ -1,5 +1,5 @@
 import { kusama, polkadot, westend } from "@polkadot-api/descriptors";
-import type { Config } from "@reactive-dot/core/types.js";
+import type { Config } from "@reactive-dot/core";
 import {
   InjectedAggregator,
   WalletConnect,

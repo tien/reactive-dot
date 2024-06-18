@@ -1,8 +1,7 @@
-import { WalletAggregator, Wallet } from "../wallets/index.js";
+import type { Gettable } from "./types.js";
+import type { Wallet, WalletAggregator } from "./wallets/index.js";
 import type { JsonRpcProvider } from "@polkadot-api/json-rpc-provider";
 import type { ChainDefinition } from "polkadot-api";
-
-type Gettable<T> = T | PromiseLike<T> | (() => T | PromiseLike<T>);
 
 export interface Chains {}
 

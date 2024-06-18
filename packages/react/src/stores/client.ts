@@ -1,7 +1,7 @@
 import { chainConfigsAtom } from "./config.js";
 import type { JsonRpcProvider } from "@polkadot-api/json-rpc-provider";
 import { ReDotError } from "@reactive-dot/core";
-import type { ChainId } from "@reactive-dot/core/types.js";
+import type { ChainId } from "@reactive-dot/core";
 import { atom } from "jotai";
 import { atomFamily } from "jotai/utils";
 import { createClient } from "polkadot-api";

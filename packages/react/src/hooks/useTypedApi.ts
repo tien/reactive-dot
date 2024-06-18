@@ -2,11 +2,7 @@ import { ChainIdContext } from "../context.js";
 import { typedApiAtomFamily } from "../stores/client.js";
 import type { ChainHookOptions } from "./types.js";
 import { ReDotError } from "@reactive-dot/core";
-import type {
-  Chains,
-  ChainId,
-  CommonDescriptor,
-} from "@reactive-dot/core/types.js";
+import type { Chains, ChainId, CommonDescriptor } from "@reactive-dot/core";
 import { useAtomValue } from "jotai";
 import { TypedApi } from "polkadot-api";
 import { useContext } from "react";
