@@ -9,15 +9,17 @@ type InferPapiStorageEntry<T> = T extends {
   ? { args: Args; response: Response }
   : { args: unknown[]; response: unknown };
 
-type InferPapiStorageEntryWithKeys<T> = T extends {
-  getEntries: (...args: infer Args) => infer Response;
+type InferPapiStorageEntries<T> = T extends {
+  getEntries: (...args: [...infer Args, infer Options]) => infer Response;
 }
-  ? { args: Args; response: Response }
-  : { args: unknown[]; response: unknown };
+  ? { args: Args; options: Options; response: Response }
+  : { args: unknown[]; options: unknown; response: unknown };
 
-type InferPapiRuntimeCall<T> = T extends (...args: infer Args) => infer Response
-  ? { args: Args; response: Response }
-  : { args: unknown[]; response: unknown };
+type InferPapiRuntimeCall<T> = T extends (
+  ...args: [...infer Args, infer Options]
+) => infer Response
+  ? { args: Args; options: Options; response: Response }
+  : { args: unknown[]; options: unknown; response: unknown };
 
 type InferPapiConstantEntry<T> = T extends {
   (): Promise<infer Payload>;
@@ -55,7 +57,7 @@ export type StorageReadInstruction<
 export type StorageEntriesReadInstruction<
   TPallet extends keyof TypedApi<TDescriptor>["query"],
   TStorage extends keyof TypedApi<TDescriptor>["query"][TPallet],
-  TArguments extends InferPapiStorageEntryWithKeys<
+  TArguments extends InferPapiStorageEntries<
     TypedApi<TDescriptor>["query"][TPallet][TStorage]
   >["args"],
   TDescriptor extends ChainDefinition = CommonDescriptor,
@@ -117,7 +119,7 @@ type StorageEntriesReadResponse<
     TDescriptor
   >,
   TDescriptor extends ChainDefinition = CommonDescriptor,
-> = InferPapiStorageEntryWithKeys<
+> = InferPapiStorageEntries<
   TypedApi<TDescriptor>["query"][TInstruction["pallet"]][TInstruction["storage"]]
 >["response"];
 
@@ -261,7 +263,7 @@ export default class Query<
     TPallet extends keyof TypedApi<TDescriptor>["query"],
     TStorage extends keyof TypedApi<TDescriptor>["query"][TPallet],
     TArguments extends Array<
-      InferPapiStorageEntryWithKeys<
+      InferPapiStorageEntries<
         TypedApi<TDescriptor>["query"][TPallet][TStorage]
       >["args"]
     >,
