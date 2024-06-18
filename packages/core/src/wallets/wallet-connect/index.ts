@@ -112,7 +112,15 @@ export default class WalletConnect extends DeepLinkWallet {
 
     return {
       uri,
-      settled: approval().then((session) => this.#session.next(session)),
+      settled: approval().then((session) => {
+        this.#session.next(session);
+
+        // TODO: only happen after connect, not reconnect
+        // report this to WalletConnect
+        if (this.#provider) {
+          this.#provider.session = session;
+        }
+      }),
     };
   };
 
