@@ -1,10 +1,10 @@
 import { withAtomFamilyErrorCatcher } from "../utils/jotai.js";
 import { chainSpecDataAtomFamily } from "./client.js";
 import { walletsAtom } from "./wallets.js";
-import { ChainId } from "@reactive-dot/core";
+import type { ChainId } from "@reactive-dot/core";
 import type { Atom } from "jotai";
 import { atomFamily, atomWithObservable } from "jotai/utils";
-import { InjectedPolkadotAccount } from "polkadot-api/pjs-signer";
+import type { InjectedPolkadotAccount } from "polkadot-api/pjs-signer";
 import { combineLatest, from } from "rxjs";
 import { map, switchMap } from "rxjs/operators";
 

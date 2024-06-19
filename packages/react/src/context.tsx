@@ -2,16 +2,16 @@ import { useReconnectWallets } from "./hooks/useReconnectWallets.js";
 import { chainConfigsAtom } from "./stores/config.js";
 import { aggregatorAtom, directWalletsAtom } from "./stores/wallets.js";
 import type { ChainId, Config } from "@reactive-dot/core";
-import { WalletAggregator, Wallet } from "@reactive-dot/core/wallets.js";
+import { Wallet, WalletAggregator } from "@reactive-dot/core/wallets.js";
 import { ScopeProvider } from "jotai-scope";
 import { useHydrateAtoms } from "jotai/utils";
-import { PolkadotSigner } from "polkadot-api";
+import type { PolkadotSigner } from "polkadot-api";
 import {
-  PropsWithChildren,
   Suspense,
   createContext,
   useEffect,
   useMemo,
+  type PropsWithChildren,
 } from "react";
 
 export type ReDotProviderProps = PropsWithChildren<{

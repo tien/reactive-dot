@@ -1,6 +1,6 @@
 import { ChainIdContext } from "../context.js";
 import { accountsAtom } from "../stores/accounts.js";
-import { ChainHookOptions } from "./types.js";
+import type { ChainHookOptions } from "./types.js";
 import { ReDotError } from "@reactive-dot/core";
 import { useAtomValue } from "jotai";
 import { useContext } from "react";

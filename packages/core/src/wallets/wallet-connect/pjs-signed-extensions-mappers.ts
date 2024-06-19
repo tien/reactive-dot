@@ -1,4 +1,4 @@
-import { HexString } from "@polkadot-api/substrate-bindings";
+import type { HexString } from "@polkadot-api/substrate-bindings";
 import {
   Bytes,
   Struct,

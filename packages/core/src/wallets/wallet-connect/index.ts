@@ -12,7 +12,7 @@ import type {
   IUniversalProvider,
   UniversalProviderOpts,
 } from "@walletconnect/universal-provider";
-import { InjectedPolkadotAccount } from "polkadot-api/pjs-signer";
+import type { InjectedPolkadotAccount } from "polkadot-api/pjs-signer";
 import { BehaviorSubject, lastValueFrom } from "rxjs";
 import { map } from "rxjs/operators";
 

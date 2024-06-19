@@ -1,4 +1,4 @@
-import { KeyedStorage } from "../../storage.js";
+import type { KeyedStorage } from "../../storage.js";
 import InjectedWallet from "../injected.js";
 import WalletAggregator from "./aggregator.js";
 import { getInjectedExtensions } from "polkadot-api/pjs-signer";

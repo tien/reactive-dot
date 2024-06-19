@@ -1,4 +1,4 @@
-import { ChainDefinition } from "polkadot-api";
+import type { ChainDefinition } from "polkadot-api";
 
 declare module "@reactive-dot/core" {
   export interface Chains {

@@ -1,5 +1,5 @@
 import { ReDotError } from "../errors.js";
-import { KeyedStorage } from "../storage.js";
+import type { KeyedStorage } from "../storage.js";
 import Wallet from "./wallet.js";
 import {
   connectInjectedExtension,

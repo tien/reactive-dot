@@ -9,10 +9,12 @@ import type { ChainHookOptions } from "./types.js";
 import {
   Query,
   QueryError,
-  QueryInstruction,
+  type ChainId,
+  type Chains,
+  type CommonDescriptor,
   type InferQueryPayload,
+  type QueryInstruction,
 } from "@reactive-dot/core";
-import type { ChainId, Chains, CommonDescriptor } from "@reactive-dot/core";
 import { atom, useAtomValue } from "jotai";
 import { useAtomCallback } from "jotai/utils";
 import { useCallback, useContext, useMemo } from "react";

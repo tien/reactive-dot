@@ -1,4 +1,4 @@
-import { AsyncState, IDLE, MutationError } from "@reactive-dot/core";
+import { IDLE, type AsyncState, type MutationError } from "@reactive-dot/core";
 import { useState } from "react";
 
 export const useAsyncState = <

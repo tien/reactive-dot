@@ -1,7 +1,7 @@
 import { walletsAtom } from "../stores/wallets.js";
 import { useAsyncState } from "./useAsyncState.js";
 import { MutationError, PENDING, connectWallet } from "@reactive-dot/core";
-import { Wallet } from "@reactive-dot/core/wallets.js";
+import type { Wallet } from "@reactive-dot/core/wallets.js";
 import { useAtomCallback } from "jotai/utils";
 import { useCallback } from "react";
 

@@ -1,5 +1,5 @@
 import { WalletAggregator } from "./aggregator/index.js";
-import Wallet from "./wallet.js";
+import type Wallet from "./wallet.js";
 
 export const initializeWallets = async (
   walletsOrAggregators: Array<Wallet | WalletAggregator>,

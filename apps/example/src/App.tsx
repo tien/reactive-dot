@@ -1,6 +1,6 @@
 import config from "./config";
 import { IDLE, MutationError, PENDING } from "@reactive-dot/core";
-import { Wallet } from "@reactive-dot/core/wallets.js";
+import type { Wallet } from "@reactive-dot/core/wallets.js";
 import {
   ReDotChainProvider,
   ReDotProvider,

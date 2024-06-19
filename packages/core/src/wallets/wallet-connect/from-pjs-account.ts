@@ -1,15 +1,15 @@
 import * as signedExtensionMappers from "./pjs-signed-extensions-mappers.js";
-import { SignerPayloadJSON } from "./types.js";
+import type { SignerPayloadJSON } from "./types.js";
 import { getDynamicBuilder } from "@polkadot-api/metadata-builders";
 import type { PolkadotSigner } from "@polkadot-api/polkadot-signer";
 import {
   AccountId,
   Blake2256,
-  V15,
   compact,
   enhanceEncoder,
   metadata as metadataCodec,
   u8,
+  type V15,
 } from "@polkadot-api/substrate-bindings";
 import { fromHex, mergeUint8, toHex } from "@polkadot-api/utils";
 

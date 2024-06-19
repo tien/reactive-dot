@@ -2,14 +2,14 @@ import { withAtomFamilyErrorCatcher } from "../utils/jotai.js";
 import { stringify } from "../utils/vanilla.js";
 import { typedApiAtomFamily } from "./client.js";
 import {
-  QueryInstruction,
   preflight,
   query,
+  type ChainId,
   type MultiInstruction,
   type Query,
+  type QueryInstruction,
 } from "@reactive-dot/core";
-import type { ChainId } from "@reactive-dot/core";
-import { type Atom, type WritableAtom, atom } from "jotai";
+import { atom, type Atom, type WritableAtom } from "jotai";
 import { atomFamily, atomWithObservable, atomWithRefresh } from "jotai/utils";
 import { from, switchMap, type Observable } from "rxjs";
 
