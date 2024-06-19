@@ -55,10 +55,12 @@ For more information on metadata syncing and type generation, please refer to th
 The records of `ChainId` -> `Descriptor` here will be used to provide you with the right type definitions when using hooks.
 
 ```ts title="redot.d.ts"
+// `dot` is the name we gave to `npx papi add`
 import type { dot } from "@polkadot-api/descriptors";
 
 declare module "@reactive-dot/core" {
   export interface Chains {
+    // "polkadot" here can be any unique string value
     polkadot: typeof dot;
   }
 }
@@ -102,6 +104,7 @@ import { Suspense } from "react";
 
 const App = () => (
   <ReDotProvider config={config}>
+    {/* `chainId` match the ID previously specified via `polkadot: typeof dot` */}
     <ReDotChainProvider chainId="polkadot">
       {/* Make sure there is at least one Suspense boundary wrapping the app */}
       <Suspense>{/* ... */}</Suspense>
