@@ -8,7 +8,7 @@ export const initializeWallets = async (
     await Promise.all(
       walletsOrAggregators.map((walletOrAggregator) =>
         walletOrAggregator instanceof WalletAggregator
-          ? walletOrAggregator.getWallets()
+          ? walletOrAggregator.scan()
           : [walletOrAggregator],
       ),
     )

@@ -5,6 +5,4 @@ export default abstract class WalletAggregator {
   abstract readonly scan: () => Wallet[] | Promise<Wallet[]>;
 
   abstract readonly wallets$: Observable<Wallet[]>;
-
-  abstract readonly getWallets: () => Wallet[] | Promise<Wallet[]>;
 }
