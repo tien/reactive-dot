@@ -28,7 +28,17 @@ const config: Config = {
       {
         projectRoot: path.join(__dirname, "../.."),
         tsconfigName: "tsconfig.typedoc.json",
-        packages: ["packages/core", "packages/react", "packages/utils"],
+        packages: [
+          {
+            path: "packages/core",
+            entry: {
+              index: "src/index.ts",
+              "wallets.js": { path: "src/wallets/index.ts", label: "Wallets" },
+            },
+          },
+          "packages/react",
+          "packages/utils",
+        ],
       },
     ],
   ],
