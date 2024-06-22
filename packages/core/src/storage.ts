@@ -1,24 +1,42 @@
-export type CreateStorageOptions = {
-  key: string;
-  storage: Storage;
+export type SimpleStorage = Pick<Storage, "getItem" | "removeItem" | "setItem">;
+
+export type PrefixedStorageOptions = {
+  prefix: string;
+  storage: SimpleStorage;
 };
 
-export class KeyedStorage implements Omit<Storage, "length" | "key" | "clear"> {
-  readonly key: string;
+export class PrefixedStorage<TKey extends string = string>
+  implements SimpleStorage
+{
+  readonly prefix: string;
 
-  #storage: Storage;
+  #storage: SimpleStorage;
 
-  constructor(options: CreateStorageOptions) {
-    this.key = options.key;
+  constructor(options: PrefixedStorageOptions) {
+    this.prefix = options.prefix;
     this.#storage = options.storage;
   }
 
-  getItem = (key: string) => this.#storage.getItem(this.#prefixKey(key));
+  getItem = (key: TKey) => this.#storage.getItem(this.#prefixKey(key));
 
-  removeItem = (key: string) => this.#storage.removeItem(this.#prefixKey(key));
+  removeItem = (key: TKey) => this.#storage.removeItem(this.#prefixKey(key));
 
-  setItem = (key: string, value: string) =>
+  setItem = (key: TKey, value: string) =>
     this.#storage.setItem(this.#prefixKey(key), value);
 
-  #prefixKey = (key: string) => `${this.key}/${key}`;
+  join = <TKeyOverride extends string | void = void>(path: string) => {
+    return new PrefixedStorage<TKeyOverride extends void ? TKey : TKeyOverride>(
+      {
+        prefix: `${this.prefix}/${path}`,
+        storage: this.#storage,
+      },
+    );
+  };
+
+  #prefixKey = (key: string) => `${this.prefix}/${key}`;
 }
+
+export const defaultStorage = new PrefixedStorage({
+  prefix: "@reactive-dot",
+  storage: globalThis.localStorage,
+});

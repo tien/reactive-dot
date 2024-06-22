@@ -25,7 +25,7 @@ export default class InjectedWallet extends Wallet {
   }
 
   override readonly initialize = async () => {
-    if (this.storage.getItem(`wallet/${this.id}/connected`) !== null) {
+    if (this.storage.getItem("connected") !== null) {
       await this.connect();
     }
   };
@@ -37,14 +37,14 @@ export default class InjectedWallet extends Wallet {
   override readonly connect = async () => {
     if (this.#extension$.getValue() === undefined) {
       this.#extension$.next(await connectInjectedExtension(this.name));
-      this.storage.setItem(`wallet/${this.id}/connected`, JSON.stringify(true));
+      this.storage.setItem("connected", JSON.stringify(true));
     }
   };
 
   override readonly disconnect = () => {
     this.#extension$.getValue()?.disconnect();
     this.#extension$.next(undefined);
-    this.storage.removeItem(`wallet/${this.id}/connected`);
+    this.storage.removeItem("connected");
   };
 
   override readonly accounts$ = this.#extension$.pipe(

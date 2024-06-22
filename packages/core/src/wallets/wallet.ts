@@ -1,9 +1,9 @@
-import { KeyedStorage } from "../storage.js";
+import { type PrefixedStorage, defaultStorage } from "../storage.js";
 import type { InjectedPolkadotAccount } from "polkadot-api/pjs-signer";
 import type { Observable } from "rxjs";
 
 export type WalletOptions = {
-  storage?: KeyedStorage | undefined;
+  storage?: PrefixedStorage | undefined;
 };
 
 export default abstract class Wallet {
@@ -11,15 +11,14 @@ export default abstract class Wallet {
 
   abstract readonly name: string;
 
-  protected readonly storage: KeyedStorage;
+  readonly #storage: PrefixedStorage;
+
+  protected get storage() {
+    return this.#storage.join<"connected">(this.id);
+  }
 
   constructor(options: WalletOptions | undefined) {
-    this.storage =
-      options?.storage ??
-      new KeyedStorage({
-        key: "@reactive-dot",
-        storage: globalThis.localStorage,
-      });
+    this.#storage = (options?.storage ?? defaultStorage).join("wallet");
   }
 
   abstract readonly initialize: () => void | Promise<void>;
