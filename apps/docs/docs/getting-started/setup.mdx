@@ -71,7 +71,7 @@ declare module "@reactive-dot/core" {
 ```ts title="config.ts"
 import { dot } from "@polkadot-api/descriptors";
 import type { Config } from "@reactive-dot/core";
-import { InjectedAggregator } from "@reactive-dot/core/wallets.js";
+import { InjectedWalletAggregator } from "@reactive-dot/core/wallets.js";
 import { chainSpec } from "polkadot-api/chains/polkadot";
 import { getSmProvider } from "polkadot-api/sm-provider";
 import { startFromWorker } from "polkadot-api/smoldot/from-worker";
@@ -89,7 +89,7 @@ const config: Config = {
       provider: getSmProvider(smoldot.addChain({ chainSpec })),
     },
   },
-  wallets: [new InjectedAggregator()],
+  wallets: [new InjectedWalletAggregator()],
 };
 
 export default config;

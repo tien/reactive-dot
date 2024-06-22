@@ -5,7 +5,7 @@ import { getInjectedExtensions } from "polkadot-api/pjs-signer";
 import { BehaviorSubject } from "rxjs";
 import { map } from "rxjs/operators";
 
-export default class InjectedAggregator extends WalletAggregator {
+export default class InjectedWalletAggregator extends WalletAggregator {
   #storage: KeyedStorage | undefined;
 
   constructor(options?: { storage?: KeyedStorage }) {

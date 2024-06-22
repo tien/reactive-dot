@@ -1,7 +1,7 @@
 import { kusama, polkadot, westend } from "@polkadot-api/descriptors";
 import type { Config } from "@reactive-dot/core";
 import {
-  InjectedAggregator,
+  InjectedWalletAggregator,
   WalletConnect,
 } from "@reactive-dot/core/wallets.js";
 import { getSmProvider } from "polkadot-api/sm-provider";
@@ -41,7 +41,7 @@ const config: Config = {
     },
   },
   wallets: [
-    new InjectedAggregator(),
+    new InjectedWalletAggregator(),
     new WalletConnect({
       projectId: "68f5b7e972a51cf379b127f51a791c34",
       providerOptions: {

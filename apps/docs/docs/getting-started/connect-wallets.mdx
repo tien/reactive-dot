@@ -42,14 +42,14 @@ Additional dependencies are required if you use any of be bellow wallet type.
 ```ts title="config.ts"
 import type { Config } from "@reactive-dot/core";
 import {
-  InjectedAggregator,
+  InjectedWalletAggregator,
   WalletConnect,
 } from "@reactive-dot/core/wallets.js";
 
 const config: Config = {
   // ...
   wallets: [
-    new InjectedAggregator(),
+    new InjectedWalletAggregator(),
     new WalletConnect({
       projectId: "WALLET_CONNECT_PROJECT_ID",
       providerOptions: {
