@@ -44,7 +44,7 @@ export default class WalletConnect extends DeepLinkWallet {
     chainIds: string[];
     optionalChainIds?: string[];
   }) {
-    super();
+    super(undefined);
 
     this.#providerOptions =
       options.projectId === undefined

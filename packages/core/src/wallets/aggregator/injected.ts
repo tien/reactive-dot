@@ -1,16 +1,16 @@
-import type { KeyedStorage } from "../../storage.js";
 import InjectedWallet from "../injected.js";
+import type { WalletOptions } from "../wallet.js";
 import WalletAggregator from "./aggregator.js";
 import { getInjectedExtensions } from "polkadot-api/pjs-signer";
 import { BehaviorSubject } from "rxjs";
 import { map } from "rxjs/operators";
 
 export default class InjectedWalletAggregator extends WalletAggregator {
-  #storage: KeyedStorage | undefined;
+  #walletOptions: WalletOptions | undefined;
 
-  constructor(options?: { storage?: KeyedStorage }) {
+  constructor(options?: WalletOptions) {
     super();
-    this.#storage = options?.storage;
+    this.#walletOptions = options;
   }
 
   readonly #walletMap$ = new BehaviorSubject(new Map<string, InjectedWallet>());
@@ -26,15 +26,7 @@ export default class InjectedWalletAggregator extends WalletAggregator {
 
     for (const name of injectedNames) {
       if (!current.has(name)) {
-        current.set(
-          name,
-          new InjectedWallet(
-            name,
-            this.#storage === undefined
-              ? undefined
-              : { storage: this.#storage },
-          ),
-        );
+        current.set(name, new InjectedWallet(name, this.#walletOptions));
       }
     }
 

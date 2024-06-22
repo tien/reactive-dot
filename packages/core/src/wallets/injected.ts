@@ -1,6 +1,5 @@
 import { ReDotError } from "../errors.js";
-import type { KeyedStorage } from "../storage.js";
-import Wallet from "./wallet.js";
+import Wallet, { type WalletOptions } from "./wallet.js";
 import {
   connectInjectedExtension,
   type InjectedExtension,
@@ -20,13 +19,9 @@ export default class InjectedWallet extends Wallet {
 
   constructor(
     public readonly name: string,
-    options?: { storage?: KeyedStorage },
+    options?: WalletOptions,
   ) {
-    super();
-
-    if (options?.storage !== undefined) {
-      this.storage = options?.storage;
-    }
+    super(options);
   }
 
   override readonly initialize = async () => {
