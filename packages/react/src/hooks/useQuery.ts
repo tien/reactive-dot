@@ -82,7 +82,7 @@ export const useRefreshQuery = <
  * @param options - Additional options
  * @returns The data response & a function to refresh it
  */
-export const useQueryWithRefresh = <
+export const useLazyLoadQueryWithRefresh = <
   TQuery extends
     | ((
         builder: Query<[], TDescriptor>,
@@ -159,7 +159,7 @@ export const useQueryWithRefresh = <
  * @param options - Additional options
  * @returns The data response
  */
-export const useQuery = <
+export const useLazyLoadQuery = <
   TQuery extends
     | ((
         builder: Query<[], TDescriptor>,
@@ -180,7 +180,7 @@ export const useQuery = <
         InferQueryPayload<Exclude<ReturnType<Exclude<TQuery, Falsy>>, Falsy>>
       >
     > => {
-  const [data] = useQueryWithRefresh(builder, options);
+  const [data] = useLazyLoadQueryWithRefresh(builder, options);
 
   return data;
 };

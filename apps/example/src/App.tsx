@@ -11,8 +11,8 @@ import {
   useConnectedWallets,
   useDisconnectWallet,
   useMutation,
-  useQuery,
-  useQueryWithRefresh,
+  useLazyLoadQuery,
+  useLazyLoadQueryWithRefresh,
   useResetQueryError,
   useWallets,
 } from "@reactive-dot/react";
@@ -43,7 +43,7 @@ const PendingPoolRewards = () => {
   const accounts = useAccounts();
 
   const [isPending, startTransition] = useTransition();
-  const [pendingRewards, refreshPendingRewards] = useQueryWithRefresh(
+  const [pendingRewards, refreshPendingRewards] = useLazyLoadQueryWithRefresh(
     (builder) =>
       builder.callApis(
         "NominationPoolsApi",
@@ -93,7 +93,7 @@ const Query = () => {
     activeEra,
     totalValueLocked,
     poolMetadatum,
-  ] = useQuery((builder) =>
+  ] = useLazyLoadQuery((builder) =>
     builder
       .fetchConstant("Babe", "ExpectedBlockTime")
       .fetchConstant("Babe", "EpochDuration")
@@ -112,7 +112,7 @@ const Query = () => {
     sessionsPerEra *
     bondingDuration;
 
-  const totalStaked = useQuery((builder) =>
+  const totalStaked = useLazyLoadQuery((builder) =>
     activeEra === undefined
       ? undefined
       : builder.readStorage("Staking", "ErasTotalStake", [activeEra.index]),

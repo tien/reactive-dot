@@ -4,15 +4,15 @@ sidebar_position: 2
 
 # Query
 
-The [`useQuery`](/api/react/function/useQuery) hook allow you to read any data from chain, while maintaining updates, concurrency, caching & deduplication behind the scene for you.
+The [`useLazyLoadQuery`](/api/react/function/useLazyLoadQuery) hook allow you to read any data from chain, while maintaining updates, concurrency, caching & deduplication behind the scene for you.
 
 ## Async handling
 
-[`useQuery`](/api/react/function/useQuery) utilize React's Suspense API for data fetching & error handling.
+[`useLazyLoadQuery`](/api/react/function/useLazyLoadQuery) utilize React's Suspense API for data fetching & error handling.
 
 ```tsx
 const ActiveEra = () => {
-  const activeEra = useQuery((builder) =>
+  const activeEra = useLazyLoadQuery((builder) =>
     builder.readStorage("Staking", "ActiveEra", []),
   );
 
@@ -32,11 +32,11 @@ const App = () => {
 
 ## Fetching multiple data
 
-Fetching multiple data can be done by chaining queries together, [`useQuery`](/api/react/function/useQuery) (with TypeScript) will automatically infer that you want to fetch multiple data concurrently & will return an array of data instead.
+Fetching multiple data can be done by chaining queries together, [`useLazyLoadQuery`](/api/react/function/useLazyLoadQuery) (with TypeScript) will automatically infer that you want to fetch multiple data concurrently & will return an array of data instead.
 
 ```tsx
 const MultiQuery = () => {
-  const [expectedBlockTime, epochDuration, proposalCount] = useQuery(
+  const [expectedBlockTime, epochDuration, proposalCount] = useLazyLoadQuery(
     (builder) =>
       builder
         .fetchConstant("Babe", "ExpectedBlockTime")
@@ -62,7 +62,7 @@ const MultiQuery = () => {
 Multiple queries of the same type can also be fetched using [`callApis`](/api/core/class/Query#callApis) & [`readStorages`](/api/core/class/Query#readStorages).
 
 ```tsx
-const [rewards, metadatum] = useQuery((builder) =>
+const [rewards, metadatum] = useLazyLoadQuery((builder) =>
   builder
     .callApis("NominationPoolsApi", "pending_rewards", [
       [ADDRESS_1],
@@ -83,11 +83,11 @@ Result of a query can be used as variables in subsequent queries.
 
 ```tsx
 const Query = () => {
-  const pools = useQuery((builder) =>
+  const pools = useLazyLoadQuery((builder) =>
     builder.readStorageEntries("NominationPools", "BondedPools", []),
   );
 
-  const poolMetadatum = useQuery((builder) =>
+  const poolMetadatum = useLazyLoadQuery((builder) =>
     builder.readStorages(
       "NominationPools",
       "Metadata",
@@ -113,7 +113,7 @@ const Query = () => {
 Use a falsy value (`undefined`, `null` or `false`) to conditionally fetch data. If the query builder returns or itself is a falsy value, Reactive DOT will not execute the query.
 
 ```ts
-const conditionalReturn = useQuery((builder) =>
+const conditionalReturn = useLazyLoadQuery((builder) =>
   account === undefined
     ? undefined
     : builder.callApi("NominationPoolsApi", "pending_rewards", [
@@ -123,7 +123,7 @@ const conditionalReturn = useQuery((builder) =>
 
 // Or
 
-const conditionalFunction = useQuery(
+const conditionalFunction = useLazyLoadQuery(
   account === undefined
     ? undefined
     : (builder) =>
@@ -135,14 +135,14 @@ const conditionalFunction = useQuery(
 
 ## Refreshing queries
 
-Certain query, like runtime API calls & reading of storage entries doesn't create any subscriptions. In order to get the latest data, they must be manually refreshed with the [`useQueryWithRefresh`](/api/react/function/useQueryWithRefresh) hook.
+Certain query, like runtime API calls & reading of storage entries doesn't create any subscriptions. In order to get the latest data, they must be manually refreshed with the [`useLazyLoadQueryWithRefresh`](/api/react/function/useLazyLoadQueryWithRefresh) hook.
 
 ```tsx
 import { useTransition } from "react";
 
 const QueryWithRefresh = () => {
   const [isPending, startTransition] = useTransition();
-  const [pendingRewards, refreshPendingRewards] = useQueryWithRefresh(
+  const [pendingRewards, refreshPendingRewards] = useLazyLoadQueryWithRefresh(
     (builder) =>
       builder.callApi("NominationPoolsApi", "pending_rewards", [
         ACCOUNT_ADDRESS,
@@ -168,7 +168,7 @@ The above will refresh all refreshable data in the query. If you want to target 
 ```tsx
 const QueryWithRefresh = () => {
   const [isPending, startTransition] = useTransition();
-  const [account1Rewards, account2Rewards] = useQuery((builder) =>
+  const [account1Rewards, account2Rewards] = useLazyLoadQuery((builder) =>
     builder
       .callApi("NominationPoolsApi", "pending_rewards", [ACCOUNT_ADDRESS_1])
       .callApi("NominationPoolsApi", "pending_rewards", [ACCOUNT_ADDRESS_2]),

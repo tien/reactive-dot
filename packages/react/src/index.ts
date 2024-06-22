@@ -15,8 +15,8 @@ export { useConnectWallet } from "./hooks/useConnectWallet.js";
 export { useDisconnectWallet } from "./hooks/useDisconnectWallet.js";
 export { useMutation } from "./hooks/useMutation.js";
 export {
-  useQuery,
-  useQueryWithRefresh,
+  useLazyLoadQuery,
+  useLazyLoadQueryWithRefresh,
   useRefreshQuery,
 } from "./hooks/useQuery.js";
 export { useReconnectWallets } from "./hooks/useReconnectWallets.js";
