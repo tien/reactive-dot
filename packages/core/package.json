@@ -1,6 +1,7 @@
 {
   "name": "@reactive-dot/core",
   "version": "0.0.0",
+  "license": "LGPL-3.0-or-later",
   "type": "module",
   "files": [
     "src",
