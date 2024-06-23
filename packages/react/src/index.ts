@@ -17,7 +17,7 @@ export { useMutation } from "./hooks/useMutation.js";
 export {
   useLazyLoadQuery,
   useLazyLoadQueryWithRefresh,
-  useRefreshQuery,
+  useQueryRefresher,
 } from "./hooks/useQuery.js";
 export { useReconnectWallets } from "./hooks/useReconnectWallets.js";
 export { useResetQueryError } from "./hooks/useResetQueryError.js";

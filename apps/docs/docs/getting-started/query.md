@@ -163,7 +163,7 @@ const QueryWithRefresh = () => {
 };
 ```
 
-The above will refresh all refreshable data in the query. If you want to target specific data to refresh, a separate [`useRefreshQuery`](/api/react/function/useRefreshQuery) hook can be used.
+The above will refresh all refreshable data in the query. If you want to target specific data to refresh, a separate [`useQueryRefresher`](/api/react/function/useQueryRefresher) hook can be used.
 
 ```tsx
 const QueryWithRefresh = () => {
@@ -173,7 +173,7 @@ const QueryWithRefresh = () => {
       .callApi("NominationPoolsApi", "pending_rewards", [ACCOUNT_ADDRESS_1])
       .callApi("NominationPoolsApi", "pending_rewards", [ACCOUNT_ADDRESS_2]),
   );
-  const refreshAccount2Rewards = useRefreshQuery((builder) =>
+  const refreshAccount2Rewards = useQueryRefresher((builder) =>
     builder.callApi("NominationPoolsApi", "pending_rewards", [
       ACCOUNT_ADDRESS_2,
     ]),

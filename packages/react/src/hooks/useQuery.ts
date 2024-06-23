@@ -26,7 +26,7 @@ import { useCallback, useContext, useMemo } from "react";
  * @param options - Additional options
  * @returns The function to refresh the query
  */
-export const useRefreshQuery = <
+export const useQueryRefresher = <
   TQuery extends
     | ((
         builder: Query<[], TDescriptor>,
@@ -143,7 +143,7 @@ export const useLazyLoadQueryWithRefresh = <
     [query, rawData],
   );
 
-  const refresh = useRefreshQuery(builder, options);
+  const refresh = useQueryRefresher(builder, options);
 
   return [
     // @ts-expect-error complex type
