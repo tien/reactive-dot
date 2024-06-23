@@ -52,8 +52,8 @@ const MultiQuery = () => {
       <dt>Epoch duration</dt>
       <dd>{epochDuration}</dd>
 
-       <dt>Proposal count</dt>
-      <dd>{proposal count}</dd>
+      <dt>Proposal count</dt>
+      <dd>{proposalCount}</dd>
     </dl>
   );
 };
