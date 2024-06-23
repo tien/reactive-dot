@@ -144,7 +144,9 @@ const Query = () => {
       <article>
         <h4>Total value staked</h4>
         <p>
-          {useNativeTokenNumberWithPlanck(totalStaked ?? 0n).toLocaleString()}
+          {useNativeTokenNumberWithPlanck(
+            typeof totalStaked === "bigint" ? totalStaked : 0n,
+          ).toLocaleString()}
         </p>
       </article>
       <article>
