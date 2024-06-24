@@ -17,6 +17,9 @@
   "private": true,
   "type": "module",
   "packageManager": "yarn@4.2.2",
+  "volta": {
+    "node": "20.15.0"
+  },
   "workspaces": [
     "apps/*",
     "packages/*"
