@@ -14,8 +14,9 @@ export const finalizedBlockAtomFamily = atomFamily((chainId: ChainId) =>
 
 export const bestBlockAtomFamily = atomFamily((chainId: ChainId) =>
   atomWithObservable((get) =>
-    from(get(clientAtomFamily(chainId)))
-      .pipe(switchMap((client) => client.bestBlocks$))
-      .pipe(map((blocks) => blocks.at(0)!)),
+    from(get(clientAtomFamily(chainId))).pipe(
+      switchMap((client) => client.bestBlocks$),
+      map((blocks) => blocks.at(0)!),
+    ),
   ),
 );

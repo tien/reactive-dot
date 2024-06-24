@@ -21,17 +21,16 @@ export const accountsAtom = atomFamily(
         Promise.all([get(chainSpecDataAtomFamily(chainId)), get(walletsAtom)]),
       ).pipe(
         switchMap(([chainSpec, wallets]) =>
-          combineLatest(wallets.map((wallet) => wallet.accounts$))
-            .pipe(map((wallets) => wallets.flat()))
-            .pipe(
-              map((accounts) =>
-                accounts.filter(
-                  (account) =>
-                    !account.genesisHash ||
-                    chainSpec.genesisHash.includes(account.genesisHash),
-                ),
+          combineLatest(wallets.map((wallet) => wallet.accounts$)).pipe(
+            map((wallets) => wallets.flat()),
+            map((accounts) =>
+              accounts.filter(
+                (account) =>
+                  !account.genesisHash ||
+                  chainSpec.genesisHash.includes(account.genesisHash),
               ),
             ),
+          ),
         ),
       ),
     ),

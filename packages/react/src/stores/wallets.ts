@@ -14,13 +14,12 @@ const aggregatorWallets = atomWithObservable((get) =>
         return aggregator;
       }),
     ),
-  )
-    .pipe(
-      switchMap((aggregators) =>
-        combineLatest(aggregators.map((aggregator) => aggregator.wallets$)),
-      ),
-    )
-    .pipe(map((wallets) => wallets.flat())),
+  ).pipe(
+    switchMap((aggregators) =>
+      combineLatest(aggregators.map((aggregator) => aggregator.wallets$)),
+    ),
+    map((wallets) => wallets.flat()),
+  ),
 );
 
 export const directWalletsAtom = atom<Wallet[]>([]);
@@ -31,21 +30,18 @@ export const walletsAtom = atom(async (get) => [
 ]);
 
 export const connectedWalletsAtom = atomWithObservable((get) =>
-  from(get(walletsAtom))
-    .pipe(
-      switchMap((wallets) =>
-        combineLatest(
-          wallets.map((wallet) =>
-            wallet.connected$.pipe(
-              map((connected) => [wallet, connected] as const),
-            ),
+  from(get(walletsAtom)).pipe(
+    switchMap((wallets) =>
+      combineLatest(
+        wallets.map((wallet) =>
+          wallet.connected$.pipe(
+            map((connected) => [wallet, connected] as const),
           ),
         ),
       ),
-    )
-    .pipe(
-      map((wallets) =>
-        wallets.filter(([_, connected]) => connected).map(([wallet]) => wallet),
-      ),
     ),
+    map((wallets) =>
+      wallets.filter(([_, connected]) => connected).map(([wallet]) => wallet),
+    ),
+  ),
 );
