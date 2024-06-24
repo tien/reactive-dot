@@ -64,12 +64,16 @@ const PendingPoolRewards = () => {
   return (
     <article>
       <h4>Pending rewards</h4>
-      <button onClick={() => startTransition(() => refreshPendingRewards())}>
+      <button
+        type="button"
+        onClick={() => startTransition(() => refreshPendingRewards())}
+      >
         {isPending ? "Refreshing..." : "Refresh"}
       </button>
       <ul>
         {pendingRewards.map((rewards, index) => (
           <PendingRewards
+            // eslint-disable-next-line @eslint-react/no-array-index-key
             key={index}
             address={accounts.at(index)?.address ?? ""}
             rewards={rewards}
@@ -158,6 +162,7 @@ const Query = () => {
       <article>
         <h4>First 4 pools</h4>
         {poolMetadatum.map((x, index) => (
+          // eslint-disable-next-line @eslint-react/no-array-index-key
           <p key={index}>{x.asText()}</p>
         ))}
       </article>
@@ -181,6 +186,7 @@ const WalletItem = (props: WalletItemProps) => {
       {props.wallet.name}:{" "}
       {connectedWallets.includes(props.wallet) ? (
         <button
+          type="button"
           onClick={() => disconnect()}
           disabled={disconnectingState === PENDING}
         >
@@ -188,6 +194,7 @@ const WalletItem = (props: WalletItemProps) => {
         </button>
       ) : (
         <button
+          type="button"
           onClick={() => connect()}
           disabled={connectingState === PENDING}
         >
@@ -251,6 +258,7 @@ const Mutation = () => {
             }
           >
             {accounts.map((account, index) => (
+              // eslint-disable-next-line @eslint-react/no-array-index-key
               <option key={index} value={index}>
                 {account.name ?? account.address}
               </option>
@@ -263,7 +271,11 @@ const Mutation = () => {
       ) : (
         <article>
           <h4>Remark</h4>
-          <button onClick={() => remark()} disabled={accounts.length === 0}>
+          <button
+            type="button"
+            onClick={() => remark()}
+            disabled={accounts.length === 0}
+          >
             Hello
           </button>
           <p>
@@ -297,7 +309,9 @@ const ErrorFallback = (props: FallbackProps) => (
     <header>
       <strong>Oops, something went wrong!</strong>
     </header>
-    <button onClick={() => props.resetErrorBoundary(props.error)}>Retry</button>
+    <button type="button" onClick={() => props.resetErrorBoundary(props.error)}>
+      Retry
+    </button>
   </article>
 );
 

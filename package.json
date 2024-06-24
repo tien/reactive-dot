@@ -28,7 +28,7 @@
   "scripts": {
     "dev": "nx run-many -t dev",
     "build": "nx run-many -t build",
-    "lint": "nx run-many -t lint",
+    "lint": "nx run-many -t lint -- --max-warnings=0",
     "test": "nx run-many -t test",
     "postinstall": "husky"
   },
