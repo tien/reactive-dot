@@ -4,10 +4,10 @@ import type { ChainDefinition, TypedApi } from "polkadot-api";
 import type { Observable } from "rxjs";
 
 type InferPapiStorageEntry<T> = T extends {
-  watchValue: (...args: infer Args) => infer Response;
+  watchValue: (...args: [...infer Args, infer Options]) => infer Response;
 }
-  ? { args: Args; response: Response }
-  : { args: unknown[]; response: unknown };
+  ? { args: Args; options: Options; response: Response }
+  : { args: unknown[]; options: unknown; response: unknown };
 
 type InferPapiStorageEntries<T> = T extends {
   getEntries: (...args: [...infer Args, infer Options]) => infer Response;
