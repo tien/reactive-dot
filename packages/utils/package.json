@@ -23,8 +23,8 @@
     "@reactive-dot/eslint-config": "workspace:*",
     "@tsconfig/recommended": "^1.0.6",
     "@tsconfig/strictest": "^2.0.5",
-    "eslint": "^9.4.0",
-    "typescript": "^5.4.5",
+    "eslint": "^9.5.0",
+    "typescript": "^5.5.2",
     "vitest": "^1.6.0"
   }
 }

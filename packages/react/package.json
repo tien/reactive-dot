@@ -26,9 +26,9 @@
     "@tsconfig/recommended": "^1.0.6",
     "@tsconfig/strictest": "^2.0.5",
     "@types/react": "^18.3.3",
-    "eslint": "^9.4.0",
+    "eslint": "^9.5.0",
     "polkadot-api": "^0.9.0",
     "react": "^18.3.1",
-    "typescript": "^5.4.5"
+    "typescript": "^5.5.2"
   }
 }

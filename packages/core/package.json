@@ -30,10 +30,10 @@
     "@tsconfig/recommended": "^1.0.6",
     "@tsconfig/strictest": "^2.0.5",
     "@walletconnect/modal": "^2.6.2",
-    "@walletconnect/universal-provider": "^2.13.2",
-    "eslint": "^9.4.0",
+    "@walletconnect/universal-provider": "^2.13.3",
+    "eslint": "^9.5.0",
     "polkadot-api": "^0.9.0",
-    "typescript": "^5.4.5"
+    "typescript": "^5.5.2"
   },
   "peerDependencies": {
     "@walletconnect/modal": "2.x",
