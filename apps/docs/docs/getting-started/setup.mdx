@@ -68,6 +68,13 @@ declare module "@reactive-dot/core" {
 
 ## Create config
 
+{/* prettier-ignore-start */}
+
+<Tabs>
+  <TabItem value="light-client" label="Light client" default>
+
+{/* prettier-ignore-end */}
+
 ```ts title="config.ts"
 import { dot } from "@polkadot-api/descriptors";
 import type { Config } from "@reactive-dot/core";
@@ -94,6 +101,39 @@ const config: Config = {
 
 export default config;
 ```
+
+{/* prettier-ignore-start */}
+
+  </TabItem>
+  <TabItem value="ws" label="WebSocket">
+
+{/* prettier-ignore-end */}
+
+```ts title="config.ts"
+import { dot } from "@polkadot-api/descriptors";
+import { WebSocketProvider } from "@polkadot-api/ws-provider/web";
+import type { Config } from "@reactive-dot/core";
+import { InjectedWalletAggregator } from "@reactive-dot/core/wallets.js";
+
+const config: Config = {
+  chains: {
+    polkadot: {
+      descriptor: dot,
+      provider: WebSocketProvider("wss://polkadot-rpc.publicnode.com"),
+    },
+  },
+  wallets: [new InjectedWalletAggregator()],
+};
+
+export default config;
+```
+
+{/* prettier-ignore-start */}
+
+  </TabItem>
+</Tabs>
+
+{/* prettier-ignore-end */}
 
 ## Wrap app in context providers
 
