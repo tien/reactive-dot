@@ -3,22 +3,24 @@ import type { CommonDescriptor } from "./config.js";
 import type { ChainDefinition, TypedApi } from "polkadot-api";
 import type { Observable } from "rxjs";
 
+type PickOptions<T> = T extends { at?: infer At } ? { at?: At } : never;
+
 type InferPapiStorageEntry<T> = T extends {
-  watchValue: (...args: [...infer Args, infer Options]) => infer Response;
+  watchValue: (...args: [...infer Args, infer At]) => infer Response;
 }
-  ? { args: Args; options: Options; response: Response }
+  ? { args: Args; options: { at: At }; response: Response }
   : { args: unknown[]; options: unknown; response: unknown };
 
 type InferPapiStorageEntries<T> = T extends {
   getEntries: (...args: [...infer Args, infer Options]) => infer Response;
 }
-  ? { args: Args; options: Options; response: Response }
+  ? { args: Args; options: PickOptions<Options>; response: Response }
   : { args: unknown[]; options: unknown; response: unknown };
 
 type InferPapiRuntimeCall<T> = T extends (
   ...args: [...infer Args, infer Options]
 ) => infer Response
-  ? { args: Args; options: Options; response: Response }
+  ? { args: Args; options: PickOptions<Options>; response: Response }
   : { args: unknown[]; options: unknown; response: unknown };
 
 type InferPapiConstantEntry<T> = T extends {
@@ -239,10 +241,18 @@ export default class Query<
     TArguments extends InferPapiStorageEntry<
       TypedApi<TDescriptor>["query"][TPallet][TStorage]
     >["args"],
-  >(pallet: TPallet, storage: TStorage, args: TArguments) {
+    TOptions extends InferPapiStorageEntry<
+      TypedApi<TDescriptor>["query"][TPallet][TStorage]
+    >["options"],
+  >(pallet: TPallet, storage: TStorage, args: TArguments, options?: TOptions) {
     return new Query([
       ...this.#instructions,
-      { instruction: "read-storage", pallet, storage, args },
+      {
+        instruction: "read-storage",
+        pallet,
+        storage,
+        args: options === undefined ? args : [...args, options],
+      },
     ]);
   }
 
@@ -252,10 +262,25 @@ export default class Query<
     TArguments extends InferPapiStorageEntry<
       TypedApi<TDescriptor>["query"][TPallet][TStorage]
     >["args"],
-  >(pallet: TPallet, storage: TStorage, args: TArguments[]) {
+    TOptions extends InferPapiStorageEntry<
+      TypedApi<TDescriptor>["query"][TPallet][TStorage]
+    >["options"],
+  >(
+    pallet: TPallet,
+    storage: TStorage,
+    args: TArguments[],
+    options?: TOptions,
+  ) {
     return new Query([
       ...this.#instructions,
-      { instruction: "read-storage", pallet, storage, args, multi: true },
+      {
+        instruction: "read-storage",
+        pallet,
+        storage,
+        args:
+          options === undefined ? args : args.map((args) => [...args, options]),
+        multi: true,
+      },
     ]);
   }
 
@@ -267,10 +292,20 @@ export default class Query<
         TypedApi<TDescriptor>["query"][TPallet][TStorage]
       >["args"]
     >,
-  >(pallet: TPallet, storage: TStorage, args: TArguments) {
+    TOptions extends Array<
+      InferPapiStorageEntries<
+        TypedApi<TDescriptor>["query"][TPallet][TStorage]
+      >["options"]
+    >,
+  >(pallet: TPallet, storage: TStorage, args: TArguments, options?: TOptions) {
     return new Query([
       ...this.#instructions,
-      { instruction: "read-storage-entries", pallet, storage, args },
+      {
+        instruction: "read-storage-entries",
+        pallet,
+        storage,
+        args: options === undefined ? args : [...args, options],
+      },
     ]);
   }
 
@@ -280,10 +315,18 @@ export default class Query<
     TArguments extends InferPapiRuntimeCall<
       TypedApi<TDescriptor>["apis"][TPallet][TApi]
     >["args"],
-  >(pallet: TPallet, api: TApi, args: TArguments) {
+    TOptions extends InferPapiRuntimeCall<
+      TypedApi<TDescriptor>["apis"][TPallet][TApi]
+    >["options"],
+  >(pallet: TPallet, api: TApi, args: TArguments, options?: TOptions) {
     return new Query([
       ...this.#instructions,
-      { instruction: "call-api", pallet, api, args },
+      {
+        instruction: "call-api",
+        pallet,
+        api,
+        args: options === undefined ? args : [...args, options],
+      },
     ]);
   }
 
@@ -293,10 +336,20 @@ export default class Query<
     TArguments extends InferPapiRuntimeCall<
       TypedApi<TDescriptor>["apis"][TPallet][TApi]
     >["args"],
-  >(pallet: TPallet, api: TApi, args: TArguments[]) {
+    TOptions extends InferPapiRuntimeCall<
+      TypedApi<TDescriptor>["apis"][TPallet][TApi]
+    >["options"],
+  >(pallet: TPallet, api: TApi, args: TArguments[], options?: TOptions) {
     return new Query([
       ...this.#instructions,
-      { instruction: "call-api", pallet, api, args, multi: true },
+      {
+        instruction: "call-api",
+        pallet,
+        api,
+        args:
+          options === undefined ? args : args.map((args) => [...args, options]),
+        multi: true,
+      },
     ]);
   }
 }
