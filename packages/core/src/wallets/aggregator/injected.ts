@@ -19,7 +19,7 @@ export default class InjectedWalletAggregator extends WalletAggregator {
     map((walletMap) => Array.from(walletMap.values())),
   );
 
-  override readonly scan = () => {
+  override scan() {
     const injectedNames = getInjectedExtensions() ?? [];
 
     const current = new Map(this.#walletMap$.value);
@@ -33,5 +33,5 @@ export default class InjectedWalletAggregator extends WalletAggregator {
     this.#walletMap$.next(current);
 
     return Array.from(current.values());
-  };
+  }
 }

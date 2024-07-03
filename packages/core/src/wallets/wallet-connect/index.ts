@@ -60,7 +60,7 @@ export default class WalletConnect extends DeepLinkWallet {
     this.#optionalChainIds = options.optionalChainIds ?? [];
   }
 
-  override readonly initialize = async () => {
+  override async initialize() {
     const { UniversalProvider } = await import(
       "@walletconnect/universal-provider"
     );
@@ -70,13 +70,13 @@ export default class WalletConnect extends DeepLinkWallet {
     if (this.#provider.session !== undefined) {
       return this.#session.next(this.#provider.session);
     }
-  };
+  }
 
   override readonly connected$ = this.#session.pipe(
     map((session) => session !== undefined),
   );
 
-  override readonly initiateConnectionHandshake = async () => {
+  override async initiateConnectionHandshake() {
     await this.initialize();
 
     if (this.#provider?.client === undefined) {
@@ -122,9 +122,9 @@ export default class WalletConnect extends DeepLinkWallet {
         }
       }),
     };
-  };
+  }
 
-  override readonly connect = async () => {
+  override async connect() {
     const { uri, settled } = await this.initiateConnectionHandshake();
 
     const connectedPromise = settled.then(() => true as const);
@@ -151,12 +151,12 @@ export default class WalletConnect extends DeepLinkWallet {
     }
 
     modal.closeModal();
-  };
+  }
 
-  override readonly disconnect = async () => {
+  override async disconnect() {
     await this.#provider?.disconnect();
     this.#session.next(undefined);
-  };
+  }
 
   override readonly accounts$ = this.#session.pipe(
     map((session) => {
@@ -200,9 +200,11 @@ export default class WalletConnect extends DeepLinkWallet {
     }),
   );
 
-  override readonly getAccounts = () => lastValueFrom(this.accounts$);
+  override getAccounts() {
+    return lastValueFrom(this.accounts$);
+  }
 
-  readonly #getModal = async () => {
+  async #getModal() {
     if (this.#modal !== undefined) {
       return this.#modal;
     }
@@ -212,5 +214,5 @@ export default class WalletConnect extends DeepLinkWallet {
     this.#modal = new WalletConnectModal(this.#modalOptions);
 
     return this.#modal;
-  };
+  }
 }

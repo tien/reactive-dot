@@ -24,28 +24,28 @@ export default class InjectedWallet extends Wallet {
     super(options);
   }
 
-  override readonly initialize = async () => {
+  override async initialize() {
     if (this.storage.getItem("connected") !== null) {
       await this.connect();
     }
-  };
+  }
 
   override connected$ = this.#extension$.pipe(
     map((extension) => extension !== undefined),
   );
 
-  override readonly connect = async () => {
+  override async connect() {
     if (this.#extension$.getValue() === undefined) {
       this.#extension$.next(await connectInjectedExtension(this.name));
       this.storage.setItem("connected", JSON.stringify(true));
     }
-  };
+  }
 
-  override readonly disconnect = () => {
+  override disconnect() {
     this.#extension$.getValue()?.disconnect();
     this.#extension$.next(undefined);
     this.storage.removeItem("connected");
-  };
+  }
 
   override readonly accounts$ = this.#extension$.pipe(
     switchMap(
@@ -63,7 +63,7 @@ export default class InjectedWallet extends Wallet {
     ),
   );
 
-  override readonly getAccounts = () => {
+  override getAccounts() {
     const extension = this.#extension$.getValue();
 
     if (extension === undefined) {
@@ -71,5 +71,5 @@ export default class InjectedWallet extends Wallet {
     }
 
     return extension.getAccounts();
-  };
+  }
 }

@@ -6,7 +6,7 @@ type ConnectionHandshake = {
 };
 
 export default abstract class DeepLinkWallet extends Wallet {
-  abstract readonly initiateConnectionHandshake: () =>
+  abstract initiateConnectionHandshake():
     | ConnectionHandshake
     | Promise<ConnectionHandshake>;
 }

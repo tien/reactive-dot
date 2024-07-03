@@ -21,17 +21,17 @@ export default abstract class Wallet {
     this.#storage = (options?.storage ?? defaultStorage).join("wallet");
   }
 
-  abstract readonly initialize: () => void | Promise<void>;
+  abstract initialize(): void | Promise<void>;
 
   abstract readonly connected$: Observable<boolean>;
 
-  abstract readonly connect: () => void | Promise<void>;
+  abstract connect(): void | Promise<void>;
 
-  abstract readonly disconnect: () => void | Promise<void>;
+  abstract disconnect(): void | Promise<void>;
 
   abstract readonly accounts$: Observable<InjectedPolkadotAccount[]>;
 
-  abstract readonly getAccounts: () =>
+  abstract getAccounts():
     | InjectedPolkadotAccount[]
     | Promise<InjectedPolkadotAccount[]>;
 }
