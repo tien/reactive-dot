@@ -1,9 +1,10 @@
-import { ChainIdContext, SignerContext } from "../context.js";
+import { SignerContext } from "../context.js";
 import { typedApiAtomFamily } from "../stores/client.js";
 import type { ChainHookOptions } from "./types.js";
 import { useAsyncState } from "./useAsyncState.js";
-import { MutationError, PENDING } from "@reactive-dot/core";
+import useChainId from "./useChainId.js";
 import type { ChainId, Chains, CommonDescriptor } from "@reactive-dot/core";
+import { MutationError, PENDING } from "@reactive-dot/core";
 import { useAtomCallback } from "jotai/utils";
 import type {
   PolkadotSigner,
@@ -51,7 +52,7 @@ export function useMutation<
     txOptions?: TxOptions<ReturnType<TAction>>;
   }>,
 ) {
-  const contextChainId = useContext(ChainIdContext);
+  const chainId = useChainId(options);
   const contextSigner = useContext(SignerContext);
 
   const [state, setState] = useAsyncState<TxEvent>();
@@ -68,12 +69,6 @@ export function useMutation<
 
         if (signer === undefined) {
           throw new MutationError("No signer provided");
-        }
-
-        const chainId = options?.chainId ?? contextChainId;
-
-        if (chainId === undefined) {
-          throw new MutationError("No chain ID provided");
         }
 
         const api = await get(typedApiAtomFamily(chainId));
@@ -95,9 +90,8 @@ export function useMutation<
       },
       [
         action,
-        contextChainId,
+        chainId,
         contextSigner,
-        options?.chainId,
         options?.signer,
         options?.txOptions,
         setState,

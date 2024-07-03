@@ -1,4 +1,3 @@
-import { ChainIdContext } from "../context.js";
 import {
   getQueryInstructionPayloadAtoms,
   queryPayloadAtomFamily,
@@ -6,10 +5,10 @@ import {
 import type { Falsy, FalsyGuard, FlatHead } from "../types.js";
 import { flatHead, stringify } from "../utils/vanilla.js";
 import type { ChainHookOptions } from "./types.js";
+import useChainId from "./useChainId.js";
 import {
   IDLE,
   Query,
-  QueryError,
   type ChainId,
   type Chains,
   type CommonDescriptor,
@@ -18,7 +17,7 @@ import {
 } from "@reactive-dot/core";
 import { atom, useAtomValue } from "jotai";
 import { useAtomCallback } from "jotai/utils";
-import { useCallback, useContext, useMemo } from "react";
+import { useCallback, useMemo } from "react";
 
 /**
  * Hook for refreshing cached query.
@@ -38,16 +37,11 @@ export function useQueryRefresher<
     : Chains[Exclude<TChainId, void>],
   TChainId extends ChainId | void = void,
 >(builder: TQuery, options?: ChainHookOptions) {
-  const contextChainId = useContext(ChainIdContext);
-  const chainId = options?.chainId ?? contextChainId;
+  const chainId = useChainId(options);
 
   const refresh = useAtomCallback(
     useCallback(
       (_, set) => {
-        if (chainId === undefined) {
-          throw new QueryError("No chain ID provided");
-        }
-
         if (!builder) {
           return;
         }
@@ -105,12 +99,7 @@ export function useLazyLoadQueryWithRefresh<
       >,
   refresh: () => void,
 ] {
-  const contextChainId = useContext(ChainIdContext);
-  const chainId = options?.chainId ?? contextChainId;
-
-  if (chainId === undefined) {
-    throw new QueryError("No chain ID provided");
-  }
+  const chainId = useChainId(options);
 
   const query = useMemo(
     () => (!builder ? undefined : builder(new Query([]))),

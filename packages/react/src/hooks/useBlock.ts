@@ -1,12 +1,10 @@
-import { ChainIdContext } from "../context.js";
 import {
   bestBlockAtomFamily,
   finalizedBlockAtomFamily,
 } from "../stores/block.js";
 import type { ChainHookOptions } from "./types.js";
-import { ReDotError } from "@reactive-dot/core";
+import useChainId from "./useChainId.js";
 import { useAtomValue } from "jotai";
-import { useContext } from "react";
 
 /**
  * Hook for fetching information about the latest block.
@@ -19,12 +17,7 @@ export function useBlock(
   tag: "best" | "finalized" = "finalized",
   options?: ChainHookOptions,
 ) {
-  const contextChainId = useContext(ChainIdContext);
-  const chainId = options?.chainId ?? contextChainId;
-
-  if (chainId === undefined) {
-    throw new ReDotError("No chain Id provided");
-  }
+  const chainId = useChainId(options);
 
   return useAtomValue(
     tag === "finalized"

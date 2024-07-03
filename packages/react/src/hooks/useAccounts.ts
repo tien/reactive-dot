@@ -1,9 +1,7 @@
-import { ChainIdContext } from "../context.js";
 import { accountsAtom } from "../stores/accounts.js";
 import type { ChainHookOptions } from "./types.js";
-import { ReDotError } from "@reactive-dot/core";
+import useChainId from "./useChainId.js";
 import { useAtomValue } from "jotai";
-import { useContext } from "react";
 
 /**
  * Hook for getting currently connected accounts.
@@ -12,12 +10,5 @@ import { useContext } from "react";
  * @returns The currently connected accounts
  */
 export function useAccounts(options?: ChainHookOptions) {
-  const contextChainId = useContext(ChainIdContext);
-  const chainId = options?.chainId ?? contextChainId;
-
-  if (chainId === undefined) {
-    throw new ReDotError("No chain Id provided");
-  }
-
-  return useAtomValue(accountsAtom(chainId));
+  return useAtomValue(accountsAtom(useChainId(options)));
 }
