@@ -50,7 +50,7 @@ const [clearIdentityState, clearIdentity] = useMutation((tx) =>
   tx.Identity.clear_identity(),
 );
 
-clearIdentity(accounts.at(0)?.polkadotSigner);
+clearIdentity({ signer: accounts.at(0)?.polkadotSigner });
 ```
 
 ## Submitting transaction

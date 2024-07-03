@@ -59,13 +59,14 @@ export function useMutation<
 
   const submit = useAtomCallback<
     void,
-    [from?: PolkadotSigner, options?: TxOptions<ReturnType<TAction>>]
+    [options?: TxOptions<ReturnType<TAction>> & { signer: PolkadotSigner }]
   >(
     useCallback(
-      async (get, _set, submitSigner, submitOptions) => {
+      async (get, _set, submitOptions) => {
         setState(PENDING);
 
-        const signer = submitSigner ?? options?.signer ?? contextSigner;
+        const signer =
+          submitOptions?.signer ?? options?.signer ?? contextSigner;
 
         if (signer === undefined) {
           throw new MutationError("No signer provided");
