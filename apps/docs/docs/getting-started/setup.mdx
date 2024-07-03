@@ -142,7 +142,7 @@ import config from "./config";
 import { ReDotChainProvider, ReDotProvider } from "@reactive-dot/react";
 import { Suspense } from "react";
 
-function App() {
+export default function App() {
   return (
     <ReDotProvider config={config}>
       {/* `chainId` match the ID previously specified via `polkadot: typeof dot` */}
@@ -153,8 +153,6 @@ function App() {
     </ReDotProvider>
   );
 }
-
-export default App;
 ```
 
 ## Use Reactive DOT
@@ -163,7 +161,7 @@ export default App;
 import { config } from "./config";
 import { useAccounts, useLazyLoadQuery } from "@reactive-dot/react";
 
-function MyComponent() {
+export default function MyComponent() {
   const accounts = useAccounts();
   const [timestamp, totalIssuance] = useLazyLoadQuery((builder) =>
     builder
@@ -190,6 +188,4 @@ function MyComponent() {
     </div>
   );
 }
-
-export default MyComponent;
 ```
