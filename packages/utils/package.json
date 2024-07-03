@@ -8,10 +8,8 @@
     "build"
   ],
   "exports": {
-    ".": {
-      "default": "./build/index.js",
-      "types": "./src/index.ts"
-    }
+    "types": "./src/index.ts",
+    "default": "./build/index.js"
   },
   "scripts": {
     "dev": "tsc --build --watch",
