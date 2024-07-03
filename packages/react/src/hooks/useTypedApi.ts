@@ -13,11 +13,11 @@ import { useContext } from "react";
  * @param options - Additional options
  * @returns Polkadot-API typed API
  */
-export const useTypedApi = <TChainId extends ChainId | void = void>(
+export function useTypedApi<TChainId extends ChainId | void = void>(
   options?: ChainHookOptions,
 ): TypedApi<
   TChainId extends void ? CommonDescriptor : Chains[Exclude<TChainId, void>]
-> => {
+> {
   const contextChainId = useContext(ChainIdContext);
   const chainId = options?.chainId ?? contextChainId;
 
@@ -26,4 +26,4 @@ export const useTypedApi = <TChainId extends ChainId | void = void>(
   }
 
   return useAtomValue(typedApiAtomFamily(chainId));
-};
+}

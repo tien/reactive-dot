@@ -6,11 +6,15 @@ import { useAtomValue } from "jotai";
  *
  * @returns Available wallets
  */
-export const useWallets = () => useAtomValue(walletsAtom);
+export function useWallets() {
+  return useAtomValue(walletsAtom);
+}
 
 /**
  * Hook for getting all connected wallets.
  *
  * @returns Connected wallets
  */
-export const useConnectedWallets = () => useAtomValue(connectedWalletsAtom);
+export function useConnectedWallets() {
+  return useAtomValue(connectedWalletsAtom);
+}

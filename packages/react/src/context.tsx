@@ -26,7 +26,7 @@ export type ReDotProviderProps = PropsWithChildren<{
   autoReconnectWallets?: boolean;
 }>;
 
-const ReDotHydrator = (props: ReDotProviderProps) => {
+function ReDotHydrator(props: ReDotProviderProps) {
   useHydrateAtoms(
     useMemo(
       () =>
@@ -52,9 +52,9 @@ const ReDotHydrator = (props: ReDotProviderProps) => {
   );
 
   return null;
-};
+}
 
-const WalletsReconnector = () => {
+function WalletsReconnector() {
   const [_, reconnect] = useReconnectWallets();
 
   useEffect(() => {
@@ -62,7 +62,7 @@ const WalletsReconnector = () => {
   }, [reconnect]);
 
   return null;
-};
+}
 
 /**
  * React context provider for Reactive DOT.
@@ -70,20 +70,22 @@ const WalletsReconnector = () => {
  * @param props - Component props
  * @returns React element
  */
-export const ReDotProvider = ({
+export function ReDotProvider({
   autoReconnectWallets = true,
   ...props
-}: ReDotProviderProps) => (
-  <ScopeProvider atoms={[chainConfigsAtom]}>
-    <ReDotHydrator {...props} />
-    {autoReconnectWallets && (
-      <Suspense>
-        <WalletsReconnector />
-      </Suspense>
-    )}
-    {props.children}
-  </ScopeProvider>
-);
+}: ReDotProviderProps) {
+  return (
+    <ScopeProvider atoms={[chainConfigsAtom]}>
+      <ReDotHydrator {...props} />
+      {autoReconnectWallets && (
+        <Suspense>
+          <WalletsReconnector />
+        </Suspense>
+      )}
+      {props.children}
+    </ScopeProvider>
+  );
+}
 
 export const ChainIdContext = createContext<ChainId | undefined>(undefined);
 
@@ -97,11 +99,13 @@ export type ReDotChainProviderProps = PropsWithChildren<{
  * @param props - Component props
  * @returns React element
  */
-export const ReDotChainProvider = (props: ReDotChainProviderProps) => (
-  <ChainIdContext.Provider value={props.chainId}>
-    {props.children}
-  </ChainIdContext.Provider>
-);
+export function ReDotChainProvider(props: ReDotChainProviderProps) {
+  return (
+    <ChainIdContext.Provider value={props.chainId}>
+      {props.children}
+    </ChainIdContext.Provider>
+  );
+}
 
 export const SignerContext = createContext<PolkadotSigner | undefined>(
   undefined,
@@ -120,8 +124,10 @@ export type ReDotSignerProviderProps = PropsWithChildren<{
  * @param props - Component props
  * @returns React element
  */
-export const ReDotSignerProvider = (props: ReDotSignerProviderProps) => (
-  <SignerContext.Provider value={props.signer}>
-    {props.children}
-  </SignerContext.Provider>
-);
+export function ReDotSignerProvider(props: ReDotSignerProviderProps) {
+  return (
+    <SignerContext.Provider value={props.signer}>
+      {props.children}
+    </SignerContext.Provider>
+  );
+}

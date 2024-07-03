@@ -15,10 +15,10 @@ import { useContext } from "react";
  * @param options - Additional options
  * @returns The latest finalized or best block
  */
-export const useBlock = (
+export function useBlock(
   tag: "best" | "finalized" = "finalized",
   options?: ChainHookOptions,
-) => {
+) {
   const contextChainId = useContext(ChainIdContext);
   const chainId = options?.chainId ?? contextChainId;
 
@@ -31,4 +31,4 @@ export const useBlock = (
       ? finalizedBlockAtomFamily(chainId)
       : bestBlockAtomFamily(chainId),
   );
-};
+}

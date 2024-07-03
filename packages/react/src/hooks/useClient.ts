@@ -11,7 +11,7 @@ import { useContext } from "react";
  * @param options - Additional options
  * @returns Polkadot-API client
  */
-export const useClient = (options?: ChainHookOptions) => {
+export function useClient(options?: ChainHookOptions) {
   const defaultChainId = useContext(ChainIdContext);
   const chainId = options?.chainId ?? defaultChainId;
 
@@ -20,4 +20,4 @@ export const useClient = (options?: ChainHookOptions) => {
   }
 
   return useAtomValue(clientAtomFamily(chainId));
-};
+}

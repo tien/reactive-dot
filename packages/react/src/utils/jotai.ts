@@ -29,7 +29,7 @@ export class AtomFamilyError extends QueryError {
   }
 }
 
-export const withAtomFamilyErrorCatcher = <
+export function withAtomFamilyErrorCatcher<
   TParam,
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   TRead extends (get: Getter, ...args: unknown[]) => any,
@@ -39,7 +39,7 @@ export const withAtomFamilyErrorCatcher = <
   atomFamily: AtomFamily<TParam, unknown>,
   param: TParam,
   atomCreator: TAtomCreator,
-): TAtomCreator => {
+): TAtomCreator {
   // @ts-expect-error complex sub-type
   const atomCatching: TAtomCreator = (read, ...args) => {
     // @ts-expect-error complex sub-type
@@ -75,9 +75,9 @@ export const withAtomFamilyErrorCatcher = <
   };
 
   return atomCatching;
-};
+}
 
-export const resetQueryError = (error: unknown) => {
+export function resetQueryError(error: unknown) {
   if (!(error instanceof Error)) {
     return;
   }
@@ -89,4 +89,4 @@ export const resetQueryError = (error: unknown) => {
   if (error.cause instanceof Error) {
     resetQueryError(error.cause);
   }
-};
+}

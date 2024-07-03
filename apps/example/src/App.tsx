@@ -22,7 +22,7 @@ import { Binary } from "polkadot-api";
 import { Suspense, useState, useTransition } from "react";
 import { ErrorBoundary, type FallbackProps } from "react-error-boundary";
 
-const useNativeTokenNumberWithPlanck = (planck: bigint) => {
+function useNativeTokenNumberWithPlanck(planck: bigint) {
   const chainSpecData = useChainSpecData();
 
   return new DenominatedNumber(
@@ -30,16 +30,18 @@ const useNativeTokenNumberWithPlanck = (planck: bigint) => {
     chainSpecData.properties.tokenDecimals,
     chainSpecData.properties.tokenSymbol,
   );
-};
+}
 
-const PendingRewards = (props: { address: string; rewards: bigint }) => (
-  <li>
-    {props.address}:{" "}
-    {useNativeTokenNumberWithPlanck(props.rewards).toLocaleString()}
-  </li>
-);
+function PendingRewards(props: { address: string; rewards: bigint }) {
+  return (
+    <li>
+      {props.address}:{" "}
+      {useNativeTokenNumberWithPlanck(props.rewards).toLocaleString()}
+    </li>
+  );
+}
 
-const PendingPoolRewards = () => {
+function PendingPoolRewards() {
   const accounts = useAccounts();
 
   const [isPending, startTransition] = useTransition();
@@ -82,9 +84,9 @@ const PendingPoolRewards = () => {
       </ul>
     </article>
   );
-};
+}
 
-const Query = () => {
+function Query() {
   const block = useBlock();
 
   const [
@@ -169,13 +171,13 @@ const Query = () => {
       <PendingPoolRewards />
     </section>
   );
-};
+}
 
 type WalletItemProps = {
   wallet: Wallet;
 };
 
-const WalletItem = (props: WalletItemProps) => {
+function WalletItem(props: WalletItemProps) {
   const connectedWallets = useConnectedWallets();
 
   const [connectingState, connect] = useConnectWallet(props.wallet);
@@ -203,9 +205,9 @@ const WalletItem = (props: WalletItemProps) => {
       )}
     </li>
   );
-};
+}
 
-const WalletConnection = () => {
+function WalletConnection() {
   const wallets = useWallets();
 
   return (
@@ -223,9 +225,9 @@ const WalletConnection = () => {
       </article>
     </section>
   );
-};
+}
 
-const Mutation = () => {
+function Mutation() {
   const connectedWallets = useConnectedWallets();
 
   const accounts = useAccounts();
@@ -302,22 +304,27 @@ const Mutation = () => {
       )}
     </section>
   );
-};
+}
 
-const ErrorFallback = (props: FallbackProps) => (
-  <article>
-    <header>
-      <strong>Oops, something went wrong!</strong>
-    </header>
-    <button type="button" onClick={() => props.resetErrorBoundary(props.error)}>
-      Retry
-    </button>
-  </article>
-);
+function ErrorFallback(props: FallbackProps) {
+  return (
+    <article>
+      <header>
+        <strong>Oops, something went wrong!</strong>
+      </header>
+      <button
+        type="button"
+        onClick={() => props.resetErrorBoundary(props.error)}
+      >
+        Retry
+      </button>
+    </article>
+  );
+}
 
 type ExampleProps = { chainName: string };
 
-const Example = (props: ExampleProps) => {
+function Example(props: ExampleProps) {
   const resetQueryError = useResetQueryError();
 
   return (
@@ -339,27 +346,27 @@ const Example = (props: ExampleProps) => {
       </ErrorBoundary>
     </div>
   );
-};
+}
 
-const App = () => (
-  <ReDotProvider config={config}>
-    <Suspense fallback="Loading wallet connection...">
-      <WalletConnection />
-    </Suspense>
-    <ReDotChainProvider chainId="polkadot">
-      <Example chainName="Polkadot" />
-    </ReDotChainProvider>
-    <ReDotChainProvider chainId="kusama">
-      <Suspense fallback={<h2>Loading Kusama...</h2>}>
-        <Example chainName="Kusama" />
+export default function App() {
+  return (
+    <ReDotProvider config={config}>
+      <Suspense fallback="Loading wallet connection...">
+        <WalletConnection />
       </Suspense>
-    </ReDotChainProvider>
-    <ReDotChainProvider chainId="westend">
-      <Suspense fallback={<h2>Loading Westend...</h2>}>
-        <Example chainName="Westend" />
-      </Suspense>
-    </ReDotChainProvider>
-  </ReDotProvider>
-);
-
-export default App;
+      <ReDotChainProvider chainId="polkadot">
+        <Example chainName="Polkadot" />
+      </ReDotChainProvider>
+      <ReDotChainProvider chainId="kusama">
+        <Suspense fallback={<h2>Loading Kusama...</h2>}>
+          <Example chainName="Kusama" />
+        </Suspense>
+      </ReDotChainProvider>
+      <ReDotChainProvider chainId="westend">
+        <Suspense fallback={<h2>Loading Westend...</h2>}>
+          <Example chainName="Westend" />
+        </Suspense>
+      </ReDotChainProvider>
+    </ReDotProvider>
+  );
+}

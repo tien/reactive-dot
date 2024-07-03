@@ -11,7 +11,7 @@ import { useContext } from "react";
  * @param options - Additional options
  * @returns The currently connected accounts
  */
-export const useAccounts = (options?: ChainHookOptions) => {
+export function useAccounts(options?: ChainHookOptions) {
   const contextChainId = useContext(ChainIdContext);
   const chainId = options?.chainId ?? contextChainId;
 
@@ -20,4 +20,4 @@ export const useAccounts = (options?: ChainHookOptions) => {
   }
 
   return useAtomValue(accountsAtom(chainId));
-};
+}

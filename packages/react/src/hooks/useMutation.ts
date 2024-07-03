@@ -30,7 +30,7 @@ type TxOptions<T extends Transaction<any, any, any, any>> = Parameters<
  * @param options - Additional options
  * @returns The current transaction state & submit function
  */
-export const useMutation = <
+export function useMutation<
   TAction extends (
     builder: TypedApi<
       TChainId extends void ? CommonDescriptor : Chains[Exclude<TChainId, void>]
@@ -50,7 +50,7 @@ export const useMutation = <
      */
     txOptions?: TxOptions<ReturnType<TAction>>;
   }>,
-) => {
+) {
   const contextChainId = useContext(ChainIdContext);
   const contextSigner = useContext(SignerContext);
 
@@ -106,4 +106,4 @@ export const useMutation = <
   );
 
   return [state, submit] as [state: typeof state, submit: typeof submit];
-};
+}

@@ -27,7 +27,7 @@ import { useCallback, useContext, useMemo } from "react";
  * @param options - Additional options
  * @returns The function to refresh the query
  */
-export const useQueryRefresher = <
+export function useQueryRefresher<
   TQuery extends
     | ((
         builder: Query<[], TDescriptor>,
@@ -37,10 +37,7 @@ export const useQueryRefresher = <
     ? CommonDescriptor
     : Chains[Exclude<TChainId, void>],
   TChainId extends ChainId | void = void,
->(
-  builder: TQuery,
-  options?: ChainHookOptions,
-) => {
+>(builder: TQuery, options?: ChainHookOptions) {
   const contextChainId = useContext(ChainIdContext);
   const chainId = options?.chainId ?? contextChainId;
 
@@ -74,7 +71,7 @@ export const useQueryRefresher = <
   );
 
   return refresh;
-};
+}
 
 /**
  * Hook for querying data from chain, returning the response & a refresher function.
@@ -83,7 +80,7 @@ export const useQueryRefresher = <
  * @param options - Additional options
  * @returns The data response & a function to refresh it
  */
-export const useLazyLoadQueryWithRefresh = <
+export function useLazyLoadQueryWithRefresh<
   TQuery extends
     | ((
         builder: Query<[], TDescriptor>,
@@ -107,7 +104,7 @@ export const useLazyLoadQueryWithRefresh = <
         typeof IDLE
       >,
   refresh: () => void,
-] => {
+] {
   const contextChainId = useContext(ChainIdContext);
   const chainId = options?.chainId ?? contextChainId;
 
@@ -152,7 +149,7 @@ export const useLazyLoadQueryWithRefresh = <
     data,
     refresh,
   ];
-};
+}
 
 /**
  * Hook for querying data from chain, and returning the response.
@@ -161,7 +158,7 @@ export const useLazyLoadQueryWithRefresh = <
  * @param options - Additional options
  * @returns The data response
  */
-export const useLazyLoadQuery = <
+export function useLazyLoadQuery<
   TQuery extends
     | ((
         builder: Query<[], TDescriptor>,
@@ -182,8 +179,8 @@ export const useLazyLoadQuery = <
         InferQueryPayload<Exclude<ReturnType<Exclude<TQuery, Falsy>>, Falsy>>
       >,
       typeof IDLE
-    > => {
+    > {
   const [data] = useLazyLoadQueryWithRefresh(builder, options);
 
   return data;
-};
+}

@@ -13,7 +13,7 @@ import {
 } from "@polkadot-api/substrate-bindings";
 import { fromHex, mergeUint8, toHex } from "@polkadot-api/utils";
 
-export const getAddressFormat = (metadata: V15): number => {
+export function getAddressFormat(metadata: V15): number {
   const dynamicBuilder = getDynamicBuilder(metadata);
 
   const constant = metadata.pallets
@@ -21,7 +21,7 @@ export const getAddressFormat = (metadata: V15): number => {
     .constants!.find((s) => s.name === "SS58Prefix")!;
 
   return dynamicBuilder.buildDefinition(constant.type).dec(constant.value);
-};
+}
 
 const versionCodec = enhanceEncoder(
   u8.enc,

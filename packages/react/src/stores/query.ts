@@ -51,11 +51,11 @@ const instructionPayloadAtomFamily = atomFamily(
   (a, b) => stringify(a) === stringify(b),
 );
 
-export const getQueryInstructionPayloadAtoms = (
+export function getQueryInstructionPayloadAtoms(
   chainId: ChainId,
   query: Query,
-) =>
-  query.instructions.map((instruction) => {
+) {
+  return query.instructions.map((instruction) => {
     if (!("multi" in instruction)) {
       return instructionPayloadAtomFamily({
         chainId: chainId,
@@ -72,6 +72,7 @@ export const getQueryInstructionPayloadAtoms = (
       });
     });
   });
+}
 
 // TODO: should be memoized within render function instead
 // https://github.com/pmndrs/jotai/discussions/1553

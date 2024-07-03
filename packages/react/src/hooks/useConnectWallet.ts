@@ -11,7 +11,7 @@ import { useCallback } from "react";
  * @param wallets - Wallets to connect to, will connect to all available wallets if none is specified
  * @returns The wallet connection state & connect function
  */
-export const useConnectWallet = (wallets?: Wallet | Wallet[]) => {
+export function useConnectWallet(wallets?: Wallet | Wallet[]) {
   const hookWallets = wallets;
 
   const [state, setState] = useAsyncState<true>();
@@ -37,4 +37,4 @@ export const useConnectWallet = (wallets?: Wallet | Wallet[]) => {
     connectionState: typeof state,
     connect: typeof connect,
   ];
-};
+}

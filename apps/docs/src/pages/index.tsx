@@ -28,7 +28,7 @@ function HomepageHeader() {
   );
 }
 
-export default function Home(): JSX.Element {
+export default function Home() {
   return (
     <Layout description="A reactive library for building Substrate front-ends">
       <HomepageHeader />

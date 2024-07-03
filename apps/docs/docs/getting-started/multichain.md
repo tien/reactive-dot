@@ -73,7 +73,7 @@ One active chain at a time.
 import type { ChainId } from "@reactive-dot/core";
 import type { ReDotChainProvider } from "@reactive-dot/react";
 
-const App = () => {
+function App() {
   const [currentChainId, setCurrentChainId] = useState<ChainId>("polkadot");
 
   return (
@@ -81,7 +81,7 @@ const App = () => {
       <MyDApp />
     </ReDotChainProvider>
   );
-};
+}
 ```
 
 Multiple active chains at the same time.
@@ -90,19 +90,21 @@ Multiple active chains at the same time.
 // ...
 import type { ReDotChainProvider } from "@reactive-dot/react";
 
-const App = () => (
-  <>
-    <ReDotChainProvider chainId="polkadot">
-      <MyDApp />
-    </ReDotChainProvider>
-    <ReDotChainProvider chainId="kusama">
-      <MyDApp />
-    </ReDotChainProvider>
-    <ReDotChainProvider chainId="westend">
-      <MyDApp />
-    </ReDotChainProvider>
-  </>
-);
+function App() {
+  return (
+    <>
+      <ReDotChainProvider chainId="polkadot">
+        <MyDApp />
+      </ReDotChainProvider>
+      <ReDotChainProvider chainId="kusama">
+        <MyDApp />
+      </ReDotChainProvider>
+      <ReDotChainProvider chainId="westend">
+        <MyDApp />
+      </ReDotChainProvider>
+    </>
+  );
+}
 ```
 
 ### Hook
@@ -112,9 +114,9 @@ All hooks provide an option to specify which chain to target.
 ```tsx
 import { useBlock } from "@reactive-dot/react";
 
-const Component = () => {
+function Component() {
   const polkadotBlock = useBlock({ chainId: "polkadot" });
   const kusamaBlock = useBlock({ chainId: "kusama" });
   const westendBlock = useBlock({ chainId: "westend" });
-};
+}
 ```

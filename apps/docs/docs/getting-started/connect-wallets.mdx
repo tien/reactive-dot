@@ -81,7 +81,7 @@ import {
   useConnectWallet,
 } from "@reactive-dot/react";
 
-const Wallets = () => {
+function Wallets() {
   const wallets = useWallets();
   const connectedWallets = useConnectedWallets();
 
@@ -114,7 +114,7 @@ const Wallets = () => {
       </article>
     </section>
   );
-};
+}
 
 export default Wallet;
 ```
@@ -124,7 +124,7 @@ export default Wallet;
 ```tsx title="Accounts.tsx"
 import { useAccounts } from "@reactive-dot/react";
 
-const Accounts = () => {
+function Accounts() {
   const accounts = useAccounts();
 
   return (
@@ -142,7 +142,7 @@ const Accounts = () => {
       </ul>
     </section>
   );
-};
+}
 
 export default Accounts;
 ```

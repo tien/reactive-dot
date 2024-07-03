@@ -17,23 +17,30 @@ export class PrefixedStorage<TKey extends string = string>
     this.#storage = options.storage;
   }
 
-  getItem = (key: TKey) => this.#storage.getItem(this.#prefixKey(key));
+  getItem(key: TKey) {
+    return this.#storage.getItem(this.#prefixKey(key));
+  }
 
-  removeItem = (key: TKey) => this.#storage.removeItem(this.#prefixKey(key));
+  removeItem(key: TKey) {
+    return this.#storage.removeItem(this.#prefixKey(key));
+  }
 
-  setItem = (key: TKey, value: string) =>
-    this.#storage.setItem(this.#prefixKey(key), value);
+  setItem(key: TKey, value: string) {
+    return this.#storage.setItem(this.#prefixKey(key), value);
+  }
 
-  join = <TKeyOverride extends string | void = void>(path: string) => {
+  join<TKeyOverride extends string | void = void>(path: string) {
     return new PrefixedStorage<TKeyOverride extends void ? TKey : TKeyOverride>(
       {
         prefix: `${this.prefix}/${path}`,
         storage: this.#storage,
       },
     );
-  };
+  }
 
-  #prefixKey = (key: string) => `${this.prefix}/${key}`;
+  #prefixKey(key: string) {
+    return `${this.prefix}/${key}`;
+  }
 }
 
 export const defaultStorage = new PrefixedStorage({

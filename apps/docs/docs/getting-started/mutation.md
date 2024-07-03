@@ -19,9 +19,11 @@ There are multiple way to select the account used for signing.
 ```tsx
 import { ReDotSignerProvider } from "@reactive-dot/react";
 
-const App = () => (
-  <ReDotSignerProvider signer={someSigner}>{/* ... */}</ReDotSignerProvider>
-);
+function App() {
+  return (
+    <ReDotSignerProvider signer={someSigner}>{/* ... */}</ReDotSignerProvider>
+  );
+}
 ```
 
 ### 2. Passing signer to the hook
@@ -58,7 +60,7 @@ import { IDLE, MutationError, PENDING } from "@reactive-dot/core";
 import { useMutation } from "@reactive-dot/react";
 import { Binary } from "polkadot-api";
 
-const Component = () => {
+function Component() {
   const [transactionState, submit] = useMutation((tx) =>
     tx.System.remark({ remark: Binary.fromText("Hello from reactive-dot!") }),
   );
@@ -80,5 +82,5 @@ const Component = () => {
         </div>
       );
   }
-};
+}
 ```

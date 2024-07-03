@@ -11,7 +11,7 @@ import { useContext } from "react";
  * @param options - Additional options
  * @returns The [JSON-RPC spec](https://paritytech.github.io/json-rpc-interface-spec/api/chainSpec.html)
  */
-export const useChainSpecData = (options?: ChainHookOptions) => {
+export function useChainSpecData(options?: ChainHookOptions) {
   const contextChainId = useContext(ChainIdContext);
   const chainId = options?.chainId ?? contextChainId;
 
@@ -20,4 +20,4 @@ export const useChainSpecData = (options?: ChainHookOptions) => {
   }
 
   return useAtomValue(chainSpecDataAtomFamily(chainId));
-};
+}

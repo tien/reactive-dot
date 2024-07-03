@@ -11,15 +11,15 @@ The [`useLazyLoadQuery`](/api/react/function/useLazyLoadQuery) hook allow you to
 [`useLazyLoadQuery`](/api/react/function/useLazyLoadQuery) utilize React's Suspense API for data fetching & error handling.
 
 ```tsx
-const ActiveEra = () => {
+function ActiveEra() {
   const activeEra = useLazyLoadQuery((builder) =>
     builder.readStorage("Staking", "ActiveEra", []),
   );
 
   return <div>Active era: {activeEra}</div>;
-};
+}
 
-const App = () => {
+function App() {
   return (
     <ErrorBoundary fallback="Error fetching active era!">
       <Suspense fallback="Fetching active era...">
@@ -27,7 +27,7 @@ const App = () => {
       </Suspense>
     </ErrorBoundary>
   );
-};
+}
 ```
 
 ## Fetching multiple data
@@ -35,7 +35,7 @@ const App = () => {
 Fetching multiple data can be done by chaining queries together, [`useLazyLoadQuery`](/api/react/function/useLazyLoadQuery) (with TypeScript) will automatically infer that you want to fetch multiple data concurrently & will return an array of data instead.
 
 ```tsx
-const MultiQuery = () => {
+function MultiQuery() {
   const [expectedBlockTime, epochDuration, proposalCount] = useLazyLoadQuery(
     (builder) =>
       builder
@@ -56,7 +56,7 @@ const MultiQuery = () => {
       <dd>{proposalCount}</dd>
     </dl>
   );
-};
+}
 ```
 
 Multiple queries of the same type can also be fetched using [`callApis`](/api/core/class/Query#callApis) & [`readStorages`](/api/core/class/Query#readStorages).
@@ -82,7 +82,7 @@ const [rewards, metadatum] = useLazyLoadQuery((builder) =>
 Result of a query can be used as variables in subsequent queries.
 
 ```tsx
-const Query = () => {
+function Query() {
   const pools = useLazyLoadQuery((builder) =>
     builder.readStorageEntries("NominationPools", "BondedPools", []),
   );
@@ -105,7 +105,7 @@ const Query = () => {
       </ul>
     </section>
   );
-};
+}
 ```
 
 ## Conditional query
@@ -147,7 +147,7 @@ Certain query, like runtime API calls & reading of storage entries doesn't creat
 ```tsx
 import { useTransition } from "react";
 
-const QueryWithRefresh = () => {
+function QueryWithRefresh() {
   const [isPending, startTransition] = useTransition();
   const [pendingRewards, refreshPendingRewards] = useLazyLoadQueryWithRefresh(
     (builder) =>
@@ -167,13 +167,13 @@ const QueryWithRefresh = () => {
       </button>
     </div>
   );
-};
+}
 ```
 
 The above will refresh all refreshable data in the query. If you want to target specific data to refresh, a separate [`useQueryRefresher`](/api/react/function/useQueryRefresher) hook can be used.
 
 ```tsx
-const QueryWithRefresh = () => {
+function QueryWithRefresh() {
   const [isPending, startTransition] = useTransition();
   const [account1Rewards, account2Rewards] = useLazyLoadQuery((builder) =>
     builder
@@ -198,7 +198,7 @@ const QueryWithRefresh = () => {
       </button>
     </div>
   );
-};
+}
 ```
 
 ## Retry failed query
@@ -209,14 +209,18 @@ Error from queries can be caught and reset using `ErrorBoundary` & [`useResetQue
 import { useResetQueryError } from "@reactive-dot/react";
 import { ErrorBoundary, type FallbackProps } from "react-error-boundary";
 
-const ErrorFallback = (props: FallbackProps) => (
-  <article>
-    <header>Oops, something went wrong!</header>
-    <button onClick={() => props.resetErrorBoundary(props.error)}>Retry</button>
-  </article>
-);
+function ErrorFallback(props: FallbackProps) {
+  return (
+    <article>
+      <header>Oops, something went wrong!</header>
+      <button onClick={() => props.resetErrorBoundary(props.error)}>
+        Retry
+      </button>
+    </article>
+  );
+}
 
-const AppErrorBoundary = () => {
+function AppErrorBoundary() {
   const resetQueryError = useResetQueryError();
 
   return (
@@ -232,5 +236,5 @@ const AppErrorBoundary = () => {
       {/* ... */}
     </ErrorBoundary>
   );
-};
+}
 ```

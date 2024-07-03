@@ -1,8 +1,8 @@
-const hasObjectPrototype = (o: unknown) => {
+function hasObjectPrototype(o: unknown) {
   return Object.prototype.toString.call(o) === "[object Object]";
-};
+}
 
-const isPlainObject = (value: unknown): value is object => {
+function isPlainObject(value: unknown): value is object {
   if (!hasObjectPrototype(value)) {
     return false;
   }
@@ -22,9 +22,9 @@ const isPlainObject = (value: unknown): value is object => {
 
   // Most likely a plain Object
   return true;
-};
+}
 
-export const stringify = <T>(queryInstruction: T) => {
+export function stringify<T>(queryInstruction: T) {
   return JSON.stringify(queryInstruction, (_, value) => {
     if (typeof value === "bigint") {
       return value.toString();
@@ -45,13 +45,13 @@ export const stringify = <T>(queryInstruction: T) => {
 
     return value;
   });
-};
+}
 
-export const flatHead = <T>(value: T): T extends [infer Head] ? Head : T => {
+export function flatHead<T>(value: T): T extends [infer Head] ? Head : T {
   if (Array.isArray(value) && value.length === 1) {
     return value.at(0);
   }
 
   // @ts-expect-error TODO: fix this
   return value;
-};
+}

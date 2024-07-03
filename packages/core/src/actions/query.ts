@@ -5,9 +5,9 @@ import type {
 import type { CommonDescriptor } from "../config.js";
 import type { ChainDefinition, TypedApi } from "polkadot-api";
 
-export const preflight = <TInstruction extends QueryInstruction>(
+export function preflight<TInstruction extends QueryInstruction>(
   instruction: TInstruction,
-) => {
+) {
   type Return = TInstruction["instruction"] extends "fetch-constant"
     ? "promise"
     : TInstruction["instruction"] extends "call-api"
@@ -26,16 +26,16 @@ export const preflight = <TInstruction extends QueryInstruction>(
     case "read-storage":
       return "observable" as Return;
   }
-};
+}
 
-export const query = <
+export function query<
   TInstruction extends QueryInstruction,
   TDescriptor extends ChainDefinition = CommonDescriptor,
 >(
   api: TypedApi<TDescriptor>,
   instruction: TInstruction,
   options?: { signal?: AbortSignal },
-): InferInstructionResponse<TInstruction> => {
+): InferInstructionResponse<TInstruction> {
   switch (instruction.instruction) {
     case "fetch-constant":
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -63,4 +63,4 @@ export const query = <
         signal: options?.signal,
       }) as InferInstructionResponse<TInstruction>;
   }
-};
+}
