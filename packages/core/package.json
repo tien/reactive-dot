@@ -1,7 +1,23 @@
 {
   "name": "@reactive-dot/core",
   "version": "0.0.0",
+  "description": "VanillaJS library for Reactive DOT",
+  "keywords": [
+    "substrate",
+    "polkadot"
+  ],
+  "homepage": "https://reactivedot.dev/",
+  "bugs": {
+    "url": "https://github.com/tien/reactive-dot/issues",
+    "email": "tien.nguyenkhac@icloud.com"
+  },
   "license": "LGPL-3.0-or-later",
+  "author": "Tiến Nguyễn Khắc <tien.nguyenkhac@icloud.com> (https://tien.zone/)",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/tien/reactive-dot.git",
+    "directory": "packages/core"
+  },
   "type": "module",
   "files": [
     "src",
