@@ -1,0 +1,20 @@
+.sponsors {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.sponsor {
+  display: contents;
+  color: inherit;
+
+  figure {
+    svg {
+      width: 14rem;
+    }
+
+    figcaption {
+      display: none;
+    }
+  }
+}

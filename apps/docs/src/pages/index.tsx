@@ -1,3 +1,4 @@
+import HomepageSponsors from "../components/HomepageSponsors";
 import styles from "./index.module.css";
 import Link from "@docusaurus/Link";
 import useDocusaurusContext from "@docusaurus/useDocusaurusContext";
@@ -34,6 +35,7 @@ export default function Home() {
       <HomepageHeader />
       <main>
         <HomepageFeatures />
+        <HomepageSponsors />
       </main>
     </Layout>
   );

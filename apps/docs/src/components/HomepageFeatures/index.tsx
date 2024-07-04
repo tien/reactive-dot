@@ -67,11 +67,11 @@ function Feature({ title, emoji, description }: FeatureItem) {
 
 export default function HomepageFeatures() {
   return (
-    <section className={styles.features}>
+    <section className={clsx(styles.features, "margin-vert--lg")}>
       <div className="container">
         <div className="row">
-          {FeatureList.map((props, idx) => (
-            <Feature key={idx} {...props} />
+          {FeatureList.map((props, index) => (
+            <Feature key={index} {...props} />
           ))}
         </div>
       </div>
