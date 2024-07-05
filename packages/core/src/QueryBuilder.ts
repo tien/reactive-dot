@@ -10,13 +10,14 @@ type PapiCallOptions = Partial<{
 
 type CallOptions = Omit<PapiCallOptions, "signal">;
 
-type OmitCallOptions<T extends unknown[]> = T extends []
-  ? []
-  : T extends [infer Head, ...infer Tail]
-    ? Head extends PapiCallOptions
-      ? OmitCallOptions<Tail>
-      : [Head, ...OmitCallOptions<Tail>]
-    : T;
+type OmitCallOptions<T extends readonly unknown[]> = T extends [
+  infer Head,
+  ...infer Tail,
+]
+  ? [Head] extends [PapiCallOptions]
+    ? OmitCallOptions<Tail>
+    : [Head, ...OmitCallOptions<Tail>]
+  : [];
 
 type InferPapiStorageEntry<T> = T extends {
   watchValue: (...args: [...infer Args, infer At]) => infer Response;
@@ -27,7 +28,7 @@ type InferPapiStorageEntry<T> = T extends {
 type InferPapiStorageEntries<T> = T extends {
   getEntries: (...args: infer Args) => infer Response;
 }
-  ? { args: Args; options: CallOptions; response: Response }
+  ? { args: OmitCallOptions<Args>; options: CallOptions; response: Response }
   : { args: unknown[]; options: unknown; response: unknown };
 
 type InferPapiRuntimeCall<T> = T extends (...args: infer Args) => infer Response
