@@ -229,10 +229,11 @@ export default class Query<
     TPallet extends keyof TypedApi<TDescriptor>["constants"],
     TConstant extends keyof TypedApi<TDescriptor>["constants"][TPallet],
   >(pallet: TPallet, constant: TConstant) {
-    return new Query([
-      ...this.#instructions,
-      { instruction: "fetch-constant", pallet, constant },
-    ]);
+    return this.#append({
+      instruction: "fetch-constant",
+      pallet,
+      constant,
+    });
   }
 
   readStorage<
@@ -245,15 +246,12 @@ export default class Query<
       TypedApi<TDescriptor>["query"][TPallet][TStorage]
     >["options"],
   >(pallet: TPallet, storage: TStorage, args: TArguments, options?: TOptions) {
-    return new Query([
-      ...this.#instructions,
-      {
-        instruction: "read-storage",
-        pallet,
-        storage,
-        args: options === undefined ? args : [...args, options],
-      },
-    ]);
+    return this.#append({
+      instruction: "read-storage",
+      pallet,
+      storage,
+      args: options === undefined ? args : [...args, options],
+    });
   }
 
   readStorages<
@@ -271,17 +269,14 @@ export default class Query<
     args: TArguments[],
     options?: TOptions,
   ) {
-    return new Query([
-      ...this.#instructions,
-      {
-        instruction: "read-storage",
-        pallet,
-        storage,
-        args:
-          options === undefined ? args : args.map((args) => [...args, options]),
-        multi: true,
-      },
-    ]);
+    return this.#append({
+      instruction: "read-storage",
+      pallet,
+      storage,
+      args:
+        options === undefined ? args : args.map((args) => [...args, options]),
+      multi: true,
+    });
   }
 
   readStorageEntries<
@@ -298,15 +293,12 @@ export default class Query<
       >["options"]
     >,
   >(pallet: TPallet, storage: TStorage, args: TArguments, options?: TOptions) {
-    return new Query([
-      ...this.#instructions,
-      {
-        instruction: "read-storage-entries",
-        pallet,
-        storage,
-        args: options === undefined ? args : [...args, options],
-      },
-    ]);
+    return this.#append({
+      instruction: "read-storage-entries",
+      pallet,
+      storage,
+      args: options === undefined ? args : [...args, options],
+    });
   }
 
   callApi<
@@ -319,15 +311,12 @@ export default class Query<
       TypedApi<TDescriptor>["apis"][TPallet][TApi]
     >["options"],
   >(pallet: TPallet, api: TApi, args: TArguments, options?: TOptions) {
-    return new Query([
-      ...this.#instructions,
-      {
-        instruction: "call-api",
-        pallet,
-        api,
-        args: options === undefined ? args : [...args, options],
-      },
-    ]);
+    return this.#append({
+      instruction: "call-api",
+      pallet,
+      api,
+      args: options === undefined ? args : [...args, options],
+    });
   }
 
   callApis<
@@ -340,16 +329,22 @@ export default class Query<
       TypedApi<TDescriptor>["apis"][TPallet][TApi]
     >["options"],
   >(pallet: TPallet, api: TApi, args: TArguments[], options?: TOptions) {
-    return new Query([
-      ...this.#instructions,
-      {
-        instruction: "call-api",
-        pallet,
-        api,
-        args:
-          options === undefined ? args : args.map((args) => [...args, options]),
-        multi: true,
-      },
-    ]);
+    return this.#append({
+      instruction: "call-api",
+      pallet,
+      api,
+      args:
+        options === undefined ? args : args.map((args) => [...args, options]),
+      multi: true,
+    });
+  }
+
+  #append<const TInstruction extends QueryInstruction>(
+    instruction: TInstruction,
+  ) {
+    return new Query([...this.#instructions, instruction]) as Query<
+      [...TInstructions, TInstruction],
+      TDescriptor
+    >;
   }
 }
