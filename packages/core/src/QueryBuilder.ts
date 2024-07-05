@@ -10,9 +10,13 @@ type PapiCallOptions = Partial<{
 
 type CallOptions = Omit<PapiCallOptions, "signal">;
 
-type OmitCallOptions<T extends unknown[]> = {
-  [P in keyof T]: T[P] extends PapiCallOptions ? never : T[P];
-};
+type OmitCallOptions<T extends unknown[]> = T extends []
+  ? []
+  : T extends [infer Head, ...infer Tail]
+    ? Head extends PapiCallOptions
+      ? OmitCallOptions<Tail>
+      : [Head, ...OmitCallOptions<Tail>]
+    : T;
 
 type InferPapiStorageEntry<T> = T extends {
   watchValue: (...args: [...infer Args, infer At]) => infer Response;
@@ -23,7 +27,7 @@ type InferPapiStorageEntry<T> = T extends {
 type InferPapiStorageEntries<T> = T extends {
   getEntries: (...args: infer Args) => infer Response;
 }
-  ? { args: OmitCallOptions<Args>; options: CallOptions; response: Response }
+  ? { args: Args; options: CallOptions; response: Response }
   : { args: unknown[]; options: unknown; response: unknown };
 
 type InferPapiRuntimeCall<T> = T extends (...args: infer Args) => infer Response
@@ -289,11 +293,9 @@ export default class Query<
   readStorageEntries<
     TPallet extends keyof TypedApi<TDescriptor>["query"],
     TStorage extends keyof TypedApi<TDescriptor>["query"][TPallet],
-    TArguments extends Array<
-      InferPapiStorageEntries<
-        TypedApi<TDescriptor>["query"][TPallet][TStorage]
-      >["args"]
-    >,
+    TArguments extends InferPapiStorageEntries<
+      TypedApi<TDescriptor>["query"][TPallet][TStorage]
+    >["args"],
     TOptions extends Array<
       InferPapiStorageEntries<
         TypedApi<TDescriptor>["query"][TPallet][TStorage]
