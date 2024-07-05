@@ -3,7 +3,16 @@ import type { CommonDescriptor } from "./config.js";
 import type { ChainDefinition, TypedApi } from "polkadot-api";
 import type { Observable } from "rxjs";
 
-type PickOptions<T> = T extends { at?: infer At } ? { at?: At } : never;
+type PapiCallOptions = Partial<{
+  at: string;
+  signal: AbortSignal;
+}>;
+
+type CallOptions = Omit<PapiCallOptions, "signal">;
+
+type OmitCallOptions<T extends unknown[]> = {
+  [P in keyof T]: T[P] extends PapiCallOptions ? never : T[P];
+};
 
 type InferPapiStorageEntry<T> = T extends {
   watchValue: (...args: [...infer Args, infer At]) => infer Response;
@@ -12,15 +21,13 @@ type InferPapiStorageEntry<T> = T extends {
   : { args: unknown[]; options: unknown; response: unknown };
 
 type InferPapiStorageEntries<T> = T extends {
-  getEntries: (...args: [...infer Args, infer Options]) => infer Response;
+  getEntries: (...args: infer Args) => infer Response;
 }
-  ? { args: Args; options: PickOptions<Options>; response: Response }
+  ? { args: OmitCallOptions<Args>; options: CallOptions; response: Response }
   : { args: unknown[]; options: unknown; response: unknown };
 
-type InferPapiRuntimeCall<T> = T extends (
-  ...args: [...infer Args, infer Options]
-) => infer Response
-  ? { args: Args; options: PickOptions<Options>; response: Response }
+type InferPapiRuntimeCall<T> = T extends (...args: infer Args) => infer Response
+  ? { args: OmitCallOptions<Args>; options: CallOptions; response: Response }
   : { args: unknown[]; options: unknown; response: unknown };
 
 type InferPapiConstantEntry<T> = T extends {
