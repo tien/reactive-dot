@@ -11,8 +11,8 @@ import type { TypedApi } from "polkadot-api";
  * @param options - Additional options
  * @returns Polkadot-API typed API
  */
-export function useTypedApi<TChainId extends ChainId | void = void>(
-  options?: ChainHookOptions,
+export function useTypedApi<TChainId extends ChainId>(
+  options?: ChainHookOptions<TChainId>,
 ): TypedApi<
   TChainId extends void ? CommonDescriptor : Chains[Exclude<TChainId, void>]
 > {

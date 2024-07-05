@@ -38,19 +38,22 @@ export function useMutation<
     >["tx"],
   ) => // eslint-disable-next-line @typescript-eslint/no-explicit-any
   Transaction<any, any, any, any>,
-  TChainId extends ChainId | void = void,
+  TChainId extends ChainId = ChainId,
 >(
   action: TAction,
-  options?: ChainHookOptions<{
-    /**
-     * Override default signer
-     */
-    signer?: PolkadotSigner;
-    /**
-     * Additional transaction options
-     */
-    txOptions?: TxOptions<ReturnType<TAction>>;
-  }>,
+  options?: ChainHookOptions<
+    TChainId,
+    {
+      /**
+       * Override default signer
+       */
+      signer?: PolkadotSigner;
+      /**
+       * Additional transaction options
+       */
+      txOptions?: TxOptions<ReturnType<TAction>>;
+    }
+  >,
 ) {
   const chainId = useChainId(options);
   const contextSigner = useContext(SignerContext);

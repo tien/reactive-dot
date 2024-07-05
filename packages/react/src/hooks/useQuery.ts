@@ -83,10 +83,10 @@ export function useLazyLoadQueryWithRefresh<
   TDescriptor extends TChainId extends void
     ? CommonDescriptor
     : Chains[Exclude<TChainId, void>],
-  TChainId extends ChainId | void = void,
+  TChainId extends ChainId = ChainId,
 >(
   builder: TQuery,
-  options?: ChainHookOptions,
+  options?: ChainHookOptions<TChainId>,
 ): [
   data: TQuery extends Falsy
     ? typeof IDLE
@@ -156,10 +156,10 @@ export function useLazyLoadQuery<
   TDescriptor extends TChainId extends void
     ? CommonDescriptor
     : Chains[Exclude<TChainId, void>],
-  TChainId extends ChainId | void = void,
+  TChainId extends ChainId = ChainId,
 >(
   builder: TQuery,
-  options?: ChainHookOptions,
+  options?: ChainHookOptions<TChainId>,
 ): TQuery extends Falsy
   ? typeof IDLE
   : FalsyGuard<

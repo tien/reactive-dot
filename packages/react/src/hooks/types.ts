@@ -1,9 +1,9 @@
 import type { ChainId } from "@reactive-dot/core";
 
 // eslint-disable-next-line @typescript-eslint/ban-types
-export type ChainHookOptions<T = {}> = T & {
+export type ChainHookOptions<TChainId extends ChainId = ChainId, T = {}> = T & {
   /**
    * Override default chain ID
    */
-  chainId?: ChainId;
+  chainId?: TChainId;
 };
