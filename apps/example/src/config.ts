@@ -13,7 +13,7 @@ const smoldotPromise = startFromWorker(
   }),
 );
 
-const config: Config = {
+const config = {
   chains: {
     polkadot: {
       descriptor: polkadot,
@@ -59,6 +59,6 @@ const config: Config = {
       ],
     }),
   ],
-};
+} as const satisfies Config;
 
 export default config;

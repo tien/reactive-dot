@@ -1,9 +1,6 @@
-import type { polkadot, kusama, westend } from "@polkadot-api/descriptors";
+import type config from "./config.js";
+import type { InferChains } from "@reactive-dot/core";
 
 declare module "@reactive-dot/core" {
-  export interface Chains {
-    polkadot: typeof polkadot;
-    kusama: typeof kusama;
-    westend: typeof westend;
-  }
+  export interface Chains extends InferChains<typeof config> {}
 }

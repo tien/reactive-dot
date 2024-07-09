@@ -50,22 +50,6 @@ npx papi
 
 For more information on metadata syncing and type generation, please refer to this [documentation](https://polkadot-api.github.io/polkadot-api-docs/codegen) provided by [Polkadot-API](https://polkadot-api.github.io/polkadot-api-docs).
 
-## Add type information
-
-The records of `ChainId` -> `Descriptor` here will be used to provide you with the right type definitions when using hooks.
-
-```ts title="redot.d.ts"
-// `dot` is the name we gave to `npx papi add`
-import type { dot } from "@polkadot-api/descriptors";
-
-declare module "@reactive-dot/core" {
-  export interface Chains {
-    // "polkadot" here can be any unique string value
-    polkadot: typeof dot;
-  }
-}
-```
-
 ## Create config
 
 {/* prettier-ignore-start */}
@@ -76,6 +60,7 @@ declare module "@reactive-dot/core" {
 {/* prettier-ignore-end */}
 
 ```ts title="config.ts"
+// `dot` is the name we gave to `npx papi add`
 import { dot } from "@polkadot-api/descriptors";
 import type { Config } from "@reactive-dot/core";
 import { InjectedWalletAggregator } from "@reactive-dot/core/wallets.js";
@@ -89,15 +74,16 @@ const smoldot = startFromWorker(
   }),
 );
 
-const config: Config = {
+const config = {
   chains: {
+    // "polkadot" here can be any unique string value
     polkadot: {
       descriptor: dot,
       provider: getSmProvider(smoldot.addChain({ chainSpec })),
     },
   },
   wallets: [new InjectedWalletAggregator()],
-};
+} as const satisfies Config;
 
 export default config;
 ```
@@ -115,7 +101,7 @@ import { WebSocketProvider } from "@polkadot-api/ws-provider/web";
 import type { Config } from "@reactive-dot/core";
 import { InjectedWalletAggregator } from "@reactive-dot/core/wallets.js";
 
-const config: Config = {
+const config = {
   chains: {
     polkadot: {
       descriptor: dot,
@@ -123,7 +109,7 @@ const config: Config = {
     },
   },
   wallets: [new InjectedWalletAggregator()],
-};
+} as const satisfies Config;
 
 export default config;
 ```
@@ -134,6 +120,19 @@ export default config;
 </Tabs>
 
 {/* prettier-ignore-end */}
+
+## Add type information
+
+The type declarations extension here will be used to provide you with the right type definitions when using hooks.
+
+```ts title="redot.d.ts"
+import type config from "./config";
+import type { InferChains } from "@reactive-dot/core";
+
+declare module "@reactive-dot/core" {
+  export interface Chains extends InferChains<typeof config> {}
+}
+```
 
 ## Wrap app in context providers
 

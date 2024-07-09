@@ -46,7 +46,7 @@ import {
   WalletConnect,
 } from "@reactive-dot/core/wallets.js";
 
-const config: Config = {
+const config = {
   // ...
   wallets: [
     new InjectedWalletAggregator(),
@@ -67,7 +67,7 @@ const config: Config = {
       ],
     }),
   ],
-};
+} as const satisfies Config;
 
 export default config;
 ```

@@ -39,7 +39,7 @@ declare module "@reactive-dot/core" {
 import type { dot, ksm, wnd } from "@polkadot-api/descriptors";
 import type { Config } from "@reactive-dot/core";
 
-const config: Config = {
+const config = {
   chains: {
     polkadot: {
       descriptor: dot,
@@ -55,7 +55,7 @@ const config: Config = {
     },
   },
   //...
-};
+} as const satisfies Config;
 
 export default config;
 ```
