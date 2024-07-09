@@ -34,9 +34,9 @@ export function useQueryRefresher<
     | Falsy,
   TDescriptor extends TChainId extends void
     ? CommonDescriptor
-    : Chains[Exclude<TChainId, void>],
-  TChainId extends ChainId | void = void,
->(builder: TQuery, options?: ChainHookOptions) {
+    : Chains[TChainId],
+  TChainId extends ChainId,
+>(builder: TQuery, options?: ChainHookOptions<TChainId>) {
   const chainId = useChainId(options);
 
   const refresh = useAtomCallback(
@@ -82,8 +82,8 @@ export function useLazyLoadQueryWithRefresh<
     | Falsy,
   TDescriptor extends TChainId extends void
     ? CommonDescriptor
-    : Chains[Exclude<TChainId, void>],
-  TChainId extends ChainId = ChainId,
+    : Chains[TChainId],
+  TChainId extends ChainId,
 >(
   builder: TQuery,
   options?: ChainHookOptions<TChainId>,
@@ -155,8 +155,8 @@ export function useLazyLoadQuery<
     | Falsy,
   TDescriptor extends TChainId extends void
     ? CommonDescriptor
-    : Chains[Exclude<TChainId, void>],
-  TChainId extends ChainId = ChainId,
+    : Chains[TChainId],
+  TChainId extends ChainId,
 >(
   builder: TQuery,
   options?: ChainHookOptions<TChainId>,

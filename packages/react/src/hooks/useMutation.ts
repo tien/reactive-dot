@@ -3,7 +3,7 @@ import { typedApiAtomFamily } from "../stores/client.js";
 import type { ChainHookOptions } from "./types.js";
 import { useAsyncState } from "./useAsyncState.js";
 import useChainId from "./useChainId.js";
-import type { ChainId, Chains, CommonDescriptor } from "@reactive-dot/core";
+import type { ChainId, Chains } from "@reactive-dot/core";
 import { MutationError, PENDING } from "@reactive-dot/core";
 import { useAtomCallback } from "jotai/utils";
 import type {
@@ -33,12 +33,10 @@ type TxOptions<T extends Transaction<any, any, any, any>> = Parameters<
  */
 export function useMutation<
   TAction extends (
-    builder: TypedApi<
-      TChainId extends void ? CommonDescriptor : Chains[Exclude<TChainId, void>]
-    >["tx"],
+    builder: TypedApi<Chains[TChainId]>["tx"],
   ) => // eslint-disable-next-line @typescript-eslint/no-explicit-any
   Transaction<any, any, any, any>,
-  TChainId extends ChainId = ChainId,
+  TChainId extends ChainId,
 >(
   action: TAction,
   options?: ChainHookOptions<

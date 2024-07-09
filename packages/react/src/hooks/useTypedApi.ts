@@ -1,7 +1,7 @@
 import { typedApiAtomFamily } from "../stores/client.js";
 import type { ChainHookOptions } from "./types.js";
 import useChainId from "./useChainId.js";
-import type { ChainId, Chains, CommonDescriptor } from "@reactive-dot/core";
+import type { ChainId, Chains } from "@reactive-dot/core";
 import { useAtomValue } from "jotai";
 import type { TypedApi } from "polkadot-api";
 
@@ -13,8 +13,6 @@ import type { TypedApi } from "polkadot-api";
  */
 export function useTypedApi<TChainId extends ChainId>(
   options?: ChainHookOptions<TChainId>,
-): TypedApi<
-  TChainId extends void ? CommonDescriptor : Chains[Exclude<TChainId, void>]
-> {
+): TypedApi<Chains[TChainId]> {
   return useAtomValue(typedApiAtomFamily(useChainId(options)));
 }
