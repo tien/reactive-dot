@@ -38,29 +38,32 @@ export function query<
 ): InferInstructionResponse<TInstruction> {
   switch (instruction.instruction) {
     case "fetch-constant":
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      return (api as any).constants[instruction.pallet][
-        instruction.constant
-      ]() as InferInstructionResponse<TInstruction>;
+      return (
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        (api.constants[instruction.pallet]![instruction.constant] as any)()
+      );
     case "call-api":
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      return (api as any).apis[instruction.pallet][instruction.api](
+      return (api.apis[instruction.pallet]![instruction.api] as any)(
         ...instruction.args,
         { signal: options?.signal },
-      ) as InferInstructionResponse<TInstruction>;
+      );
     case "read-storage":
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      return (api as any).query[instruction.pallet][
-        instruction.storage
-      ].watchValue(
-        ...instruction.args,
-      ) as InferInstructionResponse<TInstruction>;
+      return (
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        (api.query[instruction.pallet]![instruction.storage] as any).watchValue(
+          ...instruction.args,
+        )
+      );
     case "read-storage-entries":
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      return (api as any).query[instruction.pallet][
-        instruction.storage
-      ].getEntries(...instruction.args, {
-        signal: options?.signal,
-      }) as InferInstructionResponse<TInstruction>;
+      return (
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        (api.query[instruction.pallet]![instruction.storage] as any).getEntries(
+          ...instruction.args,
+          {
+            signal: options?.signal,
+          },
+        )
+      );
   }
 }
