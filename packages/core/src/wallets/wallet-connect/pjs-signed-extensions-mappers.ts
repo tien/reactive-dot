@@ -1,11 +1,11 @@
 import type { HexString } from "@polkadot-api/substrate-bindings";
 import {
   Bytes,
+  Option,
   Struct,
   compact,
-  u32,
-  Option,
   compactBn,
+  u32,
 } from "@polkadot-api/substrate-bindings";
 import { toHex } from "@polkadot-api/utils";
 
@@ -61,7 +61,7 @@ export function ChargeTransactionPayment({ value }: SignedExtension): {
   tip: HexString;
 } {
   return {
-    tip: toPjsHex(compactBn.dec(value), 16), // u128 => 16 bytes
+    tip: toPjsHex(compactBn.dec(value), 16),
   };
 }
 

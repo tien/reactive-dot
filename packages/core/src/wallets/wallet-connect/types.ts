@@ -1,3 +1,6 @@
+import type { PolkadotSigner } from "@polkadot-api/polkadot-signer";
+import type { HexString } from "@polkadot-api/substrate-bindings";
+
 export type SignerPayloadJSON = {
   /**
    * The ss-58 encoded address.
@@ -12,27 +15,27 @@ export type SignerPayloadJSON = {
   /**
    * The checkpoint hash of the block, in hex.
    */
-  blockHash: `0x${string}`;
+  blockHash: HexString;
 
   /**
    * The checkpoint block number, in hex.
    */
-  blockNumber: `0x${string}`;
+  blockNumber: HexString;
 
   /**
    * The era for this transaction, in hex.
    */
-  era: `0x${string}`;
+  era: HexString;
 
   /**
    * The genesis hash of the chain, in hex.
    */
-  genesisHash: `0x${string}`;
+  genesisHash: HexString;
 
   /**
    * The metadataHash for the CheckMetadataHash SignedExtension, as hex.
    */
-  metadataHash?: `0x${string}`;
+  metadataHash?: HexString;
 
   /**
    * The encoded method (with arguments) in hex.
@@ -47,22 +50,22 @@ export type SignerPayloadJSON = {
   /**
    * The nonce for this transaction, in hex.
    */
-  nonce: `0x${string}`;
+  nonce: HexString;
 
   /**
    * The current spec version for the runtime.
    */
-  specVersion: `0x${string}`;
+  specVersion: HexString;
 
   /**
    * The tip for this transaction, in hex.
    */
-  tip: `0x${string}`;
+  tip: HexString;
 
   /**
    * The current transaction version for the runtime.
    */
-  transactionVersion: `0x${string}`;
+  transactionVersion: HexString;
 
   /**
    * The applicable signed extensions for this runtime.
@@ -73,4 +76,65 @@ export type SignerPayloadJSON = {
    * The version of the extrinsic we are dealing with.
    */
   version: number;
+
+  /**
+   * Optional flag that enables the use of the `signedTransaction` field in
+   * `singAndSend`, `signAsync`, and `dryRun`.
+   */
+  withSignedTransaction?: boolean;
+};
+
+export type InjectedWeb3 = Record<
+  string,
+  | {
+      enable: () => Promise<PjsInjectedExtension>;
+    }
+  | undefined
+>;
+
+export type KeypairType = "ed25519" | "sr25519" | "ecdsa";
+
+export type InjectedAccount = {
+  address: string;
+  genesisHash?: string | null;
+  name?: string;
+  type?: KeypairType;
+};
+
+export type InjectedPolkadotAccount = {
+  polkadotSigner: PolkadotSigner;
+  address: string;
+  genesisHash?: string | null;
+  name?: string;
+  type?: KeypairType;
+};
+
+export type SignPayload = (
+  payload: SignerPayloadJSON,
+) => Promise<{ signature: string; signedTransaction?: string | Uint8Array }>;
+
+export type SignRaw = (payload: {
+  address: string;
+  data: HexString;
+  type: "bytes";
+}) => Promise<{ id: number; signature: HexString }>;
+
+export type PjsInjectedExtension = {
+  signer: {
+    signPayload: SignPayload;
+    signRaw: SignRaw;
+  };
+  accounts: {
+    get: () => Promise<InjectedPolkadotAccount[]>;
+    subscribe: (
+      cb: (accounts: InjectedPolkadotAccount[]) => void,
+    ) => () => void;
+  };
+};
+
+export type InjectedExtension = {
+  name: string;
+  getAccounts: () => InjectedPolkadotAccount[];
+  subscribe: (cb: (accounts: InjectedPolkadotAccount[]) => void) => () => void;
+  disconnect: () => void;
 };

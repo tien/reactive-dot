@@ -48,13 +48,13 @@
     "@walletconnect/modal": "^2.6.2",
     "@walletconnect/universal-provider": "^2.13.3",
     "eslint": "^9.6.0",
-    "polkadot-api": "^0.9.1",
+    "polkadot-api": "^0.10.0",
     "typescript": "^5.5.3"
   },
   "peerDependencies": {
     "@walletconnect/modal": "2.x",
     "@walletconnect/universal-provider": "2.x",
-    "polkadot-api": "^0.9.0"
+    "polkadot-api": "^0.10.0"
   },
   "peerDependenciesMeta": {
     "@walletconnect/modal": {

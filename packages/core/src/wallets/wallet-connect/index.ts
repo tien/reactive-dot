@@ -2,7 +2,6 @@ import { ReDotError } from "../../errors.js";
 import DeepLinkWallet from "../deep-link.js";
 import { getPolkadotSignerFromPjs } from "./from-pjs-account.js";
 import "@polkadot-api/pjs-signer";
-import { AccountId } from "@polkadot-api/substrate-bindings";
 import type {
   WalletConnectModal,
   WalletConnectModalConfig,
@@ -32,6 +31,8 @@ export default class WalletConnect extends DeepLinkWallet {
   readonly #session = new BehaviorSubject<SessionTypes.Struct | undefined>(
     undefined,
   );
+
+  #requestId = 0;
 
   override readonly id = "wallet-connect";
 
@@ -179,21 +180,33 @@ export default class WalletConnect extends DeepLinkWallet {
             address,
             genesisHash: chainId,
             polkadotSigner: getPolkadotSignerFromPjs(
-              AccountId().enc(address),
+              address,
               (payload) =>
-                this.#provider!.client!.request<{
-                  signature: `0x${string}`;
-                }>({
-                  chainId: `${chainType}:${chainId}`,
+                this.#provider!.client!.request<{ signature: string }>({
                   topic: session.topic,
+                  chainId: `${chainType}:${chainId}`,
                   request: {
                     method: "polkadot_signTransaction",
                     params: {
-                      address,
+                      address: payload.address,
                       transactionPayload: payload,
                     },
                   },
                 }),
+              async (payload) => {
+                const { signature } = await this.#provider!.client!.request<{
+                  signature: `0x${string}`;
+                }>({
+                  topic: session.topic,
+                  chainId: `${chainType}:${chainId}`,
+                  request: {
+                    method: "polkadot_signMessage",
+                    params: { address: payload.address, message: payload.data },
+                  },
+                });
+
+                return { id: this.#requestId++, signature };
+              },
             ),
           }),
         );

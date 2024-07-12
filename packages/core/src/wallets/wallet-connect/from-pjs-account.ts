@@ -1,15 +1,15 @@
 import * as signedExtensionMappers from "./pjs-signed-extensions-mappers.js";
-import type { SignerPayloadJSON } from "./types.js";
+import type { SignPayload, SignRaw, SignerPayloadJSON } from "./types.js";
 import { getDynamicBuilder } from "@polkadot-api/metadata-builders";
 import type { PolkadotSigner } from "@polkadot-api/polkadot-signer";
 import {
   AccountId,
   Blake2256,
+  type V15,
   compact,
   enhanceEncoder,
   metadata as metadataCodec,
   u8,
-  type V15,
 } from "@polkadot-api/substrate-bindings";
 import { fromHex, mergeUint8, toHex } from "@polkadot-api/utils";
 
@@ -29,11 +29,20 @@ const versionCodec = enhanceEncoder(
     (+!!value.signed << 7) | value.version,
 );
 
+const getPublicKey = AccountId().enc;
 export function getPolkadotSignerFromPjs(
-  publicKey: Uint8Array,
-  signPayload: (payload: SignerPayloadJSON) => Promise<{ signature: string }>,
+  address: string,
+  signPayload: SignPayload,
+  signRaw: SignRaw,
 ): PolkadotSigner {
-  const sign = async (
+  const signBytes = (data: Uint8Array) =>
+    signRaw({
+      address,
+      data: toHex(data),
+      type: "bytes",
+    }).then(({ signature }) => fromHex(signature));
+  const publicKey = getPublicKey(address);
+  const signTx = async (
     callData: Uint8Array,
     signedExtensions: Record<
       string,
@@ -93,20 +102,25 @@ export function getPolkadotSignerFromPjs(
     pjs.address = AccountId(getAddressFormat(decMeta)).dec(publicKey);
     pjs.method = toHex(callData);
     pjs.version = version;
+    pjs.withSignedTransaction = true; // we allow the wallet to change the payload
 
     const result = await signPayload(pjs as SignerPayloadJSON);
 
-    const preResult = mergeUint8(
-      versionCodec({ signed: true, version }),
-      // converting it to a `MultiAddress` enum, where the index 0 is `Id(AccountId)`
-      new Uint8Array([0, ...publicKey]),
-      fromHex(result.signature),
-      ...extra,
-      callData,
-    );
-
-    return mergeUint8(compact.enc(preResult.length), preResult);
+    if (!result.signedTransaction) {
+      const preResult = mergeUint8(
+        versionCodec({ signed: true, version }),
+        // converting it to a `MultiAddress` enum, where the index 0 is `Id(AccountId)`
+        new Uint8Array([0, ...publicKey]),
+        fromHex(result.signature),
+        ...extra,
+        callData,
+      );
+      return mergeUint8(compact.enc(preResult.length), preResult);
+    }
+    return typeof result.signedTransaction === "string"
+      ? fromHex(result.signedTransaction)
+      : result.signedTransaction;
   };
 
-  return { publicKey, sign };
+  return { publicKey, signTx, signBytes };
 }
