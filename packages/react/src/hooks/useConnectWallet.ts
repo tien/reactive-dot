@@ -14,27 +14,27 @@ import { useCallback } from "react";
 export function useConnectWallet(wallets?: Wallet | Wallet[]) {
   const hookWallets = wallets;
 
-  const [state, setState] = useAsyncState<true>();
+  const [success, setSuccess] = useAsyncState<true>();
 
   const connect = useAtomCallback(
     useCallback(
       async (get, _, wallets?: Wallet | Wallet[]) => {
         try {
-          setState(PENDING);
+          setSuccess(PENDING);
           const walletsToConnect =
             wallets ?? hookWallets ?? (await get(walletsAtom));
           await connectWallet(walletsToConnect);
-          setState(true);
+          setSuccess(true);
         } catch (error) {
-          setState(MutationError.from(error));
+          setSuccess(MutationError.from(error));
         }
       },
-      [hookWallets, setState],
+      [hookWallets, setSuccess],
     ),
   );
 
-  return [state, connect] as [
-    connectionState: typeof state,
+  return [success, connect] as [
+    success: typeof success,
     connect: typeof connect,
   ];
 }

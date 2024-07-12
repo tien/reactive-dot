@@ -1,18 +1,25 @@
-import { useReconnectWallets } from "./hooks/useReconnectWallets.js";
-import { chainConfigsAtom } from "./stores/config.js";
-import { aggregatorAtom, directWalletsAtom } from "./stores/wallets.js";
-import type { ChainId, Config } from "@reactive-dot/core";
+import { useReconnectWallets } from "../hooks/useReconnectWallets.js";
+import { chainConfigsAtom } from "../stores/config.js";
+import { aggregatorAtom, directWalletsAtom } from "../stores/wallets.js";
+import { MutationEventSubjectContext } from "./mutation.js";
+import type { Config } from "@reactive-dot/core";
 import { Wallet, WalletAggregator } from "@reactive-dot/core/wallets.js";
 import { ScopeProvider } from "jotai-scope";
 import { useHydrateAtoms } from "jotai/utils";
-import type { PolkadotSigner } from "polkadot-api";
-import {
-  Suspense,
-  createContext,
-  useEffect,
-  useMemo,
-  type PropsWithChildren,
-} from "react";
+import { Suspense, useEffect, useMemo, type PropsWithChildren } from "react";
+import { Subject } from "rxjs";
+
+export {
+  ChainIdContext,
+  ReDotChainProvider,
+  type ReDotChainProviderProps,
+} from "./chain.js";
+
+export {
+  ReDotSignerProvider,
+  SignerContext,
+  type ReDotSignerProviderProps,
+} from "./signer.js";
 
 export type ReDotProviderProps = PropsWithChildren<{
   /**
@@ -82,52 +89,11 @@ export function ReDotProvider({
           <WalletsReconnector />
         </Suspense>
       )}
-      {props.children}
+      <MutationEventSubjectContext.Provider
+        value={useMemo(() => new Subject(), [])}
+      >
+        {props.children}
+      </MutationEventSubjectContext.Provider>
     </ScopeProvider>
-  );
-}
-
-export const ChainIdContext = createContext<ChainId | undefined>(undefined);
-
-export type ReDotChainProviderProps = PropsWithChildren<{
-  chainId: ChainId;
-}>;
-
-/**
- * React context provider for scoping to a specific chain.
- *
- * @param props - Component props
- * @returns React element
- */
-export function ReDotChainProvider(props: ReDotChainProviderProps) {
-  return (
-    <ChainIdContext.Provider value={props.chainId}>
-      {props.children}
-    </ChainIdContext.Provider>
-  );
-}
-
-export const SignerContext = createContext<PolkadotSigner | undefined>(
-  undefined,
-);
-
-export type ReDotSignerProviderProps = PropsWithChildren<{
-  /**
-   * The default signer
-   */
-  signer: PolkadotSigner | undefined;
-}>;
-
-/**
- * React context provider to assign a default signer.
- *
- * @param props - Component props
- * @returns React element
- */
-export function ReDotSignerProvider(props: ReDotSignerProviderProps) {
-  return (
-    <SignerContext.Provider value={props.signer}>
-      {props.children}
-    </SignerContext.Provider>
   );
 }

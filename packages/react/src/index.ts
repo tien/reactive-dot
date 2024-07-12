@@ -5,7 +5,7 @@ export {
   type ReDotChainProviderProps,
   type ReDotProviderProps,
   type ReDotSignerProviderProps,
-} from "./context.js";
+} from "./contexts/index.js";
 export type { ChainHookOptions } from "./hooks/types.js";
 export { useAccounts } from "./hooks/useAccounts.js";
 export { useBlock } from "./hooks/useBlock.js";
@@ -14,6 +14,7 @@ export { useClient } from "./hooks/useClient.js";
 export { useConnectWallet } from "./hooks/useConnectWallet.js";
 export { useDisconnectWallet } from "./hooks/useDisconnectWallet.js";
 export { useMutation } from "./hooks/useMutation.js";
+export { useMutationEffect } from "./hooks/useMutationEffect.js";
 export {
   useLazyLoadQuery,
   useLazyLoadQueryWithRefresh,

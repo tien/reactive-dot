@@ -2,7 +2,7 @@ import { useWallets } from "./useWallets.js";
 import {
   IDLE,
   PENDING,
-  type AsyncState,
+  type AsyncValue,
   type ReDotError,
 } from "@reactive-dot/core";
 import { initializeWallets } from "@reactive-dot/core/wallets.js";
@@ -16,7 +16,7 @@ import { useCallback, useState } from "react";
 export function useReconnectWallets() {
   const wallets = useWallets();
 
-  const [state, setState] = useState<AsyncState<true, ReDotError>>(IDLE);
+  const [state, setState] = useState<AsyncValue<true, ReDotError>>(IDLE);
 
   const reconnect = useCallback(async () => {
     setState(PENDING);

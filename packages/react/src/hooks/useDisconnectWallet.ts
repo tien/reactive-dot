@@ -14,27 +14,27 @@ import { useCallback } from "react";
 export function useDisconnectWallet(wallets?: Wallet | Wallet[]) {
   const hookWallets = wallets;
 
-  const [state, setState] = useAsyncState<true>();
+  const [success, setSuccess] = useAsyncState<true>();
 
   const disconnect = useAtomCallback(
     useCallback(
       async (get, _, wallets?: Wallet | Wallet[]) => {
         try {
-          setState(PENDING);
+          setSuccess(PENDING);
           const walletsToDisconnect =
             wallets ?? hookWallets ?? (await get(walletsAtom));
           await disconnectWallet(walletsToDisconnect);
-          setState(true);
+          setSuccess(true);
         } catch (error) {
-          setState(MutationError.from(error));
+          setSuccess(MutationError.from(error));
         }
       },
-      [hookWallets, setState],
+      [hookWallets, setSuccess],
     ),
   );
 
-  return [state, disconnect] as [
-    disconnectionState: typeof state,
+  return [success, disconnect] as [
+    success: typeof success,
     disconnect: typeof disconnect,
   ];
 }

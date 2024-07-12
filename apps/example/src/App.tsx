@@ -15,12 +15,14 @@ import {
   useLazyLoadQueryWithRefresh,
   useResetQueryError,
   useWallets,
+  useMutationEffect,
 } from "@reactive-dot/react";
 import { DenominatedNumber } from "@reactive-dot/utils";
 import { formatDistance } from "date-fns";
 import { Binary } from "polkadot-api";
 import { Suspense, useState, useTransition } from "react";
 import { ErrorBoundary, type FallbackProps } from "react-error-boundary";
+import toast, { Toaster } from "react-hot-toast";
 
 function useNativeTokenNumberWithPlanck(planck: bigint) {
   const chainSpecData = useChainSpecData();
@@ -327,6 +329,30 @@ type ExampleProps = { chainName: string };
 function Example(props: ExampleProps) {
   const resetQueryError = useResetQueryError();
 
+  useMutationEffect((event) => {
+    if (event.value === PENDING) {
+      toast.loading("Submitting transaction", { id: event.id });
+      return;
+    }
+
+    if (event.value instanceof MutationError) {
+      toast.error("Failed to submit transaction", { id: event.id });
+      return;
+    }
+
+    switch (event.value.type) {
+      case "finalized":
+        if (event.value.ok) {
+          toast.success("Submitted transaction", { id: event.id });
+        } else {
+          toast.error("Transaction failed", { id: event.id });
+        }
+        break;
+      default:
+        toast.loading("Transaction pending", { id: event.id });
+    }
+  });
+
   return (
     <div>
       <ErrorBoundary
@@ -367,6 +393,7 @@ export default function App() {
           <Example chainName="Westend" />
         </Suspense>
       </ReDotChainProvider>
+      <Toaster />
     </ReDotProvider>
   );
 }

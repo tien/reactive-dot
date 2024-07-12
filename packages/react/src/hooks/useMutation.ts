@@ -1,4 +1,8 @@
-import { SignerContext } from "../context.js";
+import { SignerContext } from "../contexts/index.js";
+import {
+  type MutationEvent,
+  MutationEventSubjectContext,
+} from "../contexts/mutation.js";
 import { typedApiAtomFamily } from "../stores/client.js";
 import type { ChainHookOptions } from "./types.js";
 import { useAsyncState } from "./useAsyncState.js";
@@ -54,9 +58,18 @@ export function useMutation<
   >,
 ) {
   const chainId = useChainId(options);
+  const mutationEventSubject = useContext(MutationEventSubjectContext);
   const contextSigner = useContext(SignerContext);
 
-  const [state, setState] = useAsyncState<TxEvent>();
+  const [event, setEvent] = useAsyncState<TxEvent>();
+
+  const setState = useCallback(
+    (event: Omit<MutationEvent, "chainId">) => {
+      setEvent(event.value);
+      mutationEventSubject.next({ ...event, chainId });
+    },
+    [chainId, mutationEventSubject, setEvent],
+  );
 
   const submit = useAtomCallback<
     void,
@@ -64,26 +77,42 @@ export function useMutation<
   >(
     useCallback(
       async (get, _set, submitOptions) => {
-        setState(PENDING);
+        const id = globalThis.crypto.randomUUID();
+
+        setState({ id, value: PENDING });
 
         const signer =
           submitOptions?.signer ?? options?.signer ?? contextSigner;
 
         if (signer === undefined) {
-          throw new MutationError("No signer provided");
+          const error = new MutationError("No signer provided");
+
+          setState({
+            id,
+            value: MutationError.from(error),
+          });
+
+          throw error;
         }
 
         const api = await get(typedApiAtomFamily(chainId));
 
         const transaction = action(api.tx);
 
+        setState({ id, call: transaction.decodedCall, value: PENDING });
+
         return new Promise((resolve, reject) =>
           transaction
             .signSubmitAndWatch(signer, submitOptions ?? options?.txOptions)
             .subscribe({
-              next: setState,
+              next: (value) =>
+                setState({ id, call: transaction.decodedCall, value }),
               error: (error) => {
-                setState(MutationError.from(error));
+                setState({
+                  id,
+                  call: transaction.decodedCall,
+                  value: MutationError.from(error),
+                });
                 reject(error);
               },
               complete: resolve,
@@ -101,5 +130,5 @@ export function useMutation<
     ),
   );
 
-  return [state, submit] as [state: typeof state, submit: typeof submit];
+  return [event, submit] as [event: typeof event, submit: typeof submit];
 }
