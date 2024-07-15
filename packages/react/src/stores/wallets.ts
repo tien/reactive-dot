@@ -1,25 +1,12 @@
-import type { WalletAggregator, Wallet } from "@reactive-dot/core/wallets.js";
+import { aggregateWallets, getConnectedWallets } from "@reactive-dot/core";
+import type { Wallet, WalletAggregator } from "@reactive-dot/core/wallets.js";
 import { atom } from "jotai";
 import { atomWithObservable } from "jotai/utils";
-import { combineLatest, from } from "rxjs";
-import { map, switchMap } from "rxjs/operators";
 
-export const aggregatorAtom = atom<WalletAggregator[]>([]);
+export const aggregatorsAtom = atom<WalletAggregator[]>([]);
 
 const aggregatorWallets = atomWithObservable((get) =>
-  from(
-    Promise.all(
-      get(aggregatorAtom).map(async (aggregator) => {
-        await aggregator.scan();
-        return aggregator;
-      }),
-    ),
-  ).pipe(
-    switchMap((aggregators) =>
-      combineLatest(aggregators.map((aggregator) => aggregator.wallets$)),
-    ),
-    map((wallets) => wallets.flat()),
-  ),
+  aggregateWallets(get(aggregatorsAtom)),
 );
 
 export const directWalletsAtom = atom<Wallet[]>([]);
@@ -30,18 +17,5 @@ export const walletsAtom = atom(async (get) => [
 ]);
 
 export const connectedWalletsAtom = atomWithObservable((get) =>
-  from(get(walletsAtom)).pipe(
-    switchMap((wallets) =>
-      combineLatest(
-        wallets.map((wallet) =>
-          wallet.connected$.pipe(
-            map((connected) => [wallet, connected] as const),
-          ),
-        ),
-      ),
-    ),
-    map((wallets) =>
-      wallets.filter(([_, connected]) => connected).map(([wallet]) => wallet),
-    ),
-  ),
+  getConnectedWallets(get(walletsAtom)),
 );

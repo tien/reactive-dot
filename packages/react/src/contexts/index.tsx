@@ -1,6 +1,6 @@
 import { useReconnectWallets } from "../hooks/useReconnectWallets.js";
 import { chainConfigsAtom } from "../stores/config.js";
-import { aggregatorAtom, directWalletsAtom } from "../stores/wallets.js";
+import { aggregatorsAtom, directWalletsAtom } from "../stores/wallets.js";
 import { MutationEventSubjectContext } from "./mutation.js";
 import type { Config } from "@reactive-dot/core";
 import { Wallet, WalletAggregator } from "@reactive-dot/core/wallets.js";
@@ -47,7 +47,7 @@ function ReDotHydrator(props: ReDotProviderProps) {
             ) ?? [],
           ],
           [
-            aggregatorAtom,
+            aggregatorsAtom,
             props.config.wallets?.filter(
               (aggregator): aggregator is WalletAggregator =>
                 aggregator instanceof WalletAggregator,
