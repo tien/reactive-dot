@@ -1,10 +1,8 @@
 import { chainConfigsAtom } from "./config.js";
-import type { JsonRpcProvider } from "@polkadot-api/json-rpc-provider";
-import { ReDotError } from "@reactive-dot/core";
 import type { ChainId } from "@reactive-dot/core";
+import { getClient, ReDotError } from "@reactive-dot/core";
 import { atom } from "jotai";
 import { atomFamily } from "jotai/utils";
-import { createClient } from "polkadot-api";
 
 export const clientAtomFamily = atomFamily((chainId: ChainId) =>
   atom(async (get) => {
@@ -14,16 +12,7 @@ export const clientAtomFamily = atomFamily((chainId: ChainId) =>
       throw new ReDotError(`No config provided for ${chainId}`);
     }
 
-    const providerOrGetter = await chainConfig.provider;
-
-    // Hack to detect wether function is a `JsonRpcProvider` or a getter of `JsonRpcProvider`
-    const provider = await (providerOrGetter.length > 0
-      ? (providerOrGetter as JsonRpcProvider)
-      : (
-          providerOrGetter as Exclude<typeof providerOrGetter, JsonRpcProvider>
-        )());
-
-    return createClient(provider);
+    return getClient(chainConfig);
   }),
 );
 
