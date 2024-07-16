@@ -18,7 +18,7 @@ jobs:
 
       - run: yarn nx run-many -t build --projects="packages/*"
 
-      - run: yarn workspaces foreach -At --no-private version 0.0.0-snapshot.$(git rev-parse --short HEAD) --immediate
+      - run: yarn workspaces foreach -At --no-private version 0.0.0-snapshot.${{ github.run_number }}+$(git rev-parse --short HEAD) --immediate
 
       - run: scripts/publish.sh
         env:
