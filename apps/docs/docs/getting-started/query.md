@@ -39,8 +39,8 @@ function MultiQuery() {
   const [expectedBlockTime, epochDuration, proposalCount] = useLazyLoadQuery(
     (builder) =>
       builder
-        .fetchConstant("Babe", "ExpectedBlockTime")
-        .fetchConstant("Babe", "EpochDuration")
+        .getConstant("Babe", "ExpectedBlockTime")
+        .getConstant("Babe", "EpochDuration")
         .readStorage("Treasury", "ProposalCount", []),
   );
 

@@ -50,7 +50,7 @@ export type ConstantFetchInstruction<
   TPallet extends keyof TypedApi<TDescriptor>["constants"],
   TConstant extends keyof TypedApi<TDescriptor>["constants"][TPallet],
   TDescriptor extends ChainDefinition = CommonDescriptor,
-> = BaseInstruction<"fetch-constant"> & {
+> = BaseInstruction<"get-constant"> & {
   pallet: TPallet;
   constant: TConstant;
 };
@@ -237,12 +237,12 @@ export default class Query<
     return Object.freeze(this.#instructions.slice()) as Readonly<TInstructions>;
   }
 
-  fetchConstant<
+  getConstant<
     TPallet extends keyof TypedApi<TDescriptor>["constants"],
     TConstant extends keyof TypedApi<TDescriptor>["constants"][TPallet],
   >(pallet: TPallet, constant: TConstant) {
     return this.#append({
-      instruction: "fetch-constant",
+      instruction: "get-constant",
       pallet,
       constant,
     });
