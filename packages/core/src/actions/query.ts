@@ -8,7 +8,7 @@ import type { ChainDefinition, TypedApi } from "polkadot-api";
 export function preflight<TInstruction extends QueryInstruction>(
   instruction: TInstruction,
 ) {
-  type Return = TInstruction["instruction"] extends "fetch-constant"
+  type Return = TInstruction["instruction"] extends "get-constant"
     ? "promise"
     : TInstruction["instruction"] extends "call-api"
       ? "promise"
@@ -19,7 +19,7 @@ export function preflight<TInstruction extends QueryInstruction>(
           : "promise" | "observable";
 
   switch (instruction.instruction) {
-    case "fetch-constant":
+    case "get-constant":
     case "call-api":
     case "read-storage-entries":
       return "promise" as Return;
@@ -37,7 +37,7 @@ export function query<
   options?: { signal?: AbortSignal },
 ): InferInstructionResponse<TInstruction> {
   switch (instruction.instruction) {
-    case "fetch-constant":
+    case "get-constant":
       return (
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
         (api.constants[instruction.pallet]![instruction.constant] as any)()

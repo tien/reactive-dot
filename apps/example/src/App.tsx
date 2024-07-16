@@ -103,10 +103,10 @@ function Query() {
     poolMetadatum,
   ] = useLazyLoadQuery((builder) =>
     builder
-      .fetchConstant("Babe", "ExpectedBlockTime")
-      .fetchConstant("Babe", "EpochDuration")
-      .fetchConstant("Staking", "SessionsPerEra")
-      .fetchConstant("Staking", "BondingDuration")
+      .getConstant("Babe", "ExpectedBlockTime")
+      .getConstant("Babe", "EpochDuration")
+      .getConstant("Staking", "SessionsPerEra")
+      .getConstant("Staking", "BondingDuration")
       .readStorage("Timestamp", "Now", [])
       .readStorage("Balances", "TotalIssuance", [])
       .readStorage("Staking", "ActiveEra", [])
