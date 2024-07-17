@@ -1,12 +1,13 @@
-name: Packages
+name: Publish snapshot
 
 on:
   push:
     branches: [main]
 
+concurrency: ${{ github.workflow }}-${{ github.ref }}
+
 jobs:
   publish-snapshot:
-    if: github.event_name == 'push'
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -16,10 +17,10 @@ jobs:
 
       - uses: ./.github/actions/setup
 
-      - run: yarn nx run-many -t build --projects="packages/*"
+      - run: yarn build:packages
 
       - run: yarn workspaces foreach -At --no-private version 0.0.0-snapshot.${{ github.run_number }}+$(git rev-parse --short HEAD) --immediate
 
-      - run: scripts/publish.sh
+      - run: scripts/publish-snapshot.sh
         env:
           YARN_NPM_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
