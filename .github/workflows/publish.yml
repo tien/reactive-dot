@@ -20,7 +20,7 @@ jobs:
 
       - uses: changesets/action@v1
         with:
-          publish: yarn build:packages && scripts/publish.sh
+          publish: yarn publish:packages
           commit: "chore: version packages"
           title: "chore: version packages"
         env:

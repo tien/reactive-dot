@@ -29,6 +29,7 @@
     "dev": "nx run-many -t dev",
     "build": "nx run-many -t build",
     "build:packages": "nx run-many -t build --projects='packages/*'",
+    "publish:packages": "yarn build:packages && scripts/publish.sh",
     "lint": "nx run-many -t lint -- --max-warnings=0",
     "test": "nx run-many -t test",
     "postinstall": "husky"
