@@ -1,7 +1,6 @@
 import { ReDotError } from "../../errors.js";
 import DeepLinkWallet from "../deep-link.js";
 import { getPolkadotSignerFromPjs } from "./from-pjs-account.js";
-import "@polkadot-api/pjs-signer";
 import type {
   WalletConnectModal,
   WalletConnectModalConfig,
