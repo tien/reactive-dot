@@ -1,6 +1,9 @@
 import * as signedExtensionMappers from "./pjs-signed-extensions-mappers.js";
 import type { SignPayload, SignRaw, SignerPayloadJSON } from "./types.js";
-import { getDynamicBuilder } from "@polkadot-api/metadata-builders";
+import {
+  getDynamicBuilder,
+  getLookupFn,
+} from "@polkadot-api/metadata-builders";
 import type { PolkadotSigner } from "@polkadot-api/polkadot-signer";
 import {
   AccountId,
@@ -14,7 +17,7 @@ import {
 import { fromHex, mergeUint8, toHex } from "@polkadot-api/utils";
 
 export function getAddressFormat(metadata: V15): number {
-  const dynamicBuilder = getDynamicBuilder(metadata);
+  const dynamicBuilder = getDynamicBuilder(getLookupFn(metadata));
 
   const constant = metadata.pallets
     .find((x) => x.name === "System")!
