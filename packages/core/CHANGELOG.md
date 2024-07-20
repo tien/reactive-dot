@@ -1,5 +1,16 @@
 # @reactive-dot/core
 
+## 0.2.0
+
+### Minor Changes
+
+- [#14](https://github.com/tien/reactive-dot/pull/14) [`11b17b0`](https://github.com/tien/reactive-dot/commit/11b17b0b7819f44ebca5c08ba2e11d36dde5f8f7) Thanks [@tien](https://github.com/tien)! - Support for Polkadot-API version 0.11.2
+
+### Patch Changes
+
+- Updated dependencies []:
+  - @reactive-dot/utils@0.2.0
+
 ## 0.1.1
 
 ### Patch Changes
