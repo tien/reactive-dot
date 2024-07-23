@@ -1,6 +1,6 @@
 import type { MaybeAsync } from "../types.js";
 import { toObservable } from "../utils.js";
-import type Wallet from "../wallets/wallet.js";
+import type { Wallet } from "../wallets/wallet.js";
 import type { ChainSpecData } from "@polkadot-api/substrate-client";
 import { combineLatest } from "rxjs";
 import { map, switchMap } from "rxjs/operators";

@@ -1,11 +1,11 @@
-import InjectedWallet from "../injected.js";
+import { InjectedWallet } from "../injected.js";
 import type { WalletOptions } from "../wallet.js";
-import WalletAggregator from "./aggregator.js";
+import { WalletAggregator } from "./aggregator.js";
 import { getInjectedExtensions } from "polkadot-api/pjs-signer";
 import { BehaviorSubject } from "rxjs";
 import { map } from "rxjs/operators";
 
-export default class InjectedWalletAggregator extends WalletAggregator {
+export class InjectedWalletAggregator extends WalletAggregator {
   #walletOptions: WalletOptions | undefined;
 
   constructor(options?: WalletOptions) {

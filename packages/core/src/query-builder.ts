@@ -222,7 +222,7 @@ export type InferQueryPayload<T extends Query> =
     ? InferInstructionsPayload<Instructions, Descriptor>
     : never;
 
-export default class Query<
+export class Query<
   const TInstructions extends QueryInstruction[] = QueryInstruction[],
   TDescriptor extends ChainDefinition = CommonDescriptor,
 > {

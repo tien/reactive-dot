@@ -1,4 +1,4 @@
-export default class DenominatedNumber extends Number {
+export class DenominatedNumber extends Number {
   // Large values lead to massive memory usage. Limit to something sensible.
   static #maxDecimal = 100;
 

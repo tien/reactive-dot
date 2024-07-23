@@ -1,4 +1,4 @@
-import config from "./config";
+import { config } from "./config";
 import { IDLE, MutationError, PENDING } from "@reactive-dot/core";
 import type { Wallet } from "@reactive-dot/core/wallets.js";
 import {
@@ -374,7 +374,7 @@ function Example(props: ExampleProps) {
   );
 }
 
-export default function App() {
+export function App() {
   return (
     <ReDotProvider config={config}>
       <Suspense fallback="Loading wallet connection...">

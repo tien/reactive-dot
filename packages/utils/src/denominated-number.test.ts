@@ -1,4 +1,4 @@
-import DenominatedNumber from "./DenominatedNumber.js";
+import { DenominatedNumber } from "./denominated-number.js";
 import { describe, expect, it } from "vitest";
 
 describe("DenominatedNumber", () => {

@@ -6,7 +6,7 @@ import {
 import { typedApiAtomFamily } from "../stores/client.js";
 import type { ChainHookOptions } from "./types.js";
 import { useAsyncState } from "./use-async-state.js";
-import useChainId from "./use-chain-id.js";
+import { useChainId } from "./use-chain-id.js";
 import type { ChainId, Chains } from "@reactive-dot/core";
 import { MutationError, PENDING } from "@reactive-dot/core";
 import { useAtomCallback } from "jotai/utils";

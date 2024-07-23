@@ -1,5 +1,5 @@
 import { ReDotError } from "../errors.js";
-import Wallet, { type WalletOptions } from "./wallet.js";
+import { Wallet, type WalletOptions } from "./wallet.js";
 import {
   connectInjectedExtension,
   type InjectedExtension,
@@ -8,7 +8,7 @@ import {
 import { BehaviorSubject, Observable } from "rxjs";
 import { map, switchMap } from "rxjs/operators";
 
-export default class InjectedWallet extends Wallet {
+export class InjectedWallet extends Wallet {
   readonly #extension$ = new BehaviorSubject<InjectedExtension | undefined>(
     undefined,
   );

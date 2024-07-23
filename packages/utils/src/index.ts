@@ -1,1 +1,1 @@
-export { default as DenominatedNumber } from "./DenominatedNumber.js";
+export { DenominatedNumber } from "./denominated-number.js";

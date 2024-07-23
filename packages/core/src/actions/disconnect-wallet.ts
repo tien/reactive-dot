@@ -1,4 +1,4 @@
-import type Wallet from "../wallets/wallet.js";
+import type { Wallet } from "../wallets/wallet.js";
 
 export async function disconnectWallet(wallet: Wallet | Wallet[]) {
   const walletsToDisconnect = Array.isArray(wallet) ? wallet : [wallet];
