@@ -61,11 +61,11 @@ import { useMutation } from "@reactive-dot/react";
 import { Binary } from "polkadot-api";
 
 function Component() {
-  const [transactionState, submit] = useMutation((tx) =>
+  const [remarkState, submit] = useMutation((tx) =>
     tx.System.remark({ remark: Binary.fromText("Hello from reactive-dot!") }),
   );
 
-  switch (transactionState) {
+  switch (remarkState) {
     case IDLE:
       return <div>No transaction submitted yet</div>;
     case PENDING:
