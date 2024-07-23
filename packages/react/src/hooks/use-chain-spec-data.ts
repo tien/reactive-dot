@@ -1,6 +1,6 @@
 import { chainSpecDataAtomFamily } from "../stores/client.js";
 import type { ChainHookOptions } from "./types.js";
-import useChainId from "./useChainId.js";
+import useChainId from "./use-chain-id.js";
 import { useAtomValue } from "jotai";
 
 /**

@@ -5,7 +5,7 @@ import {
 import type { Falsy, FalsyGuard, FlatHead } from "../types.js";
 import { flatHead, stringify } from "../utils/vanilla.js";
 import type { ChainHookOptions } from "./types.js";
-import useChainId from "./useChainId.js";
+import useChainId from "./use-chain-id.js";
 import {
   IDLE,
   Query,
