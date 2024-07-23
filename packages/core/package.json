@@ -39,10 +39,10 @@
     "lint": "eslint src"
   },
   "dependencies": {
-    "@reactive-dot/utils": "workspace:*"
+    "@reactive-dot/utils": "workspace:^"
   },
   "devDependencies": {
-    "@reactive-dot/eslint-config": "workspace:*",
+    "@reactive-dot/eslint-config": "workspace:^",
     "@tsconfig/recommended": "^1.0.7",
     "@tsconfig/strictest": "^2.0.5",
     "@walletconnect/modal": "^2.6.2",
