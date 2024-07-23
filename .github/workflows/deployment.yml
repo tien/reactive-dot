@@ -1,4 +1,4 @@
-name: Deployement
+name: Deployment
 
 on:
   push:
