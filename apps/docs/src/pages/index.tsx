@@ -1,8 +1,8 @@
-import HomepageSponsors from "../components/homepage-sponsors";
+import { HomepageSponsors } from "../components/homepage-sponsors";
 import styles from "./index.module.css";
 import Link from "@docusaurus/Link";
 import useDocusaurusContext from "@docusaurus/useDocusaurusContext";
-import HomepageFeatures from "@site/src/components/homepage-features";
+import { HomepageFeatures } from "@site/src/components/homepage-features";
 import Heading from "@theme/Heading";
 import Layout from "@theme/Layout";
 import clsx from "clsx";

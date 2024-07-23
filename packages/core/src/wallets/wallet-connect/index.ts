@@ -1,5 +1,5 @@
 import { ReDotError } from "../../errors.js";
-import DeepLinkWallet from "../deep-link.js";
+import { DeepLinkWallet } from "../deep-link.js";
 import { getPolkadotSignerFromPjs } from "./from-pjs-account.js";
 import type {
   WalletConnectModal,
@@ -14,7 +14,7 @@ import type { InjectedPolkadotAccount } from "polkadot-api/pjs-signer";
 import { BehaviorSubject, lastValueFrom } from "rxjs";
 import { map } from "rxjs/operators";
 
-export default class WalletConnect extends DeepLinkWallet {
+export class WalletConnect extends DeepLinkWallet {
   readonly #providerOptions: UniversalProviderOpts;
 
   #provider: IUniversalProvider | undefined;

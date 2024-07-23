@@ -6,7 +6,7 @@ export type WalletOptions = {
   storage?: PrefixedStorage | undefined;
 };
 
-export default abstract class Wallet {
+export abstract class Wallet {
   abstract readonly id: string;
 
   abstract readonly name: string;

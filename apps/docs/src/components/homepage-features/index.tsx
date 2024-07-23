@@ -65,7 +65,7 @@ function Feature({ title, emoji, description }: FeatureItem) {
   );
 }
 
-export default function HomepageFeatures() {
+export function HomepageFeatures() {
   return (
     <section className={clsx(styles.features, "margin-vert--lg")}>
       <div className="container">

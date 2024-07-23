@@ -1,5 +1,5 @@
 export {
-  default as Query,
+  Query,
   type InferQueryPayload,
   type InferQueryResponse,
   type MultiInstruction,

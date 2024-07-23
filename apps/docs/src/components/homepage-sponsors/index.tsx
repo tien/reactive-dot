@@ -96,7 +96,7 @@ function Sponsor({ title, image, href }: SponsorItem) {
   );
 }
 
-export default function HomepageSponsors() {
+export function HomepageSponsors() {
   return (
     <section className="margin-vert--lg">
       <header className="text--center">
