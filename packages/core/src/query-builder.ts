@@ -225,8 +225,7 @@ export type InferQueryPayload<T extends Query> =
 export default class Query<
   const TInstructions extends QueryInstruction[] = QueryInstruction[],
   TDescriptor extends ChainDefinition = CommonDescriptor,
-> implements Query<TInstructions>
-{
+> {
   #instructions: TInstructions;
 
   constructor(instructions: TInstructions) {
