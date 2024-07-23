@@ -49,7 +49,7 @@
     "@walletconnect/universal-provider": "^2.14.0",
     "eslint": "^9.7.0",
     "polkadot-api": "^0.11.2",
-    "typescript": "^5.5.3"
+    "typescript": "^5.5.4"
   },
   "peerDependencies": {
     "@walletconnect/modal": "2.x",
