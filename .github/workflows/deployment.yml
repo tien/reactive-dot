@@ -10,6 +10,7 @@ jobs:
 
     permissions:
       contents: read
+      deployments: write
 
     steps:
       - uses: actions/checkout@v4
@@ -23,3 +24,4 @@ jobs:
           accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
           projectName: reactive-dot
           directory: apps/docs/build
+          gitHubToken: ${{ secrets.GITHUB_TOKEN }}
