@@ -1,5 +1,14 @@
 # @reactive-dot/core
 
+## 0.3.1
+
+### Patch Changes
+
+- [#43](https://github.com/tien/reactive-dot/pull/43) [`be24bc6`](https://github.com/tien/reactive-dot/commit/be24bc60c87fc4e35c68aa9412cdb225d4c9b895) Thanks [@tien](https://github.com/tien)! - Fix incorrect return type from `useAccounts` hook.
+
+- Updated dependencies []:
+  - @reactive-dot/utils@0.3.1
+
 ## 0.3.0
 
 ### Minor Changes
