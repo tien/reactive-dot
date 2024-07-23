@@ -1,5 +1,16 @@
 # @reactive-dot/react
 
+## 0.3.0
+
+### Patch Changes
+
+- [#36](https://github.com/tien/reactive-dot/pull/36) [`dfa501f`](https://github.com/tien/reactive-dot/commit/dfa501f0d6e26fc010f50ca5b67ec8f0675f9c9a) Thanks [@tien](https://github.com/tien)! - Use `^` (compatible) version range.
+
+- [#33](https://github.com/tien/reactive-dot/pull/33) [`ea12e2a`](https://github.com/tien/reactive-dot/commit/ea12e2af95cf8e45bbc602587383b1dffb4d6b42) Thanks [@tien](https://github.com/tien)! - Add React to peer dependencies.
+
+- Updated dependencies [[`eea304b`](https://github.com/tien/reactive-dot/commit/eea304b1fd1ddaa31691f01cbc4e03d998bb4fdf), [`dfa501f`](https://github.com/tien/reactive-dot/commit/dfa501f0d6e26fc010f50ca5b67ec8f0675f9c9a)]:
+  - @reactive-dot/core@0.3.0
+
 ## 0.2.0
 
 ### Patch Changes

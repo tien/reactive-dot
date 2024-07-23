@@ -1,5 +1,11 @@
 # @reactive-dot/utils
 
+## 0.3.0
+
+### Patch Changes
+
+- [#36](https://github.com/tien/reactive-dot/pull/36) [`dfa501f`](https://github.com/tien/reactive-dot/commit/dfa501f0d6e26fc010f50ca5b67ec8f0675f9c9a) Thanks [@tien](https://github.com/tien)! - Use `^` (compatible) version range.
+
 ## 0.2.0
 
 ## 0.1.1
