@@ -1,4 +1,4 @@
-import type { MaybeAsync } from "../types.js";
+import type { MaybeAsync, PolkadotAccount } from "../types.js";
 import { toObservable } from "../utils.js";
 import type { Wallet } from "../wallets/wallet.js";
 import type { ChainSpecData } from "@polkadot-api/substrate-client";
@@ -15,7 +15,9 @@ export function getAccounts(
         wallets.map((wallet) =>
           wallet.accounts$.pipe(
             map((accounts) =>
-              accounts.map((account) => ({ ...account, wallet })),
+              accounts.map(
+                (account): PolkadotAccount => ({ ...account, wallet }),
+              ),
             ),
           ),
         ),
