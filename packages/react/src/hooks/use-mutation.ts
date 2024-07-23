@@ -43,19 +43,16 @@ export function useMutation<
   TChainId extends ChainId,
 >(
   action: TAction,
-  options?: ChainHookOptions<
-    TChainId,
-    {
-      /**
-       * Override default signer
-       */
-      signer?: PolkadotSigner;
-      /**
-       * Additional transaction options
-       */
-      txOptions?: TxOptions<ReturnType<TAction>>;
-    }
-  >,
+  options?: ChainHookOptions<TChainId> & {
+    /**
+     * Override default signer
+     */
+    signer?: PolkadotSigner;
+    /**
+     * Additional transaction options
+     */
+    txOptions?: TxOptions<ReturnType<TAction>>;
+  },
 ) {
   const chainId = useChainId(options);
   const mutationEventSubject = useContext(MutationEventSubjectContext);
