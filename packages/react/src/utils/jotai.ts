@@ -22,8 +22,8 @@ export class AtomFamilyError extends QueryError {
       ? Param
       : unknown,
     message?: string,
-  ): AtomFamilyError {
-    return new AtomFamilyError(atomFamily, param, message, {
+  ) {
+    return new this(atomFamily, param, message, {
       cause: error,
     });
   }
