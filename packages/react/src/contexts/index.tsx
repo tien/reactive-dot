@@ -1,4 +1,4 @@
-import { useReconnectWallets } from "../hooks/useReconnectWallets.js";
+import { useReconnectWallets } from "../hooks/use-reconnect-wallets.js";
 import { chainConfigsAtom } from "../stores/config.js";
 import { aggregatorsAtom, directWalletsAtom } from "../stores/wallets.js";
 import { MutationEventSubjectContext } from "./mutation.js";

@@ -1,8 +1,8 @@
+import type { CommonDescriptor } from "../config.js";
 import type {
   InferInstructionResponse,
   QueryInstruction,
-} from "../QueryBuilder.js";
-import type { CommonDescriptor } from "../config.js";
+} from "../query-builder.js";
 import type { ChainDefinition, TypedApi } from "polkadot-api";
 
 export function preflight<TInstruction extends QueryInstruction>(

@@ -4,7 +4,7 @@ export {
   type InferQueryResponse,
   type MultiInstruction,
   type QueryInstruction,
-} from "./QueryBuilder.js";
+} from "./query-builder.js";
 export * from "./actions/index.js";
 export * from "./async-state.js";
 export * from "./errors.js";

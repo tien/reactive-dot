@@ -1,4 +1,4 @@
-import { useWallets } from "./useWallets.js";
+import { useWallets } from "./use-wallets.js";
 import {
   IDLE,
   PENDING,
