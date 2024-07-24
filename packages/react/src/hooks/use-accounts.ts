@@ -1,6 +1,6 @@
 import { accountsAtom } from "../stores/accounts.js";
 import type { ChainHookOptions } from "./types.js";
-import { useChainId } from "./use-chain-id.js";
+import { useChainId_INTERNAL } from "./use-chain-id.js";
 import { useAtomValue } from "jotai";
 
 /**
@@ -10,5 +10,5 @@ import { useAtomValue } from "jotai";
  * @returns The currently connected accounts
  */
 export function useAccounts(options?: ChainHookOptions) {
-  return useAtomValue(accountsAtom(useChainId(options)));
+  return useAtomValue(accountsAtom(useChainId_INTERNAL(options)));
 }

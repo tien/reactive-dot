@@ -9,12 +9,13 @@ export {
 export type { ChainHookOptions } from "./hooks/types.js";
 export { useAccounts } from "./hooks/use-accounts.js";
 export { useBlock } from "./hooks/use-block.js";
+export { useChainId } from "./hooks/use-chain-id.js";
 export { useChainSpecData } from "./hooks/use-chain-spec-data.js";
 export { useClient } from "./hooks/use-client.js";
 export { useConnectWallet } from "./hooks/use-connect-wallet.js";
 export { useDisconnectWallet } from "./hooks/use-disconnect-wallet.js";
-export { useMutation } from "./hooks/use-mutation.js";
 export { useMutationEffect } from "./hooks/use-mutation-effect.js";
+export { useMutation } from "./hooks/use-mutation.js";
 export {
   useLazyLoadQuery,
   useLazyLoadQueryWithRefresh,

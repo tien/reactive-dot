@@ -5,7 +5,7 @@ import {
 import type { Falsy, FalsyGuard, FlatHead } from "../types.js";
 import { flatHead, stringify } from "../utils/vanilla.js";
 import type { ChainHookOptions } from "./types.js";
-import { useChainId } from "./use-chain-id.js";
+import { useChainId_INTERNAL } from "./use-chain-id.js";
 import {
   IDLE,
   Query,
@@ -37,7 +37,7 @@ export function useQueryRefresher<
     : Chains[TChainId],
   TChainId extends ChainId,
 >(builder: TQuery, options?: ChainHookOptions<TChainId>) {
-  const chainId = useChainId(options);
+  const chainId = useChainId_INTERNAL(options);
 
   const refresh = useAtomCallback(
     useCallback(
@@ -99,7 +99,7 @@ export function useLazyLoadQueryWithRefresh<
       >,
   refresh: () => void,
 ] {
-  const chainId = useChainId(options);
+  const chainId = useChainId_INTERNAL(options);
 
   const query = useMemo(
     () => (!builder ? undefined : builder(new Query([]))),
