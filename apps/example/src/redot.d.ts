@@ -1,4 +1,4 @@
-import type config from "./config.js";
+import type { config } from "./config.js";
 import type { InferChains } from "@reactive-dot/core";
 
 declare module "@reactive-dot/core" {
