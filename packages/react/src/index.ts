@@ -8,7 +8,7 @@ export {
 } from "./contexts/index.js";
 export type { ChainHookOptions } from "./hooks/types.js";
 export { useAccounts } from "./hooks/use-accounts.js";
-export { useBlock } from "./hooks/use-block.js";
+export { useBlock, useBlockBody, useBlockHeader } from "./hooks/use-block.js";
 export { useChainId } from "./hooks/use-chain-id.js";
 export { useChainSpecData } from "./hooks/use-chain-spec-data.js";
 export { useClient } from "./hooks/use-client.js";
