@@ -46,15 +46,21 @@ export function query<
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       return (api.apis[instruction.pallet]![instruction.api] as any)(
         ...instruction.args,
-        { signal: options?.signal },
+        { signal: options?.signal, at: instruction.at },
       );
-    case "read-storage":
-      return (
+    case "read-storage": {
+      const storageEntry = api.query[instruction.pallet]![
+        instruction.storage
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        (api.query[instruction.pallet]![instruction.storage] as any).watchValue(
-          ...instruction.args,
-        )
-      );
+      ] as any;
+
+      return instruction.at?.startsWith("0x")
+        ? storageEntry.getValue(...instruction.args, { at: instruction.at })
+        : storageEntry.watchValue(
+            ...instruction.args,
+            ...[instruction.at].filter((x) => x !== undefined),
+          );
+    }
     case "read-storage-entries":
       return (
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -62,6 +68,7 @@ export function query<
           ...instruction.args,
           {
             signal: options?.signal,
+            at: instruction.at,
           },
         )
       );

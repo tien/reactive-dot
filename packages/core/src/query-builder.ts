@@ -8,8 +8,6 @@ type PapiCallOptions = Partial<{
   signal: AbortSignal;
 }>;
 
-type CallOptions = Omit<PapiCallOptions, "signal">;
-
 type OmitCallOptions<T extends readonly unknown[]> = T extends [
   infer Head,
   ...infer Tail,
@@ -20,20 +18,20 @@ type OmitCallOptions<T extends readonly unknown[]> = T extends [
   : [];
 
 type InferPapiStorageEntry<T> = T extends {
-  watchValue: (...args: [...infer Args, infer At]) => infer Response;
+  watchValue: (...args: [...infer Args, infer _]) => infer Response;
 }
-  ? { args: Args; options: { at: At }; response: Response }
-  : { args: unknown[]; options: unknown; response: unknown };
+  ? { args: Args; response: Response }
+  : { args: unknown[]; response: unknown };
 
 type InferPapiStorageEntries<T> = T extends {
   getEntries: (...args: infer Args) => infer Response;
 }
-  ? { args: OmitCallOptions<Args>; options: CallOptions; response: Response }
-  : { args: unknown[]; options: unknown; response: unknown };
+  ? { args: OmitCallOptions<Args>; response: Response }
+  : { args: unknown[]; response: unknown };
 
 type InferPapiRuntimeCall<T> = T extends (...args: infer Args) => infer Response
-  ? { args: OmitCallOptions<Args>; options: CallOptions; response: Response }
-  : { args: unknown[]; options: unknown; response: unknown };
+  ? { args: OmitCallOptions<Args>; response: Response }
+  : { args: unknown[]; response: unknown };
 
 type InferPapiConstantEntry<T> = T extends {
   (): Promise<infer Payload>;
@@ -41,6 +39,8 @@ type InferPapiConstantEntry<T> = T extends {
 }
   ? Promise<Payload>
   : unknown;
+
+type At = "best" | "finalized" | `0x${string}`;
 
 type BaseInstruction<T extends string> = {
   instruction: T;
@@ -66,6 +66,7 @@ export type StorageReadInstruction<
   pallet: TPallet;
   storage: TStorage;
   args: TArguments;
+  at: At | undefined;
 };
 
 export type StorageEntriesReadInstruction<
@@ -79,6 +80,7 @@ export type StorageEntriesReadInstruction<
   pallet: TPallet;
   storage: TStorage;
   args: TArguments;
+  at: At | undefined;
 };
 
 export type ApiCallInstruction<
@@ -92,6 +94,7 @@ export type ApiCallInstruction<
   pallet: TPallet;
   api: TApi;
   args: TArguments;
+  at: At | undefined;
 };
 
 export type MultiInstruction<TInstruction extends BaseInstruction<string>> =
@@ -253,15 +256,18 @@ export class Query<
     TArguments extends InferPapiStorageEntry<
       TypedApi<TDescriptor>["query"][TPallet][TStorage]
     >["args"],
-    TOptions extends InferPapiStorageEntry<
-      TypedApi<TDescriptor>["query"][TPallet][TStorage]
-    >["options"],
-  >(pallet: TPallet, storage: TStorage, args: TArguments, options?: TOptions) {
+  >(
+    pallet: TPallet,
+    storage: TStorage,
+    args: TArguments,
+    options?: { at?: At },
+  ) {
     return this.#append({
       instruction: "read-storage",
       pallet,
       storage,
-      args: options === undefined ? args : [...args, options],
+      args,
+      at: options?.at,
     });
   }
 
@@ -271,21 +277,18 @@ export class Query<
     TArguments extends InferPapiStorageEntry<
       TypedApi<TDescriptor>["query"][TPallet][TStorage]
     >["args"],
-    TOptions extends InferPapiStorageEntry<
-      TypedApi<TDescriptor>["query"][TPallet][TStorage]
-    >["options"],
   >(
     pallet: TPallet,
     storage: TStorage,
     args: TArguments[],
-    options?: TOptions,
+    options?: { at?: At },
   ) {
     return this.#append({
       instruction: "read-storage",
       pallet,
       storage,
-      args:
-        options === undefined ? args : args.map((args) => [...args, options]),
+      args,
+      at: options?.at,
       multi: true,
     });
   }
@@ -296,17 +299,18 @@ export class Query<
     TArguments extends InferPapiStorageEntries<
       TypedApi<TDescriptor>["query"][TPallet][TStorage]
     >["args"],
-    TOptions extends Array<
-      InferPapiStorageEntries<
-        TypedApi<TDescriptor>["query"][TPallet][TStorage]
-      >["options"]
-    >,
-  >(pallet: TPallet, storage: TStorage, args: TArguments, options?: TOptions) {
+  >(
+    pallet: TPallet,
+    storage: TStorage,
+    args: TArguments,
+    options?: { at?: At },
+  ) {
     return this.#append({
       instruction: "read-storage-entries",
       pallet,
       storage,
-      args: options === undefined ? args : [...args, options],
+      args,
+      at: options?.at,
     });
   }
 
@@ -316,15 +320,13 @@ export class Query<
     TArguments extends InferPapiRuntimeCall<
       TypedApi<TDescriptor>["apis"][TPallet][TApi]
     >["args"],
-    TOptions extends InferPapiRuntimeCall<
-      TypedApi<TDescriptor>["apis"][TPallet][TApi]
-    >["options"],
-  >(pallet: TPallet, api: TApi, args: TArguments, options?: TOptions) {
+  >(pallet: TPallet, api: TApi, args: TArguments, options?: { at?: At }) {
     return this.#append({
       instruction: "call-api",
       pallet,
       api,
-      args: options === undefined ? args : [...args, options],
+      args,
+      at: options?.at,
     });
   }
 
@@ -334,16 +336,13 @@ export class Query<
     TArguments extends InferPapiRuntimeCall<
       TypedApi<TDescriptor>["apis"][TPallet][TApi]
     >["args"],
-    TOptions extends InferPapiRuntimeCall<
-      TypedApi<TDescriptor>["apis"][TPallet][TApi]
-    >["options"],
-  >(pallet: TPallet, api: TApi, args: TArguments[], options?: TOptions) {
+  >(pallet: TPallet, api: TApi, args: TArguments[], options?: { at?: At }) {
     return this.#append({
       instruction: "call-api",
       pallet,
       api,
-      args:
-        options === undefined ? args : args.map((args) => [...args, options]),
+      args,
+      at: options?.at,
       multi: true,
     });
   }
