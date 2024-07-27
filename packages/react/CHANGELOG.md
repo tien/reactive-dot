@@ -1,5 +1,19 @@
 # @reactive-dot/react
 
+## 0.4.0
+
+### Minor Changes
+
+- [#47](https://github.com/tien/reactive-dot/pull/47) [`435791b`](https://github.com/tien/reactive-dot/commit/435791b0a8a715f576b9d30ffba24572a6913bc3) Thanks [@tien](https://github.com/tien)! - Add `useChainId` hook.
+
+  - Get current chain ID from context
+  - Optionally assert current chain ID using allowlist and/or denylist
+
+### Patch Changes
+
+- Updated dependencies [[`18cb167`](https://github.com/tien/reactive-dot/commit/18cb167af54c57aa3d6af999e621618d10bbaac5)]:
+  - @reactive-dot/core@0.4.0
+
 ## 0.3.1
 
 ### Patch Changes
