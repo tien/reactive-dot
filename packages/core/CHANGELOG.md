@@ -1,5 +1,14 @@
 # @reactive-dot/core
 
+## 0.4.0
+
+### Patch Changes
+
+- [#56](https://github.com/tien/reactive-dot/pull/56) [`18cb167`](https://github.com/tien/reactive-dot/commit/18cb167af54c57aa3d6af999e621618d10bbaac5) Thanks [@tien](https://github.com/tien)! - Fix query crashing when specifying the `at` option.
+
+- Updated dependencies []:
+  - @reactive-dot/utils@0.4.0
+
 ## 0.3.1
 
 ### Patch Changes
