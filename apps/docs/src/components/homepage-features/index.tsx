@@ -34,10 +34,7 @@ const FeatureList: FeatureItem[] = [
     title: (
       <span>
         Powered by{" "}
-        <a
-          href="https://polkadot-api.github.io/polkadot-api-docs"
-          target="_blank"
-        >
+        <a href="https://papi.how/" target="_blank">
           Polkadot-API
         </a>
       </span>
