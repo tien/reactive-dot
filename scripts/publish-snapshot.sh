@@ -49,7 +49,7 @@ while IFS= read -r -d '' package_json; do
   fi
 done < <(find . -name package.json -type f -not -path "*/node_modules/*" -print0)
 
-yarn workspaces foreach -At --no-private npm publish --access public --tag snapshot --tolerate-republish
+yarn workspaces foreach -Apt --no-private npm publish --access public --tag snapshot --tolerate-republish
 
 # Delete only the created LICENSE files
 for file in "${created_files[@]}"; do
