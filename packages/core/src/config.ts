@@ -13,6 +13,7 @@ export type Config = {
   readonly wallets?: Array<WalletAggregator | Wallet>;
 };
 
+// eslint-disable-next-line @typescript-eslint/no-empty-object-type
 export interface Chains {}
 
 export type InferChains<T extends Config> = {

@@ -19,7 +19,7 @@ const instructionPayloadAtomFamily = atomFamily(
     instruction: Exclude<
       QueryInstruction,
       MultiInstruction<// @ts-expect-error need any empty object here
-      // eslint-disable-next-line @typescript-eslint/ban-types
+      // eslint-disable-next-line @typescript-eslint/no-empty-object-type
       {}>
     >;
   }): Atom<unknown> | WritableAtom<Promise<unknown>, [], void> => {
