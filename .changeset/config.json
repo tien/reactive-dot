@@ -7,5 +7,5 @@
     { "repo": "tien/reactive-dot" }
   ],
   "privatePackages": false,
-  "fixed": [["@reactive-dot/*"]]
+  "linked": [["@reactive-dot/*"]]
 }
