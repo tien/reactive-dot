@@ -1,5 +1,11 @@
 # @reactive-dot/core
 
+## 0.5.0
+
+### Minor Changes
+
+- [#74](https://github.com/tien/reactive-dot/pull/74) [`294d7f0`](https://github.com/tien/reactive-dot/commit/294d7f07b4e622eac94c55c43c400d8eae34ad01) Thanks [@tien](https://github.com/tien)! - **BREAKING**: move `WalletConnect` logic to dedicated subpath export.
+
 ## 0.4.0
 
 ### Patch Changes
