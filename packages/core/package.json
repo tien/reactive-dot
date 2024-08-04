@@ -29,8 +29,12 @@
       "default": "./build/index.js"
     },
     "./wallets.js": {
-      "default": "./build/wallets/index.js",
-      "types": "./src/wallets/index.ts"
+      "types": "./src/wallets/index.ts",
+      "default": "./build/wallets/index.js"
+    },
+    "./wallets/wallet-connect.js": {
+      "types": "./src/wallets/wallet-connect/index.ts",
+      "default": "./build/wallets/wallet-connect/index.js"
     }
   },
   "scripts": {

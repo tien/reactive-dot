@@ -1,5 +1,5 @@
-import { ReDotError } from "../errors.js";
-import { Wallet, type WalletOptions } from "./wallet.js";
+import { ReDotError } from "../../errors.js";
+import { Wallet, type WalletOptions } from "../wallet.js";
 import {
   connectInjectedExtension,
   type InjectedExtension,

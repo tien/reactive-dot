@@ -1,9 +1,7 @@
 import { kusama, polkadot, westend } from "@polkadot-api/descriptors";
 import type { Config } from "@reactive-dot/core";
-import {
-  InjectedWalletAggregator,
-  WalletConnect,
-} from "@reactive-dot/core/wallets.js";
+import { InjectedWalletAggregator } from "@reactive-dot/core/wallets.js";
+import { WalletConnect } from "@reactive-dot/core/wallets/wallet-connect.js";
 import { getSmProvider } from "polkadot-api/sm-provider";
 import { startFromWorker } from "polkadot-api/smoldot/from-worker";
 
