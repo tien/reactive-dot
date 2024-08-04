@@ -1,4 +1,4 @@
-import type { Wallet } from "../wallet.js";
+import type { Wallet } from "./wallet.js";
 import type { Observable } from "rxjs";
 
 export abstract class WalletAggregator {
