@@ -24,9 +24,7 @@ function Component() {
 
 ## Typed API
 
-The `TypedApi` allows easy interaction with the runtime metadata, with a great developer experience. .
-
-`PolkadotClient` interface shapes the top-level API for `polkadot-api`. You can find the full documentation [here](https://papi.how/typed).
+The `TypedApi` allows easy interaction with the runtime metadata, with a great developer experience. You can find the full documentation [here](https://papi.how/typed).
 
 ```ts
 import { useTypedApi } from "@reactive-dot/react";
