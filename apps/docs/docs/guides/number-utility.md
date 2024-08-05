@@ -4,6 +4,8 @@ sidebar_position: 2
 
 # Number utility
 
+## Denominated number
+
 To handle complexity around [planck unit](https://wiki.polkadot.network/docs/learn-DOT#the-planck-unit) used in Polkadot, a utility class [`DenominatedNumber`](/api/utils/class/DenominatedNumber) is provided by [`@reactive-dot/utils`](https://reactivedot.dev/api/utils).
 
 ```ts
@@ -45,4 +47,33 @@ console.log(dotAmount.toLocaleString()); // DOT 10.50
 dotAmount = dotAmount.mapFromNumber((number) => (number * 2) / 4);
 
 console.log(dotAmount.toLocaleString()); // DOT 5.25
+```
+
+## Native token
+
+Two hooks [`useNativeTokenAmountFromPlanck`](/api/react/function/useNativeTokenAmountFromPlanck) & [`useNativeTokenAmountFromNumber`](/api/react/function/useNativeTokenAmountFromNumber) are also provided for easy conversion from planck and/or number value to native token amount.
+
+```ts
+import {
+  useNativeTokenAmountFromNumber,
+  useNativeTokenAmountFromPlanck,
+} from "@reactive-dot/react";
+
+let amount = useNativeTokenAmountFromPlanck(10_000_000_000n);
+// Or
+amount = useNativeTokenAmountFromNumber(1);
+
+console.log(amount.toLocaleString("en-NZ")); // DOT 1.00
+
+// Partial application is also supported by omitting the planck/number value.
+// Here, a conversion function will be returned instead.
+const amountFromPlanck = useNativeTokenAmountFromPlanck();
+
+[10_000_000_000n, 20_000_000_000n, 30_000_000_000n]
+  .map(amountFromPlanck)
+  .map((amount) => amount.toLocaleString("en-NZ"))
+  .forEach(console.log);
+// DOT 1.00
+// DOT 2.00
+// DOT 3.00
 ```
