@@ -1,12 +1,12 @@
 ---
-sidebar_position: 5
+sidebar_position: 1
 ---
 
 # Multichain
 
 ## Setup
 
-Multichain setup can be done by adding extra chain configurations, after having followed this guide [here](./setup.mdx).
+Multichain setup can be done by adding extra chain configurations, after having followed this guide [here](../getting-started/setup.mdx).
 
 ### Download & sync metadata
 
