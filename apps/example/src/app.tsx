@@ -6,39 +6,28 @@ import {
   ReDotProvider,
   useAccounts,
   useBlock,
-  useChainSpecData,
   useConnectWallet,
   useConnectedWallets,
   useDisconnectWallet,
-  useMutation,
   useLazyLoadQuery,
   useLazyLoadQueryWithRefresh,
+  useMutation,
+  useMutationEffect,
+  useNativeTokenAmountFromPlanck,
   useResetQueryError,
   useWallets,
-  useMutationEffect,
 } from "@reactive-dot/react";
-import { DenominatedNumber } from "@reactive-dot/utils";
 import { formatDistance } from "date-fns";
 import { Binary } from "polkadot-api";
 import { Suspense, useState, useTransition } from "react";
 import { ErrorBoundary, type FallbackProps } from "react-error-boundary";
 import toast, { Toaster } from "react-hot-toast";
 
-function useNativeTokenNumberWithPlanck(planck: bigint) {
-  const chainSpecData = useChainSpecData();
-
-  return new DenominatedNumber(
-    planck,
-    chainSpecData.properties.tokenDecimals,
-    chainSpecData.properties.tokenSymbol,
-  );
-}
-
 function PendingRewards(props: { address: string; rewards: bigint }) {
   return (
     <li>
       {props.address}:{" "}
-      {useNativeTokenNumberWithPlanck(props.rewards).toLocaleString()}
+      {useNativeTokenAmountFromPlanck(props.rewards).toLocaleString()}
     </li>
   );
 }
@@ -143,7 +132,7 @@ function Query() {
       </article>
       <article>
         <h4>Total issuance</h4>
-        <p>{useNativeTokenNumberWithPlanck(totalIssuance).toLocaleString()}</p>
+        <p>{useNativeTokenAmountFromPlanck(totalIssuance).toLocaleString()}</p>
       </article>
       <article>
         <h4>Bonding duration</h4>
@@ -152,7 +141,7 @@ function Query() {
       <article>
         <h4>Total value staked</h4>
         <p>
-          {useNativeTokenNumberWithPlanck(
+          {useNativeTokenAmountFromPlanck(
             typeof totalStaked === "bigint" ? totalStaked : 0n,
           ).toLocaleString()}
         </p>
@@ -160,7 +149,7 @@ function Query() {
       <article>
         <h4>Total value locked in nomination Pools</h4>
         <p>
-          {useNativeTokenNumberWithPlanck(totalValueLocked).toLocaleString()}
+          {useNativeTokenAmountFromPlanck(totalValueLocked).toLocaleString()}
         </p>
       </article>
       <article>

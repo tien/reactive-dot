@@ -17,6 +17,10 @@ export { useDisconnectWallet } from "./hooks/use-disconnect-wallet.js";
 export { useMutationEffect } from "./hooks/use-mutation-effect.js";
 export { useMutation } from "./hooks/use-mutation.js";
 export {
+  useNativeTokenAmountFromNumber,
+  useNativeTokenAmountFromPlanck,
+} from "./hooks/use-native-token-amount.js";
+export {
   useLazyLoadQuery,
   useLazyLoadQueryWithRefresh,
   useQueryRefresher,
