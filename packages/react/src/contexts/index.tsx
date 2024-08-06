@@ -1,4 +1,4 @@
-import { useReconnectWallets } from "../hooks/use-reconnect-wallets.js";
+import { useWalletsReconnector } from "../hooks/use-wallets-reconnector.js";
 import { chainConfigsAtom } from "../stores/config.js";
 import { aggregatorsAtom, directWalletsAtom } from "../stores/wallets.js";
 import { MutationEventSubjectContext } from "./mutation.js";
@@ -62,7 +62,7 @@ function ReDotHydrator(props: ReDotProviderProps) {
 }
 
 function WalletsReconnector() {
-  const [_, reconnect] = useReconnectWallets();
+  const [_, reconnect] = useWalletsReconnector();
 
   useEffect(() => {
     reconnect();

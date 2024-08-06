@@ -11,7 +11,7 @@ import { useCallback } from "react";
  * @param wallets - Wallets to disconnect from, will disconnect from all connected wallets if none is specified
  * @returns The wallet disconnection state & disconnect function
  */
-export function useDisconnectWallet(wallets?: Wallet | Wallet[]) {
+export function useWalletDisconnector(wallets?: Wallet | Wallet[]) {
   const hookWallets = wallets;
 
   const [success, setSuccess] = useAsyncState<true>();

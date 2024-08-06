@@ -6,15 +6,15 @@ import {
   ReDotProvider,
   useAccounts,
   useBlock,
-  useConnectWallet,
   useConnectedWallets,
-  useDisconnectWallet,
   useLazyLoadQuery,
   useLazyLoadQueryWithRefresh,
   useMutation,
   useMutationEffect,
   useNativeTokenAmountFromPlanck,
-  useResetQueryError,
+  useQueryErrorResetter,
+  useWalletConnector,
+  useWalletDisconnector,
   useWallets,
 } from "@reactive-dot/react";
 import { formatDistance } from "date-fns";
@@ -171,8 +171,8 @@ type WalletItemProps = {
 function WalletItem(props: WalletItemProps) {
   const connectedWallets = useConnectedWallets();
 
-  const [connectingState, connect] = useConnectWallet(props.wallet);
-  const [disconnectingState, disconnect] = useDisconnectWallet(props.wallet);
+  const [connectingState, connect] = useWalletConnector(props.wallet);
+  const [disconnectingState, disconnect] = useWalletDisconnector(props.wallet);
 
   return (
     <li>
@@ -316,7 +316,7 @@ function ErrorFallback(props: FallbackProps) {
 type ExampleProps = { chainName: string };
 
 function Example(props: ExampleProps) {
-  const resetQueryError = useResetQueryError();
+  const resetQueryError = useQueryErrorResetter();
 
   useMutationEffect((event) => {
     if (event.value === PENDING) {

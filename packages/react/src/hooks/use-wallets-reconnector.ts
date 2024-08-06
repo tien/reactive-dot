@@ -13,7 +13,7 @@ import { useCallback, useState } from "react";
  *
  * @returns The reconnection state and reconnect function
  */
-export function useReconnectWallets() {
+export function useWalletsReconnector() {
   const wallets = useWallets();
 
   const [state, setState] = useState<AsyncValue<true, ReDotError>>(IDLE);
