@@ -1,5 +1,18 @@
 # @reactive-dot/react
 
+## 0.6.0
+
+### Minor Changes
+
+- [#80](https://github.com/tien/reactive-dot/pull/80) [`b9bb4c1`](https://github.com/tien/reactive-dot/commit/b9bb4c19c33e3ce62ec6bea3eee8f517bc6e0f57) Thanks [@tien](https://github.com/tien)! - Add hooks for converting planck or number to native token amount.
+
+- [#87](https://github.com/tien/reactive-dot/pull/87) [`94505d6`](https://github.com/tien/reactive-dot/commit/94505d6416934e9ed4c8ac7794beee1142517b0f) Thanks [@tien](https://github.com/tien)! - **BREAKING**: rename action hooks
+
+  - `useResetQueryError` to `useQueryErrorResetter`
+  - `useConnectWallet` to `useWalletConnector`
+  - `useDisconnectWallet` to `useWalletDisconnector`
+  - `useReconnectWallets` to `useWalletsReconnector`
+
 ## 0.5.0
 
 ### Patch Changes
