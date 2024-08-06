@@ -1,5 +1,10 @@
 import { config } from "./config";
-import { IDLE, MutationError, PENDING } from "@reactive-dot/core";
+import {
+  IDLE,
+  MutationError,
+  PENDING,
+  type PolkadotAccount,
+} from "@reactive-dot/core";
 import type { Wallet } from "@reactive-dot/core/wallets.js";
 import {
   ReDotChainProvider,
@@ -13,6 +18,7 @@ import {
   useMutationEffect,
   useNativeTokenAmountFromPlanck,
   useQueryErrorResetter,
+  useSpendableBalance,
   useWalletConnector,
   useWalletDisconnector,
   useWallets,
@@ -23,11 +29,16 @@ import { Suspense, useState, useTransition } from "react";
 import { ErrorBoundary, type FallbackProps } from "react-error-boundary";
 import toast, { Toaster } from "react-hot-toast";
 
-function PendingRewards(props: { address: string; rewards: bigint }) {
+type PendingRewardsProps = {
+  account: PolkadotAccount;
+  rewards: bigint;
+};
+
+function PendingRewards({ account, rewards }: PendingRewardsProps) {
   return (
     <li>
-      {props.address}:{" "}
-      {useNativeTokenAmountFromPlanck(props.rewards).toLocaleString()}
+      {account.name ?? account.address}:{" "}
+      {useNativeTokenAmountFromPlanck(rewards).toLocaleString()}
     </li>
   );
 }
@@ -68,8 +79,48 @@ function PendingPoolRewards() {
           <PendingRewards
             // eslint-disable-next-line @eslint-react/no-array-index-key
             key={index}
-            address={accounts.at(index)?.address ?? ""}
+            account={accounts.at(index)!}
             rewards={rewards}
+          />
+        ))}
+      </ul>
+    </article>
+  );
+}
+
+type SpendableBalanceProps = {
+  account: PolkadotAccount;
+};
+
+function SpendableBalance({ account }: SpendableBalanceProps) {
+  return (
+    <li>
+      {account.name ?? account.address}:{" "}
+      {useSpendableBalance(account.address).toLocaleString()}
+    </li>
+  );
+}
+
+function SpendableBalances() {
+  const accounts = useAccounts();
+
+  if (accounts.length === 0) {
+    return (
+      <article>
+        <h4>Balances</h4>
+        <p>Please connect accounts to see balances</p>
+      </article>
+    );
+  }
+
+  return (
+    <article>
+      <h4>Spendable balances</h4>
+      <ul>
+        {accounts.map((account) => (
+          <SpendableBalance
+            key={account.wallet.id + account.address}
+            account={account}
           />
         ))}
       </ul>
@@ -159,6 +210,7 @@ function Query() {
           <p key={index}>{x.asText()}</p>
         ))}
       </article>
+      <SpendableBalances />
       <PendingPoolRewards />
     </section>
   );
@@ -168,16 +220,16 @@ type WalletItemProps = {
   wallet: Wallet;
 };
 
-function WalletItem(props: WalletItemProps) {
+function WalletItem({ wallet }: WalletItemProps) {
   const connectedWallets = useConnectedWallets();
 
-  const [connectingState, connect] = useWalletConnector(props.wallet);
-  const [disconnectingState, disconnect] = useWalletDisconnector(props.wallet);
+  const [connectingState, connect] = useWalletConnector(wallet);
+  const [disconnectingState, disconnect] = useWalletDisconnector(wallet);
 
   return (
     <li>
-      {props.wallet.name}:{" "}
-      {connectedWallets.includes(props.wallet) ? (
+      {wallet.name}:{" "}
+      {connectedWallets.includes(wallet) ? (
         <button
           type="button"
           onClick={() => disconnect()}
@@ -297,16 +349,13 @@ function Mutation() {
   );
 }
 
-function ErrorFallback(props: FallbackProps) {
+function ErrorFallback({ error, resetErrorBoundary }: FallbackProps) {
   return (
     <article>
       <header>
         <strong>Oops, something went wrong!</strong>
       </header>
-      <button
-        type="button"
-        onClick={() => props.resetErrorBoundary(props.error)}
-      >
+      <button type="button" onClick={() => resetErrorBoundary(error)}>
         Retry
       </button>
     </article>
@@ -315,7 +364,7 @@ function ErrorFallback(props: FallbackProps) {
 
 type ExampleProps = { chainName: string };
 
-function Example(props: ExampleProps) {
+function Example({ chainName }: ExampleProps) {
   const resetQueryError = useQueryErrorResetter();
 
   useMutationEffect((event) => {
@@ -353,8 +402,8 @@ function Example(props: ExampleProps) {
           }
         }}
       >
-        <Suspense fallback={<h2>Loading {props.chainName}...</h2>}>
-          <h2>{props.chainName}</h2>
+        <Suspense fallback={<h2>Loading {chainName}...</h2>}>
+          <h2>{chainName}</h2>
           <Query />
           <Mutation />
         </Suspense>
@@ -373,14 +422,10 @@ export function App() {
         <Example chainName="Polkadot" />
       </ReDotChainProvider>
       <ReDotChainProvider chainId="kusama">
-        <Suspense fallback={<h2>Loading Kusama...</h2>}>
-          <Example chainName="Kusama" />
-        </Suspense>
+        <Example chainName="Kusama" />
       </ReDotChainProvider>
       <ReDotChainProvider chainId="westend">
-        <Suspense fallback={<h2>Loading Westend...</h2>}>
-          <Example chainName="Westend" />
-        </Suspense>
+        <Example chainName="Westend" />
       </ReDotChainProvider>
       <Toaster />
     </ReDotProvider>
