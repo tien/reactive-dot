@@ -203,10 +203,10 @@ function QueryWithRefresh() {
 
 ## Retry failed query
 
-Error from queries can be caught and reset using `ErrorBoundary` & [`useResetQueryError`](/api/react/function/useResetQueryError) hook.
+Error from queries can be caught and reset using `ErrorBoundary` & [`useQueryErrorResetter`](/api/react/function/useQueryErrorResetter) hook.
 
 ```tsx
-import { useResetQueryError } from "@reactive-dot/react";
+import { useQueryErrorResetter } from "@reactive-dot/react";
 import { ErrorBoundary, type FallbackProps } from "react-error-boundary";
 
 function ErrorFallback(props: FallbackProps) {
@@ -221,7 +221,7 @@ function ErrorFallback(props: FallbackProps) {
 }
 
 function AppErrorBoundary() {
-  const resetQueryError = useResetQueryError();
+  const resetQueryError = useQueryErrorResetter();
 
   return (
     <ErrorBoundary

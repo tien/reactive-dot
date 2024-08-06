@@ -5,6 +5,6 @@ import { resetQueryError } from "../utils/jotai.js";
  *
  * @returns Function to reset caught query error
  */
-export function useResetQueryError() {
+export function useQueryErrorResetter() {
   return resetQueryError;
 }

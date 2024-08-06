@@ -78,15 +78,16 @@ export const config = {
 import {
   useConnectedWallets,
   useWallets,
-  useConnectWallet,
+  useWalletConnector,
+  useWalletDisconnector,
 } from "@reactive-dot/react";
 
 export function Wallets() {
   const wallets = useWallets();
   const connectedWallets = useConnectedWallets();
 
-  const [_, connectWallet] = useConnectWallet();
-  const [__, disconnectWallet] = useDisconnectWallet();
+  const [_, connectWallet] = useWalletConnector();
+  const [__, disconnectWallet] = useWalletDisconnector();
 
   return (
     <section>
