@@ -1,5 +1,11 @@
 # @reactive-dot/react
 
+## 0.7.0
+
+### Minor Changes
+
+- [#88](https://github.com/tien/reactive-dot/pull/88) [`5243b19`](https://github.com/tien/reactive-dot/commit/5243b1913eec85e469e9d4b0ef23e10b1024a9d7) Thanks [@tien](https://github.com/tien)! - Add hook for getting all configured chain IDs.
+
 ## 0.6.0
 
 ### Minor Changes
