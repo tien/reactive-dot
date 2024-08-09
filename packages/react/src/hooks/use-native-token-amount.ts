@@ -3,7 +3,7 @@ import { useChainSpecData } from "./use-chain-spec-data.js";
 import { DenominatedNumber } from "@reactive-dot/utils";
 
 /**
- * Hook for returning the native token amount from a planck value
+ * Hook for returning the native token amount from a planck value.
  *
  * @param planck - The planck value
  * @param options - Additional options
@@ -14,7 +14,7 @@ export function useNativeTokenAmountFromPlanck(
   options?: ChainHookOptions,
 ): DenominatedNumber;
 /**
- * Hook for returning a function that converts planck value to native token amount
+ * Hook for returning a function that converts planck value to native token amount.
  *
  * @param options - Additional options
  * @returns Function for getting the native token amount from a planck value
