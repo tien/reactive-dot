@@ -14,6 +14,7 @@ export { useChainSpecData } from "./hooks/use-chain-spec-data.js";
 export { useClient } from "./hooks/use-client.js";
 export { useMutationEffect } from "./hooks/use-mutation-effect.js";
 export { useMutation } from "./hooks/use-mutation.js";
+export { useSpendableBalance } from "./hooks/use-balance.js";
 export {
   useNativeTokenAmountFromNumber,
   useNativeTokenAmountFromPlanck,
