@@ -1,5 +1,12 @@
 # @reactive-dot/core
 
+## 0.7.0
+
+### Patch Changes
+
+- Updated dependencies [[`ec6ef50`](https://github.com/tien/reactive-dot/commit/ec6ef50184fbb854026c16b1455dd09da4178272)]:
+  - @reactive-dot/utils@0.7.0
+
 ## 0.5.0
 
 ### Minor Changes

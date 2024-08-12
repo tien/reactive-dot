@@ -1,5 +1,11 @@
 # @reactive-dot/utils
 
+## 0.7.0
+
+### Minor Changes
+
+- [#86](https://github.com/tien/reactive-dot/pull/86) [`ec6ef50`](https://github.com/tien/reactive-dot/commit/ec6ef50184fbb854026c16b1455dd09da4178272) Thanks [@tien](https://github.com/tien)! - Add utilities for getting the minimum and/or maximum value from a list of big integers.
+
 ## 0.4.0
 
 ## 0.3.1
