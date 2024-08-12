@@ -1,5 +1,18 @@
 # @reactive-dot/react
 
+## 0.7.0
+
+### Minor Changes
+
+- [#86](https://github.com/tien/reactive-dot/pull/86) [`ec6ef50`](https://github.com/tien/reactive-dot/commit/ec6ef50184fbb854026c16b1455dd09da4178272) Thanks [@tien](https://github.com/tien)! - Add hook for getting account's spendable balance.
+
+- [#88](https://github.com/tien/reactive-dot/pull/88) [`5243b19`](https://github.com/tien/reactive-dot/commit/5243b1913eec85e469e9d4b0ef23e10b1024a9d7) Thanks [@tien](https://github.com/tien)! - Add hook for getting all configured chain IDs.
+
+### Patch Changes
+
+- Updated dependencies []:
+  - @reactive-dot/core@0.7.0
+
 ## 0.6.0
 
 ### Minor Changes
