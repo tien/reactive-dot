@@ -55,7 +55,7 @@ export function useNativeTokenAmountFromPlanck(
 /**
  * Hook for returning the native token amount from a number value
  *
- * @param planck - The number value
+ * @param number - The number value
  * @param options - Additional options
  * @returns The native token amount
  */
