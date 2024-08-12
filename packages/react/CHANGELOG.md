@@ -1,5 +1,13 @@
 # @reactive-dot/react
 
+## 0.7.1
+
+### Patch Changes
+
+- [#102](https://github.com/tien/reactive-dot/pull/102) [`ff1c4f6`](https://github.com/tien/reactive-dot/commit/ff1c4f6451853a730a9ed592ec705ed0651d9bae) Thanks [@tien](https://github.com/tien)! - Add missing export for `useChainIds`.
+
+- [#104](https://github.com/tien/reactive-dot/pull/104) [`2cf5826`](https://github.com/tien/reactive-dot/commit/2cf582624a32d50fd7e1379548d95c20fe54fad4) Thanks [@tien](https://github.com/tien)! - Use `const` modifier in case consuming applications also perform checks on library types.
+
 ## 0.7.0
 
 ### Minor Changes
