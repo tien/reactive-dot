@@ -56,7 +56,7 @@ export function useSpendableBalance(
       builder.getConstant("Balances", "ExistentialDeposit").readStorages(
         "System",
         "Account",
-        addresses.map((address) => [address]),
+        addresses.map((address) => [address] as const),
       ),
     options,
   ) as [bigint, SystemAccount[]];
