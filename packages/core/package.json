@@ -24,18 +24,9 @@
     "build"
   ],
   "exports": {
-    ".": {
-      "types": "./src/index.ts",
-      "default": "./build/index.js"
-    },
-    "./wallets.js": {
-      "types": "./src/wallets/index.ts",
-      "default": "./build/wallets/index.js"
-    },
-    "./wallets/wallet-connect.js": {
-      "types": "./src/wallets/wallet-connect/index.ts",
-      "default": "./build/wallets/wallet-connect/index.js"
-    }
+    ".": "./build/index.js",
+    "./wallets.js": "./build/wallets/index.js",
+    "./wallets/wallet-connect.js": "./build/wallets/wallet-connect/index.js"
   },
   "scripts": {
     "dev": "tsc --build --watch",
