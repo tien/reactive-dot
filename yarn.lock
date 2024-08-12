@@ -2436,6 +2436,24 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@docusaurus/module-type-aliases@npm:3.5.1":
+  version: 3.5.1
+  resolution: "@docusaurus/module-type-aliases@npm:3.5.1"
+  dependencies:
+    "@docusaurus/types": "npm:3.5.1"
+    "@types/history": "npm:^4.7.11"
+    "@types/react": "npm:*"
+    "@types/react-router-config": "npm:*"
+    "@types/react-router-dom": "npm:*"
+    react-helmet-async: "npm:*"
+    react-loadable: "npm:@docusaurus/react-loadable@6.0.0"
+  peerDependencies:
+    react: "*"
+    react-dom: "*"
+  checksum: 10c0/4ffac163da4887230759c273eddde0f34ddee65c1f26ef0ee53efca4aa98017481e94fa0d56b8240871bf11ca330401d128508adfc679526b18329db46c2a76b
+  languageName: node
+  linkType: hard
+
 "@docusaurus/plugin-content-blog@npm:3.4.0":
   version: 3.4.0
   resolution: "@docusaurus/plugin-content-blog@npm:3.4.0"
@@ -4297,7 +4315,7 @@ __metadata:
   resolution: "@reactive-dot/docs@workspace:apps/docs"
   dependencies:
     "@docusaurus/core": "npm:^3.4.0"
-    "@docusaurus/module-type-aliases": "npm:3.4.0"
+    "@docusaurus/module-type-aliases": "npm:3.5.1"
     "@docusaurus/preset-classic": "npm:^3.4.0"
     "@docusaurus/tsconfig": "npm:3.4.0"
     "@docusaurus/types": "npm:3.5.1"
