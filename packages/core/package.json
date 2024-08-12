@@ -51,7 +51,7 @@
     "@tsconfig/strictest": "^2.0.5",
     "@walletconnect/modal": "^2.6.2",
     "@walletconnect/universal-provider": "^2.14.0",
-    "eslint": "^9.8.0",
+    "eslint": "^9.9.0",
     "polkadot-api": "^0.12.1",
     "typescript": "^5.5.4"
   },
