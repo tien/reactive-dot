@@ -8,13 +8,13 @@ export {
 } from "./contexts/index.js";
 export type { ChainHookOptions } from "./hooks/types.js";
 export { useAccounts } from "./hooks/use-accounts.js";
+export { useSpendableBalance } from "./hooks/use-balance.js";
 export { useBlock } from "./hooks/use-block.js";
-export { useChainId } from "./hooks/use-chain-id.js";
+export { useChainId, useChainIds } from "./hooks/use-chain-id.js";
 export { useChainSpecData } from "./hooks/use-chain-spec-data.js";
 export { useClient } from "./hooks/use-client.js";
 export { useMutationEffect } from "./hooks/use-mutation-effect.js";
 export { useMutation } from "./hooks/use-mutation.js";
-export { useSpendableBalance } from "./hooks/use-balance.js";
 export {
   useNativeTokenAmountFromNumber,
   useNativeTokenAmountFromPlanck,
