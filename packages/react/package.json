@@ -24,10 +24,7 @@
     "src",
     "build"
   ],
-  "exports": {
-    "types": "./src/index.ts",
-    "default": "./build/index.js"
-  },
+  "exports": "./build/index.js",
   "scripts": {
     "dev": "tsc --build --watch",
     "build": "rm -rf build && tsc --build",
