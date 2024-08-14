@@ -32,7 +32,7 @@
   },
   "dependencies": {
     "@reactive-dot/core": "workspace:^",
-    "jotai": "^2.9.2",
+    "jotai": "^2.9.3",
     "jotai-scope": "^0.7.0"
   },
   "devDependencies": {
