@@ -1,4 +1,4 @@
-import { withAtomFamilyErrorCatcher } from "../utils/jotai.js";
+import { weakAtomFamily, withAtomFamilyErrorCatcher } from "../utils/jotai.js";
 import { stringify } from "../utils/vanilla.js";
 import { typedApiAtomFamily } from "./client.js";
 import {
@@ -10,10 +10,10 @@ import {
   type QueryInstruction,
 } from "@reactive-dot/core";
 import { atom, type Atom, type WritableAtom } from "jotai";
-import { atomFamily, atomWithObservable, atomWithRefresh } from "jotai/utils";
+import { atomWithObservable, atomWithRefresh } from "jotai/utils";
 import { from, switchMap, type Observable } from "rxjs";
 
-const instructionPayloadAtomFamily = atomFamily(
+const instructionPayloadAtomFamily = weakAtomFamily(
   (param: {
     chainId: ChainId;
     instruction: Exclude<
@@ -76,7 +76,7 @@ export function getQueryInstructionPayloadAtoms(
 
 // TODO: should be memoized within render function instead
 // https://github.com/pmndrs/jotai/discussions/1553
-export const queryPayloadAtomFamily = atomFamily(
+export const queryPayloadAtomFamily = weakAtomFamily(
   (param: { chainId: ChainId; query: Query }): Atom<unknown> =>
     withAtomFamilyErrorCatcher(
       queryPayloadAtomFamily,
