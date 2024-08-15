@@ -1,13 +1,13 @@
 import { clientAtomFamily } from "./client.js";
-import type { ChainId } from "@reactive-dot/core";
+import { type ChainId, getBlock } from "@reactive-dot/core";
 import { atomFamily, atomWithObservable } from "jotai/utils";
 import { from } from "rxjs";
-import { switchMap, map } from "rxjs/operators";
+import { switchMap } from "rxjs/operators";
 
 export const finalizedBlockAtomFamily = atomFamily((chainId: ChainId) =>
   atomWithObservable((get) =>
     from(get(clientAtomFamily(chainId))).pipe(
-      switchMap((client) => client.finalizedBlock$),
+      switchMap((client) => getBlock(client, { tag: "finalized" })),
     ),
   ),
 );
@@ -15,8 +15,7 @@ export const finalizedBlockAtomFamily = atomFamily((chainId: ChainId) =>
 export const bestBlockAtomFamily = atomFamily((chainId: ChainId) =>
   atomWithObservable((get) =>
     from(get(clientAtomFamily(chainId))).pipe(
-      switchMap((client) => client.bestBlocks$),
-      map((blocks) => blocks.at(0)!),
+      switchMap((client) => getBlock(client, { tag: "best" })),
     ),
   ),
 );
