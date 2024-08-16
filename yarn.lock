@@ -4312,12 +4312,12 @@ __metadata:
     "@walletconnect/modal": "npm:^2.6.2"
     "@walletconnect/universal-provider": "npm:^2.14.0"
     eslint: "npm:^9.9.0"
-    polkadot-api: "npm:^0.13.2"
+    polkadot-api: "npm:^1.0.0"
     typescript: "npm:^5.5.4"
   peerDependencies:
     "@walletconnect/modal": 2.x
     "@walletconnect/universal-provider": 2.x
-    polkadot-api: ^0.13.2
+    polkadot-api: ^1.0.0
   peerDependenciesMeta:
     "@walletconnect/modal":
       optional: true
@@ -4379,7 +4379,7 @@ __metadata:
     "@walletconnect/universal-provider": "npm:^2.14.0"
     date-fns: "npm:^3.6.0"
     eslint: "npm:^9.9.0"
-    polkadot-api: "npm:^0.13.2"
+    polkadot-api: "npm:^1.0.0"
     react: "npm:^18.3.1"
     react-dom: "npm:^18.3.1"
     react-error-boundary: "npm:^4.0.13"
@@ -4401,7 +4401,7 @@ __metadata:
     eslint: "npm:^9.9.0"
     jotai: "npm:^2.9.3"
     jotai-scope: "npm:^0.7.0"
-    polkadot-api: "npm:^0.13.2"
+    polkadot-api: "npm:^1.0.0"
     react: "npm:^18.3.1"
     typescript: "npm:^5.5.4"
   peerDependencies:
@@ -14498,9 +14498,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"polkadot-api@npm:^0.13.2":
-  version: 0.13.2
-  resolution: "polkadot-api@npm:0.13.2"
+"polkadot-api@npm:^1.0.0":
+  version: 1.0.0
+  resolution: "polkadot-api@npm:1.0.0"
   dependencies:
     "@polkadot-api/cli": "npm:0.7.4"
     "@polkadot-api/json-rpc-provider": "npm:0.0.3"
@@ -14524,7 +14524,7 @@ __metadata:
   bin:
     papi: bin/cli.mjs
     polkadot-api: bin/cli.mjs
-  checksum: 10c0/807df2886ea33ea095694c04c3db6a8fcd97cab8b3d7221b1d8f95eb3be5e9b61de0b3fd884a1ec525e2ff4e8c69341e03fa9ab9cc8cfa61e5bb723e917cb83e
+  checksum: 10c0/00c6df5ef59a70c72c038bf20304c38aa0c9d68b347e4fff54b73b87d7cb48e4a01f4f3c7d0dd0de73f712c7e9a45feea1860260e75a966659040d91bb345d91
   languageName: node
   linkType: hard
 
