@@ -39,6 +39,19 @@ export function getBlock<TOptions extends GetBlockOptions>(
   }
 }
 
+type Extra = Partial<{
+  nonZeroSender: undefined;
+  specVersion: undefined;
+  txVersion: undefined;
+  genesis: undefined;
+  mortality: { type: `Mortal${string}`; value: number };
+  nonce: number;
+  weight: undefined;
+  transactionPayment: bigint;
+  metadataHash: Enum<{ Disabled: undefined; Enabled: undefined }>;
+  [key: string]: unknown;
+}>;
+
 export async function unstable_getBlockExtrinsics(
   client: PolkadotClient,
   typedApi: TypedApi<ChainDefinition>,
@@ -96,6 +109,10 @@ export async function unstable_getBlockExtrinsics(
     }>
   >;
 
+  const extra$ = dynamicBuilder.buildDefinition(
+    metadata.extrinsic.extra,
+  ) as Codec<unknown[]>;
+
   const call$ = dynamicBuilder.buildDefinition(
     metadata.extrinsic.call,
   ) as Codec<{ module: string; method: string; args: unknown }>;
@@ -110,7 +127,7 @@ export async function unstable_getBlockExtrinsics(
     body: Struct({
       signer: address$,
       signature: signature$,
-      extra: dynamicBuilder.buildDefinition(metadata.extrinsic.extra),
+      extra: extra$,
       call: call$,
     }),
   });
@@ -134,7 +151,27 @@ export async function unstable_getBlockExtrinsics(
       return;
     }
 
-    return (signed ? signedExtrinsic$.dec : inherentExtrinsic$.dec)(bytes);
+    const decodedExtrinsic = (
+      signed ? signedExtrinsic$.dec : inherentExtrinsic$.dec
+    )(bytes);
+
+    if (!("extra" in decodedExtrinsic.body)) {
+      return decodedExtrinsic;
+    }
+
+    const extraArray = decodedExtrinsic.body.extra;
+
+    const extra = Object.fromEntries(
+      metadata.extrinsic.signedExtensions.map((signedExtension, index) => {
+        const name = signedExtension.identifier.replace(/^Check/, "");
+        return [
+          name.slice(0, 1).toLowerCase() + name.slice(1),
+          extraArray[index],
+        ] as const;
+      }),
+    ) as Extra;
+
+    return { ...decodedExtrinsic, body: { ...decodedExtrinsic.body, extra } };
   });
 }
 
