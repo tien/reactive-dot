@@ -1,5 +1,11 @@
 # @reactive-dot/utils
 
+## 0.8.0
+
+### Minor Changes
+
+- [#105](https://github.com/tien/reactive-dot/pull/105) [`336b208`](https://github.com/tien/reactive-dot/commit/336b208627776e85f9173bcc36e1a86e6d389299) Thanks [@tien](https://github.com/tien)! - Add source and declaration maps for improved debugging and type checking.
+
 ## 0.7.0
 
 ### Minor Changes
