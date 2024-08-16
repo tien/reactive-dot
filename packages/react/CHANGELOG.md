@@ -1,5 +1,16 @@
 # @reactive-dot/react
 
+## 0.8.0
+
+### Minor Changes
+
+- [#105](https://github.com/tien/reactive-dot/pull/105) [`336b208`](https://github.com/tien/reactive-dot/commit/336b208627776e85f9173bcc36e1a86e6d389299) Thanks [@tien](https://github.com/tien)! - Add source and declaration maps for improved debugging and type checking.
+
+### Patch Changes
+
+- Updated dependencies [[`c2c3a61`](https://github.com/tien/reactive-dot/commit/c2c3a617d54cc1db9ed4bfec276d46044e8100db), [`336b208`](https://github.com/tien/reactive-dot/commit/336b208627776e85f9173bcc36e1a86e6d389299), [`6ba27d5`](https://github.com/tien/reactive-dot/commit/6ba27d5641ca82d1f65fba7c4a9b4938627f0911)]:
+  - @reactive-dot/core@0.8.0
+
 ## 0.7.1
 
 ### Patch Changes
