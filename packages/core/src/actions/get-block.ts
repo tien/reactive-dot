@@ -4,6 +4,7 @@ import {
 } from "@polkadot-api/metadata-builders";
 import {
   Struct,
+  Bytes,
   enhanceCodec,
   metadata as metadataCodec,
   u8,
@@ -50,20 +51,20 @@ export async function unstable_getBlockExtrinsics(
   )(15);
 
   if (v15MetadataBinary === undefined) {
-    return undefined;
+    return;
   }
 
   const metadataResult = metadataCodec.dec(v15MetadataBinary.asBytes());
 
   if (metadataResult.metadata.tag !== "v15") {
-    return undefined;
+    return;
   }
 
   const metadata = metadataResult.metadata.value;
 
   const dynamicBuilder = await getOrCreateDynamicBuilder(client, metadata);
 
-  const version = enhanceCodec(
+  const version$ = enhanceCodec(
     u8,
     (value: { signed: boolean; version: number }) =>
       (+!!value.signed << 7) | value.version,
@@ -73,7 +74,7 @@ export async function unstable_getBlockExtrinsics(
     }),
   );
 
-  const address = dynamicBuilder.buildDefinition(
+  const address$ = dynamicBuilder.buildDefinition(
     metadata.extrinsic.address,
   ) as Codec<
     Enum<{
@@ -85,37 +86,55 @@ export async function unstable_getBlockExtrinsics(
     }>
   >;
 
-  const call = dynamicBuilder.buildDefinition(
+  const signature$ = dynamicBuilder.buildDefinition(
+    metadata.extrinsic.signature,
+  ) as Codec<
+    Enum<{
+      Ed25519: FixedSizeBinary<64>;
+      Sr25519: FixedSizeBinary<64>;
+      Ecdsa: FixedSizeBinary<65>;
+    }>
+  >;
+
+  const call$ = dynamicBuilder.buildDefinition(
     metadata.extrinsic.call,
   ) as Codec<{ module: string; method: string; args: unknown }>;
 
-  const inherentExtrinsic = Struct({
-    version: version as Codec<{ version: number; signed: false }>,
-    body: Struct({ call }),
+  const inherentExtrinsic$ = Struct({
+    version: version$ as Codec<{ version: number; signed: false }>,
+    body: Struct({ call: call$ }),
   });
 
-  const signedExtrinsic = Struct({
-    version: version as Codec<{ version: number; signed: true }>,
+  const signedExtrinsic$ = Struct({
+    version: version$ as Codec<{ version: number; signed: true }>,
     body: Struct({
-      signer: address,
-      signature: dynamicBuilder.buildDefinition(metadata.extrinsic.signature),
+      signer: address$,
+      signature: signature$,
       extra: dynamicBuilder.buildDefinition(metadata.extrinsic.extra),
-      call,
+      call: call$,
     }),
   });
 
   const blockBody = await client.getBlockBody(blockHash);
 
-  const simpleVersion = Struct({
-    version: version,
+  const simpleVersion$ = Struct({
+    version: version$,
   });
 
-  return blockBody.map((hexBody: string) => {
-    const {
-      version: { signed },
-    } = simpleVersion.dec(hexBody);
+  const bytes$ = Bytes();
 
-    return (signed ? signedExtrinsic.dec : inherentExtrinsic.dec)(hexBody);
+  return blockBody.map((extrinsicHex: string) => {
+    const bytes = bytes$.dec(extrinsicHex);
+
+    const {
+      version: { version, signed },
+    } = simpleVersion$.dec(bytes);
+
+    if (version !== 4) {
+      return;
+    }
+
+    return (signed ? signedExtrinsic$.dec : inherentExtrinsic$.dec)(bytes);
   });
 }
 
