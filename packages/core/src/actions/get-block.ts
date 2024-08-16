@@ -3,10 +3,10 @@ import {
   getLookupFn,
 } from "@polkadot-api/metadata-builders";
 import {
-  Struct,
   Bytes,
   enhanceCodec,
   metadata as metadataCodec,
+  Struct,
   u8,
   type V15,
 } from "@polkadot-api/substrate-bindings";
@@ -39,6 +39,20 @@ export function getBlock<TOptions extends GetBlockOptions>(
   }
 }
 
+type MultiAddress = Enum<{
+  Id: SS58String;
+  Index: number | bigint;
+  Raw: Binary;
+  Address32: FixedSizeBinary<32>;
+  Address20: FixedSizeBinary<20>;
+}>;
+
+type MultiSignature = Enum<{
+  Ed25519: FixedSizeBinary<64>;
+  Sr25519: FixedSizeBinary<64>;
+  Ecdsa: FixedSizeBinary<65>;
+}>;
+
 type Extra = Partial<{
   nonZeroSender: undefined;
   specVersion: undefined;
@@ -51,6 +65,22 @@ type Extra = Partial<{
   metadataHash: Enum<{ Disabled: undefined; Enabled: undefined }>;
   [key: string]: unknown;
 }>;
+
+type Call = {
+  module: string;
+  func: string;
+  args: unknown;
+};
+
+type Extrinsic = { version: number; call: Call } & (
+  | { signed: false }
+  | {
+      signed: true;
+      sender: MultiAddress;
+      signature: MultiSignature;
+      extra: Extra;
+    }
+);
 
 export async function unstable_getBlockExtrinsics(
   client: PolkadotClient,
@@ -89,33 +119,55 @@ export async function unstable_getBlockExtrinsics(
 
   const address$ = dynamicBuilder.buildDefinition(
     metadata.extrinsic.address,
-  ) as Codec<
-    Enum<{
-      Id: SS58String;
-      Index: number | bigint;
-      Raw: Binary;
-      Address32: FixedSizeBinary<32>;
-      Address20: FixedSizeBinary<20>;
-    }>
-  >;
+  ) as Codec<MultiAddress>;
 
   const signature$ = dynamicBuilder.buildDefinition(
     metadata.extrinsic.signature,
-  ) as Codec<
-    Enum<{
-      Ed25519: FixedSizeBinary<64>;
-      Sr25519: FixedSizeBinary<64>;
-      Ecdsa: FixedSizeBinary<65>;
-    }>
-  >;
+  ) as Codec<MultiSignature>;
 
-  const extra$ = dynamicBuilder.buildDefinition(
+  const rawExtra$ = dynamicBuilder.buildDefinition(
     metadata.extrinsic.extra,
   ) as Codec<unknown[]>;
 
-  const call$ = dynamicBuilder.buildDefinition(
+  const extra$ = enhanceCodec(
+    rawExtra$,
+    (extra: Extra) =>
+      metadata.extrinsic.signedExtensions.map(
+        (signedExtension) =>
+          extra[
+            "Check" +
+              signedExtension.identifier.slice(0, 1).toUpperCase() +
+              signedExtension.identifier.slice(1, 0)
+          ],
+      ),
+    (extra) =>
+      Object.fromEntries(
+        metadata.extrinsic.signedExtensions.map((signedExtension, index) => {
+          const name = signedExtension.identifier.replace(/^Check/, "");
+          return [
+            name.slice(0, 1).toLowerCase() + name.slice(1),
+            extra[index],
+          ] as const;
+        }),
+      ) as Extra,
+  );
+
+  const rawCall$ = dynamicBuilder.buildDefinition(
     metadata.extrinsic.call,
-  ) as Codec<{ module: string; method: string; args: unknown }>;
+  ) as Codec<{ type: string; value: { type: string; value: unknown } }>;
+
+  const call$ = enhanceCodec(
+    rawCall$,
+    (call: Call) => ({
+      type: call.module,
+      value: { type: call.func, value: call.args },
+    }),
+    (call) => ({
+      module: call.type,
+      func: call.value.type,
+      args: call.value.value,
+    }),
+  );
 
   const inherentExtrinsic$ = Struct({
     version: version$ as Codec<{ version: number; signed: false }>,
@@ -125,54 +177,50 @@ export async function unstable_getBlockExtrinsics(
   const signedExtrinsic$ = Struct({
     version: version$ as Codec<{ version: number; signed: true }>,
     body: Struct({
-      signer: address$,
+      sender: address$,
       signature: signature$,
       extra: extra$,
       call: call$,
     }),
   });
 
-  const blockBody = await client.getBlockBody(blockHash);
-
   const simpleVersion$ = Struct({
     version: version$,
   });
 
-  const bytes$ = Bytes();
+  const extrinsic$ = enhanceCodec(
+    Bytes(),
+    (extrinsic: Extrinsic) =>
+      extrinsic.signed
+        ? signedExtrinsic$.enc({
+            version: { version: extrinsic.version, signed: extrinsic.signed },
+            body: {
+              sender: extrinsic.sender,
+              signature: extrinsic.signature,
+              extra: extrinsic.extra,
+              call: extrinsic.call,
+            },
+          })
+        : inherentExtrinsic$.enc({
+            version: { version: extrinsic.version, signed: extrinsic.signed },
+            body: { call: extrinsic.call },
+          }),
+    (extrinsicBytes) => {
+      const {
+        version: { signed },
+      } = simpleVersion$.dec(extrinsicBytes);
 
-  return blockBody.map((extrinsicHex: string) => {
-    const bytes = bytes$.dec(extrinsicHex);
+      const rawExtrinsic = (
+        signed ? signedExtrinsic$.dec : inherentExtrinsic$.dec
+      )(extrinsicBytes);
 
-    const {
-      version: { version, signed },
-    } = simpleVersion$.dec(bytes);
+      return { ...rawExtrinsic.version, ...rawExtrinsic.body } as Extrinsic;
+    },
+  );
 
-    if (version !== 4) {
-      return;
-    }
+  const blockBody = await client.getBlockBody(blockHash);
 
-    const decodedExtrinsic = (
-      signed ? signedExtrinsic$.dec : inherentExtrinsic$.dec
-    )(bytes);
-
-    if (!("extra" in decodedExtrinsic.body)) {
-      return decodedExtrinsic;
-    }
-
-    const extraArray = decodedExtrinsic.body.extra;
-
-    const extra = Object.fromEntries(
-      metadata.extrinsic.signedExtensions.map((signedExtension, index) => {
-        const name = signedExtension.identifier.replace(/^Check/, "");
-        return [
-          name.slice(0, 1).toLowerCase() + name.slice(1),
-          extraArray[index],
-        ] as const;
-      }),
-    ) as Extra;
-
-    return { ...decodedExtrinsic, body: { ...decodedExtrinsic.body, extra } };
-  });
+  return blockBody.map(extrinsic$.dec);
 }
 
 const dynamicBuilders = new WeakMap<
