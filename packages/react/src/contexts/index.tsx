@@ -1,9 +1,7 @@
 import { useWalletsReconnector } from "../hooks/use-wallets-reconnector.js";
-import { chainConfigsAtom } from "../stores/config.js";
-import { aggregatorsAtom, directWalletsAtom } from "../stores/wallets.js";
+import { configAtom } from "../stores/config.js";
 import { MutationEventSubjectContext } from "./mutation.js";
 import type { Config } from "@reactive-dot/core";
-import { Wallet, WalletAggregator } from "@reactive-dot/core/wallets.js";
 import { ScopeProvider } from "jotai-scope";
 import { useHydrateAtoms } from "jotai/utils";
 import { Suspense, useEffect, useMemo, type PropsWithChildren } from "react";
@@ -34,29 +32,7 @@ export type ReDotProviderProps = PropsWithChildren<{
 }>;
 
 function ReDotHydrator(props: ReDotProviderProps) {
-  useHydrateAtoms(
-    useMemo(
-      () =>
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        new Map<any, any>([
-          [chainConfigsAtom, props.config.chains],
-          [
-            directWalletsAtom,
-            props.config.wallets?.filter(
-              (wallet): wallet is Wallet => wallet instanceof Wallet,
-            ) ?? [],
-          ],
-          [
-            aggregatorsAtom,
-            props.config.wallets?.filter(
-              (aggregator): aggregator is WalletAggregator =>
-                aggregator instanceof WalletAggregator,
-            ) ?? [],
-          ],
-        ]),
-      [props.config],
-    ),
-  );
+  useHydrateAtoms(useMemo(() => [[configAtom, props.config]], [props.config]));
 
   return null;
 }
@@ -82,7 +58,7 @@ export function ReDotProvider({
   ...props
 }: ReDotProviderProps) {
   return (
-    <ScopeProvider atoms={[chainConfigsAtom]}>
+    <ScopeProvider atoms={[configAtom]}>
       <ReDotHydrator {...props} />
       {autoReconnectWallets && (
         <Suspense>
