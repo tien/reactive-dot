@@ -18,6 +18,10 @@ export function preflight<TInstruction extends QueryInstruction>(
           ? "observable"
           : "promise" | "observable";
 
+  if ("at" in instruction && instruction.at?.startsWith("0x")) {
+    return "promise" as Return;
+  }
+
   switch (instruction.instruction) {
     case "get-constant":
     case "call-api":
