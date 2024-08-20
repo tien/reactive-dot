@@ -24,6 +24,7 @@ import {
   useWallets,
 } from "@reactive-dot/react";
 import { formatDistance } from "date-fns";
+import { DevTools } from "jotai-devtools";
 import { Binary } from "polkadot-api";
 import { Suspense, useState, useTransition } from "react";
 import { ErrorBoundary, type FallbackProps } from "react-error-boundary";
@@ -428,6 +429,7 @@ export function App() {
         <Example chainName="Westend" />
       </ReDotChainProvider>
       <Toaster />
+      <DevTools />
     </ReDotProvider>
   );
 }

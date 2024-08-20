@@ -20,6 +20,7 @@ export {
   useNativeTokenAmountFromPlanck,
 } from "./hooks/use-native-token-amount.js";
 export { useQueryErrorResetter } from "./hooks/use-query-error-resetter.js";
+export { useQueryLoader } from "./hooks/use-query-loader.js";
 export {
   useLazyLoadQuery,
   useLazyLoadQueryWithRefresh,

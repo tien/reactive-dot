@@ -13,7 +13,7 @@ import { atom, type Atom, type WritableAtom } from "jotai";
 import { atomFamily, atomWithObservable, atomWithRefresh } from "jotai/utils";
 import { from, switchMap, type Observable } from "rxjs";
 
-const instructionPayloadAtomFamily = atomFamily(
+export const instructionPayloadAtomFamily = atomFamily(
   (param: {
     chainId: ChainId;
     instruction: Exclude<
