@@ -14,7 +14,7 @@
     "@polkadot-api/descriptors": "portal:.papi/descriptors",
     "@reactive-dot/react": "workspace:^",
     "@walletconnect/modal": "^2.6.2",
-    "@walletconnect/universal-provider": "^2.14.0",
+    "@walletconnect/universal-provider": "^2.15.1",
     "date-fns": "^3.6.0",
     "jotai-devtools": "^0.10.1",
     "polkadot-api": "^1.0.0",
