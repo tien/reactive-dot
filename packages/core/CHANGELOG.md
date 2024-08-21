@@ -1,5 +1,11 @@
 # @reactive-dot/core
 
+## 0.9.0
+
+### Patch Changes
+
+- [#129](https://github.com/tien/reactive-dot/pull/129) [`255c1c8`](https://github.com/tien/reactive-dot/commit/255c1c8d3dd7ce39977dbd02535234b38033aa77) Thanks [@tien](https://github.com/tien)! - Fixed incorrect atom type when querying with block hash.
+
 ## 0.8.0
 
 ### Minor Changes
