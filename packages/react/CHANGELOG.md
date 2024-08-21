@@ -1,5 +1,18 @@
 # @reactive-dot/react
 
+## 0.9.0
+
+### Minor Changes
+
+- [#127](https://github.com/tien/reactive-dot/pull/127) [`7965340`](https://github.com/tien/reactive-dot/commit/7965340a58313596dfdf99d1833ad3d9bac74ee5) Thanks [@tien](https://github.com/tien)! - Added hook for pre-loading queries.
+
+### Patch Changes
+
+- [#124](https://github.com/tien/reactive-dot/pull/124) [`d122505`](https://github.com/tien/reactive-dot/commit/d122505fb74e9b45c7e238d3778dbf173a040c48) Thanks [@tien](https://github.com/tien)! - Fixed some global states that were unscoped.
+
+- Updated dependencies [[`255c1c8`](https://github.com/tien/reactive-dot/commit/255c1c8d3dd7ce39977dbd02535234b38033aa77)]:
+  - @reactive-dot/core@0.9.0
+
 ## 0.8.0
 
 ### Minor Changes
