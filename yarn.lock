@@ -4504,7 +4504,7 @@ __metadata:
     "@types/react": "npm:^18.3.3"
     eslint: "npm:^9.9.0"
     jotai: "npm:^2.9.3"
-    jotai-scope: "npm:^0.7.0"
+    jotai-scope: "npm:^0.7.2"
     polkadot-api: "npm:^1.0.0"
     react: "npm:^18.3.1"
     typescript: "npm:^5.5.4"
@@ -11961,13 +11961,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"jotai-scope@npm:^0.7.0":
-  version: 0.7.0
-  resolution: "jotai-scope@npm:0.7.0"
+"jotai-scope@npm:^0.7.2":
+  version: 0.7.2
+  resolution: "jotai-scope@npm:0.7.2"
   peerDependencies:
-    jotai: ">=2.5.0"
+    jotai: ">=2.9.2"
     react: ">=17.0.0"
-  checksum: 10c0/225627e47556fa87adb545e557ea87811ec752ef4949c15e430a4f58817f7140aea19ff32168c65a0591a3df584386a3287852fef287e4f6e0705492ee4fcfd5
+  checksum: 10c0/15b098f26d757c4da5efb0034639783b7fd6e06bb9a863a3cc3df86a49668bdad5bedf0035866b1e2aea91e2f1d1cf34b18fedcaec11fc833a68a6b092904d64
   languageName: node
   linkType: hard
 

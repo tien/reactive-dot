@@ -33,7 +33,7 @@
   "dependencies": {
     "@reactive-dot/core": "workspace:^",
     "jotai": "^2.9.3",
-    "jotai-scope": "^0.7.0"
+    "jotai-scope": "^0.7.2"
   },
   "devDependencies": {
     "@reactive-dot/eslint-config": "workspace:^",
