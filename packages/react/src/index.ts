@@ -26,6 +26,7 @@ export {
   useLazyLoadQueryWithRefresh,
   useQueryRefresher,
 } from "./hooks/use-query.js";
+export { useSigner } from "./hooks/use-signer.js";
 export { useTypedApi } from "./hooks/use-typed-api.js";
 export { useWalletConnector } from "./hooks/use-wallet-connector.js";
 export { useWalletDisconnector } from "./hooks/use-wallet-disconnector.js";
