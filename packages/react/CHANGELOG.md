@@ -1,5 +1,16 @@
 # @reactive-dot/react
 
+## 0.10.0
+
+### Minor Changes
+
+- [#132](https://github.com/tien/reactive-dot/pull/132) [`510dd4b`](https://github.com/tien/reactive-dot/commit/510dd4b3930695d8936ec749cd6b0358431e29af) Thanks [@tien](https://github.com/tien)! - Added hook for getting the current signer.
+
+### Patch Changes
+
+- Updated dependencies [[`a845ca5`](https://github.com/tien/reactive-dot/commit/a845ca5646e62f205db0949474376916e93093e9)]:
+  - @reactive-dot/core@0.10.0
+
 ## 0.9.0
 
 ### Minor Changes

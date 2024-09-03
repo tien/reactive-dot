@@ -1,5 +1,11 @@
 # @reactive-dot/core
 
+## 0.10.0
+
+### Patch Changes
+
+- [#143](https://github.com/tien/reactive-dot/pull/143) [`a845ca5`](https://github.com/tien/reactive-dot/commit/a845ca5646e62f205db0949474376916e93093e9) Thanks [@tien](https://github.com/tien)! - Fixed permanent suspense when no wallets are available.
+
 ## 0.9.0
 
 ### Patch Changes
