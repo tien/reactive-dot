@@ -2,7 +2,7 @@ import type { MaybeAsync, PolkadotAccount } from "../types.js";
 import { toObservable } from "../utils.js";
 import type { Wallet } from "../wallets/wallet.js";
 import type { ChainSpecData } from "@polkadot-api/substrate-client";
-import { combineLatest } from "rxjs";
+import { combineLatest, of } from "rxjs";
 import { map, switchMap } from "rxjs/operators";
 
 export function getAccounts(
@@ -10,8 +10,12 @@ export function getAccounts(
   chainSpec?: MaybeAsync<ChainSpecData>,
 ) {
   return combineLatest([toObservable(wallets), toObservable(chainSpec)]).pipe(
-    switchMap(([wallets, chainSpec]) =>
-      combineLatest(
+    switchMap(([wallets, chainSpec]) => {
+      if (wallets.length === 0) {
+        return of([]);
+      }
+
+      return combineLatest(
         wallets.map((wallet) =>
           wallet.accounts$.pipe(
             map((accounts) =>
@@ -33,7 +37,7 @@ export function getAccounts(
                     chainSpec.genesisHash.includes(account.genesisHash),
                 ),
         ),
-      ),
-    ),
+      );
+    }),
   );
 }
