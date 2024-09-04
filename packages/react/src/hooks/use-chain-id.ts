@@ -44,13 +44,24 @@ export function useChainId<
   >;
 }
 
-export function useChainId_INTERNAL(options?: ChainHookOptions) {
+/**
+ * @internal
+ */
+export function internal_useChainId<TOptionalChainId extends boolean = false>({
+  optionalChainId = false as TOptionalChainId,
+  ...options
+}: ChainHookOptions & {
+  optionalChainId?: TOptionalChainId;
+} = {}) {
+  // eslint-disable-next-line react-hooks/rules-of-hooks
   const contextChainId = useContext(ChainIdContext);
   const chainId = options?.chainId ?? contextChainId;
 
-  if (chainId === undefined) {
+  if (!optionalChainId && chainId === undefined) {
     throw new ReDotError("No chain ID provided");
   }
 
-  return chainId;
+  return chainId as TOptionalChainId extends false
+    ? ChainId
+    : ChainId | undefined;
 }

@@ -6,7 +6,7 @@ import {
 import { typedApiAtomFamily } from "../stores/client.js";
 import type { ChainHookOptions } from "./types.js";
 import { useAsyncState } from "./use-async-state.js";
-import { useChainId_INTERNAL } from "./use-chain-id.js";
+import { internal_useChainId } from "./use-chain-id.js";
 import type { ChainId, Chains } from "@reactive-dot/core";
 import { MutationError, PENDING } from "@reactive-dot/core";
 import { useAtomCallback } from "jotai/utils";
@@ -54,7 +54,7 @@ export function useMutation<
     txOptions?: TxOptions<ReturnType<TAction>>;
   },
 ) {
-  const chainId = useChainId_INTERNAL(options);
+  const chainId = internal_useChainId(options);
   const mutationEventSubject = useContext(MutationEventSubjectContext);
   const contextSigner = useContext(SignerContext);
 

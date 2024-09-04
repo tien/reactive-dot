@@ -1,6 +1,6 @@
 import { chainSpecDataAtomFamily } from "../stores/client.js";
 import type { ChainHookOptions } from "./types.js";
-import { useChainId_INTERNAL } from "./use-chain-id.js";
+import { internal_useChainId } from "./use-chain-id.js";
 import { useAtomValue } from "jotai";
 
 /**
@@ -10,5 +10,5 @@ import { useAtomValue } from "jotai";
  * @returns The [JSON-RPC spec](https://paritytech.github.io/json-rpc-interface-spec/api/chainSpec.html)
  */
 export function useChainSpecData(options?: ChainHookOptions) {
-  return useAtomValue(chainSpecDataAtomFamily(useChainId_INTERNAL(options)));
+  return useAtomValue(chainSpecDataAtomFamily(internal_useChainId(options)));
 }
