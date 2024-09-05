@@ -10,12 +10,19 @@ import type { Atom } from "jotai";
 import { atomFamily, atomWithObservable } from "jotai/utils";
 
 export const accountsAtom = atomFamily(
-  (chainId: ChainId): Atom<PolkadotAccount[] | Promise<PolkadotAccount[]>> =>
+  (
+    chainId: ChainId | undefined,
+  ): Atom<PolkadotAccount[] | Promise<PolkadotAccount[]>> =>
     withAtomFamilyErrorCatcher(
       accountsAtom,
       chainId,
       atomWithObservable,
     )((get) =>
-      getAccounts(get(walletsAtom), get(chainSpecDataAtomFamily(chainId))),
+      getAccounts(
+        get(walletsAtom),
+        chainId === undefined
+          ? undefined
+          : get(chainSpecDataAtomFamily(chainId)),
+      ),
     ),
 );

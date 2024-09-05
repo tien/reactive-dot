@@ -1,6 +1,6 @@
 import { typedApiAtomFamily } from "../stores/client.js";
 import type { ChainHookOptions } from "./types.js";
-import { useChainId_INTERNAL } from "./use-chain-id.js";
+import { internal_useChainId } from "./use-chain-id.js";
 import type { ChainId, Chains } from "@reactive-dot/core";
 import { useAtomValue } from "jotai";
 import type { TypedApi } from "polkadot-api";
@@ -14,5 +14,5 @@ import type { TypedApi } from "polkadot-api";
 export function useTypedApi<TChainId extends ChainId>(
   options?: ChainHookOptions<TChainId>,
 ): TypedApi<Chains[TChainId]> {
-  return useAtomValue(typedApiAtomFamily(useChainId_INTERNAL(options)));
+  return useAtomValue(typedApiAtomFamily(internal_useChainId(options)));
 }
