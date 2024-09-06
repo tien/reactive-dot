@@ -1,5 +1,11 @@
 # @reactive-dot/react
 
+## 0.11.0
+
+### Minor Changes
+
+- [#144](https://github.com/tien/reactive-dot/pull/144) [`1297296`](https://github.com/tien/reactive-dot/commit/1297296b1514d628d5c9581f42e8b2326fc34524) Thanks [@tien](https://github.com/tien)! - Updated logic to support retrieving accounts without a defined chain ID.
+
 ## 0.10.0
 
 ### Minor Changes
