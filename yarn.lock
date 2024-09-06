@@ -2790,6 +2790,26 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@docusaurus/types@npm:3.5.2":
+  version: 3.5.2
+  resolution: "@docusaurus/types@npm:3.5.2"
+  dependencies:
+    "@mdx-js/mdx": "npm:^3.0.0"
+    "@types/history": "npm:^4.7.11"
+    "@types/react": "npm:*"
+    commander: "npm:^5.1.0"
+    joi: "npm:^17.9.2"
+    react-helmet-async: "npm:^1.3.0"
+    utility-types: "npm:^3.10.0"
+    webpack: "npm:^5.88.1"
+    webpack-merge: "npm:^5.9.0"
+  peerDependencies:
+    react: ^18.0.0
+    react-dom: ^18.0.0
+  checksum: 10c0/a06607a8ed96871d9a2c1239e1d94e584acd5c638f7eb4071feb1f18221c25c9b78794b3f804884db201cfdfc67cecdf37a823efe854f435fb4f5a36b28237d4
+  languageName: node
+  linkType: hard
+
 "@docusaurus/utils-common@npm:3.4.0":
   version: 3.4.0
   resolution: "@docusaurus/utils-common@npm:3.4.0"
@@ -4437,7 +4457,7 @@ __metadata:
     "@docusaurus/module-type-aliases": "npm:3.5.1"
     "@docusaurus/preset-classic": "npm:^3.4.0"
     "@docusaurus/tsconfig": "npm:3.5.1"
-    "@docusaurus/types": "npm:3.5.1"
+    "@docusaurus/types": "npm:3.5.2"
     "@mdx-js/react": "npm:^3.0.1"
     clsx: "npm:^2.1.1"
     docusaurus-plugin-typedoc-api: "npm:^4.2.1"
