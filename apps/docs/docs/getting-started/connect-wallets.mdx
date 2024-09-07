@@ -24,17 +24,17 @@ Additional dependencies are required if you use any of be bellow wallet type.
 <Tabs>
   <TabItem value="npm" label="npm" default>
     ```sh
-    npm add @walletconnect/modal @walletconnect/universal-provider
+    npm add @reactive-dot/wallet-walletconnect
     ```
   </TabItem>
   <TabItem value="yarn" label="yarn">
     ```sh
-    yarn add @walletconnect/modal @walletconnect/universal-provider
+    yarn add @reactive-dot/wallet-walletconnect
     ```
   </TabItem>
     <TabItem value="pnpm" label="pnpm">
     ```sh
-    pnpm add @walletconnect/modal @walletconnect/universal-provider
+    pnpm add @reactive-dot/wallet-walletconnect
     ```
   </TabItem>
 </Tabs>
@@ -46,7 +46,7 @@ Additional dependencies are required if you use any of be bellow wallet type.
 ```ts title="config.ts"
 import type { Config } from "@reactive-dot/core";
 import { InjectedWalletAggregator } from "@reactive-dot/core/wallets.js";
-import { WalletConnect } from "@reactive-dot/core/wallets/wallet-connect.js";
+import { WalletConnect } from "@reactive-dot/wallet-walletconnect";
 
 export const config = {
   // ...
