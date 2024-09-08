@@ -42,14 +42,14 @@
     "@tsconfig/strictest": "^2.0.5",
     "@walletconnect/modal": "^2.6.2",
     "@walletconnect/universal-provider": "^2.14.0",
-    "eslint": "^9.9.0",
-    "polkadot-api": "^1.0.0",
+    "eslint": "^9.10.0",
+    "polkadot-api": "^1.2.0",
     "typescript": "^5.5.4"
   },
   "peerDependencies": {
     "@walletconnect/modal": "2.x",
     "@walletconnect/universal-provider": "2.x",
-    "polkadot-api": "^1.0.0"
+    "polkadot-api": "1.x"
   },
   "peerDependenciesMeta": {
     "@walletconnect/modal": {
