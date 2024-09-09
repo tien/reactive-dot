@@ -43,6 +43,6 @@
     "typescript": "^5.5.4"
   },
   "peerDependencies": {
-    "@reactive-dot/core": "workspace:^"
+    "@reactive-dot/core": "*"
   }
 }

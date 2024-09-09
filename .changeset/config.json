@@ -1,5 +1,5 @@
 {
-  "$schema": "https://unpkg.com/@changesets/config@3.0.2/schema.json",
+  "$schema": "https://unpkg.com/@changesets/config@3.0.3/schema.json",
   "access": "public",
   "baseBranch": "main",
   "changelog": [
@@ -7,5 +7,8 @@
     { "repo": "tien/reactive-dot" }
   ],
   "privatePackages": false,
-  "linked": [["@reactive-dot/*"]]
+  "linked": [["@reactive-dot/*"]],
+  "___experimentalUnsafeOptions_WILL_CHANGE_IN_PATCH": {
+    "onlyUpdatePeerDependentsWhenOutOfRange": true
+  }
 }
