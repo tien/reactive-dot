@@ -19,7 +19,7 @@ jobs:
 
       - run: yarn build:packages
 
-      - run: yarn workspaces foreach -Apt --no-private version 0.0.0-snapshot.${{ github.run_number }}+$(git rev-parse --short HEAD) --immediate
+      - run: yarn workspaces foreach -At --no-private version 0.0.0-snapshot.${{ github.run_number }}+$(git rev-parse --short HEAD) --immediate
 
       - run: scripts/publish-snapshot.sh
         env:
