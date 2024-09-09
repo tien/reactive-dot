@@ -1,5 +1,7 @@
 #!/bin/bash
 
+set -e
+
 # Check if LICENSE file exists in the root directory
 if [ ! -f LICENSE ]; then
   echo "LICENSE file not found in the root directory."
