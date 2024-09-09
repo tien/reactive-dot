@@ -4487,7 +4487,7 @@ __metadata:
     eslint: "npm:^9.10.0"
     typescript: "npm:^5.5.4"
   peerDependencies:
-    "@reactive-dot/core": "workspace:^"
+    "@reactive-dot/core": "*"
   languageName: unknown
   linkType: soft
 
