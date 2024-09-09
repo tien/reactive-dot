@@ -1,10 +1,11 @@
 {
-  "name": "@reactive-dot/core",
-  "version": "0.10.0",
-  "description": "VanillaJS library for Reactive DOT",
+  "name": "@reactive-dot/wallet-walletconnect",
+  "version": "0.0.0",
+  "description": "WalletConnect adapter for Reactive DOT",
   "keywords": [
     "substrate",
-    "polkadot"
+    "polkadot",
+    "WalletConnect"
   ],
   "homepage": "https://reactivedot.dev/",
   "bugs": {
@@ -16,34 +17,32 @@
   "repository": {
     "type": "git",
     "url": "https://github.com/tien/reactive-dot.git",
-    "directory": "packages/core"
+    "directory": "packages/wallet-walletconnect"
   },
   "type": "module",
   "files": [
     "src",
     "build"
   ],
-  "exports": {
-    ".": "./build/index.js",
-    "./wallets.js": "./build/wallets/index.js"
-  },
+  "exports": "./build/index.js",
   "scripts": {
     "dev": "tsc --build --watch",
     "build": "rm -rf build && tsc --build",
     "lint": "eslint src"
   },
   "dependencies": {
-    "@reactive-dot/utils": "workspace:^"
+    "@walletconnect/modal": "^2.6.2",
+    "@walletconnect/universal-provider": "^2.16.1"
   },
   "devDependencies": {
+    "@reactive-dot/core": "workspace:^",
     "@reactive-dot/eslint-config": "workspace:^",
     "@tsconfig/recommended": "^1.0.7",
     "@tsconfig/strictest": "^2.0.5",
     "eslint": "^9.10.0",
-    "polkadot-api": "^1.2.0",
     "typescript": "^5.5.4"
   },
   "peerDependencies": {
-    "polkadot-api": "1.x"
+    "@reactive-dot/core": "workspace:^"
   }
 }
