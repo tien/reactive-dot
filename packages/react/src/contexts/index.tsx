@@ -1,4 +1,4 @@
-import { useWalletsReconnector } from "../hooks/use-wallets-reconnector.js";
+import { useWalletsInitializer } from "../hooks/use-wallets-initializer.js";
 import { configAtom } from "../stores/config.js";
 import { MutationEventSubjectContext } from "./mutation.js";
 import type { Config } from "@reactive-dot/core";
@@ -26,9 +26,9 @@ export type ReDotProviderProps = PropsWithChildren<{
   config: Config;
 
   /**
-   * Whether or not to reconnect previously connected wallets on mount.
+   * Whether or not to initialize wallets on mount.
    */
-  autoReconnectWallets?: boolean;
+  autoInitializeWallets?: boolean;
 }>;
 
 function ReDotHydrator(props: ReDotProviderProps) {
@@ -37,12 +37,12 @@ function ReDotHydrator(props: ReDotProviderProps) {
   return null;
 }
 
-function WalletsReconnector() {
-  const [_, reconnect] = useWalletsReconnector();
+function WalletsInitializer() {
+  const [_, initialize] = useWalletsInitializer();
 
   useEffect(() => {
-    reconnect();
-  }, [reconnect]);
+    initialize();
+  }, [initialize]);
 
   return null;
 }
@@ -54,15 +54,15 @@ function WalletsReconnector() {
  * @returns React element
  */
 export function ReDotProvider({
-  autoReconnectWallets = true,
+  autoInitializeWallets = true,
   ...props
 }: ReDotProviderProps) {
   return (
     <ScopeProvider atoms={[configAtom]}>
       <ReDotHydrator {...props} />
-      {autoReconnectWallets && (
+      {autoInitializeWallets && (
         <Suspense>
-          <WalletsReconnector />
+          <WalletsInitializer />
         </Suspense>
       )}
       <MutationEventSubjectContext.Provider

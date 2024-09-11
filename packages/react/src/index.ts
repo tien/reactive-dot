@@ -30,5 +30,5 @@ export { useSigner } from "./hooks/use-signer.js";
 export { useTypedApi } from "./hooks/use-typed-api.js";
 export { useWalletConnector } from "./hooks/use-wallet-connector.js";
 export { useWalletDisconnector } from "./hooks/use-wallet-disconnector.js";
-export { useWalletsReconnector } from "./hooks/use-wallets-reconnector.js";
+export { useWalletsInitializer } from "./hooks/use-wallets-initializer.js";
 export { useConnectedWallets, useWallets } from "./hooks/use-wallets.js";
