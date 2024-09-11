@@ -4486,8 +4486,6 @@ __metadata:
     "@walletconnect/universal-provider": "npm:^2.16.1"
     eslint: "npm:^9.10.0"
     typescript: "npm:^5.5.4"
-  peerDependencies:
-    "@reactive-dot/core": "*"
   languageName: unknown
   linkType: soft
 

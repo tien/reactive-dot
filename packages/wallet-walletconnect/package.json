@@ -31,18 +31,15 @@
     "lint": "eslint src"
   },
   "dependencies": {
+    "@reactive-dot/core": "workspace:^",
     "@walletconnect/modal": "^2.6.2",
     "@walletconnect/universal-provider": "^2.16.1"
   },
   "devDependencies": {
-    "@reactive-dot/core": "workspace:^",
     "@reactive-dot/eslint-config": "workspace:^",
     "@tsconfig/recommended": "^1.0.7",
     "@tsconfig/strictest": "^2.0.5",
     "eslint": "^9.10.0",
     "typescript": "^5.5.4"
-  },
-  "peerDependencies": {
-    "@reactive-dot/core": "*"
   }
 }
