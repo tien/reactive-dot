@@ -1,0 +1,47 @@
+{
+  "name": "@reactive-dot/wallet-ledger",
+  "version": "0.0.0",
+  "description": "Ledger adapter for Reactive DOT",
+  "keywords": [
+    "substrate",
+    "polkadot",
+    "ledger"
+  ],
+  "homepage": "https://reactivedot.dev/",
+  "bugs": {
+    "url": "https://github.com/tien/reactive-dot/issues",
+    "email": "tien.nguyenkhac@icloud.com"
+  },
+  "license": "LGPL-3.0-or-later",
+  "author": "Tiến Nguyễn Khắc <tien.nguyenkhac@icloud.com> (https://tien.zone/)",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/tien/reactive-dot.git",
+    "directory": "packages/wallet-ledger"
+  },
+  "type": "module",
+  "files": [
+    "src",
+    "build"
+  ],
+  "exports": "./build/index.js",
+  "scripts": {
+    "dev": "tsc --build --watch",
+    "build": "rm -rf build && tsc --build",
+    "lint": "eslint src"
+  },
+  "dependencies": {
+    "@ledgerhq/hw-transport-webusb": "^6.29.2",
+    "@polkadot-api/merkleize-metadata": "^1.1.2",
+    "@reactive-dot/core": "workspace:^",
+    "@zondax/ledger-substrate": "^1.0.0",
+    "buffer": "^6.0.3"
+  },
+  "devDependencies": {
+    "@reactive-dot/eslint-config": "workspace:^",
+    "@tsconfig/recommended": "^1.0.7",
+    "@tsconfig/strictest": "^2.0.5",
+    "eslint": "^9.10.0",
+    "typescript": "^5.5.4"
+  }
+}
