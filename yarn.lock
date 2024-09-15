@@ -4121,15 +4121,15 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@polkadot-api/cli@npm:0.8.1":
-  version: 0.8.1
-  resolution: "@polkadot-api/cli@npm:0.8.1"
+"@polkadot-api/cli@npm:0.8.2":
+  version: 0.8.2
+  resolution: "@polkadot-api/cli@npm:0.8.2"
   dependencies:
     "@commander-js/extra-typings": "npm:^12.1.0"
-    "@polkadot-api/codegen": "npm:0.10.0"
+    "@polkadot-api/codegen": "npm:0.11.0"
     "@polkadot-api/json-rpc-provider": "npm:0.0.3"
     "@polkadot-api/known-chains": "npm:0.5.1"
-    "@polkadot-api/metadata-compatibility": "npm:0.1.4"
+    "@polkadot-api/metadata-compatibility": "npm:0.1.5"
     "@polkadot-api/observable-client": "npm:0.5.3"
     "@polkadot-api/polkadot-sdk-compat": "npm:2.1.0"
     "@polkadot-api/sm-provider": "npm:0.1.1"
@@ -4153,19 +4153,19 @@ __metadata:
   bin:
     papi: dist/main.js
     polkadot-api: dist/main.js
-  checksum: 10c0/a27d033b0f42cc79f6e9552f057593b98a246717afb9488790d7748a905a40b4446edc95a4ba0abb4203116ab88910cfae47cb02a0661f51bc81282d92d8cad0
+  checksum: 10c0/c1b27258eff148d4ae58a06d99dc5ffe6ec147c388d597e8837a4e4cee6d0103e924336ef3e2371997790fcdb8dd1bc7cb453c256d895a2febc0df7496e02801
   languageName: node
   linkType: hard
 
-"@polkadot-api/codegen@npm:0.10.0":
-  version: 0.10.0
-  resolution: "@polkadot-api/codegen@npm:0.10.0"
+"@polkadot-api/codegen@npm:0.11.0":
+  version: 0.11.0
+  resolution: "@polkadot-api/codegen@npm:0.11.0"
   dependencies:
     "@polkadot-api/metadata-builders": "npm:0.7.0"
-    "@polkadot-api/metadata-compatibility": "npm:0.1.4"
+    "@polkadot-api/metadata-compatibility": "npm:0.1.5"
     "@polkadot-api/substrate-bindings": "npm:0.7.0"
     "@polkadot-api/utils": "npm:0.1.1"
-  checksum: 10c0/983847e80d6106844cec2c968df06e436e0451433b9ed12dbfc89f4bb5f2e853d583040b7b07200b3e212856705aa434249a44ca83bfea167326c6447a06aad5
+  checksum: 10c0/7c06d41336bea99ceae83bfdb1418572ec4b5c70ff68d2d7489c7d235e43bf07e7297d0351bcc7a37e09355d0ea46722c8bfcd1f813264cef770b7763de0267b
   languageName: node
   linkType: hard
 
@@ -4224,13 +4224,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@polkadot-api/metadata-compatibility@npm:0.1.4":
-  version: 0.1.4
-  resolution: "@polkadot-api/metadata-compatibility@npm:0.1.4"
+"@polkadot-api/metadata-compatibility@npm:0.1.5":
+  version: 0.1.5
+  resolution: "@polkadot-api/metadata-compatibility@npm:0.1.5"
   dependencies:
     "@polkadot-api/metadata-builders": "npm:0.7.0"
     "@polkadot-api/substrate-bindings": "npm:0.7.0"
-  checksum: 10c0/1fac6ad7530ed747241194d30de119f5f9669cd40ab03084dbad08fd8167c2668602fca9eceaa44a1c77777808bd844284da0230e355c7945abed6e7d5ee1e9a
+  checksum: 10c0/ce63fe3c8d17c27f0c3332d4bddb917ffc518ccf1d62c23e2721f142a0a068f9972bc03ffdc6857074954be23a44657f0075cd83e07b26f4809d8b419787324c
   languageName: node
   linkType: hard
 
@@ -4377,7 +4377,7 @@ __metadata:
     "@tsconfig/recommended": "npm:^1.0.7"
     "@tsconfig/strictest": "npm:^2.0.5"
     eslint: "npm:^9.10.0"
-    polkadot-api: "npm:^1.2.0"
+    polkadot-api: "npm:^1.2.1"
     typescript: "npm:^5.6.2"
   peerDependencies:
     polkadot-api: 1.x
@@ -4437,7 +4437,7 @@ __metadata:
     date-fns: "npm:^3.6.0"
     eslint: "npm:^9.10.0"
     jotai-devtools: "npm:^0.10.1"
-    polkadot-api: "npm:^1.2.0"
+    polkadot-api: "npm:^1.2.1"
     react: "npm:^18.3.1"
     react-dom: "npm:^18.3.1"
     react-error-boundary: "npm:^4.0.13"
@@ -4459,7 +4459,7 @@ __metadata:
     eslint: "npm:^9.10.0"
     jotai: "npm:^2.9.3"
     jotai-scope: "npm:^0.7.2"
-    polkadot-api: "npm:^1.2.0"
+    polkadot-api: "npm:^1.2.1"
     react: "npm:^18.3.1"
     typescript: "npm:^5.6.2"
   peerDependencies:
@@ -14932,16 +14932,16 @@ __metadata:
   languageName: node
   linkType: hard
 
-"polkadot-api@npm:^1.2.0":
-  version: 1.2.0
-  resolution: "polkadot-api@npm:1.2.0"
+"polkadot-api@npm:^1.2.1":
+  version: 1.2.1
+  resolution: "polkadot-api@npm:1.2.1"
   dependencies:
-    "@polkadot-api/cli": "npm:0.8.1"
+    "@polkadot-api/cli": "npm:0.8.2"
     "@polkadot-api/json-rpc-provider": "npm:0.0.3"
     "@polkadot-api/known-chains": "npm:0.5.1"
     "@polkadot-api/logs-provider": "npm:0.0.5"
     "@polkadot-api/metadata-builders": "npm:0.7.0"
-    "@polkadot-api/metadata-compatibility": "npm:0.1.4"
+    "@polkadot-api/metadata-compatibility": "npm:0.1.5"
     "@polkadot-api/observable-client": "npm:0.5.3"
     "@polkadot-api/pjs-signer": "npm:0.4.2"
     "@polkadot-api/polkadot-sdk-compat": "npm:2.1.0"
@@ -14958,7 +14958,7 @@ __metadata:
   bin:
     papi: bin/cli.mjs
     polkadot-api: bin/cli.mjs
-  checksum: 10c0/46040d3fa664865b853a4debb92f3e0099adfd5ba291f26f2275b5c90270b8ac7bec1ac6164fb2c050248ab6bd45f51b9750c628811e62f78aa73c5011bf586b
+  checksum: 10c0/30e80b1e6655eb6033221b36224e2b241298d912e41a02b40041ce7b294a351cc2d096aef41373a33a7b924bc735470c0986733e102203837c1c2ce182339d44
   languageName: node
   linkType: hard
 
