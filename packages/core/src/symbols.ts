@@ -1,3 +1,3 @@
-export const IDLE = Symbol();
+export const idle = Symbol();
 
-export const PENDING = Symbol();
+export const pending = Symbol();

@@ -1,8 +1,8 @@
 import { config } from "./config";
 import {
-  IDLE,
+  idle,
   MutationError,
-  PENDING,
+  pending,
   type PolkadotAccount,
 } from "@reactive-dot/core";
 import type { Wallet } from "@reactive-dot/core/wallets.js";
@@ -234,17 +234,17 @@ function WalletItem({ wallet }: WalletItemProps) {
         <button
           type="button"
           onClick={() => disconnect()}
-          disabled={disconnectingState === PENDING}
+          disabled={disconnectingState === pending}
         >
-          Disconnect{disconnectingState === PENDING && <>...</>}
+          Disconnect{disconnectingState === pending && <>...</>}
         </button>
       ) : (
         <button
           type="button"
           onClick={() => connect()}
-          disabled={connectingState === PENDING}
+          disabled={connectingState === pending}
         >
-          Connect{connectingState === PENDING && <>...</>}
+          Connect{connectingState === pending && <>...</>}
         </button>
       )}
     </li>
@@ -327,9 +327,9 @@ function Mutation() {
           <p>
             {(() => {
               switch (remarkState) {
-                case IDLE:
+                case idle:
                   return null;
-                case PENDING:
+                case pending:
                   return "Submitting transaction...";
                 default:
                   if (remarkState instanceof MutationError) {
@@ -369,7 +369,7 @@ function Example({ chainName }: ExampleProps) {
   const resetQueryError = useQueryErrorResetter();
 
   useMutationEffect((event) => {
-    if (event.value === PENDING) {
+    if (event.value === pending) {
       toast.loading("Submitting transaction", { id: event.id });
       return;
     }

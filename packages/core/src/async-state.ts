@@ -1,7 +1,7 @@
-import type { IDLE, PENDING } from "./symbols.js";
+import type { idle, pending } from "./symbols.js";
 
 export type AsyncValue<TResult, TError extends Error = Error> =
-  | typeof IDLE
-  | typeof PENDING
+  | typeof idle
+  | typeof pending
   | TError
   | TResult;
