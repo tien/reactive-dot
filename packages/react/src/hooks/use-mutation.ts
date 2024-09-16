@@ -8,7 +8,7 @@ import type { ChainHookOptions } from "./types.js";
 import { useAsyncState } from "./use-async-state.js";
 import { internal_useChainId } from "./use-chain-id.js";
 import type { ChainId, Chains } from "@reactive-dot/core";
-import { MutationError, PENDING } from "@reactive-dot/core";
+import { MutationError, pending } from "@reactive-dot/core";
 import { useAtomCallback } from "jotai/utils";
 import type {
   PolkadotSigner,
@@ -76,7 +76,7 @@ export function useMutation<
       async (get, _set, submitOptions) => {
         const id = globalThis.crypto.randomUUID();
 
-        setState({ id, value: PENDING });
+        setState({ id, value: pending });
 
         const signer =
           submitOptions?.signer ?? options?.signer ?? contextSigner;
@@ -96,7 +96,7 @@ export function useMutation<
 
         const transaction = action(api.tx);
 
-        setState({ id, call: transaction.decodedCall, value: PENDING });
+        setState({ id, call: transaction.decodedCall, value: pending });
 
         return new Promise((resolve, reject) =>
           transaction

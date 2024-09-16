@@ -56,7 +56,7 @@ clearIdentity({ signer: accounts.at(0)?.polkadotSigner });
 ## Submitting transaction
 
 ```tsx
-import { IDLE, MutationError, PENDING } from "@reactive-dot/core";
+import { idle, MutationError, pending } from "@reactive-dot/core";
 import { useMutation } from "@reactive-dot/react";
 import { Binary } from "polkadot-api";
 
@@ -66,9 +66,9 @@ function Component() {
   );
 
   switch (remarkState) {
-    case IDLE:
+    case idle:
       return <div>No transaction submitted yet</div>;
-    case PENDING:
+    case pending:
       return <div>Submitting transaction...</div>;
     default:
       if (remarkState instanceof MutationError) {
@@ -90,13 +90,13 @@ function Component() {
 It’s common to watch for all transactions throughout the application to display an appropriate loading state or toast. This can be easily achieved with the [`useMutationEffect`](/api/react/function/useMutationEffect) hook.
 
 ```tsx
-import { IDLE, MutationError, PENDING } from "@reactive-dot/core";
+import { idle, MutationError, pending } from "@reactive-dot/core";
 import { useMutationEffect } from "@reactive-dot/react";
 import toast from "react-hot-toast";
 
 function Watcher() {
   useMutationEffect((event) => {
-    if (event.value === PENDING) {
+    if (event.value === pending) {
       toast.loading("Submitting transaction", { id: event.id });
       return;
     }

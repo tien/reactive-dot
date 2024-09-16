@@ -1,7 +1,7 @@
 import type {
   AsyncValue,
   ChainId,
-  IDLE,
+  idle,
   MutationError,
 } from "@reactive-dot/core";
 import type { Transaction, TxEvent } from "polkadot-api";
@@ -17,7 +17,7 @@ export type MutationEvent = {
     string,
     unknown
   >["decodedCall"];
-  value: Exclude<AsyncValue<TxEvent, MutationError>, typeof IDLE>;
+  value: Exclude<AsyncValue<TxEvent, MutationError>, typeof idle>;
 };
 
 export const MutationEventSubjectContext = createContext(

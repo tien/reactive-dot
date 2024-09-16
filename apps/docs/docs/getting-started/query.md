@@ -113,7 +113,7 @@ function Query() {
 Use a falsy value (`undefined`, `null` or `false`) to conditionally fetch data. If the query builder returns or itself is a falsy value, Reactive DOT will not execute the query.
 
 ```ts
-import { IDLE } from "@reactive-dot/core";
+import { idle } from "@reactive-dot/core";
 
 const conditionalReturn = useLazyLoadQuery((builder) =>
   account === undefined
@@ -134,8 +134,8 @@ const conditionalFunction = useLazyLoadQuery(
         ]),
 );
 
-// Result will be `IDLE` if the query hasn't been executed
-if (conditionalReturn === IDLE || conditionalFunction === IDLE) {
+// Result will be `idle` if the query hasn't been executed
+if (conditionalReturn === idle || conditionalFunction === idle) {
   console.log("Queries are in idle state");
 }
 ```

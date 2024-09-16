@@ -7,7 +7,7 @@ import { flatHead, stringify } from "../utils/vanilla.js";
 import type { ChainHookOptions } from "./types.js";
 import { internal_useChainId } from "./use-chain-id.js";
 import {
-  IDLE,
+  idle,
   Query,
   type ChainId,
   type Chains,
@@ -91,13 +91,13 @@ export function useLazyLoadQueryWithRefresh<
   options?: ChainHookOptions<TChainId>,
 ): [
   data: TQuery extends Falsy
-    ? typeof IDLE
+    ? typeof idle
     : FalsyGuard<
         ReturnType<Exclude<TQuery, Falsy>>,
         FlatHead<
           InferQueryPayload<Exclude<ReturnType<Exclude<TQuery, Falsy>>, Falsy>>
         >,
-        typeof IDLE
+        typeof idle
       >,
   refresh: () => void,
 ] {
@@ -117,7 +117,7 @@ export function useLazyLoadQueryWithRefresh<
     useMemo(
       () =>
         !query
-          ? atom(IDLE)
+          ? atom(idle)
           : queryPayloadAtomFamily({
               chainId,
               query,
@@ -163,13 +163,13 @@ export function useLazyLoadQuery<
   builder: TQuery,
   options?: ChainHookOptions<TChainId>,
 ): TQuery extends Falsy
-  ? typeof IDLE
+  ? typeof idle
   : FalsyGuard<
       ReturnType<Exclude<TQuery, Falsy>>,
       FlatHead<
         InferQueryPayload<Exclude<ReturnType<Exclude<TQuery, Falsy>>, Falsy>>
       >,
-      typeof IDLE
+      typeof idle
     > {
   const [data] = useLazyLoadQueryWithRefresh(builder, options);
 
