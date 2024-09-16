@@ -6,8 +6,8 @@ import {
   type Chains,
   type CommonDescriptor,
   Query,
-  type QueryInstruction,
 } from "@reactive-dot/core";
+import type { QueryInstruction } from "@reactive-dot/core/internal.js";
 import type { Getter } from "jotai";
 import { useAtomCallback } from "jotai/utils";
 import { useCallback } from "react";
