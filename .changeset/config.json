@@ -7,7 +7,7 @@
     { "repo": "tien/reactive-dot" }
   ],
   "privatePackages": false,
-  "linked": [["@reactive-dot/*"]],
+  "linked": [["@reactive-dot/*", "!@reactive-dot/utils"]],
   "___experimentalUnsafeOptions_WILL_CHANGE_IN_PATCH": {
     "onlyUpdatePeerDependentsWhenOutOfRange": true
   }
