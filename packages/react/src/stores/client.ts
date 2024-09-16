@@ -1,39 +1,44 @@
-import { chainConfigsAtom } from "./config.js";
-import type { ChainId } from "@reactive-dot/core";
+import type { ChainId, Config } from "@reactive-dot/core";
 import { getClient, ReDotError } from "@reactive-dot/core";
 import { atom } from "jotai";
 import { atomFamily } from "jotai/utils";
 
-export const clientAtomFamily = atomFamily((chainId: ChainId) =>
-  atom(async (get) => {
-    const chainConfig = get(chainConfigsAtom)[chainId];
+export const clientAtomFamily = atomFamily(
+  (param: { config: Config; chainId: ChainId }) =>
+    atom(async () => {
+      const chainConfig = param.config.chains[param.chainId];
 
-    if (chainConfig === undefined) {
-      throw new ReDotError(`No config provided for ${chainId}`);
-    }
+      if (chainConfig === undefined) {
+        throw new ReDotError(`No config provided for ${param.chainId}`);
+      }
 
-    return getClient(chainConfig);
-  }),
+      return getClient(chainConfig);
+    }),
+  (a, b) => a.config === b.config && a.chainId === b.chainId,
 );
 
-export const chainSpecDataAtomFamily = atomFamily((chainId: ChainId) =>
-  atom(async (get) => {
-    const client = await get(clientAtomFamily(chainId));
+export const chainSpecDataAtomFamily = atomFamily(
+  (param: { config: Config; chainId: ChainId }) =>
+    atom(async (get) => {
+      const client = await get(clientAtomFamily(param));
 
-    return client.getChainSpecData();
-  }),
+      return client.getChainSpecData();
+    }),
+  (a, b) => a.config === b.config && a.chainId === b.chainId,
 );
 
-export const typedApiAtomFamily = atomFamily((chainId: ChainId) =>
-  atom(async (get) => {
-    const config = get(chainConfigsAtom)[chainId];
+export const typedApiAtomFamily = atomFamily(
+  (param: { config: Config; chainId: ChainId }) =>
+    atom(async (get) => {
+      const config = param.config.chains[param.chainId];
 
-    if (config === undefined) {
-      throw new ReDotError(`No config provided for chain ${chainId}`);
-    }
+      if (config === undefined) {
+        throw new ReDotError(`No config provided for chain ${param.chainId}`);
+      }
 
-    const client = await get(clientAtomFamily(chainId));
+      const client = await get(clientAtomFamily(param));
 
-    return client.getTypedApi(config.descriptor);
-  }),
+      return client.getTypedApi(config.descriptor);
+    }),
+  (a, b) => a.config === b.config && a.chainId === b.chainId,
 );

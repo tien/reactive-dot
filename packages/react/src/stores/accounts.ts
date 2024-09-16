@@ -2,6 +2,7 @@ import { withAtomFamilyErrorCatcher } from "../utils/jotai.js";
 import { chainSpecDataAtomFamily } from "./client.js";
 import { walletsAtom } from "./wallets.js";
 import {
+  type Config,
   getAccounts,
   type ChainId,
   type PolkadotAccount,
@@ -10,19 +11,22 @@ import type { Atom } from "jotai";
 import { atomFamily, atomWithObservable } from "jotai/utils";
 
 export const accountsAtom = atomFamily(
-  (
-    chainId: ChainId | undefined,
-  ): Atom<PolkadotAccount[] | Promise<PolkadotAccount[]>> =>
+  (param: {
+    config: Config;
+    chainId: ChainId | undefined;
+  }): Atom<PolkadotAccount[] | Promise<PolkadotAccount[]>> =>
     withAtomFamilyErrorCatcher(
       accountsAtom,
-      chainId,
+      param,
       atomWithObservable,
     )((get) =>
       getAccounts(
-        get(walletsAtom),
-        chainId === undefined
+        get(walletsAtom(param.config)),
+        param.chainId === undefined
           ? undefined
-          : get(chainSpecDataAtomFamily(chainId)),
+          : // @ts-expect-error `chainId` will never be undefined
+            get(chainSpecDataAtomFamily(param)),
       ),
     ),
+  (a, b) => a.config === b.config && a.chainId === b.chainId,
 );

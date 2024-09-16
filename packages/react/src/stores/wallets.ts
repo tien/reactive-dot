@@ -1,30 +1,31 @@
-import { configAtom } from "./config.js";
-import { aggregateWallets, getConnectedWallets } from "@reactive-dot/core";
+import {
+  aggregateWallets,
+  type Config,
+  getConnectedWallets,
+} from "@reactive-dot/core";
 import { Wallet, WalletAggregator } from "@reactive-dot/core/wallets.js";
 import { atom } from "jotai";
-import { atomWithObservable } from "jotai/utils";
+import { atomFamily, atomWithObservable } from "jotai/utils";
 
-export const walletAggregatorsAtom = atom(
-  (get) =>
-    get(configAtom).wallets?.filter(
-      (aggregator) => aggregator instanceof WalletAggregator,
-    ) ?? [],
+const aggregatorWallets = atomFamily((config: Config) =>
+  atomWithObservable(() =>
+    aggregateWallets(
+      config.wallets?.filter(
+        (walletOrAggregator) => walletOrAggregator instanceof WalletAggregator,
+      ) ?? [],
+    ),
+  ),
 );
 
-const aggregatorWallets = atomWithObservable((get) =>
-  aggregateWallets(get(walletAggregatorsAtom)),
+export const walletsAtom = atomFamily((config: Config) =>
+  atom(async (get) => [
+    ...(config.wallets?.filter(
+      (walletOrAggregator) => walletOrAggregator instanceof Wallet,
+    ) ?? []),
+    ...(await get(aggregatorWallets(config))),
+  ]),
 );
 
-export const directWalletsAtom = atom<Wallet[]>(
-  (get) =>
-    get(configAtom).wallets?.filter((wallet) => wallet instanceof Wallet) ?? [],
-);
-
-export const walletsAtom = atom(async (get) => [
-  ...get(directWalletsAtom),
-  ...(await get(aggregatorWallets)),
-]);
-
-export const connectedWalletsAtom = atomWithObservable((get) =>
-  getConnectedWallets(get(walletsAtom)),
+export const connectedWalletsAtom = atomFamily((config: Config) =>
+  atomWithObservable((get) => getConnectedWallets(get(walletsAtom(config)))),
 );
