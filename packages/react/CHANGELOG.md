@@ -1,5 +1,20 @@
 # @reactive-dot/react
 
+## 0.13.0
+
+### Minor Changes
+
+- [#165](https://github.com/tien/reactive-dot/pull/165) [`82aa041`](https://github.com/tien/reactive-dot/commit/82aa041997eddf56d24ba97da3ba61f38e1cda7f) Thanks [@tien](https://github.com/tien)! - BREAKING: renamed wallets "reconnect" to "initialize".
+
+- [#174](https://github.com/tien/reactive-dot/pull/174) [`1468d69`](https://github.com/tien/reactive-dot/commit/1468d69091e4aa96886edbf3272b0b3df21a4a4a) Thanks [@tien](https://github.com/tien)! - BREAKING: switched to camelCase for exported symbols.
+
+- [#172](https://github.com/tien/reactive-dot/pull/172) [`46abe19`](https://github.com/tien/reactive-dot/commit/46abe19dd85a54385e480941baae2275603718e9) Thanks [@tien](https://github.com/tien)! - BREAKING: moved internal types to subpath export.
+
+### Patch Changes
+
+- Updated dependencies [[`1468d69`](https://github.com/tien/reactive-dot/commit/1468d69091e4aa96886edbf3272b0b3df21a4a4a), [`46abe19`](https://github.com/tien/reactive-dot/commit/46abe19dd85a54385e480941baae2275603718e9)]:
+  - @reactive-dot/core@0.13.0
+
 ## 0.12.0
 
 ### Patch Changes
