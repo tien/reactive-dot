@@ -38,7 +38,7 @@
     "@reactive-dot/eslint-config": "workspace:^",
     "@tsconfig/recommended": "^1.0.7",
     "@tsconfig/strictest": "^2.0.5",
-    "@types/react": "^18.3.5",
+    "@types/react": "^18.3.6",
     "eslint": "^9.10.0",
     "polkadot-api": "^1.2.1",
     "react": "^18.3.1",
