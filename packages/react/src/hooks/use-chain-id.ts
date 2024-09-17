@@ -1,8 +1,7 @@
 import { ChainIdContext } from "../contexts/index.js";
-import { chainConfigsAtom } from "../stores/config.js";
 import type { ChainHookOptions } from "./types.js";
+import { useConfig } from "./use-config.js";
 import { type ChainId, ReDotError } from "@reactive-dot/core";
-import { useAtomValue } from "jotai";
 import { useContext } from "react";
 
 /**
@@ -11,7 +10,7 @@ import { useContext } from "react";
  * @returns All configured chain IDs
  */
 export function useChainIds() {
-  return Object.keys(useAtomValue(chainConfigsAtom)) as ChainId[];
+  return Object.keys(useConfig().chains) as ChainId[];
 }
 
 /**

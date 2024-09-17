@@ -1,4 +1,5 @@
 import { connectedWalletsAtom, walletsAtom } from "../stores/wallets.js";
+import { useConfig } from "./use-config.js";
 import { useAtomValue } from "jotai";
 
 /**
@@ -7,7 +8,7 @@ import { useAtomValue } from "jotai";
  * @returns Available wallets
  */
 export function useWallets() {
-  return useAtomValue(walletsAtom);
+  return useAtomValue(walletsAtom(useConfig()));
 }
 
 /**
@@ -16,5 +17,5 @@ export function useWallets() {
  * @returns Connected wallets
  */
 export function useConnectedWallets() {
-  return useAtomValue(connectedWalletsAtom);
+  return useAtomValue(connectedWalletsAtom(useConfig()));
 }

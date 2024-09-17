@@ -4,6 +4,7 @@ import {
 } from "../stores/block.js";
 import type { ChainHookOptions } from "./types.js";
 import { internal_useChainId } from "./use-chain-id.js";
+import { useConfig } from "./use-config.js";
 import { useAtomValue } from "jotai";
 
 /**
@@ -17,11 +18,12 @@ export function useBlock(
   tag: "best" | "finalized" = "finalized",
   options?: ChainHookOptions,
 ) {
+  const config = useConfig();
   const chainId = internal_useChainId(options);
 
   return useAtomValue(
     tag === "finalized"
-      ? finalizedBlockAtomFamily(chainId)
-      : bestBlockAtomFamily(chainId),
+      ? finalizedBlockAtomFamily({ config, chainId })
+      : bestBlockAtomFamily({ config, chainId }),
   );
 }

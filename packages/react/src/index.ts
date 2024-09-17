@@ -13,6 +13,7 @@ export { useBlock } from "./hooks/use-block.js";
 export { useChainId, useChainIds } from "./hooks/use-chain-id.js";
 export { useChainSpecData } from "./hooks/use-chain-spec-data.js";
 export { useClient } from "./hooks/use-client.js";
+export { useConfig } from "./hooks/use-config.js";
 export { useMutationEffect } from "./hooks/use-mutation-effect.js";
 export { useMutation } from "./hooks/use-mutation.js";
 export {

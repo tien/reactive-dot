@@ -6,6 +6,7 @@ import type { Falsy, FalsyGuard, FlatHead } from "../types.js";
 import { flatHead, stringify } from "../utils/vanilla.js";
 import type { ChainHookOptions } from "./types.js";
 import { internal_useChainId } from "./use-chain-id.js";
+import { useConfig } from "./use-config.js";
 import {
   idle,
   Query,
@@ -39,6 +40,7 @@ export function useQueryRefresher<
     : Chains[TChainId],
   TChainId extends ChainId,
 >(builder: TQuery, options?: ChainHookOptions<TChainId>) {
+  const config = useConfig();
   const chainId = internal_useChainId(options);
 
   const refresh = useAtomCallback(
@@ -54,7 +56,11 @@ export function useQueryRefresher<
           return;
         }
 
-        const atoms = getQueryInstructionPayloadAtoms(chainId, query).flat();
+        const atoms = getQueryInstructionPayloadAtoms(
+          config,
+          chainId,
+          query,
+        ).flat();
 
         for (const atom of atoms) {
           if ("write" in atom) {
@@ -62,7 +68,7 @@ export function useQueryRefresher<
           }
         }
       },
-      [builder, chainId],
+      [builder, chainId, config],
     ),
   );
 
@@ -101,6 +107,7 @@ export function useLazyLoadQueryWithRefresh<
       >,
   refresh: () => void,
 ] {
+  const config = useConfig();
   const chainId = internal_useChainId(options);
 
   const query = useMemo(
@@ -119,6 +126,7 @@ export function useLazyLoadQueryWithRefresh<
         !query
           ? atom(idle)
           : queryPayloadAtomFamily({
+              config,
               chainId,
               query,
             }),

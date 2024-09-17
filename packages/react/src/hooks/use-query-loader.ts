@@ -1,6 +1,7 @@
 import { queryPayloadAtomFamily } from "../stores/query.js";
 import type { ChainHookOptions } from "./types.js";
 import { internal_useChainId } from "./use-chain-id.js";
+import { useConfig } from "./use-config.js";
 import {
   type ChainId,
   type Chains,
@@ -18,6 +19,7 @@ import { useCallback } from "react";
  * @returns The function to load queries
  */
 export function useQueryLoader() {
+  const config = useConfig();
   const chainId = internal_useChainId();
 
   const _loadQuery = useCallback(
@@ -38,12 +40,13 @@ export function useQueryLoader() {
 
         void get(
           queryPayloadAtomFamily({
+            config,
             chainId: options?.chainId ?? chainId,
             query,
           }),
         );
       },
-    [chainId],
+    [chainId, config],
   );
 
   const loadQuery = useAtomCallback(

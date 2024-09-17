@@ -1,7 +1,13 @@
 import { withAtomFamilyErrorCatcher } from "../utils/jotai.js";
 import { stringify } from "../utils/vanilla.js";
 import { typedApiAtomFamily } from "./client.js";
-import { preflight, query, type ChainId, type Query } from "@reactive-dot/core";
+import {
+  type Config,
+  preflight,
+  query,
+  type ChainId,
+  type Query,
+} from "@reactive-dot/core";
 import type {
   MultiInstruction,
   QueryInstruction,
@@ -12,6 +18,7 @@ import { from, switchMap, type Observable } from "rxjs";
 
 export const instructionPayloadAtomFamily = atomFamily(
   (param: {
+    config: Config;
     chainId: ChainId;
     instruction: Exclude<
       QueryInstruction,
@@ -27,7 +34,7 @@ export const instructionPayloadAtomFamily = atomFamily(
           param,
           atomWithRefresh,
         )(async (get, { signal }) => {
-          const api = await get(typedApiAtomFamily(param.chainId));
+          const api = await get(typedApiAtomFamily(param));
 
           return query(api, param.instruction, { signal });
         });
@@ -37,7 +44,7 @@ export const instructionPayloadAtomFamily = atomFamily(
           param,
           atomWithObservable,
         )((get) =>
-          from(get(typedApiAtomFamily(param.chainId))).pipe(
+          from(get(typedApiAtomFamily(param))).pipe(
             switchMap(
               (api) => query(api, param.instruction) as Observable<unknown>,
             ),
@@ -45,17 +52,22 @@ export const instructionPayloadAtomFamily = atomFamily(
         );
     }
   },
-  (a, b) => stringify(a) === stringify(b),
+  (a, b) =>
+    a.config === b.config &&
+    a.chainId === b.chainId &&
+    stringify(a.instruction) === stringify(b.instruction),
 );
 
 export function getQueryInstructionPayloadAtoms(
+  config: Config,
   chainId: ChainId,
   query: Query,
 ) {
   return query.instructions.map((instruction) => {
     if (!("multi" in instruction)) {
       return instructionPayloadAtomFamily({
-        chainId: chainId,
+        config,
+        chainId,
         instruction,
       });
     }
@@ -64,7 +76,8 @@ export function getQueryInstructionPayloadAtoms(
       const { multi, ...rest } = instruction;
 
       return instructionPayloadAtomFamily({
-        chainId: chainId,
+        config,
+        chainId,
         instruction: { ...rest, args },
       });
     });
@@ -74,13 +87,17 @@ export function getQueryInstructionPayloadAtoms(
 // TODO: should be memoized within render function instead
 // https://github.com/pmndrs/jotai/discussions/1553
 export const queryPayloadAtomFamily = atomFamily(
-  (param: { chainId: ChainId; query: Query }): Atom<unknown> =>
+  (param: { config: Config; chainId: ChainId; query: Query }): Atom<unknown> =>
     withAtomFamilyErrorCatcher(
       queryPayloadAtomFamily,
       param,
       atom,
     )((get) => {
-      const atoms = getQueryInstructionPayloadAtoms(param.chainId, param.query);
+      const atoms = getQueryInstructionPayloadAtoms(
+        param.config,
+        param.chainId,
+        param.query,
+      );
 
       return Promise.all(
         atoms.map((atomOrAtoms) => {
@@ -93,6 +110,7 @@ export const queryPayloadAtomFamily = atomFamily(
       );
     }),
   (a, b) =>
+    a.config === b.config &&
     a.chainId === b.chainId &&
     stringify(a.query.instructions) === stringify(b.query.instructions),
 );
