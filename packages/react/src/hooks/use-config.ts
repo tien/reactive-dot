@@ -1,5 +1,5 @@
 import { ConfigContext } from "../contexts/index.js";
-import { ReDotError } from "@reactive-dot/core";
+import { ReactiveDotError } from "@reactive-dot/core";
 import { useContext } from "react";
 
 /**
@@ -11,7 +11,7 @@ export function useConfig() {
   const config = useContext(ConfigContext);
 
   if (config === undefined) {
-    throw new ReDotError("No config provided");
+    throw new ReactiveDotError("No config provided");
   }
   return config;
 }

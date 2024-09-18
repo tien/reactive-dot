@@ -1,4 +1,4 @@
-import { ReDotError } from "../../errors.js";
+import { ReactiveDotError } from "../../errors.js";
 import { Wallet, type WalletOptions } from "../wallet.js";
 import {
   connectInjectedExtension,
@@ -67,7 +67,7 @@ export class InjectedWallet extends Wallet {
     const extension = this.#extension$.getValue();
 
     if (extension === undefined) {
-      throw new ReDotError("Extension is not connected");
+      throw new ReactiveDotError("Extension is not connected");
     }
 
     return extension.getAccounts();

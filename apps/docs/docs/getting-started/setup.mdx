@@ -130,7 +130,7 @@ export const config = {
 
 The type declarations extension here will be used to provide you with the right type definitions when using hooks.
 
-```ts title="redot.d.ts"
+```ts title="reactive-dot.d.ts"
 import type { config } from "./config";
 import type { InferChains } from "@reactive-dot/core";
 
@@ -143,18 +143,18 @@ declare module "@reactive-dot/core" {
 
 ```tsx title="app.tsx"
 import { config } from "./config";
-import { ReDotChainProvider, ReDotProvider } from "@reactive-dot/react";
+import { ChainProvider, ReactiveDotProvider } from "@reactive-dot/react";
 import { Suspense } from "react";
 
 export function App() {
   return (
-    <ReDotProvider config={config}>
+    <ReactiveDotProvider config={config}>
       {/* `chainId` match the ID previously specified via `polkadot: typeof dot` */}
-      <ReDotChainProvider chainId="polkadot">
+      <ChainProvider chainId="polkadot">
         {/* Make sure there is at least one Suspense boundary wrapping the app */}
         <Suspense>{/* ... */}</Suspense>
-      </ReDotChainProvider>
-    </ReDotProvider>
+      </ChainProvider>
+    </ReactiveDotProvider>
   );
 }
 ```

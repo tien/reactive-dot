@@ -21,7 +21,7 @@ npx papi
 
 ### Add type information
 
-```ts title="redot.d.ts"
+```ts title="reactive-dot.d.ts"
 import type { dot, ksm, wnd } from "@polkadot-api/descriptors";
 
 declare module "@reactive-dot/core" {
@@ -69,15 +69,15 @@ One active chain at a time.
 ```tsx
 // ...
 import type { ChainId } from "@reactive-dot/core";
-import type { ReDotChainProvider } from "@reactive-dot/react";
+import type { ChainProvider } from "@reactive-dot/react";
 
 function App() {
   const [currentChainId, setCurrentChainId] = useState<ChainId>("polkadot");
 
   return (
-    <ReDotChainProvider chainId={currentChainId}>
+    <ChainProvider chainId={currentChainId}>
       <MyDApp />
-    </ReDotChainProvider>
+    </ChainProvider>
   );
 }
 ```
@@ -86,20 +86,20 @@ Multiple active chains at the same time.
 
 ```tsx
 // ...
-import type { ReDotChainProvider } from "@reactive-dot/react";
+import type { ChainProvider } from "@reactive-dot/react";
 
 function App() {
   return (
     <>
-      <ReDotChainProvider chainId="polkadot">
+      <ChainProvider chainId="polkadot">
         <MyDApp />
-      </ReDotChainProvider>
-      <ReDotChainProvider chainId="kusama">
+      </ChainProvider>
+      <ChainProvider chainId="kusama">
         <MyDApp />
-      </ReDotChainProvider>
-      <ReDotChainProvider chainId="westend">
+      </ChainProvider>
+      <ChainProvider chainId="westend">
         <MyDApp />
-      </ReDotChainProvider>
+      </ChainProvider>
     </>
   );
 }
@@ -179,9 +179,9 @@ function App() {
   return (
     <div>
       {bountiesEnabledChainIds.map((chainId) => (
-        <ReDotChainProvider key={chainId} chainId={chainId}>
+        <ChainProvider key={chainId} chainId={chainId}>
           <BountiesPalletRequiredComponent />
-        </ReDotChainProvider>
+        </ChainProvider>
       ))}
       {/* ... */}
     </div>

@@ -3,7 +3,7 @@ import {
   idle,
   pending,
   type AsyncValue,
-  type ReDotError,
+  type ReactiveDotError,
 } from "@reactive-dot/core";
 import { initializeWallets } from "@reactive-dot/core/wallets.js";
 import { useCallback, useState } from "react";
@@ -16,7 +16,7 @@ import { useCallback, useState } from "react";
 export function useWalletsInitializer() {
   const wallets = useWallets();
 
-  const [state, setState] = useState<AsyncValue<true, ReDotError>>(idle);
+  const [state, setState] = useState<AsyncValue<true, ReactiveDotError>>(idle);
 
   const initialize = useCallback(async () => {
     setState(pending);

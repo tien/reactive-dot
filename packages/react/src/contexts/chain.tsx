@@ -3,7 +3,7 @@ import { createContext, type PropsWithChildren } from "react";
 
 export const ChainIdContext = createContext<ChainId | undefined>(undefined);
 
-export type ReDotChainProviderProps = PropsWithChildren<{
+export type ChainProviderProps = PropsWithChildren<{
   chainId: ChainId;
 }>;
 
@@ -13,7 +13,7 @@ export type ReDotChainProviderProps = PropsWithChildren<{
  * @param props - Component props
  * @returns React element
  */
-export function ReDotChainProvider(props: ReDotChainProviderProps) {
+export function ChainProvider(props: ChainProviderProps) {
   return (
     <ChainIdContext.Provider value={props.chainId}>
       {props.children}

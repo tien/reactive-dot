@@ -15,7 +15,7 @@ export type {
   Config,
   InferChains,
 } from "./config.js";
-export { MutationError, QueryError, ReDotError } from "./errors.js";
+export { MutationError, QueryError, ReactiveDotError } from "./errors.js";
 export { Query } from "./query-builder.js";
 export { PrefixedStorage } from "./storage.js";
 export { idle, pending } from "./symbols.js";

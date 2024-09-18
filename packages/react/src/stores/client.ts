@@ -1,5 +1,5 @@
 import type { ChainId, Config } from "@reactive-dot/core";
-import { getClient, ReDotError } from "@reactive-dot/core";
+import { getClient, ReactiveDotError } from "@reactive-dot/core";
 import { atom } from "jotai";
 import { atomFamily } from "jotai/utils";
 
@@ -9,7 +9,7 @@ export const clientAtomFamily = atomFamily(
       const chainConfig = param.config.chains[param.chainId];
 
       if (chainConfig === undefined) {
-        throw new ReDotError(`No config provided for ${param.chainId}`);
+        throw new ReactiveDotError(`No config provided for ${param.chainId}`);
       }
 
       return getClient(chainConfig);
@@ -33,7 +33,9 @@ export const typedApiAtomFamily = atomFamily(
       const config = param.config.chains[param.chainId];
 
       if (config === undefined) {
-        throw new ReDotError(`No config provided for chain ${param.chainId}`);
+        throw new ReactiveDotError(
+          `No config provided for chain ${param.chainId}`,
+        );
       }
 
       const client = await get(clientAtomFamily(param));
