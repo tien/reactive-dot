@@ -17,12 +17,10 @@ There are multiple way to select the account used for signing.
 ### 1. Via context
 
 ```tsx
-import { ReDotSignerProvider } from "@reactive-dot/react";
+import { SignerProvider } from "@reactive-dot/react";
 
 function App() {
-  return (
-    <ReDotSignerProvider signer={someSigner}>{/* ... */}</ReDotSignerProvider>
-  );
+  return <SignerProvider signer={someSigner}>{/* ... */}</SignerProvider>;
 }
 ```
 

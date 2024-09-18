@@ -12,19 +12,19 @@ import { Subject } from "rxjs";
 
 export {
   ChainIdContext,
-  ReDotChainProvider,
-  type ReDotChainProviderProps,
+  ChainProvider,
+  type ChainProviderProps,
 } from "./chain.js";
 
 export {
-  ReDotSignerProvider,
+  SignerProvider,
   SignerContext,
-  type ReDotSignerProviderProps,
+  type SignerProviderProps,
 } from "./signer.js";
 
 export const ConfigContext = createContext<Config | undefined>(undefined);
 
-export type ReDotProviderProps = PropsWithChildren<{
+export type ReactiveDotProviderProps = PropsWithChildren<{
   /**
    * Global config used by ReactiveDOT.
    */
@@ -42,11 +42,11 @@ export type ReDotProviderProps = PropsWithChildren<{
  * @param props - Component props
  * @returns React element
  */
-export function ReDotProvider({
+export function ReactiveDotProvider({
   config,
   autoInitializeWallets = true,
   children,
-}: ReDotProviderProps) {
+}: ReactiveDotProviderProps) {
   return (
     <ConfigContext.Provider value={config}>
       <MutationEventSubjectContext.Provider

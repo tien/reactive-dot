@@ -1,10 +1,10 @@
 export {
-  ReDotChainProvider,
-  ReDotProvider,
-  ReDotSignerProvider,
-  type ReDotChainProviderProps,
-  type ReDotProviderProps,
-  type ReDotSignerProviderProps,
+  ChainProvider,
+  ReactiveDotProvider,
+  SignerProvider,
+  type ChainProviderProps,
+  type ReactiveDotProviderProps,
+  type SignerProviderProps,
 } from "./contexts/index.js";
 export type { ChainHookOptions } from "./hooks/types.js";
 export { useAccounts } from "./hooks/use-accounts.js";

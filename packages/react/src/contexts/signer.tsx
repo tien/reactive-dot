@@ -5,7 +5,7 @@ export const SignerContext = createContext<PolkadotSigner | undefined>(
   undefined,
 );
 
-export type ReDotSignerProviderProps = PropsWithChildren<{
+export type SignerProviderProps = PropsWithChildren<{
   /**
    * The default signer
    */
@@ -18,7 +18,7 @@ export type ReDotSignerProviderProps = PropsWithChildren<{
  * @param props - Component props
  * @returns React element
  */
-export function ReDotSignerProvider(props: ReDotSignerProviderProps) {
+export function SignerProvider(props: SignerProviderProps) {
   return (
     <SignerContext.Provider value={props.signer}>
       {props.children}

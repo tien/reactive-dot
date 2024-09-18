@@ -7,8 +7,8 @@ import {
 } from "@reactive-dot/core";
 import type { Wallet } from "@reactive-dot/core/wallets.js";
 import {
-  ReDotChainProvider,
-  ReDotProvider,
+  ChainProvider,
+  ReactiveDotProvider,
   useAccounts,
   useBlock,
   useConnectedWallets,
@@ -415,21 +415,21 @@ function Example({ chainName }: ExampleProps) {
 
 export function App() {
   return (
-    <ReDotProvider config={config}>
+    <ReactiveDotProvider config={config}>
       <Suspense fallback="Loading wallet connection...">
         <WalletConnection />
       </Suspense>
-      <ReDotChainProvider chainId="polkadot">
+      <ChainProvider chainId="polkadot">
         <Example chainName="Polkadot" />
-      </ReDotChainProvider>
-      <ReDotChainProvider chainId="kusama">
+      </ChainProvider>
+      <ChainProvider chainId="kusama">
         <Example chainName="Kusama" />
-      </ReDotChainProvider>
-      <ReDotChainProvider chainId="westend">
+      </ChainProvider>
+      <ChainProvider chainId="westend">
         <Example chainName="Westend" />
-      </ReDotChainProvider>
+      </ChainProvider>
       <Toaster />
       <DevTools />
-    </ReDotProvider>
+    </ReactiveDotProvider>
   );
 }

@@ -1,7 +1,7 @@
 import { ChainIdContext } from "../contexts/index.js";
 import type { ChainHookOptions } from "./types.js";
 import { useConfig } from "./use-config.js";
-import { type ChainId, ReDotError } from "@reactive-dot/core";
+import { type ChainId, ReactiveDotError } from "@reactive-dot/core";
 import { useContext } from "react";
 
 /**
@@ -26,15 +26,15 @@ export function useChainId<
   const chainId = useContext(ChainIdContext);
 
   if (chainId === undefined) {
-    throw new ReDotError("No chain ID provided");
+    throw new ReactiveDotError("No chain ID provided");
   }
 
   if (options?.allowlist?.includes(chainId) === false) {
-    throw new ReDotError("Chain ID not allowed", { cause: chainId });
+    throw new ReactiveDotError("Chain ID not allowed", { cause: chainId });
   }
 
   if (options?.denylist?.includes(chainId)) {
-    throw new ReDotError("Chain ID denied", { cause: chainId });
+    throw new ReactiveDotError("Chain ID denied", { cause: chainId });
   }
 
   return chainId as Exclude<
@@ -57,7 +57,7 @@ export function internal_useChainId<TOptionalChainId extends boolean = false>({
   const chainId = options?.chainId ?? contextChainId;
 
   if (!optionalChainId && chainId === undefined) {
-    throw new ReDotError("No chain ID provided");
+    throw new ReactiveDotError("No chain ID provided");
   }
 
   return chainId as TOptionalChainId extends false
