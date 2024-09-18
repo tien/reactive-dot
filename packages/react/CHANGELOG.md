@@ -1,5 +1,20 @@
 # @reactive-dot/react
 
+## 0.14.0
+
+### Minor Changes
+
+- [#176](https://github.com/tien/reactive-dot/pull/176) [`5837511`](https://github.com/tien/reactive-dot/commit/583751173e1dd7546f71c421d7d4b2f98769124a) Thanks [@tien](https://github.com/tien)! - Removed `jotai-scope`, enabling consumer to use their own Jotai's store provider.
+
+- [#186](https://github.com/tien/reactive-dot/pull/186) [`a215f26`](https://github.com/tien/reactive-dot/commit/a215f26b3d22feea611ede32ebdbaace4adf7503) Thanks [@tien](https://github.com/tien)! - BREAKING: Updated all variables and types to use the library’s full name.
+
+### Patch Changes
+
+- [#183](https://github.com/tien/reactive-dot/pull/183) [`c9a922d`](https://github.com/tien/reactive-dot/commit/c9a922d3ee83b78175922d89c539c0165ff9c40b) Thanks [@tien](https://github.com/tien)! - Refactored query & query-refresher logic.
+
+- Updated dependencies [[`a215f26`](https://github.com/tien/reactive-dot/commit/a215f26b3d22feea611ede32ebdbaace4adf7503)]:
+  - @reactive-dot/core@0.14.0
+
 ## 0.13.0
 
 ### Minor Changes

@@ -1,5 +1,11 @@
 # @reactive-dot/core
 
+## 0.14.0
+
+### Minor Changes
+
+- [#186](https://github.com/tien/reactive-dot/pull/186) [`a215f26`](https://github.com/tien/reactive-dot/commit/a215f26b3d22feea611ede32ebdbaace4adf7503) Thanks [@tien](https://github.com/tien)! - BREAKING: Updated all variables and types to use the library’s full name.
+
 ## 0.13.0
 
 ### Minor Changes
