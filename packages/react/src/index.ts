@@ -22,10 +22,10 @@ export {
 } from "./hooks/use-native-token-amount.js";
 export { useQueryErrorResetter } from "./hooks/use-query-error-resetter.js";
 export { useQueryLoader } from "./hooks/use-query-loader.js";
+export { useQueryRefresher } from "./hooks/use-query-refresher.js";
 export {
   useLazyLoadQuery,
   useLazyLoadQueryWithRefresh,
-  useQueryRefresher,
 } from "./hooks/use-query.js";
 export { useSigner } from "./hooks/use-signer.js";
 export { useTypedApi } from "./hooks/use-typed-api.js";
