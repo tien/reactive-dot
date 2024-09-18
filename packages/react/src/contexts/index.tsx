@@ -26,7 +26,7 @@ export const ConfigContext = createContext<Config | undefined>(undefined);
 
 export type ReDotProviderProps = PropsWithChildren<{
   /**
-   * Global config used by Reactive DOT.
+   * Global config used by ReactiveDOT.
    */
   config: Config;
 
@@ -37,7 +37,7 @@ export type ReDotProviderProps = PropsWithChildren<{
 }>;
 
 /**
- * React context provider for Reactive DOT.
+ * React context provider for ReactiveDOT.
  *
  * @param props - Component props
  * @returns React element

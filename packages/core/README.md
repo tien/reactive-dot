@@ -1,6 +1,6 @@
 # @reactive-dot/core
 
-VanillaJS library for Reactive DOT.
+VanillaJS library for ReactiveDOT.
 
 ## Documentation
 

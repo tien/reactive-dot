@@ -1,7 +1,7 @@
 {
   "name": "@reactive-dot/wallet-walletconnect",
   "version": "0.13.0",
-  "description": "WalletConnect adapter for Reactive DOT",
+  "description": "WalletConnect adapter for ReactiveDOT",
   "keywords": [
     "substrate",
     "polkadot",

@@ -1,6 +1,6 @@
 # @reactive-dot/utils
 
-Collection of utils from Reactive DOT.
+Collection of utils from ReactiveDOT.
 
 ## Documentation
 

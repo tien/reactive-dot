@@ -33,7 +33,7 @@
 
     <!-- Title -->
     <text x="230" y="135" font-family="Arial, Helvetica, sans-serif" font-size="36" fill="#E6007A"
-        font-weight="bold">Reactive DOT</text>
+        font-weight="bold">ReactiveDOT</text>
 
     <!-- Tag line -->
     <text x="230" y="175" font-family="Arial, Helvetica, sans-serif" font-size="22" fill="#333"

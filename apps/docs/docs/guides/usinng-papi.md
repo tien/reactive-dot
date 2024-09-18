@@ -4,7 +4,7 @@ sidebar_position: 3
 
 # Using Polkadot-API (PAPI)
 
-Reactive DOT is designed as a convenient layer over [PAPI](https://papi.how/) for enhanced developer quality of life. For more advanced use cases and data manipulation, it's recommended to use [PAPI](https://papi.how/) directly. You can access PAPI APIs through two hooks: [`useClient`](/api/react/function/useClient) and [`useTypedApi`](/api/react/function/useTypedApi).
+ReactiveDOT is designed as a convenient layer over [PAPI](https://papi.how/) for enhanced developer quality of life. For more advanced use cases and data manipulation, it's recommended to use [PAPI](https://papi.how/) directly. You can access PAPI APIs through two hooks: [`useClient`](/api/react/function/useClient) and [`useTypedApi`](/api/react/function/useTypedApi).
 
 ## Polkadot client
 
