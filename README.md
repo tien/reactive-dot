@@ -1,4 +1,4 @@
-# Reactive DOT
+# ReactiveDOT
 
 A reactive library for building Substrate front-ends.
 

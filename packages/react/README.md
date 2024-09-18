@@ -1,6 +1,6 @@
 # @reactive-dot/react
 
-React library for Reactive DOT.
+React library for ReactiveDOT.
 
 ## Documentation
 

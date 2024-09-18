@@ -1,7 +1,7 @@
 {
   "name": "@reactive-dot/react",
   "version": "0.13.0",
-  "description": "React library for Reactive DOT",
+  "description": "React library for ReactiveDOT",
   "keywords": [
     "substrate",
     "polkadot",

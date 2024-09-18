@@ -44,8 +44,8 @@ export const config = {
       projectId: "68f5b7e972a51cf379b127f51a791c34",
       providerOptions: {
         metadata: {
-          name: "Reactive DOT example",
-          description: "Simple React App showcasing Reactive DOT",
+          name: "ReactiveDOT example",
+          description: "Simple React App showcasing ReactiveDOT",
           url: globalThis.location.origin,
           icons: ["https://walletconnect.com/walletconnect-logo.png"],
         },

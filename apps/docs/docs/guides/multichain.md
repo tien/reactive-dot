@@ -121,7 +121,7 @@ function Component() {
 
 ## Chain narrowing
 
-By default, Reactive DOT provides type definitions based on the merged definitions of all chains in the config. For example, if your DApp is set up to be used with Polkadot, Kusama, and Westend, the following code will not work because the Bounties pallet only exists on Polkadot and Kusama, not on Westend:
+By default, ReactiveDOT provides type definitions based on the merged definitions of all chains in the config. For example, if your DApp is set up to be used with Polkadot, Kusama, and Westend, the following code will not work because the Bounties pallet only exists on Polkadot and Kusama, not on Westend:
 
 ```tsx
 function Component() {

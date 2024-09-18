@@ -4,7 +4,7 @@ import path from "node:path";
 import { themes as prismThemes } from "prism-react-renderer";
 
 const config: Config = {
-  title: "Reactive DOT",
+  title: "ReactiveDOT",
   tagline: "A reactive library for building Substrate front-ends",
   favicon: "img/favicon.ico",
 
@@ -61,9 +61,9 @@ const config: Config = {
   themeConfig: {
     image: "img/social-card.png",
     navbar: {
-      title: "Reactive DOT",
+      title: "ReactiveDOT",
       logo: {
-        alt: "Reactive DOT logo",
+        alt: "ReactiveDOT logo",
         src: "img/logo.svg",
         srcDark: "img/logo-dark.svg",
       },

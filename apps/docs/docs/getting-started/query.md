@@ -110,7 +110,7 @@ function Query() {
 
 ## Conditional query
 
-Use a falsy value (`undefined`, `null` or `false`) to conditionally fetch data. If the query builder returns or itself is a falsy value, Reactive DOT will not execute the query.
+Use a falsy value (`undefined`, `null` or `false`) to conditionally fetch data. If the query builder returns or itself is a falsy value, ReactiveDOT will not execute the query.
 
 ```ts
 import { idle } from "@reactive-dot/core";
