@@ -19,4 +19,3 @@ export { MutationError, QueryError, ReactiveDotError } from "./errors.js";
 export { Query } from "./query-builder.js";
 export { PrefixedStorage } from "./storage.js";
 export { idle, pending } from "./symbols.js";
-export type { PolkadotAccount } from "./types.js";

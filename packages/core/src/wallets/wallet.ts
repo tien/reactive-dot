@@ -1,5 +1,5 @@
 import { type PrefixedStorage, defaultStorage } from "../storage.js";
-import type { InjectedPolkadotAccount } from "polkadot-api/pjs-signer";
+import type { PolkadotSignerAccount } from "./account.js";
 import type { Observable } from "rxjs";
 
 export type WalletOptions = {
@@ -29,9 +29,9 @@ export abstract class Wallet {
 
   abstract disconnect(): void | Promise<void>;
 
-  abstract readonly accounts$: Observable<InjectedPolkadotAccount[]>;
+  abstract readonly accounts$: Observable<PolkadotSignerAccount[]>;
 
   abstract getAccounts():
-    | InjectedPolkadotAccount[]
-    | Promise<InjectedPolkadotAccount[]>;
+    | PolkadotSignerAccount[]
+    | Promise<PolkadotSignerAccount[]>;
 }

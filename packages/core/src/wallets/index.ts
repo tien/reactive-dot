@@ -1,3 +1,8 @@
+export type {
+  PolkadotAccount,
+  PolkadotSignerAccount,
+  WalletAccount,
+} from "./account.js";
 export { WalletAggregator } from "./aggregator.js";
 export { DeepLinkWallet } from "./deep-link-wallet.js";
 export { initializeWallets } from "./initialize-wallets.js";

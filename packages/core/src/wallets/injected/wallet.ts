@@ -1,9 +1,9 @@
 import { ReactiveDotError } from "../../errors.js";
+import type { PolkadotSignerAccount } from "../account.js";
 import { Wallet, type WalletOptions } from "../wallet.js";
 import {
   connectInjectedExtension,
   type InjectedExtension,
-  type InjectedPolkadotAccount,
 } from "polkadot-api/pjs-signer";
 import { BehaviorSubject, Observable } from "rxjs";
 import { map, switchMap } from "rxjs/operators";
@@ -50,7 +50,7 @@ export class InjectedWallet extends Wallet {
   override readonly accounts$ = this.#extension$.pipe(
     switchMap(
       (extension) =>
-        new Observable<InjectedPolkadotAccount[]>((subscriber) => {
+        new Observable<PolkadotSignerAccount[]>((subscriber) => {
           if (extension === undefined) {
             subscriber.next([]);
           } else {
