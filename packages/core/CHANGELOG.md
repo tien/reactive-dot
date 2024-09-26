@@ -1,5 +1,11 @@
 # @reactive-dot/core
 
+## 0.15.0
+
+### Minor Changes
+
+- [#199](https://github.com/tien/reactive-dot/pull/199) [`6370689`](https://github.com/tien/reactive-dot/commit/63706898748890dc4f16a2469deafbd36dedf9b5) Thanks [@tien](https://github.com/tien)! - Added support for formatting addresses based on their chain's SS58 format.
+
 ## 0.14.0
 
 ### Minor Changes
