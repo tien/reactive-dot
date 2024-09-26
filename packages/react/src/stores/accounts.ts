@@ -1,12 +1,8 @@
 import { withAtomFamilyErrorCatcher } from "../utils/jotai.js";
 import { chainSpecDataAtomFamily } from "./client.js";
 import { walletsAtom } from "./wallets.js";
-import {
-  type Config,
-  getAccounts,
-  type ChainId,
-  type PolkadotAccount,
-} from "@reactive-dot/core";
+import { getAccounts, type ChainId, type Config } from "@reactive-dot/core";
+import type { WalletAccount } from "@reactive-dot/core/wallets.js";
 import type { Atom } from "jotai";
 import { atomFamily, atomWithObservable } from "jotai/utils";
 
@@ -14,7 +10,7 @@ export const accountsAtom = atomFamily(
   (param: {
     config: Config;
     chainId: ChainId | undefined;
-  }): Atom<PolkadotAccount[] | Promise<PolkadotAccount[]>> =>
+  }): Atom<WalletAccount[] | Promise<WalletAccount[]>> =>
     withAtomFamilyErrorCatcher(
       accountsAtom,
       param,
