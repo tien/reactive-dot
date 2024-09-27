@@ -1,18 +1,23 @@
 import type { WalletOptions } from "../../core/build/wallets/wallet.js";
 import { AccountMismatchError } from "./errors.js";
-import { AccountId } from "@polkadot-api/substrate-bindings";
-import { Wallet, type LocalWallet } from "@reactive-dot/core/wallets.js";
-import type { PolkadotGenericApp } from "@zondax/ledger-substrate";
-import type { InjectedPolkadotAccount } from "polkadot-api/pjs-signer";
+import type { LedgerSigner } from "@polkadot-api/ledger-signer";
+import { Binary } from "@polkadot-api/substrate-bindings";
+import {
+  type LocalWallet,
+  type PolkadotSignerAccount,
+  Wallet,
+} from "@reactive-dot/core/wallets.js";
 import { BehaviorSubject, lastValueFrom } from "rxjs";
 import { map, skip } from "rxjs/operators";
 
-const getPublicKey = AccountId().enc;
-
 type LedgerAccount = {
-  address: string;
+  publicKey: Uint8Array;
   name?: string;
-  path: string;
+  path: number;
+};
+
+type JsonLedgerAccount = Omit<LedgerAccount, "publicKey"> & {
+  publicKey: string;
 };
 
 /**
@@ -25,43 +30,38 @@ export class LedgerWallet extends Wallet<"accounts"> implements LocalWallet {
 
   readonly #ledgerAccounts$ = new BehaviorSubject<LedgerAccount[]>([]);
 
-  // TODO: complete this logic
   override readonly accounts$ = this.#ledgerAccounts$.pipe(
-    map((accounts): InjectedPolkadotAccount[] =>
-      accounts.map((account) => ({
-        address: account.address,
-        type: "ed25519",
-        ...(account.name === undefined ? {} : { name: account.name }),
-        polkadotSigner: {
-          publicKey: getPublicKey(account.address),
-          signTx: async (
-            callData,
-            _signedExtensions,
-            metadata,
-            _atBlockNumber,
-            _hasher,
-          ) => {
-            await this.#assertMatchingAccount(account);
+    map((accounts) =>
+      accounts.map(
+        (account): PolkadotSignerAccount => ({
+          ...(account.name === undefined ? {} : { name: account.name }),
+          polkadotSigner: ({ tokenSymbol, tokenDecimals }) => ({
+            publicKey: account.publicKey,
+            signTx: async (...args) => {
+              await this.#assertMatchingAccount(account);
 
-            const app = await this.#getOrCreateApp();
-            const response = await app.signWithMetadata(
-              account.path,
-              Buffer.from(callData),
-              Buffer.from(metadata),
-            );
+              const ledgerSigner = await this.#getOrCreateLedgerSigner();
+              const polkadotSigner = await ledgerSigner.getPolkadotSigner(
+                { tokenSymbol, decimals: tokenDecimals },
+                account.path,
+              );
 
-            return response.signature;
-          },
-          signBytes: async (data) => {
-            await this.#assertMatchingAccount(account);
+              return polkadotSigner.signTx(...args);
+            },
+            signBytes: async (...args) => {
+              await this.#assertMatchingAccount(account);
 
-            const app = await this.#getOrCreateApp();
-            const response = await app.signRaw(account.path, Buffer.from(data));
+              const ledgerSigner = await this.#getOrCreateLedgerSigner();
+              const polkadotSigner = await ledgerSigner.getPolkadotSigner(
+                { tokenSymbol, decimals: tokenDecimals },
+                account.path,
+              );
 
-            return response.signature;
-          },
-        },
-      })),
+              return polkadotSigner.signBytes(...args);
+            },
+          }),
+        }),
+      ),
     ),
   );
 
@@ -69,22 +69,35 @@ export class LedgerWallet extends Wallet<"accounts"> implements LocalWallet {
     map((accounts) => accounts.length > 0),
   );
 
-  #app?: PolkadotGenericApp;
+  #ledgerSigner?: LedgerSigner;
 
   constructor(options?: WalletOptions) {
     super(options);
-    this.#ledgerAccounts$
-      .pipe(skip(1))
-      .subscribe((accounts) =>
-        this.storage.setItem("accounts", JSON.stringify(accounts)),
-      );
+    this.#ledgerAccounts$.pipe(skip(1)).subscribe((accounts) =>
+      this.storage.setItem(
+        "accounts",
+        JSON.stringify(
+          accounts.map(
+            (account): JsonLedgerAccount => ({
+              ...account,
+              publicKey: Binary.fromBytes(account.publicKey).asHex(),
+            }),
+          ),
+        ),
+      ),
+    );
   }
 
   override initialize() {
     this.#ledgerAccounts$.next(
-      JSON.parse(
-        this.storage.getItem("accounts") ?? JSON.stringify([]),
-      ) as LedgerAccount[],
+      (
+        JSON.parse(
+          this.storage.getItem("accounts") ?? JSON.stringify([]),
+        ) as JsonLedgerAccount[]
+      ).map((account) => ({
+        ...account,
+        publicKey: Binary.fromHex(account.publicKey).asBytes(),
+      })),
     );
   }
 
@@ -101,7 +114,9 @@ export class LedgerWallet extends Wallet<"accounts"> implements LocalWallet {
   addAccount(account: LedgerAccount) {
     this.#ledgerAccounts$.next(
       this.#ledgerAccounts$.value
-        .filter((storedAccount) => storedAccount.address !== account.address)
+        .filter(
+          (storedAccount) => storedAccount.publicKey !== account.publicKey,
+        )
         .concat([account]),
     );
   }
@@ -109,7 +124,7 @@ export class LedgerWallet extends Wallet<"accounts"> implements LocalWallet {
   removeAccount(account: LedgerAccount) {
     this.#ledgerAccounts$.next(
       this.#ledgerAccounts$.value.filter(
-        (storedAccount) => storedAccount.address !== account.address,
+        (storedAccount) => storedAccount.publicKey !== account.publicKey,
       ),
     );
   }
@@ -118,30 +133,28 @@ export class LedgerWallet extends Wallet<"accounts"> implements LocalWallet {
     this.#ledgerAccounts$.next([]);
   }
 
-  async getConnectedAccount(index = 0) {
-    const app = await this.#getOrCreateApp();
-    const path = this.#getBip44Path(index);
-    const { address } = await app.getAddress(path, 42, false);
+  async getConnectedAccount(path: number) {
+    const ledgerSigner = await this.#getOrCreateLedgerSigner();
+    const publicKey = await ledgerSigner.getPubkey(path);
 
-    return { address, path } as LedgerAccount;
+    return {
+      publicKey,
+      path,
+    } as LedgerAccount;
   }
 
   async #assertMatchingAccount(account: LedgerAccount) {
-    const app = await this.#getOrCreateApp();
-    const ledgerAccount = await app.getAddress(account.path, 42, false);
+    const ledgerSigner = await this.#getOrCreateLedgerSigner();
+    const publicKey = await ledgerSigner.getPubkey(account.path);
 
-    if (account.address !== ledgerAccount.address) {
+    if (account.publicKey !== publicKey) {
       throw new AccountMismatchError();
     }
   }
 
-  #getBip44Path(account: number) {
-    return `m/44'/354'/${account}'/0/0`;
-  }
-
-  async #getOrCreateApp() {
-    if (this.#app !== undefined) {
-      return this.#app;
+  async #getOrCreateLedgerSigner() {
+    if (this.#ledgerSigner !== undefined) {
+      return this.#ledgerSigner;
     }
 
     if (!("Buffer" in globalThis)) {
@@ -151,13 +164,14 @@ export class LedgerWallet extends Wallet<"accounts"> implements LocalWallet {
       globalThis.Buffer = Buffer;
     }
 
-    const [{ default: TransportWebUSB }, { PolkadotGenericApp }] =
-      await Promise.all([
-        import("@ledgerhq/hw-transport-webusb"),
-        import("@zondax/ledger-substrate"),
-      ]);
+    const [{ default: TransportWebUSB }, { LedgerSigner }] = await Promise.all([
+      import("@ledgerhq/hw-transport-webusb"),
+      import("@polkadot-api/ledger-signer"),
+    ]);
 
-    // @ts-expect-error Weird bug with Zondax
-    return (this.#app = new PolkadotGenericApp(await TransportWebUSB.create()));
+    return (this.#ledgerSigner = new LedgerSigner(
+      // @ts-expect-error Weird bug with Ledger
+      await TransportWebUSB.create(),
+    ));
   }
 }

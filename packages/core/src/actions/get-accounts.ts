@@ -28,13 +28,35 @@ export function getAccounts(
         wallets.map((wallet) =>
           wallet.accounts$.pipe(
             map((accounts) =>
-              accounts.map(
-                (account): WalletAccount => ({
-                  ...account,
-                  address: ss58AccountId.dec(account.polkadotSigner.publicKey),
-                  wallet,
-                }),
-              ),
+              accounts
+                .map((account): WalletAccount | undefined => {
+                  if (
+                    typeof account.polkadotSigner === "function" &&
+                    chainSpec === undefined
+                  ) {
+                    return undefined;
+                  }
+
+                  const polkadotSigner =
+                    typeof account.polkadotSigner === "function"
+                      ? account.polkadotSigner({
+                          tokenSymbol: chainSpec!.properties[
+                            "tokenSymbol"
+                          ] as string,
+                          tokenDecimals: chainSpec!.properties[
+                            "tokenDecimals"
+                          ] as number,
+                        })
+                      : account.polkadotSigner;
+
+                  return {
+                    ...account,
+                    polkadotSigner,
+                    address: ss58AccountId.dec(polkadotSigner.publicKey),
+                    wallet,
+                  };
+                })
+                .filter((account) => account !== undefined),
             ),
           ),
         ),

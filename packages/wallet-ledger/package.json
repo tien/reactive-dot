@@ -32,9 +32,8 @@
   },
   "dependencies": {
     "@ledgerhq/hw-transport-webusb": "^6.29.2",
-    "@polkadot-api/merkleize-metadata": "^1.1.2",
+    "@polkadot-api/ledger-signer": "^0.1.1",
     "@reactive-dot/core": "workspace:^",
-    "@zondax/ledger-substrate": "^1.0.0",
     "buffer": "^6.0.3"
   },
   "devDependencies": {
