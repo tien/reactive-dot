@@ -5,7 +5,9 @@ type ConnectionHandshake = {
   settled: Promise<void>;
 };
 
-export abstract class DeepLinkWallet extends Wallet {
+export abstract class DeepLinkWallet<
+  TStorageKey extends string = string,
+> extends Wallet<TStorageKey> {
   abstract initiateConnectionHandshake():
     | ConnectionHandshake
     | Promise<ConnectionHandshake>;

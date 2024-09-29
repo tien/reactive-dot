@@ -13,6 +13,7 @@
   "dependencies": {
     "@polkadot-api/descriptors": "portal:.papi/descriptors",
     "@reactive-dot/react": "workspace:^",
+    "@reactive-dot/wallet-ledger": "workspace:^",
     "@reactive-dot/wallet-walletconnect": "workspace:^",
     "date-fns": "^4.1.0",
     "jotai-devtools": "^0.10.1",

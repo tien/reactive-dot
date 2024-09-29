@@ -8,7 +8,7 @@ import {
 import { BehaviorSubject, Observable } from "rxjs";
 import { map, switchMap } from "rxjs/operators";
 
-export class InjectedWallet extends Wallet {
+export class InjectedWallet extends Wallet<"connected"> {
   readonly #extension$ = new BehaviorSubject<InjectedExtension | undefined>(
     undefined,
   );

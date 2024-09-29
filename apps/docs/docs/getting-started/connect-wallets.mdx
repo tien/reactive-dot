@@ -41,17 +41,43 @@ Additional dependencies are required if you use any of be bellow wallet type.
 
 {/* prettier-ignore-end */}
 
+### [Ledger](https://www.ledger.com/)
+
+{/* prettier-ignore-start */}
+
+<Tabs>
+  <TabItem value="npm" label="npm" default>
+    ```sh
+    npm add @reactive-dot/wallet-ledger
+    ```
+  </TabItem>
+  <TabItem value="yarn" label="yarn">
+    ```sh
+    yarn add @reactive-dot/wallet-ledger
+    ```
+  </TabItem>
+    <TabItem value="pnpm" label="pnpm">
+    ```sh
+    pnpm add @reactive-dot/wallet-ledger
+    ```
+  </TabItem>
+</Tabs>
+
+{/* prettier-ignore-end */}
+
 ## Add wallets to the config
 
 ```ts title="config.ts"
 import type { Config } from "@reactive-dot/core";
 import { InjectedWalletAggregator } from "@reactive-dot/core/wallets.js";
+import { LedgerWallet } from "@reactive-dot/wallet-ledger";
 import { WalletConnect } from "@reactive-dot/wallet-walletconnect";
 
 export const config = {
   // ...
   wallets: [
     new InjectedWalletAggregator(),
+    new LedgerWalet(),
     new WalletConnect({
       projectId: "WALLET_CONNECT_PROJECT_ID",
       providerOptions: {

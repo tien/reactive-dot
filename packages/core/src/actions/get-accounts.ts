@@ -17,7 +17,7 @@ export function getAccounts(
         return of([]);
       }
 
-      const maybeSs58Format = chainSpec?.properties["ss58Format"];
+      const maybeSs58Format = chainSpec?.properties.ss58Format;
 
       const ss58Format =
         typeof maybeSs58Format === "number" ? maybeSs58Format : undefined;
@@ -28,13 +28,36 @@ export function getAccounts(
         wallets.map((wallet) =>
           wallet.accounts$.pipe(
             map((accounts) =>
-              accounts.map(
-                (account): WalletAccount => ({
-                  ...account,
-                  address: ss58AccountId.dec(account.polkadotSigner.publicKey),
-                  wallet,
-                }),
-              ),
+              accounts
+                .map((account): WalletAccount | undefined => {
+                  const polkadotSigner = (() => {
+                    if (typeof account.polkadotSigner !== "function") {
+                      return account.polkadotSigner;
+                    }
+
+                    if (chainSpec === undefined) {
+                      return undefined;
+                    }
+
+                    return account.polkadotSigner({
+                      tokenSymbol: chainSpec.properties.tokenSymbol as string,
+                      tokenDecimals: chainSpec.properties
+                        .tokenDecimals as number,
+                    });
+                  })();
+
+                  if (polkadotSigner === undefined) {
+                    return undefined;
+                  }
+
+                  return {
+                    ...account,
+                    polkadotSigner,
+                    address: ss58AccountId.dec(polkadotSigner.publicKey),
+                    wallet,
+                  };
+                })
+                .filter((account) => account !== undefined),
             ),
           ),
         ),
