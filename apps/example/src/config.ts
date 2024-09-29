@@ -41,6 +41,7 @@ export const config = {
   },
   wallets: [
     new InjectedWalletAggregator(),
+    new LedgerWallet(),
     new WalletConnect({
       projectId: "68f5b7e972a51cf379b127f51a791c34",
       providerOptions: {
@@ -57,6 +58,5 @@ export const config = {
         "polkadot:e143f23803ac50e8f6f8e62695d1ce9e", // Westend
       ],
     }),
-    new LedgerWallet(),
   ],
 } as const satisfies Config;
