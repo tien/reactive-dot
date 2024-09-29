@@ -30,22 +30,25 @@ export function getAccounts(
             map((accounts) =>
               accounts
                 .map((account): WalletAccount | undefined => {
-                  if (
-                    typeof account.polkadotSigner === "function" &&
-                    chainSpec === undefined
-                  ) {
+                  const polkadotSigner = (() => {
+                    if (typeof account.polkadotSigner !== "function") {
+                      return account.polkadotSigner;
+                    }
+
+                    if (chainSpec === undefined) {
+                      return undefined;
+                    }
+
+                    return account.polkadotSigner({
+                      tokenSymbol: chainSpec.properties.tokenSymbol as string,
+                      tokenDecimals: chainSpec.properties
+                        .tokenDecimals as number,
+                    });
+                  })();
+
+                  if (polkadotSigner === undefined) {
                     return undefined;
                   }
-
-                  const polkadotSigner =
-                    typeof account.polkadotSigner === "function"
-                      ? account.polkadotSigner({
-                          tokenSymbol: chainSpec!.properties
-                            .tokenSymbol as string,
-                          tokenDecimals: chainSpec!.properties
-                            .tokenDecimals as number,
-                        })
-                      : account.polkadotSigner;
 
                   return {
                     ...account,
