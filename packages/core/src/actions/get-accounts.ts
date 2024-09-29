@@ -17,7 +17,7 @@ export function getAccounts(
         return of([]);
       }
 
-      const maybeSs58Format = chainSpec?.properties["ss58Format"];
+      const maybeSs58Format = chainSpec?.properties.ss58Format;
 
       const ss58Format =
         typeof maybeSs58Format === "number" ? maybeSs58Format : undefined;
@@ -40,12 +40,10 @@ export function getAccounts(
                   const polkadotSigner =
                     typeof account.polkadotSigner === "function"
                       ? account.polkadotSigner({
-                          tokenSymbol: chainSpec!.properties[
-                            "tokenSymbol"
-                          ] as string,
-                          tokenDecimals: chainSpec!.properties[
-                            "tokenDecimals"
-                          ] as number,
+                          tokenSymbol: chainSpec!.properties
+                            .tokenSymbol as string,
+                          tokenDecimals: chainSpec!.properties
+                            .tokenDecimals as number,
                         })
                       : account.polkadotSigner;
 

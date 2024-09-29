@@ -6,7 +6,7 @@ export type WalletOptions = {
   storage?: PrefixedStorage | undefined;
 };
 
-export abstract class Wallet<TStorage extends string = string> {
+export abstract class Wallet<TStorageKey extends string = string> {
   abstract readonly id: string;
 
   abstract readonly name: string;
@@ -14,7 +14,7 @@ export abstract class Wallet<TStorage extends string = string> {
   readonly #storage: PrefixedStorage;
 
   protected get storage() {
-    return this.#storage.join<TStorage>(this.id);
+    return this.#storage.join<TStorageKey>(this.id);
   }
 
   constructor(options?: WalletOptions | undefined) {

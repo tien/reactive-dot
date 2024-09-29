@@ -4504,6 +4504,7 @@ __metadata:
     "@polkadot-api/descriptors": "portal:.papi/descriptors"
     "@reactive-dot/eslint-config": "workspace:^"
     "@reactive-dot/react": "workspace:^"
+    "@reactive-dot/wallet-ledger": "workspace:^"
     "@reactive-dot/wallet-walletconnect": "workspace:^"
     "@tsconfig/recommended": "npm:^1.0.7"
     "@tsconfig/strictest": "npm:^2.0.5"
@@ -4556,7 +4557,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@reactive-dot/wallet-ledger@workspace:packages/wallet-ledger":
+"@reactive-dot/wallet-ledger@workspace:^, @reactive-dot/wallet-ledger@workspace:packages/wallet-ledger":
   version: 0.0.0-use.local
   resolution: "@reactive-dot/wallet-ledger@workspace:packages/wallet-ledger"
   dependencies:

@@ -1,7 +1,24 @@
-import type { Wallet } from "./wallet.js";
+import { Wallet } from "./wallet.js";
 
-export type LocalWallet = Wallet & {
-  addAccount(...args: unknown[]): void | Promise<void>;
-  removeAccount(...args: unknown[]): void | Promise<void>;
-  clearAccounts(): void | Promise<void>;
-};
+/**
+ * @experimental
+ */
+export abstract class LocalWallet<
+  TAccount,
+  TStorageKey extends string,
+> extends Wallet<TStorageKey> {
+  /**
+   * @experimental
+   */
+  abstract addAccount(account: TAccount): void | Promise<void>;
+
+  /**
+   * @experimental
+   */
+  abstract removeAccount(account: TAccount): void | Promise<void>;
+
+  /**
+   * @experimental
+   */
+  abstract clearAccounts(): void | Promise<void>;
+}

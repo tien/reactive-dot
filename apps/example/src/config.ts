@@ -1,6 +1,7 @@
 import { kusama, polkadot, westend } from "@polkadot-api/descriptors";
 import type { Config } from "@reactive-dot/core";
 import { InjectedWalletAggregator } from "@reactive-dot/core/wallets.js";
+import { LedgerWallet } from "@reactive-dot/wallet-ledger";
 import { WalletConnect } from "@reactive-dot/wallet-walletconnect";
 import { getSmProvider } from "polkadot-api/sm-provider";
 import { startFromWorker } from "polkadot-api/smoldot/from-worker";
@@ -56,5 +57,6 @@ export const config = {
         "polkadot:e143f23803ac50e8f6f8e62695d1ce9e", // Westend
       ],
     }),
+    new LedgerWallet(),
   ],
 } as const satisfies Config;

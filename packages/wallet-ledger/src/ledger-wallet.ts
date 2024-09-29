@@ -3,9 +3,8 @@ import { AccountMismatchError } from "./errors.js";
 import type { LedgerSigner } from "@polkadot-api/ledger-signer";
 import { Binary } from "@polkadot-api/substrate-bindings";
 import {
-  type LocalWallet,
+  LocalWallet,
   type PolkadotSignerAccount,
-  Wallet,
 } from "@reactive-dot/core/wallets.js";
 import { BehaviorSubject, lastValueFrom } from "rxjs";
 import { map, skip } from "rxjs/operators";
@@ -20,17 +19,14 @@ type JsonLedgerAccount = Omit<LedgerAccount, "publicKey"> & {
   publicKey: string;
 };
 
-/**
- * @experimental
- */
-export class LedgerWallet extends Wallet<"accounts"> implements LocalWallet {
-  override readonly id = "ledger";
+export class LedgerWallet extends LocalWallet<LedgerAccount, "accounts"> {
+  readonly id = "ledger";
 
-  override readonly name = "Ledger";
+  readonly name = "Ledger";
 
   readonly #ledgerAccounts$ = new BehaviorSubject<LedgerAccount[]>([]);
 
-  override readonly accounts$ = this.#ledgerAccounts$.pipe(
+  readonly accounts$ = this.#ledgerAccounts$.pipe(
     map((accounts) =>
       accounts.map(
         (account): PolkadotSignerAccount => ({
@@ -65,7 +61,7 @@ export class LedgerWallet extends Wallet<"accounts"> implements LocalWallet {
     ),
   );
 
-  override readonly connected$ = this.accounts$.pipe(
+  readonly connected$ = this.accounts$.pipe(
     map((accounts) => accounts.length > 0),
   );
 
@@ -88,7 +84,7 @@ export class LedgerWallet extends Wallet<"accounts"> implements LocalWallet {
     );
   }
 
-  override initialize() {
+  initialize() {
     this.#ledgerAccounts$.next(
       (
         JSON.parse(
@@ -101,13 +97,15 @@ export class LedgerWallet extends Wallet<"accounts"> implements LocalWallet {
     );
   }
 
-  override connect() {}
+  async connect() {
+    this.addAccount(await this.getConnectedAccount());
+  }
 
-  override disconnect() {
+  disconnect() {
     this.clearAccounts();
   }
 
-  override getAccounts() {
+  getAccounts() {
     return lastValueFrom(this.accounts$);
   }
 
@@ -133,7 +131,7 @@ export class LedgerWallet extends Wallet<"accounts"> implements LocalWallet {
     this.#ledgerAccounts$.next([]);
   }
 
-  async getConnectedAccount(path: number) {
+  async getConnectedAccount(path = 0) {
     const ledgerSigner = await this.#getOrCreateLedgerSigner();
     const publicKey = await ledgerSigner.getPubkey(path);
 
@@ -147,7 +145,10 @@ export class LedgerWallet extends Wallet<"accounts"> implements LocalWallet {
     const ledgerSigner = await this.#getOrCreateLedgerSigner();
     const publicKey = await ledgerSigner.getPubkey(account.path);
 
-    if (account.publicKey !== publicKey) {
+    if (
+      Binary.fromBytes(account.publicKey).asHex() !==
+      Binary.fromBytes(publicKey).asHex()
+    ) {
       throw new AccountMismatchError();
     }
   }
