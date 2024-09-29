@@ -19,7 +19,7 @@ export class InjectedWalletAggregator extends WalletAggregator {
     map((walletMap) => Array.from(walletMap.values())),
   );
 
-  override scan() {
+  scan() {
     const injectedNames = getInjectedExtensions() ?? [];
 
     const current = new Map(this.#walletMap$.value);

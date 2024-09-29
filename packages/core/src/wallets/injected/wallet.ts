@@ -13,7 +13,7 @@ export class InjectedWallet extends Wallet {
     undefined,
   );
 
-  override get id() {
+  get id() {
     return `injected/${this.name}`;
   }
 
@@ -24,30 +24,30 @@ export class InjectedWallet extends Wallet {
     super(options);
   }
 
-  override async initialize() {
+  async initialize() {
     if (this.storage.getItem("connected") !== null) {
       await this.connect();
     }
   }
 
-  override connected$ = this.#extension$.pipe(
+  connected$ = this.#extension$.pipe(
     map((extension) => extension !== undefined),
   );
 
-  override async connect() {
+  async connect() {
     if (this.#extension$.getValue() === undefined) {
       this.#extension$.next(await connectInjectedExtension(this.name));
       this.storage.setItem("connected", JSON.stringify(true));
     }
   }
 
-  override disconnect() {
+  disconnect() {
     this.#extension$.getValue()?.disconnect();
     this.#extension$.next(undefined);
     this.storage.removeItem("connected");
   }
 
-  override readonly accounts$ = this.#extension$.pipe(
+  readonly accounts$ = this.#extension$.pipe(
     switchMap(
       (extension) =>
         new Observable<PolkadotSignerAccount[]>((subscriber) => {
@@ -63,7 +63,7 @@ export class InjectedWallet extends Wallet {
     ),
   );
 
-  override getAccounts() {
+  getAccounts() {
     const extension = this.#extension$.getValue();
 
     if (extension === undefined) {
