@@ -33,9 +33,9 @@ export class WalletConnect extends DeepLinkWallet {
 
   #requestId = 0;
 
-  override readonly id = "wallet-connect";
+  readonly id = "wallet-connect";
 
-  override readonly name = "WalletConnect";
+  readonly name = "WalletConnect";
 
   constructor(options: {
     projectId?: string;
@@ -60,7 +60,7 @@ export class WalletConnect extends DeepLinkWallet {
     this.#optionalChainIds = options.optionalChainIds ?? [];
   }
 
-  override async initialize() {
+  async initialize() {
     const { UniversalProvider } = await import(
       "@walletconnect/universal-provider"
     );
@@ -72,11 +72,11 @@ export class WalletConnect extends DeepLinkWallet {
     }
   }
 
-  override readonly connected$ = this.#session.pipe(
+  readonly connected$ = this.#session.pipe(
     map((session) => session !== undefined),
   );
 
-  override async initiateConnectionHandshake() {
+  async initiateConnectionHandshake() {
     await this.initialize();
 
     if (this.#provider?.client === undefined) {
@@ -126,7 +126,7 @@ export class WalletConnect extends DeepLinkWallet {
     };
   }
 
-  override async connect() {
+  async connect() {
     const { uri, settled } = await this.initiateConnectionHandshake();
 
     const connectedPromise = settled.then(() => true as const);
@@ -155,12 +155,12 @@ export class WalletConnect extends DeepLinkWallet {
     modal.closeModal();
   }
 
-  override async disconnect() {
+  async disconnect() {
     await this.#provider?.disconnect();
     this.#session.next(undefined);
   }
 
-  override readonly accounts$ = this.#session.pipe(
+  readonly accounts$ = this.#session.pipe(
     map((session) => {
       if (session === undefined) {
         return [];
@@ -214,7 +214,7 @@ export class WalletConnect extends DeepLinkWallet {
     }),
   );
 
-  override getAccounts() {
+  getAccounts() {
     return lastValueFrom(this.accounts$);
   }
 
