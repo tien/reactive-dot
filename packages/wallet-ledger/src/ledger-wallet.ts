@@ -131,6 +131,11 @@ export class LedgerWallet extends LocalWallet<LedgerAccount, "accounts"> {
     this.#ledgerAccounts$.next([]);
   }
 
+  /**
+   * @experimental
+   * @param path - The primary derivation index
+   * @returns The connected Ledger's account
+   */
   async getConnectedAccount(path = 0) {
     const ledgerSigner = await this.#getOrCreateLedgerSigner();
     const publicKey = await ledgerSigner.getPubkey(path);
