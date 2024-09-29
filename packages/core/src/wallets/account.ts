@@ -2,6 +2,7 @@ import type { Wallet } from "./wallet.js";
 import type { InjectedPolkadotAccount } from "polkadot-api/pjs-signer";
 
 export type PolkadotSignerAccount = {
+  id: string;
   polkadotSigner:
     | InjectedPolkadotAccount["polkadotSigner"]
     /**

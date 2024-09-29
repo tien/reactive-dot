@@ -1,6 +1,9 @@
 import { getPolkadotSignerFromPjs } from "./from-pjs-account.js";
 import { ReactiveDotError } from "@reactive-dot/core";
-import { DeepLinkWallet } from "@reactive-dot/core/wallets.js";
+import {
+  DeepLinkWallet,
+  type PolkadotSignerAccount,
+} from "@reactive-dot/core/wallets.js";
 import type {
   WalletConnectModal,
   WalletConnectModalConfig,
@@ -10,7 +13,6 @@ import type {
   IUniversalProvider,
   UniversalProviderOpts,
 } from "@walletconnect/universal-provider";
-import type { InjectedPolkadotAccount } from "polkadot-api/pjs-signer";
 import { BehaviorSubject, lastValueFrom } from "rxjs";
 import { map } from "rxjs/operators";
 
@@ -177,8 +179,8 @@ export class WalletConnect extends DeepLinkWallet {
             ],
         )
         .map(
-          ([chainType, chainId, address]): InjectedPolkadotAccount => ({
-            address,
+          ([chainType, chainId, address]): PolkadotSignerAccount => ({
+            id: `${chainType}:${chainId}:${address}`,
             genesisHash: chainId,
             polkadotSigner: getPolkadotSignerFromPjs(
               address,
