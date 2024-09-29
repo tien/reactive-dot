@@ -1,2 +1,2 @@
-export * from "./errors.js";
+export { AccountMismatchError } from "./errors.js";
 export { LedgerWallet } from "./ledger-wallet.js";
