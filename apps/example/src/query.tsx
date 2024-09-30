@@ -116,7 +116,7 @@ function SpendableBalances() {
       <ul>
         {accounts.map((account) => (
           <SpendableBalance
-            key={account.wallet.id + account.address}
+            key={account.wallet.id + account.id}
             account={account}
           />
         ))}

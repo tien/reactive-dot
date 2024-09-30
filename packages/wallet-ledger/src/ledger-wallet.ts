@@ -10,12 +10,13 @@ import { BehaviorSubject, lastValueFrom } from "rxjs";
 import { map, skip } from "rxjs/operators";
 
 type LedgerAccount = {
+  id: string;
   publicKey: Uint8Array;
   name?: string;
   path: number;
 };
 
-type JsonLedgerAccount = Omit<LedgerAccount, "publicKey"> & {
+type JsonLedgerAccount = Omit<LedgerAccount, "publicKey" | "id"> & {
   publicKey: string;
 };
 
@@ -30,6 +31,7 @@ export class LedgerWallet extends LocalWallet<LedgerAccount, "accounts"> {
     map((accounts) =>
       accounts.map(
         (account): PolkadotSignerAccount => ({
+          id: account.id,
           ...(account.name === undefined ? {} : { name: account.name }),
           polkadotSigner: ({ tokenSymbol, tokenDecimals }) => ({
             publicKey: account.publicKey,
@@ -74,7 +76,7 @@ export class LedgerWallet extends LocalWallet<LedgerAccount, "accounts"> {
         "accounts",
         JSON.stringify(
           accounts.map(
-            (account): JsonLedgerAccount => ({
+            ({ id, ...account }): JsonLedgerAccount => ({
               ...account,
               publicKey: Binary.fromBytes(account.publicKey).asHex(),
             }),
@@ -92,44 +94,47 @@ export class LedgerWallet extends LocalWallet<LedgerAccount, "accounts"> {
         ) as JsonLedgerAccount[]
       ).map((account) => ({
         ...account,
+        id: account.publicKey,
         publicKey: Binary.fromHex(account.publicKey).asBytes(),
       })),
     );
   }
 
   async connect() {
-    this.addAccount(await this.getConnectedAccount());
+    this.accountStore.add(await this.getConnectedAccount());
   }
 
   disconnect() {
-    this.clearAccounts();
+    this.accountStore.clear();
   }
 
   getAccounts() {
     return lastValueFrom(this.accounts$);
   }
 
-  addAccount(account: LedgerAccount) {
-    this.#ledgerAccounts$.next(
-      this.#ledgerAccounts$.value
-        .filter(
-          (storedAccount) => storedAccount.publicKey !== account.publicKey,
-        )
-        .concat([account]),
-    );
-  }
+  accountStore = {
+    add: (account: LedgerAccount) => {
+      this.#ledgerAccounts$.next(
+        this.#ledgerAccounts$.value
+          .filter((storedAccount) => storedAccount.id !== account.id)
+          .concat([account]),
+      );
+    },
+    delete: (identifiable: string | { id: string }) => {
+      const id =
+        typeof identifiable === "string" ? identifiable : identifiable.id;
 
-  removeAccount(account: LedgerAccount) {
-    this.#ledgerAccounts$.next(
-      this.#ledgerAccounts$.value.filter(
-        (storedAccount) => storedAccount.publicKey !== account.publicKey,
-      ),
-    );
-  }
-
-  clearAccounts() {
-    this.#ledgerAccounts$.next([]);
-  }
+      this.#ledgerAccounts$.next(
+        this.#ledgerAccounts$.value.filter(
+          (storedAccount) => storedAccount.id !== id,
+        ),
+      );
+    },
+    clear: () => {
+      this.#ledgerAccounts$.next([]);
+    },
+    values: () => this.#ledgerAccounts$.value,
+  };
 
   /**
    * @experimental
@@ -141,6 +146,7 @@ export class LedgerWallet extends LocalWallet<LedgerAccount, "accounts"> {
     const publicKey = await ledgerSigner.getPubkey(path);
 
     return {
+      id: Binary.fromBytes(publicKey).asHex(),
       publicKey,
       path,
     } as LedgerAccount;
