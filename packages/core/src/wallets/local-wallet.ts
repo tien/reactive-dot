@@ -13,9 +13,11 @@ export abstract class LocalWallet<
    */
   abstract accountStore: {
     add(account: TAccount): void | Promise<void>;
+    clear(): void | Promise<void>;
     delete(account: { id: TAccount["id"] }): void | Promise<void>;
     delete(accountId: TAccount["id"]): void | Promise<void>;
-    clear(): void | Promise<void>;
+    has(account: { id: TAccount["id"] }): boolean | Promise<boolean>;
+    has(accountId: TAccount["id"]): boolean | Promise<boolean>;
     values(): Iterable<TAccount>;
   };
 }

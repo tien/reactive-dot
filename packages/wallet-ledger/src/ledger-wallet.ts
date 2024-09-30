@@ -120,6 +120,9 @@ export class LedgerWallet extends LocalWallet<LedgerAccount, "accounts"> {
           .concat([account]),
       );
     },
+    clear: () => {
+      this.#ledgerAccounts$.next([]);
+    },
     delete: (identifiable: string | { id: string }) => {
       const id =
         typeof identifiable === "string" ? identifiable : identifiable.id;
@@ -130,8 +133,11 @@ export class LedgerWallet extends LocalWallet<LedgerAccount, "accounts"> {
         ),
       );
     },
-    clear: () => {
-      this.#ledgerAccounts$.next([]);
+    has: (identifiable: string | { id: string }) => {
+      const id =
+        typeof identifiable === "string" ? identifiable : identifiable.id;
+
+      return this.#ledgerAccounts$.value.some((account) => account.id === id);
     },
     values: () => this.#ledgerAccounts$.value,
   };
