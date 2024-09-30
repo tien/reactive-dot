@@ -16,7 +16,7 @@ type LedgerAccount = {
   path: number;
 };
 
-type JsonLedgerAccount = Omit<LedgerAccount, "publicKey"> & {
+type JsonLedgerAccount = Omit<LedgerAccount, "publicKey" | "id"> & {
   publicKey: string;
 };
 
@@ -76,7 +76,7 @@ export class LedgerWallet extends LocalWallet<LedgerAccount, "accounts"> {
         "accounts",
         JSON.stringify(
           accounts.map(
-            (account): JsonLedgerAccount => ({
+            ({ id, ...account }): JsonLedgerAccount => ({
               ...account,
               publicKey: Binary.fromBytes(account.publicKey).asHex(),
             }),
@@ -94,6 +94,7 @@ export class LedgerWallet extends LocalWallet<LedgerAccount, "accounts"> {
         ) as JsonLedgerAccount[]
       ).map((account) => ({
         ...account,
+        id: account.publicKey,
         publicKey: Binary.fromHex(account.publicKey).asBytes(),
       })),
     );
