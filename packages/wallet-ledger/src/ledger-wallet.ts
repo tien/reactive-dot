@@ -176,7 +176,9 @@ export class LedgerWallet extends LocalWallet<LedgerAccount, "accounts"> {
     }
 
     if (!("Buffer" in globalThis)) {
-      const { Buffer } = await import("buffer/");
+      const {
+        default: { Buffer },
+      } = await import("buffer/");
 
       // @ts-expect-error polyfill types mismatch
       globalThis.Buffer = Buffer;
