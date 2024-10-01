@@ -1,5 +1,11 @@
 # @reactive-dot/wallet-ledger
 
+## 0.16.1
+
+### Patch Changes
+
+- [#214](https://github.com/tien/reactive-dot/pull/214) [`24913cb`](https://github.com/tien/reactive-dot/commit/24913cb9340e8f2752269d1abcbdf900ecfdabf8) Thanks [@tien](https://github.com/tien)! - Fixed incorrect CommonJS import for Buffer polyfill.
+
 ## 0.16.0
 
 ### Minor Changes
