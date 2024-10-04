@@ -36,12 +36,12 @@
   },
   "devDependencies": {
     "@changesets/changelog-github": "^0.5.0",
-    "@changesets/cli": "^2.27.8",
+    "@changesets/cli": "^2.27.9",
     "@commitlint/cli": "^19.5.0",
     "@commitlint/config-conventional": "^19.5.0",
     "@trivago/prettier-plugin-sort-imports": "^4.3.0",
     "husky": "^9.1.6",
-    "nx": "^19.8.2",
+    "nx": "^19.8.3",
     "prettier": "^3.3.3"
   }
 }
