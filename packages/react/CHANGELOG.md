@@ -1,5 +1,11 @@
 # @reactive-dot/react
 
+## 0.16.2
+
+### Patch Changes
+
+- [#224](https://github.com/tien/reactive-dot/pull/224) [`15beee0`](https://github.com/tien/reactive-dot/commit/15beee09dfcd6e434609a24c327aff3be244651a) Thanks [@tien](https://github.com/tien)! - Fixed TypeScript error with PAPI version 1.4.0.
+
 ## 0.16.0
 
 ### Patch Changes
