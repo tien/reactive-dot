@@ -6,13 +6,13 @@
   "main": "index.js",
   "devDependencies": {
     "@eslint-react/eslint-plugin": "^1.14.3",
-    "@eslint/compat": "^1.1.1",
-    "@eslint/js": "^9.11.1",
+    "@eslint/compat": "^1.2.0",
+    "@eslint/js": "^9.12.0",
     "@types/eslint__js": "^8.42.3",
     "eslint-plugin-react-hooks": "^4.6.2",
     "eslint-plugin-tsdoc": "^0.3.0",
     "typescript": "^5.6.2",
-    "typescript-eslint": "^8.7.0"
+    "typescript-eslint": "^8.8.0"
   },
   "peerDependencies": {
     "eslint": "*"
