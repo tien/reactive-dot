@@ -14,11 +14,11 @@ import type { TypedApi } from "polkadot-api";
  */
 export function useTypedApi<TChainId extends ChainId>(
   options?: ChainHookOptions<TChainId>,
-): TypedApi<Chains[TChainId]> {
+) {
   return useAtomValue(
     typedApiAtomFamily({
       config: useConfig(),
       chainId: internal_useChainId(options),
     }),
-  );
+  ) as TypedApi<Chains[TChainId]>;
 }
