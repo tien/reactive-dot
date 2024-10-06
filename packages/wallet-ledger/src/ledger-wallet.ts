@@ -29,37 +29,39 @@ export class LedgerWallet extends LocalWallet<LedgerAccount, "accounts"> {
 
   readonly accounts$ = this.#ledgerAccounts$.pipe(
     map((accounts) =>
-      accounts.map(
-        (account): PolkadotSignerAccount => ({
-          id: account.id,
-          ...(account.name === undefined ? {} : { name: account.name }),
-          polkadotSigner: ({ tokenSymbol, tokenDecimals }) => ({
-            publicKey: account.publicKey,
-            signTx: async (...args) => {
-              await this.#assertMatchingAccount(account);
+      accounts
+        .toSorted((a, b) => a.path - b.path)
+        .map(
+          (account): PolkadotSignerAccount => ({
+            id: account.id,
+            ...(account.name === undefined ? {} : { name: account.name }),
+            polkadotSigner: ({ tokenSymbol, tokenDecimals }) => ({
+              publicKey: account.publicKey,
+              signTx: async (...args) => {
+                await this.#assertMatchingAccount(account);
 
-              const ledgerSigner = await this.#getOrCreateLedgerSigner();
-              const polkadotSigner = await ledgerSigner.getPolkadotSigner(
-                { tokenSymbol, decimals: tokenDecimals },
-                account.path,
-              );
+                const ledgerSigner = await this.#getOrCreateLedgerSigner();
+                const polkadotSigner = await ledgerSigner.getPolkadotSigner(
+                  { tokenSymbol, decimals: tokenDecimals },
+                  account.path,
+                );
 
-              return polkadotSigner.signTx(...args);
-            },
-            signBytes: async (...args) => {
-              await this.#assertMatchingAccount(account);
+                return polkadotSigner.signTx(...args);
+              },
+              signBytes: async (...args) => {
+                await this.#assertMatchingAccount(account);
 
-              const ledgerSigner = await this.#getOrCreateLedgerSigner();
-              const polkadotSigner = await ledgerSigner.getPolkadotSigner(
-                { tokenSymbol, decimals: tokenDecimals },
-                account.path,
-              );
+                const ledgerSigner = await this.#getOrCreateLedgerSigner();
+                const polkadotSigner = await ledgerSigner.getPolkadotSigner(
+                  { tokenSymbol, decimals: tokenDecimals },
+                  account.path,
+                );
 
-              return polkadotSigner.signBytes(...args);
-            },
+                return polkadotSigner.signBytes(...args);
+              },
+            }),
           }),
-        }),
-      ),
+        ),
     ),
   );
 
