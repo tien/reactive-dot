@@ -1,5 +1,11 @@
 # @reactive-dot/wallet-ledger
 
+## 0.16.3
+
+### Patch Changes
+
+- [#219](https://github.com/tien/reactive-dot/pull/219) [`50107c5`](https://github.com/tien/reactive-dot/commit/50107c56c8b8e6bc1adb3a1f6dc9cda60150838a) Thanks [@tien](https://github.com/tien)! - Sort Ledger accounts by derivation path.
+
 ## 0.16.1
 
 ### Patch Changes
