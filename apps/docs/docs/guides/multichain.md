@@ -22,14 +22,11 @@ npx papi
 ### Add type information
 
 ```ts title="reactive-dot.d.ts"
-import type { dot, ksm, wnd } from "@polkadot-api/descriptors";
+import type { config } from "./config";
+import type { InferChains } from "@reactive-dot/core";
 
 declare module "@reactive-dot/core" {
-  export interface Chains {
-    polkadot: typeof dot;
-    kusama: typeof ksm;
-    westend: typeof wnd;
-  }
+  export interface Chains extends InferChains<typeof config> {}
 }
 ```
 
