@@ -104,7 +104,7 @@ export const config = {
 
 ```ts title="config.ts"
 import { dot } from "@polkadot-api/descriptors";
-import { WebSocketProvider } from "@polkadot-api/ws-provider/web";
+import { getWsProvider } from "@polkadot-api/ws-provider/web";
 import type { Config } from "@reactive-dot/core";
 import { InjectedWalletAggregator } from "@reactive-dot/core/wallets.js";
 
@@ -112,7 +112,7 @@ export const config = {
   chains: {
     polkadot: {
       descriptor: dot,
-      provider: WebSocketProvider("wss://polkadot-rpc.publicnode.com"),
+      provider: getWsProvider("wss://polkadot-rpc.publicnode.com"),
     },
   },
   wallets: [new InjectedWalletAggregator()],
