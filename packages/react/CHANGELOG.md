@@ -1,5 +1,11 @@
 # @reactive-dot/react
 
+## 0.16.4
+
+### Patch Changes
+
+- [#231](https://github.com/tien/reactive-dot/pull/231) [`306666a`](https://github.com/tien/reactive-dot/commit/306666a37f4db772903b73b933a2f5914d365dea) Thanks [@tien](https://github.com/tien)! - Fixed missing accepted parameter type for `useNativeTokenAmountFromNumber` partial application.
+
 ## 0.16.2
 
 ### Patch Changes
