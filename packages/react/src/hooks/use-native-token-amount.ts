@@ -90,7 +90,7 @@ export function useNativeTokenAmountFromNumber(
         chainSpecData.properties.tokenSymbol,
       );
     default:
-      return (number: number) =>
+      return (number: number | string) =>
         DenominatedNumber.fromNumber(
           number,
           chainSpecData.properties.tokenDecimals,
