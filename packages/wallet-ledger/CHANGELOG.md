@@ -1,5 +1,12 @@
 # @reactive-dot/wallet-ledger
 
+## 0.16.5
+
+### Patch Changes
+
+- Updated dependencies []:
+  - @reactive-dot/core@0.16.5
+
 ## 0.16.3
 
 ### Patch Changes

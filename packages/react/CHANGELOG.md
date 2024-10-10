@@ -1,5 +1,14 @@
 # @reactive-dot/react
 
+## 0.16.5
+
+### Patch Changes
+
+- [#234](https://github.com/tien/reactive-dot/pull/234) [`98d2370`](https://github.com/tien/reactive-dot/commit/98d23709a1888b94c77495189bba110ce5823b83) Thanks [@tien](https://github.com/tien)! - Fixed missing accepted parameter type for `useNativeTokenAmountFromPlanck`.
+
+- Updated dependencies []:
+  - @reactive-dot/core@0.16.5
+
 ## 0.16.4
 
 ### Patch Changes
