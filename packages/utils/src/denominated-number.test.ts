@@ -237,13 +237,23 @@ describe("DenominatedNumber", () => {
   });
 
   describe("toLocaleString", () => {
-    it("Add denomination to the string value", () => {
+    it("add denomination to the string value", () => {
       const string = new DenominatedNumber(30, 0, "DOT").toLocaleString(
         "en-NZ",
       );
 
       expect(string).toContain("DOT");
       expect(string).toContain("30.00");
+    });
+
+    it("keep compact notation", () => {
+      const string = new DenominatedNumber(30000, 0, "DOT").toLocaleString(
+        "en-NZ",
+        { notation: "compact" },
+      );
+
+      expect(string).toContain("DOT");
+      expect(string).toContain("30K");
     });
   });
 });
