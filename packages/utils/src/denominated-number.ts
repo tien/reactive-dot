@@ -100,7 +100,7 @@ export class DenominatedNumber extends Number {
       return this.valueOf().toLocaleString(locales, options);
     }
 
-    const newOptions: Intl.NumberFormatOptions = {};
+    const newOptions: Intl.NumberFormatOptions = options ?? {};
 
     if (options?.style === undefined) {
       newOptions.style = "currency";
