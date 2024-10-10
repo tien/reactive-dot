@@ -1,5 +1,11 @@
 # @reactive-dot/utils
 
+## 0.8.1
+
+### Patch Changes
+
+- [#237](https://github.com/tien/reactive-dot/pull/237) [`cfcf0e6`](https://github.com/tien/reactive-dot/commit/cfcf0e6a60862565987b9763ca6f96c1b159c839) Thanks [@tien](https://github.com/tien)! - Fixed `DenominatedNumber.toLocaleString` not correctly handling additional options.
+
 ## 0.8.0
 
 ### Minor Changes
