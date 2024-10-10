@@ -10,7 +10,7 @@ import { DenominatedNumber } from "@reactive-dot/utils";
  * @returns The native token amount
  */
 export function useNativeTokenAmountFromPlanck(
-  planck: bigint,
+  planck: bigint | number | string,
   options?: ChainHookOptions,
 ): DenominatedNumber;
 /**
