@@ -4590,9 +4590,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@polkadot-api/descriptors@portal:.papi/descriptors::locator=%40reactive-dot%2Fexample%40workspace%3Aapps%2Fexample":
+"@polkadot-api/descriptors@portal:.papi/descriptors::locator=%40reactive-dot%2Fexample-react%40workspace%3Aexamples%2Freact":
   version: 0.0.0-use.local
-  resolution: "@polkadot-api/descriptors@portal:.papi/descriptors::locator=%40reactive-dot%2Fexample%40workspace%3Aapps%2Fexample"
+  resolution: "@polkadot-api/descriptors@portal:.papi/descriptors::locator=%40reactive-dot%2Fexample-react%40workspace%3Aexamples%2Freact"
   peerDependencies:
     polkadot-api: "*"
   languageName: node
@@ -4847,9 +4847,9 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@reactive-dot/example@workspace:apps/example":
+"@reactive-dot/example-react@workspace:examples/react":
   version: 0.0.0-use.local
-  resolution: "@reactive-dot/example@workspace:apps/example"
+  resolution: "@reactive-dot/example-react@workspace:examples/react"
   dependencies:
     "@polkadot-api/descriptors": "portal:.papi/descriptors"
     "@reactive-dot/eslint-config": "workspace:^"
