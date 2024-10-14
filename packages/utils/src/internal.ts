@@ -55,3 +55,14 @@ export function flatHead<T>(value: T): T extends [infer Head] ? Head : T {
   // @ts-expect-error TODO: fix this
   return value;
 }
+
+export function maybeThen<TValueIn, TValueOut>(
+  maybePromise: TValueIn | Promise<TValueIn>,
+  then: (value: TValueIn) => TValueOut,
+) {
+  if (maybePromise instanceof Promise) {
+    return maybePromise.then(then);
+  }
+
+  return then(maybePromise);
+}

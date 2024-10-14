@@ -1,6 +1,4 @@
 import { queryPayloadAtom } from "../stores/query.js";
-import type { Falsy, FalsyGuard, FlatHead } from "../types.js";
-import { flatHead, stringify } from "../utils/vanilla.js";
 import type { ChainHookOptions } from "./types.js";
 import { internal_useChainId } from "./use-chain-id.js";
 import { useConfig } from "./use-config.js";
@@ -13,9 +11,13 @@ import {
   type CommonDescriptor,
 } from "@reactive-dot/core";
 import type {
+  Falsy,
+  FalsyGuard,
+  FlatHead,
   InferQueryPayload,
   QueryInstruction,
 } from "@reactive-dot/core/internal.js";
+import { flatHead, stringify } from "@reactive-dot/utils/internal.js";
 import { atom, useAtomValue } from "jotai";
 import { useMemo } from "react";
 
