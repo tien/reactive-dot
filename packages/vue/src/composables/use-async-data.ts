@@ -6,11 +6,13 @@ import type { Observable, Subscription } from "rxjs";
 import {
   computed,
   inject,
+  type MaybeRef,
   type MaybeRefOrGetter,
   onWatcherCleanup,
   shallowReadonly,
   shallowRef,
   toValue,
+  unref,
   watchEffect,
 } from "vue";
 
@@ -99,9 +101,13 @@ export function useAsyncData<T>(
     }
   });
 
-  return Object.assign(readonlyState, {
-    then: promiseLike.then.bind(promiseLike),
-  }) as ReadonlyAsyncState<T> & PromiseLike<ReadonlyAsyncState<T>>;
+  return {
+    ...readonlyState,
+    then: (
+      onfulfilled: () => unknown,
+      onrejected: (reason: unknown) => unknown,
+    ) => promiseLike.then(onfulfilled, onrejected),
+  } as ReadonlyAsyncState<T> & PromiseLike<ReadonlyAsyncState<T, unknown, T>>;
 }
 
 /**
@@ -109,7 +115,7 @@ export function useAsyncData<T>(
  */
 export function useLazyValue<T>(
   key: MaybeRefOrGetter<string>,
-  get: MaybeRefOrGetter<() => T>,
+  get: MaybeRef<() => T>,
 ) {
   const cache = inject(lazyValuesKey);
 
@@ -121,7 +127,7 @@ export function useLazyValue<T>(
     () =>
       (toValue(cache).get(toValue(key))?.value ??
         toValue(cache)
-          .set(toValue(key), shallowRef(toValue(get)()))
+          .set(toValue(key), shallowRef(unref(get)()))
           .get(toValue(key))!.value) as T,
   );
 }

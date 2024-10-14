@@ -10,9 +10,9 @@ import { computed, inject, toValue } from "vue";
  * @returns The current config
  */
 export function useConfig() {
-  return computed(() => {
-    const config = inject(configKey);
+  const config = inject(configKey);
 
+  return computed(() => {
     if (config === undefined) {
       throw new ReactiveDotError("No config provided");
     }

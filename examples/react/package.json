@@ -7,7 +7,7 @@
     "build": "vite build",
     "lint": "eslint src",
     "preview": "vite preview",
-    "postinstall": "npx papi"
+    "postinstall": "papi"
   },
   "dependencies": {
     "@polkadot-api/descriptors": "portal:.papi/descriptors",

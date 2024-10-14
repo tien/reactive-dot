@@ -23,8 +23,10 @@ export function useChainId<
   const TAllowList extends ChainId[],
   const TDenylist extends ChainId[] = [],
 >(options?: { allowlist?: TAllowList; denylist?: TDenylist }) {
+  const injectedChainId = inject(chainIdKey);
+
   return computed(() => {
-    const chainId = toValue(inject(chainIdKey));
+    const chainId = toValue(injectedChainId);
 
     if (chainId === undefined) {
       throw new ReactiveDotError("No chain ID provided");

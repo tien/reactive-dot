@@ -8,14 +8,18 @@ export type ChainComposableOptions<TChainId extends ChainId = ChainId> = {
   chainId?: MaybeRefOrGetter<TChainId>;
 };
 
-export type AsyncState<TData, TError = unknown> = {
-  data: Ref<TData | undefined>;
+export type AsyncState<TData, TError = unknown, TDefault = undefined> = {
+  data: Ref<TData | TDefault>;
   error: Ref<TError | undefined>;
   status: Ref<"idle" | "pending" | "success" | "error">;
 };
 
-export type ReadonlyAsyncState<TData, TError = unknown> = {
-  data: Readonly<Ref<TData>>;
+export type ReadonlyAsyncState<
+  TData,
+  TError = unknown,
+  TDefault = undefined,
+> = {
+  data: Readonly<Ref<TData | TDefault>>;
   error: Readonly<Ref<TError | undefined>>;
   status: Readonly<Ref<"idle" | "pending" | "success" | "error">>;
 };

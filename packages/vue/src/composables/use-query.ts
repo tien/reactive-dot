@@ -1,4 +1,4 @@
-import type { ChainComposableOptions } from "./types.js";
+import type { ChainComposableOptions, ReadonlyAsyncState } from "./types.js";
 import { useAsyncData, useLazyValue } from "./use-async-data.js";
 import { useTypedApiPromise } from "./use-typed-api.js";
 import {
@@ -11,30 +11,37 @@ import {
 } from "@reactive-dot/core";
 import type {
   Falsy,
+  FlatHead,
+  InferQueryPayload,
   MultiInstruction,
   QueryInstruction,
 } from "@reactive-dot/core/internal.js";
 import { stringify } from "@reactive-dot/utils/internal.js";
-import { from, type Observable } from "rxjs";
+import { combineLatest, from, type Observable } from "rxjs";
 import { switchMap } from "rxjs/operators";
-import { computed, type MaybeRefOrGetter, toValue } from "vue";
+import {
+  computed,
+  type MaybeRef,
+  type MaybeRefOrGetter,
+  toValue,
+  unref,
+  type UnwrapRef,
+} from "vue";
 
 export function useLazyLoadQuery<
-  TQueryBuilder extends
+  TQuery extends MaybeRef<
     | ((
         builder: Query<[], TDescriptor>,
       ) => Query<QueryInstruction<TDescriptor>[], TDescriptor> | Falsy)
-    | Falsy,
+    | Falsy
+  >,
   TDescriptor extends TChainId extends void
     ? CommonDescriptor
     : Chains[TChainId],
   TChainId extends ChainId,
->(
-  builder: MaybeRefOrGetter<TQueryBuilder | Falsy>,
-  options?: ChainComposableOptions<TChainId>,
-) {
+>(builder: TQuery, options?: ChainComposableOptions<TChainId>) {
   const responses = computed(() => {
-    const builderValue = toValue(builder);
+    const builderValue = unref(builder);
 
     if (!builderValue) {
       return;
@@ -47,20 +54,26 @@ export function useLazyLoadQuery<
     }
 
     if (query.instructions.length === 0) {
-      return [useQueryInstructionPromise(query.instructions.at(0)!, options)];
+      return [useQueryInstructionFuture(query.instructions.at(0)!, options)];
     }
 
     return query.instructions.flatMap((instruction) => {
       if (!("multi" in instruction)) {
-        return useQueryInstructionPromise(instruction, options);
+        return useQueryInstructionFuture(instruction, options);
       }
 
       return (instruction.args as unknown[]).map((args) => {
         const { multi, ...rest } = instruction;
-        return useQueryInstructionPromise({ ...rest, args }, options);
+        return useQueryInstructionFuture({ ...rest, args }, options);
       });
     });
   });
+
+  type Data = FlatHead<
+    InferQueryPayload<
+      Exclude<ReturnType<Exclude<UnwrapRef<TQuery>, Falsy>>, Falsy>
+    >
+  >;
 
   return useAsyncData(
     computed(() => {
@@ -72,12 +85,15 @@ export function useLazyLoadQuery<
         return responses.value.at(0)!.value;
       }
 
-      return Promise.all(responses.value.map((response) => response.value));
+      return combineLatest(
+        responses.value.map((response) => from(response.value)),
+      );
     }),
-  );
+  ) as ReadonlyAsyncState<Data> &
+    PromiseLike<ReadonlyAsyncState<Data, unknown, Data>>;
 }
 
-function useQueryInstructionPromise(
+function useQueryInstructionFuture(
   instruction: MaybeRefOrGetter<
     Exclude<
       QueryInstruction,
