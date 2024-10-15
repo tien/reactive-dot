@@ -1,6 +1,6 @@
 import { withAtomFamilyErrorCatcher } from "../utils/jotai.js";
 import { chainSpecDataAtomFamily } from "./client.js";
-import { walletsAtom } from "./wallets.js";
+import { connectedWalletsAtom } from "./wallets.js";
 import { getAccounts, type ChainId, type Config } from "@reactive-dot/core";
 import type { WalletAccount } from "@reactive-dot/core/wallets.js";
 import type { Atom } from "jotai";
@@ -17,7 +17,7 @@ export const accountsAtom = atomFamily(
       atomWithObservable,
     )((get) =>
       getAccounts(
-        get(walletsAtom(param.config)),
+        get(connectedWalletsAtom(param.config)),
         param.chainId === undefined
           ? undefined
           : // @ts-expect-error `chainId` will never be undefined
