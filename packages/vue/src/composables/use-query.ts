@@ -1,5 +1,6 @@
 import type { ChainComposableOptions, ReadonlyAsyncState } from "./types.js";
-import { useAsyncData, useLazyValue } from "./use-async-data.js";
+import { useAsyncData } from "./use-async-data.js";
+import { lazyValue, useLazyValuesCache } from "./use-lazy-value.js";
 import { useTypedApiPromise } from "./use-typed-api.js";
 import {
   type ChainId,
@@ -18,60 +19,54 @@ import type {
   QueryInstruction,
 } from "@reactive-dot/core/internal.js";
 import { stringify } from "@reactive-dot/utils/internal.js";
+import type { ChainDefinition, TypedApi } from "polkadot-api";
 import { from, type Observable } from "rxjs";
 import { switchMap } from "rxjs/operators";
 import {
   computed,
-  type MaybeRef,
   type MaybeRefOrGetter,
   onWatcherCleanup,
   type Ref,
+  type ShallowRef,
   toValue,
-  unref,
   type UnwrapRef,
   watchEffect,
 } from "vue";
 
 export function useLazyLoadQuery<
-  TQuery extends MaybeRef<
-    | ((
-        builder: Query<[], TDescriptor>,
-      ) => Query<QueryInstruction<TDescriptor>[], TDescriptor> | Falsy)
-    | Falsy
-  >,
+  TQuery extends (
+    builder: Query<[], TDescriptor>,
+  ) => Query<QueryInstruction<TDescriptor>[], TDescriptor> | Falsy,
   TDescriptor extends TChainId extends void
     ? CommonDescriptor
     : Chains[TChainId],
   TChainId extends ChainId,
 >(builder: TQuery, options?: ChainComposableOptions<TChainId>) {
+  const typedApiPromise = useTypedApiPromise(options);
+  const cache = useLazyValuesCache();
+
   const responses = computed(() => {
-    const builderValue = unref(builder);
-
-    if (!builderValue) {
-      return;
-    }
-
-    const query = builderValue(new Query([]));
+    const query = builder(new Query([]));
 
     if (!query) {
       return;
     }
 
-    if (query.instructions.length === 0) {
+    if (query.instructions.length === 1) {
       return useAsyncData(
-        useQueryInstructionFuture(query.instructions.at(0)!, options),
+        queryInstruction(query.instructions.at(0)!, typedApiPromise, cache),
       );
     }
 
     return query.instructions
       .flatMap((instruction) => {
         if (!("multi" in instruction)) {
-          return useQueryInstructionFuture(instruction, options);
+          return queryInstruction(instruction, typedApiPromise, cache);
         }
 
         return (instruction.args as unknown[]).map((args) => {
           const { multi, ...rest } = instruction;
-          return useQueryInstructionFuture({ ...rest, args }, options);
+          return queryInstruction({ ...rest, args }, typedApiPromise, cache);
         });
       })
       .map(useAsyncData);
@@ -89,12 +84,12 @@ export function useLazyLoadQuery<
   const state = {
     data: computed(() =>
       !Array.isArray(responses.value)
-        ? responses.value?.data
+        ? responses.value?.data.value
         : responses.value.map((response) => response.data),
     ),
     error: computed(() => {
       if (!Array.isArray(responses.value)) {
-        return responses.value?.error;
+        return responses.value?.error.value;
       }
 
       const errorResponses = responses.value.filter(
@@ -113,7 +108,7 @@ export function useLazyLoadQuery<
     }),
     status: computed(() => {
       if (!Array.isArray(responses.value)) {
-        return responses.value?.status;
+        return responses.value?.status.value;
       }
 
       if (
@@ -199,7 +194,7 @@ export function useLazyLoadQuery<
   } as unknown as Return;
 }
 
-function useQueryInstructionFuture(
+function queryInstruction(
   instruction: MaybeRefOrGetter<
     Exclude<
       QueryInstruction,
@@ -208,36 +203,30 @@ function useQueryInstructionFuture(
       {}>
     >
   >,
-  options?: ChainComposableOptions,
+  typedApiPromise: MaybeRefOrGetter<Promise<TypedApi<ChainDefinition>>>,
+  cache: MaybeRefOrGetter<Map<string, ShallowRef<unknown>>>,
 ) {
-  const typedApiPromise = useTypedApiPromise(options);
-
-  return useLazyValue(
+  return lazyValue(
     computed(() => `query/${stringify(toValue(instruction))}`),
-    computed(() => {
-      const instructionValue = toValue(instruction);
-      const preflightResult = preflight(instructionValue);
-      const typedApiPromiseValue = toValue(typedApiPromise);
-
-      return () => {
-        switch (preflightResult) {
-          case "promise":
-            return typedApiPromiseValue.then(
+    () => {
+      switch (preflight(toValue(instruction))) {
+        case "promise":
+          return toValue(typedApiPromise).then(
+            (typedApi) =>
+              executeQuery(typedApi, toValue(instruction)) as Promise<unknown>,
+          );
+        case "observable":
+          return from(toValue(typedApiPromise)).pipe(
+            switchMap(
               (typedApi) =>
-                executeQuery(typedApi, instructionValue) as Promise<unknown>,
-            );
-          case "observable":
-            return from(typedApiPromiseValue).pipe(
-              switchMap(
-                (typedApi) =>
-                  executeQuery(
-                    typedApi,
-                    instructionValue,
-                  ) as Observable<unknown>,
-              ),
-            );
-        }
-      };
-    }),
+                executeQuery(
+                  typedApi,
+                  toValue(instruction),
+                ) as Observable<unknown>,
+            ),
+          );
+      }
+    },
+    cache,
   );
 }

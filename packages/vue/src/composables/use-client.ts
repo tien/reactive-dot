@@ -1,7 +1,8 @@
 import type { ChainComposableOptions } from "./types.js";
-import { useAsyncData, useLazyValue } from "./use-async-data.js";
+import { useAsyncData } from "./use-async-data.js";
 import { internal_useChainId } from "./use-chain-id.js";
 import { useChainConfig } from "./use-config.js";
+import { useLazyValue } from "./use-lazy-value.js";
 import { getClient } from "@reactive-dot/core";
 import { computed, toValue } from "vue";
 
@@ -24,9 +25,6 @@ export function useClientPromise(options?: ChainComposableOptions) {
 
   return useLazyValue(
     computed(() => `client-${chainId.value}`),
-    computed(() => {
-      const chainConfigValue = toValue(chainConfig);
-      return () => getClient(chainConfigValue);
-    }),
+    () => getClient(toValue(chainConfig)),
   );
 }

@@ -1,8 +1,9 @@
 import type { ChainComposableOptions } from "./types.js";
-import { useAsyncData, useLazyValue } from "./use-async-data.js";
+import { useAsyncData } from "./use-async-data.js";
 import { internal_useChainId } from "./use-chain-id.js";
 import { useClientPromise } from "./use-client.js";
 import { useChainConfig } from "./use-config.js";
+import { useLazyValue } from "./use-lazy-value.js";
 import type { ChainId, Chains } from "@reactive-dot/core";
 import type { TypedApi } from "polkadot-api";
 import { computed } from "vue";
@@ -31,15 +32,12 @@ export function useTypedApiPromise<TChainId extends ChainId>(
 
   return useLazyValue(
     computed(() => `typed-api-${chainId.value}`),
-    computed(() => {
-      const clientPromiseValue = clientPromise.value;
-      return () =>
-        clientPromiseValue.then(
-          (client) =>
-            client.getTypedApi(chainConfig.value.descriptor) as TypedApi<
-              Chains[TChainId]
-            >,
-        );
-    }),
+    () =>
+      clientPromise.value.then(
+        (client) =>
+          client.getTypedApi(chainConfig.value.descriptor) as TypedApi<
+            Chains[TChainId]
+          >,
+      ),
   );
 }

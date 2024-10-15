@@ -1,18 +1,12 @@
-import { lazyValuesKey } from "../keys.js";
 import type { AsyncState, ReadonlyAsyncState } from "./types.js";
-import { ReactiveDotError } from "@reactive-dot/core";
 import type { Falsy } from "@reactive-dot/core/internal.js";
 import type { Observable, Subscription } from "rxjs";
 import {
-  computed,
-  inject,
-  type MaybeRef,
   type MaybeRefOrGetter,
   onWatcherCleanup,
   shallowReadonly,
   shallowRef,
   toValue,
-  unref,
   watchEffect,
 } from "vue";
 
@@ -108,26 +102,4 @@ export function useAsyncData<T>(
       onrejected: (reason: unknown) => unknown,
     ) => promiseLike.then(onfulfilled, onrejected),
   } as ReadonlyAsyncState<T> & PromiseLike<ReadonlyAsyncState<T, unknown, T>>;
-}
-
-/**
- * @internal
- */
-export function useLazyValue<T>(
-  key: MaybeRefOrGetter<string>,
-  get: MaybeRef<() => T>,
-) {
-  const cache = inject(lazyValuesKey);
-
-  if (cache === undefined) {
-    throw new ReactiveDotError("No lazy values cache provided");
-  }
-
-  return computed(
-    () =>
-      (toValue(cache).get(toValue(key))?.value ??
-        toValue(cache)
-          .set(toValue(key), shallowRef(unref(get)()))
-          .get(toValue(key))!.value) as T,
-  );
 }
