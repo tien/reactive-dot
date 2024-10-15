@@ -2,11 +2,7 @@ export {
   ChainProvider,
   ReactiveDotProvider,
   SignerProvider,
-  type ChainProviderProps,
-  type ReactiveDotProviderProps,
-  type SignerProviderProps,
 } from "./contexts/index.js";
-export type { ChainHookOptions } from "./hooks/types.js";
 export { useAccounts } from "./hooks/use-accounts.js";
 export { useSpendableBalance } from "./hooks/use-balance.js";
 export { useBlock } from "./hooks/use-block.js";
@@ -31,5 +27,4 @@ export { useSigner } from "./hooks/use-signer.js";
 export { useTypedApi } from "./hooks/use-typed-api.js";
 export { useWalletConnector } from "./hooks/use-wallet-connector.js";
 export { useWalletDisconnector } from "./hooks/use-wallet-disconnector.js";
-export { useWalletsInitializer } from "./hooks/use-wallets-initializer.js";
 export { useConnectedWallets, useWallets } from "./hooks/use-wallets.js";

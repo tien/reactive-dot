@@ -29,11 +29,6 @@ export type ReactiveDotProviderProps = PropsWithChildren<{
    * Global config used by ReactiveDOT.
    */
   config: Config;
-
-  /**
-   * Whether or not to initialize wallets on mount.
-   */
-  autoInitializeWallets?: boolean;
 }>;
 
 /**
@@ -44,7 +39,6 @@ export type ReactiveDotProviderProps = PropsWithChildren<{
  */
 export function ReactiveDotProvider({
   config,
-  autoInitializeWallets = true,
   children,
 }: ReactiveDotProviderProps) {
   return (
@@ -52,11 +46,9 @@ export function ReactiveDotProvider({
       <MutationEventSubjectContext.Provider
         value={useMemo(() => new Subject(), [])}
       >
-        {autoInitializeWallets && (
-          <Suspense>
-            <WalletsInitializer />
-          </Suspense>
-        )}
+        <Suspense>
+          <WalletsInitializer />
+        </Suspense>
         {children}
       </MutationEventSubjectContext.Provider>
     </ConfigContext.Provider>
