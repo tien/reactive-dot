@@ -24,7 +24,7 @@ export function useClientPromise(options?: ChainComposableOptions) {
   const chainConfig = useChainConfig(options);
 
   return useLazyValue(
-    computed(() => `client-${chainId.value}`),
+    computed(() => ["client", chainId.value]),
     () => getClient(toValue(chainConfig)),
   );
 }

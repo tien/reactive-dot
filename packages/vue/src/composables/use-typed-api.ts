@@ -31,7 +31,7 @@ export function useTypedApiPromise<TChainId extends ChainId>(
   const clientPromise = useClientPromise(options);
 
   return useLazyValue(
-    computed(() => `typed-api-${chainId.value}`),
+    computed(() => ["typed-api", chainId.value]),
     () =>
       clientPromise.value.then(
         (client) =>

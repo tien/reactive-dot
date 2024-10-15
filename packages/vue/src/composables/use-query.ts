@@ -1,5 +1,6 @@
 import type { ChainComposableOptions, ReadonlyAsyncState } from "./types.js";
 import { useAsyncData } from "./use-async-data.js";
+import { internal_useChainId } from "./use-chain-id.js";
 import { lazyValue, useLazyValuesCache } from "./use-lazy-value.js";
 import { useTypedApiPromise } from "./use-typed-api.js";
 import {
@@ -42,6 +43,7 @@ export function useLazyLoadQuery<
     : Chains[TChainId],
   TChainId extends ChainId,
 >(builder: TQuery, options?: ChainComposableOptions<TChainId>) {
+  const chainId = internal_useChainId(options);
   const typedApiPromise = useTypedApiPromise(options);
   const cache = useLazyValuesCache();
 
@@ -54,19 +56,29 @@ export function useLazyLoadQuery<
 
     if (query.instructions.length === 1) {
       return useAsyncData(
-        queryInstruction(query.instructions.at(0)!, typedApiPromise, cache),
+        queryInstruction(
+          query.instructions.at(0)!,
+          chainId,
+          typedApiPromise,
+          cache,
+        ),
       );
     }
 
     return query.instructions
       .flatMap((instruction) => {
         if (!("multi" in instruction)) {
-          return queryInstruction(instruction, typedApiPromise, cache);
+          return queryInstruction(instruction, chainId, typedApiPromise, cache);
         }
 
         return (instruction.args as unknown[]).map((args) => {
           const { multi, ...rest } = instruction;
-          return queryInstruction({ ...rest, args }, typedApiPromise, cache);
+          return queryInstruction(
+            { ...rest, args },
+            chainId,
+            typedApiPromise,
+            cache,
+          );
         });
       })
       .map(useAsyncData);
@@ -203,11 +215,16 @@ function queryInstruction(
       {}>
     >
   >,
+  chainId: MaybeRefOrGetter<ChainId>,
   typedApiPromise: MaybeRefOrGetter<Promise<TypedApi<ChainDefinition>>>,
   cache: MaybeRefOrGetter<Map<string, ShallowRef<unknown>>>,
 ) {
   return lazyValue(
-    computed(() => `query/${stringify(toValue(instruction))}`),
+    computed(() => [
+      "query",
+      toValue(chainId),
+      stringify(toValue(instruction)),
+    ]),
     () => {
       switch (preflight(toValue(instruction))) {
         case "promise":

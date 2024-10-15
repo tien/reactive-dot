@@ -9,10 +9,12 @@ import {
   inject,
 } from "vue";
 
+type Key = string | number;
+
 /**
  * @internal
  */
-export function useLazyValue<T>(key: MaybeRefOrGetter<string>, get: () => T) {
+export function useLazyValue<T>(key: MaybeRefOrGetter<Key[]>, get: () => T) {
   return lazyValue(key, get, useLazyValuesCache());
 }
 
@@ -33,14 +35,15 @@ export function useLazyValuesCache() {
  * @internal
  */
 export function lazyValue<T>(
-  key: MaybeRefOrGetter<string>,
+  key: MaybeRefOrGetter<Key[]>,
   get: () => T,
   cache: MaybeRefOrGetter<Map<string, ShallowRef<unknown>>>,
 ) {
   return computed(
     () =>
-      (toValue(cache).get(toValue(key))?.value ??
-        toValue(cache).set(toValue(key), shallowRef(get())).get(toValue(key))!
-          .value) as T,
+      (toValue(cache).get(toValue(key).join("/"))?.value ??
+        toValue(cache)
+          .set(toValue(key).join("/"), shallowRef(get()))
+          .get(toValue(key).join("/"))!.value) as T,
   );
 }
