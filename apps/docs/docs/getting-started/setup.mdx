@@ -149,7 +149,6 @@ import { Suspense } from "react";
 export function App() {
   return (
     <ReactiveDotProvider config={config}>
-      {/* `chainId` match the ID previously specified via `polkadot: typeof dot` */}
       <ChainProvider chainId="polkadot">
         {/* Make sure there is at least one Suspense boundary wrapping the app */}
         <Suspense>{/* ... */}</Suspense>
