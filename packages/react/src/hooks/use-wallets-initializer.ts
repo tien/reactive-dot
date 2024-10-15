@@ -10,6 +10,7 @@ import { useCallback, useState } from "react";
 
 /**
  * Hook for initializing wallets.
+ * @internal
  *
  * @returns The initialization state and initialize function
  */
