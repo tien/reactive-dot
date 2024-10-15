@@ -11,9 +11,9 @@ const { data } = await useLazyLoadQuery((builder) =>
 <template>
   <dl>
     <dt>Height</dt>
-    <dd>{{ data[0].toLocaleString() }}</dd>
+    <dd>{{ data[0].value.toLocaleString() }}</dd>
 
     <dt>Total issuance</dt>
-    <dd>{{ data[1].toLocaleString() }}</dd>
+    <dd>{{ data[1].value.toLocaleString() }}</dd>
   </dl>
 </template>

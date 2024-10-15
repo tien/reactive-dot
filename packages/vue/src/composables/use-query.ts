@@ -8,6 +8,7 @@ import {
   query as executeQuery,
   preflight,
   Query,
+  QueryError,
 } from "@reactive-dot/core";
 import type {
   Falsy,
@@ -17,15 +18,18 @@ import type {
   QueryInstruction,
 } from "@reactive-dot/core/internal.js";
 import { stringify } from "@reactive-dot/utils/internal.js";
-import { combineLatest, from, type Observable } from "rxjs";
+import { from, type Observable } from "rxjs";
 import { switchMap } from "rxjs/operators";
 import {
   computed,
   type MaybeRef,
   type MaybeRefOrGetter,
+  onWatcherCleanup,
+  type Ref,
   toValue,
   unref,
   type UnwrapRef,
+  watchEffect,
 } from "vue";
 
 export function useLazyLoadQuery<
@@ -54,19 +58,23 @@ export function useLazyLoadQuery<
     }
 
     if (query.instructions.length === 0) {
-      return [useQueryInstructionFuture(query.instructions.at(0)!, options)];
+      return useAsyncData(
+        useQueryInstructionFuture(query.instructions.at(0)!, options),
+      );
     }
 
-    return query.instructions.flatMap((instruction) => {
-      if (!("multi" in instruction)) {
-        return useQueryInstructionFuture(instruction, options);
-      }
+    return query.instructions
+      .flatMap((instruction) => {
+        if (!("multi" in instruction)) {
+          return useQueryInstructionFuture(instruction, options);
+        }
 
-      return (instruction.args as unknown[]).map((args) => {
-        const { multi, ...rest } = instruction;
-        return useQueryInstructionFuture({ ...rest, args }, options);
-      });
-    });
+        return (instruction.args as unknown[]).map((args) => {
+          const { multi, ...rest } = instruction;
+          return useQueryInstructionFuture({ ...rest, args }, options);
+        });
+      })
+      .map(useAsyncData);
   });
 
   type Data = FlatHead<
@@ -75,22 +83,120 @@ export function useLazyLoadQuery<
     >
   >;
 
-  return useAsyncData(
-    computed(() => {
-      if (responses.value === undefined) {
+  const { promise, resolve, reject } =
+    Promise.withResolvers<ReadonlyAsyncState<Data, unknown, Data>>();
+
+  const state = {
+    data: computed(() =>
+      !Array.isArray(responses.value)
+        ? responses.value?.data
+        : responses.value.map((response) => response.data),
+    ),
+    error: computed(() => {
+      if (!Array.isArray(responses.value)) {
+        return responses.value?.error;
+      }
+
+      const errorResponses = responses.value.filter(
+        (response) => response.error.value !== undefined,
+      );
+
+      if (errorResponses.length === 0) {
         return;
       }
 
-      if (responses.value.length === 1) {
-        return responses.value.at(0)!.value;
-      }
-
-      return combineLatest(
-        responses.value.map((response) => from(response.value)),
+      return QueryError.from(
+        new AggregateError(
+          errorResponses.map((response) => response.error.value),
+        ),
       );
     }),
-  ) as ReadonlyAsyncState<Data> &
-    PromiseLike<ReadonlyAsyncState<Data, unknown, Data>>;
+    status: computed(() => {
+      if (!Array.isArray(responses.value)) {
+        return responses.value?.status;
+      }
+
+      if (
+        responses.value.some((response) => response.status.value === "error")
+      ) {
+        return "error";
+      }
+
+      if (
+        responses.value.some((response) => response.status.value === "pending")
+      ) {
+        return "pending";
+      }
+
+      if (
+        responses.value.every((response) => response.status.value === "success")
+      ) {
+        return "success";
+      }
+
+      return "idle";
+    }),
+  } as ReadonlyAsyncState<Data>;
+
+  watchEffect(() => {
+    const abortController = new AbortController();
+
+    if (!Array.isArray(responses.value)) {
+      responses.value?.then(
+        () => {
+          if (!abortController.signal.aborted) {
+            resolve(state as ReadonlyAsyncState<Data, unknown, Data>);
+          }
+        },
+        (error) => {
+          if (!abortController.signal.aborted) {
+            reject(error);
+          }
+        },
+      );
+    } else {
+      Promise.all(responses.value.map((response) => response))
+        .then(() => {
+          if (!abortController.signal.aborted) {
+            resolve(state as ReadonlyAsyncState<Data, unknown, Data>);
+          }
+        })
+        .catch((error) => {
+          if (!abortController.signal.aborted) {
+            reject(error);
+          }
+        });
+    }
+
+    onWatcherCleanup(() => {
+      abortController.abort();
+    });
+  });
+
+  type RefProperties<T, TDefault = never> = {
+    [P in keyof T]: Readonly<Ref<T[P] | TDefault>>;
+  };
+
+  type Return =
+    Data extends Array<infer _>
+      ? ReadonlyAsyncState<RefProperties<Data, undefined>> &
+          PromiseLike<
+            ReadonlyAsyncState<
+              RefProperties<Data>,
+              unknown,
+              RefProperties<Data>
+            >
+          >
+      : ReadonlyAsyncState<Data> &
+          PromiseLike<ReadonlyAsyncState<Data, unknown, Data>>;
+
+  return {
+    ...state,
+    then: (
+      onfulfilled: () => unknown,
+      onrejected: (reason: unknown) => unknown,
+    ) => promise.then(onfulfilled, onrejected),
+  } as unknown as Return;
 }
 
 function useQueryInstructionFuture(
