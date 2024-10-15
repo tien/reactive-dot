@@ -10,7 +10,7 @@ import {
   query as executeQuery,
   preflight,
   Query,
-  QueryError,
+  type QueryError,
 } from "@reactive-dot/core";
 import type {
   Falsy,
@@ -19,19 +19,16 @@ import type {
   MultiInstruction,
   QueryInstruction,
 } from "@reactive-dot/core/internal.js";
-import { stringify } from "@reactive-dot/utils/internal.js";
+import { flatHead, stringify } from "@reactive-dot/utils/internal.js";
 import type { ChainDefinition, TypedApi } from "polkadot-api";
-import { from, type Observable } from "rxjs";
-import { switchMap } from "rxjs/operators";
+import { combineLatest, from, of, type Observable } from "rxjs";
+import { map, switchMap } from "rxjs/operators";
 import {
   computed,
   type MaybeRefOrGetter,
-  onWatcherCleanup,
-  type Ref,
   type ShallowRef,
   toValue,
   type UnwrapRef,
-  watchEffect,
 } from "vue";
 
 export function useLazyLoadQuery<
@@ -55,33 +52,31 @@ export function useLazyLoadQuery<
     }
 
     if (query.instructions.length === 1) {
-      return useAsyncData(
+      return [
         queryInstruction(
           query.instructions.at(0)!,
           chainId,
           typedApiPromise,
           cache,
         ),
-      );
+      ];
     }
 
-    return query.instructions
-      .flatMap((instruction) => {
-        if (!("multi" in instruction)) {
-          return queryInstruction(instruction, chainId, typedApiPromise, cache);
-        }
+    return query.instructions.map((instruction) => {
+      if (!("multi" in instruction)) {
+        return queryInstruction(instruction, chainId, typedApiPromise, cache);
+      }
 
-        return (instruction.args as unknown[]).map((args) => {
-          const { multi, ...rest } = instruction;
-          return queryInstruction(
-            { ...rest, args },
-            chainId,
-            typedApiPromise,
-            cache,
-          );
-        });
-      })
-      .map(useAsyncData);
+      return (instruction.args as unknown[]).map((args) => {
+        const { multi, ...rest } = instruction;
+        return queryInstruction(
+          { ...rest, args },
+          chainId,
+          typedApiPromise,
+          cache,
+        );
+      });
+    });
   });
 
   type Data = FlatHead<
@@ -90,120 +85,36 @@ export function useLazyLoadQuery<
     >
   >;
 
-  const { promise, resolve, reject } =
-    Promise.withResolvers<ReadonlyAsyncState<Data, unknown, Data>>();
+  type Return =
+    Data extends Array<infer _>
+      ? ReadonlyAsyncState<Data, QueryError> &
+          PromiseLike<ReadonlyAsyncState<Data, QueryError, Data>>
+      : ReadonlyAsyncState<Data> &
+          PromiseLike<ReadonlyAsyncState<Data, QueryError, Data>>;
 
-  const state = {
-    data: computed(() =>
-      !Array.isArray(responses.value)
-        ? responses.value?.data.value
-        : responses.value.map((response) => response.data),
-    ),
-    error: computed(() => {
-      if (!Array.isArray(responses.value)) {
-        return responses.value?.error.value;
-      }
-
-      const errorResponses = responses.value.filter(
-        (response) => response.error.value !== undefined,
-      );
-
-      if (errorResponses.length === 0) {
+  return useAsyncData(
+    computed(() => {
+      if (responses.value === undefined) {
         return;
       }
 
-      return QueryError.from(
-        new AggregateError(
-          errorResponses.map((response) => response.error.value),
-        ),
-      );
+      return combineLatest(
+        responses.value.map((response) => {
+          if (!Array.isArray(response)) {
+            return from(response.value);
+          }
+
+          const responses = response.map((response) => response.value);
+
+          if (responses.length === 0) {
+            return of([]);
+          }
+
+          return combineLatest(response.map((response) => response.value));
+        }),
+      ).pipe(map(flatHead));
     }),
-    status: computed(() => {
-      if (!Array.isArray(responses.value)) {
-        return responses.value?.status.value;
-      }
-
-      if (
-        responses.value.some((response) => response.status.value === "error")
-      ) {
-        return "error";
-      }
-
-      if (
-        responses.value.some((response) => response.status.value === "pending")
-      ) {
-        return "pending";
-      }
-
-      if (
-        responses.value.every((response) => response.status.value === "success")
-      ) {
-        return "success";
-      }
-
-      return "idle";
-    }),
-  } as ReadonlyAsyncState<Data>;
-
-  watchEffect(() => {
-    const abortController = new AbortController();
-
-    if (!Array.isArray(responses.value)) {
-      responses.value?.then(
-        () => {
-          if (!abortController.signal.aborted) {
-            resolve(state as ReadonlyAsyncState<Data, unknown, Data>);
-          }
-        },
-        (error) => {
-          if (!abortController.signal.aborted) {
-            reject(error);
-          }
-        },
-      );
-    } else {
-      Promise.all(responses.value.map((response) => response))
-        .then(() => {
-          if (!abortController.signal.aborted) {
-            resolve(state as ReadonlyAsyncState<Data, unknown, Data>);
-          }
-        })
-        .catch((error) => {
-          if (!abortController.signal.aborted) {
-            reject(error);
-          }
-        });
-    }
-
-    onWatcherCleanup(() => {
-      abortController.abort();
-    });
-  });
-
-  type RefProperties<T, TDefault = never> = {
-    [P in keyof T]: Readonly<Ref<T[P] | TDefault>>;
-  };
-
-  type Return =
-    Data extends Array<infer _>
-      ? ReadonlyAsyncState<RefProperties<Data, undefined>> &
-          PromiseLike<
-            ReadonlyAsyncState<
-              RefProperties<Data>,
-              unknown,
-              RefProperties<Data>
-            >
-          >
-      : ReadonlyAsyncState<Data> &
-          PromiseLike<ReadonlyAsyncState<Data, unknown, Data>>;
-
-  return {
-    ...state,
-    then: (
-      onfulfilled: () => unknown,
-      onrejected: (reason: unknown) => unknown,
-    ) => promise.then(onfulfilled, onrejected),
-  } as unknown as Return;
+  ) as Return;
 }
 
 function queryInstruction(

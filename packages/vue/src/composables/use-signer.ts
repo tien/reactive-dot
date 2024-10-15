@@ -1,5 +1,5 @@
 import { signerKey } from "../keys.js";
-import { computed, inject, toValue } from "vue";
+import { inject, toValue } from "vue";
 
 /**
  * Composable for getting the current signer.
@@ -7,5 +7,5 @@ import { computed, inject, toValue } from "vue";
  * @returns The current signer
  */
 export function useSigner() {
-  return computed(() => toValue(inject(signerKey)));
+  return toValue(inject(signerKey));
 }

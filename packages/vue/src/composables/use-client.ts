@@ -7,7 +7,7 @@ import { getClient } from "@reactive-dot/core";
 import { computed, toValue } from "vue";
 
 /**
- * Hook for getting Polkadot-API client instance.
+ * Composable for getting Polkadot-API client instance.
  *
  * @param options - Additional options
  * @returns Polkadot-API client
