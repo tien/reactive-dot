@@ -23,6 +23,7 @@
   },
   "workspaces": [
     "apps/*",
+    "examples/*",
     "packages/*"
   ],
   "scripts": {

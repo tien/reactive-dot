@@ -1,6 +1,5 @@
 {
-  "name": "@reactive-dot/example",
-  "version": "0.0.0",
+  "name": "@reactive-dot/example-react",
   "private": true,
   "type": "module",
   "scripts": {
