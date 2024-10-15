@@ -1,11 +1,11 @@
-import type { AsyncState, ReadonlyAsyncState } from "./types.js";
+import type { ReadonlyAsyncState } from "./types.js";
+import { useAsyncState } from "./use-async-state.js";
 import type { Falsy } from "@reactive-dot/core/internal.js";
 import type { Observable, Subscription } from "rxjs";
 import {
   type MaybeRefOrGetter,
   onWatcherCleanup,
   shallowReadonly,
-  shallowRef,
   toValue,
   watchEffect,
 } from "vue";
@@ -16,11 +16,7 @@ import {
 export function useAsyncData<T>(
   future: MaybeRefOrGetter<Promise<T> | Observable<T> | Falsy>,
 ) {
-  const state = {
-    data: shallowRef(),
-    error: shallowRef(),
-    status: shallowRef("idle"),
-  } as AsyncState<T>;
+  const state = useAsyncState<T>();
 
   watchEffect(() => {
     const promiseOrObservable = toValue(future);
