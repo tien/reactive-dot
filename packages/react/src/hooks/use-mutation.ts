@@ -20,6 +20,8 @@ import type {
 } from "polkadot-api";
 import { useCallback, useContext } from "react";
 
+type MaybePromise<T> = T | Promise<T>;
+
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 type TxOptions<T extends Transaction<any, any, any, any>> = Parameters<
   TxObservable<
@@ -32,18 +34,18 @@ type TxOptions<T extends Transaction<any, any, any, any>> = Parameters<
 /**
  * Hook for sending transactions to chains.
  *
- * @param action - The function to create the transaction
+ * @param builder - The function to create the transaction
  * @param options - Additional options
  * @returns The current transaction state & submit function
  */
 export function useMutation<
-  TAction extends (
-    builder: TypedApi<Chains[TChainId]>["tx"],
+  TBuilder extends (
+    tx: TypedApi<Chains[TChainId]>["tx"],
   ) => // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  Transaction<any, any, any, any>,
+  MaybePromise<Transaction<any, any, any, any>>,
   TChainId extends ChainId,
 >(
-  action: TAction,
+  builder: TBuilder,
   options?: ChainHookOptions<TChainId> & {
     /**
      * Override default signer
@@ -52,7 +54,7 @@ export function useMutation<
     /**
      * Additional transaction options
      */
-    txOptions?: TxOptions<ReturnType<TAction>>;
+    txOptions?: TxOptions<Awaited<ReturnType<TBuilder>>>;
   },
 ) {
   const config = useConfig();
@@ -72,7 +74,11 @@ export function useMutation<
 
   const submit = useAtomCallback<
     void,
-    [options?: TxOptions<ReturnType<TAction>> & { signer: PolkadotSigner }]
+    [
+      options?: TxOptions<Awaited<ReturnType<TBuilder>>> & {
+        signer: PolkadotSigner;
+      },
+    ]
   >(
     useCallback(
       async (get, _set, submitOptions) => {
@@ -96,7 +102,7 @@ export function useMutation<
 
         const api = await get(typedApiAtomFamily({ config, chainId }));
 
-        const transaction = action(api.tx);
+        const transaction = await builder(api.tx);
 
         setState({ id, call: transaction.decodedCall, value: pending });
 
@@ -119,7 +125,7 @@ export function useMutation<
         );
       },
       [
-        action,
+        builder,
         chainId,
         config,
         contextSigner,
