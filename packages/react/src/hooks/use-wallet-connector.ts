@@ -1,7 +1,7 @@
 import { walletsAtom } from "../stores/wallets.js";
-import { useAsyncState } from "./use-async-state.js";
+import { useAsyncAction } from "./use-async-action.js";
 import { useConfig } from "./use-config.js";
-import { MutationError, pending, connectWallet } from "@reactive-dot/core";
+import { connectWallet } from "@reactive-dot/core";
 import type { Wallet } from "@reactive-dot/core/wallets.js";
 import { useAtomCallback } from "jotai/utils";
 import { useCallback } from "react";
@@ -14,29 +14,19 @@ import { useCallback } from "react";
  */
 export function useWalletConnector(wallets?: Wallet | Wallet[]) {
   const hookWallets = wallets;
-
   const config = useConfig();
-  const [success, setSuccess] = useAsyncState<true>();
 
-  const connect = useAtomCallback(
-    useCallback(
-      async (get, _, wallets?: Wallet | Wallet[]) => {
-        try {
-          setSuccess(pending);
+  return useAsyncAction(
+    useAtomCallback(
+      useCallback(
+        async (get, _, wallets?: Wallet | Wallet[]) => {
           const walletsToConnect =
             wallets ?? hookWallets ?? (await get(walletsAtom(config)));
           await connectWallet(walletsToConnect);
-          setSuccess(true);
-        } catch (error) {
-          setSuccess(MutationError.from(error));
-        }
-      },
-      [config, hookWallets, setSuccess],
+          return true as const;
+        },
+        [config, hookWallets],
+      ),
     ),
   );
-
-  return [success, connect] as [
-    success: typeof success,
-    connect: typeof connect,
-  ];
 }
