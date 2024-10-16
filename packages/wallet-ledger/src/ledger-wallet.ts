@@ -6,7 +6,7 @@ import {
   LocalWallet,
   type PolkadotSignerAccount,
 } from "@reactive-dot/core/wallets.js";
-import { BehaviorSubject, lastValueFrom } from "rxjs";
+import { BehaviorSubject, firstValueFrom } from "rxjs";
 import { map, skip } from "rxjs/operators";
 
 type LedgerAccount = {
@@ -111,7 +111,7 @@ export class LedgerWallet extends LocalWallet<LedgerAccount, "accounts"> {
   }
 
   getAccounts() {
-    return lastValueFrom(this.accounts$);
+    return firstValueFrom(this.accounts$);
   }
 
   accountStore = {
