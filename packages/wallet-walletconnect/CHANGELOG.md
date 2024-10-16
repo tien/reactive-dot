@@ -1,5 +1,11 @@
 # @reactive-dot/wallet-walletconnect
 
+## 0.16.6
+
+### Patch Changes
+
+- [#257](https://github.com/tien/reactive-dot/pull/257) [`ce4db82`](https://github.com/tien/reactive-dot/commit/ce4db82577957a7d029c072d953b4c5e6e6462aa) Thanks [@tien](https://github.com/tien)! - Fixed `Wallet.getAccounts` incorrectly used `lastValueFrom` instead of `firstValueFrom`.
+
 ## 0.16.5
 
 ### Patch Changes
