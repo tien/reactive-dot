@@ -1,12 +1,13 @@
 import { lazyValuesKey } from "../keys.js";
+import { refreshable } from "../utils/refreshable.js";
 import { ReactiveDotError } from "@reactive-dot/core";
 import {
   type MaybeRefOrGetter,
   type ShallowRef,
   computed,
-  toValue,
-  shallowRef,
   inject,
+  shallowRef,
+  toValue,
 } from "vue";
 
 type Key = string | number;
@@ -31,19 +32,28 @@ export function useLazyValuesCache() {
   return cache;
 }
 
-/**
- * @internal
- */
 export function lazyValue<T>(
   key: MaybeRefOrGetter<Key[]>,
   get: () => T,
   cache: MaybeRefOrGetter<Map<string, ShallowRef<unknown>>>,
 ) {
-  return computed(
-    () =>
-      (toValue(cache).get(toValue(key).join("/"))?.value ??
-        toValue(cache)
-          .set(toValue(key).join("/"), shallowRef(get()))
-          .get(toValue(key).join("/"))!.value) as T,
+  const put = (force = false) => {
+    const stringKey = toValue(key).join("/");
+
+    const refValue = (toValue(cache).get(stringKey) ??
+      toValue(cache)
+        .set(stringKey, shallowRef(get()))
+        .get(stringKey)!) as ShallowRef<T>;
+
+    if (force) {
+      refValue.value = get();
+    }
+
+    return refValue.value;
+  };
+
+  return refreshable(
+    computed(() => put()),
+    () => void put(true),
   );
 }

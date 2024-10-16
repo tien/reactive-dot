@@ -1,4 +1,4 @@
-import type { AsyncState } from "./types.js";
+import type { MutableAsyncState } from "./types.js";
 import { shallowRef } from "vue";
 
 /**
@@ -9,5 +9,5 @@ export function useAsyncState<T>() {
     data: shallowRef(),
     error: shallowRef(),
     status: shallowRef("idle"),
-  } as AsyncState<T>;
+  } as MutableAsyncState<T>;
 }

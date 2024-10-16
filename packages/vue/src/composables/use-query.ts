@@ -1,4 +1,5 @@
-import type { ChainComposableOptions, ReadonlyAsyncState } from "./types.js";
+import { refresh, refreshable } from "../utils/refreshable.js";
+import type { ChainComposableOptions, AsyncState } from "./types.js";
 import { useAsyncData } from "./use-async-data.js";
 import { internal_useChainId } from "./use-chain-id.js";
 import { lazyValue, useLazyValuesCache } from "./use-lazy-value.js";
@@ -21,7 +22,7 @@ import type {
 } from "@reactive-dot/core/internal.js";
 import { flatHead, stringify } from "@reactive-dot/utils/internal.js";
 import type { ChainDefinition, TypedApi } from "polkadot-api";
-import { combineLatest, from, of, type Observable } from "rxjs";
+import { combineLatest, from, type Observable, of } from "rxjs";
 import { map, switchMap } from "rxjs/operators";
 import {
   computed,
@@ -87,33 +88,53 @@ export function useLazyLoadQuery<
 
   type Return =
     Data extends Array<infer _>
-      ? ReadonlyAsyncState<Data, QueryError> &
-          PromiseLike<ReadonlyAsyncState<Data, QueryError, Data>>
-      : ReadonlyAsyncState<Data> &
-          PromiseLike<ReadonlyAsyncState<Data, QueryError, Data>>;
+      ? AsyncState<Data, QueryError> &
+          PromiseLike<AsyncState<Data, QueryError, Data>>
+      : AsyncState<Data> & PromiseLike<AsyncState<Data, QueryError, Data>>;
 
   return useAsyncData(
-    computed(() => {
-      if (responses.value === undefined) {
-        return;
-      }
+    refreshable(
+      computed(() => {
+        if (responses.value === undefined) {
+          return;
+        }
 
-      return combineLatest(
-        responses.value.map((response) => {
+        return combineLatest(
+          responses.value.map((response) => {
+            if (!Array.isArray(response)) {
+              return from(response.value);
+            }
+
+            const responses = response.map((response) => response.value);
+
+            if (responses.length === 0) {
+              return of([]);
+            }
+
+            return combineLatest(response.map((response) => response.value));
+          }),
+        ).pipe(map(flatHead));
+      }),
+      () => {
+        if (!responses.value) {
+          return;
+        }
+
+        if (!Array.isArray(responses.value)) {
+          return void refresh(responses.value);
+        }
+
+        for (const response of responses.value) {
           if (!Array.isArray(response)) {
-            return from(response.value);
+            refresh(response);
+          } else {
+            for (const subResponse of response) {
+              refresh(subResponse);
+            }
           }
-
-          const responses = response.map((response) => response.value);
-
-          if (responses.length === 0) {
-            return of([]);
-          }
-
-          return combineLatest(response.map((response) => response.value));
-        }),
-      ).pipe(map(flatHead));
-    }),
+        }
+      },
+    ),
   ) as Return;
 }
 
