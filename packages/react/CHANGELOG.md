@@ -1,5 +1,15 @@
 # @reactive-dot/react
 
+## 0.17.0
+
+### Minor Changes
+
+- [#251](https://github.com/tien/reactive-dot/pull/251) [`7f362ce`](https://github.com/tien/reactive-dot/commit/7f362ce6d87569f335c28de48a722a20d2fe9304) Thanks [@tien](https://github.com/tien)! - BREAKING: removed exports of internally used functions & interfaces.
+
+### Patch Changes
+
+- [#248](https://github.com/tien/reactive-dot/pull/248) [`9c9c6f3`](https://github.com/tien/reactive-dot/commit/9c9c6f382be793b4c1b121e0db8252c7729e3d26) Thanks [@tien](https://github.com/tien)! - Fixed an issue where accounts were being fetched from wallets that were not connected.
+
 ## 0.16.5
 
 ### Patch Changes
