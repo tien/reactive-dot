@@ -40,7 +40,7 @@ export const config = {
     },
   },
   wallets: [
-    new InjectedWalletAggregator(),
+    new InjectedWalletAggregator({ originName: "ReactiveDOT React Example" }),
     new LedgerWallet(),
     new WalletConnect({
       projectId: "68f5b7e972a51cf379b127f51a791c34",
