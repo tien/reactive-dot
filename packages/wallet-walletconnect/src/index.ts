@@ -13,7 +13,7 @@ import type {
   IUniversalProvider,
   UniversalProviderOpts,
 } from "@walletconnect/universal-provider";
-import { BehaviorSubject, lastValueFrom } from "rxjs";
+import { BehaviorSubject, firstValueFrom } from "rxjs";
 import { map } from "rxjs/operators";
 
 export class WalletConnect extends DeepLinkWallet {
@@ -217,7 +217,7 @@ export class WalletConnect extends DeepLinkWallet {
   );
 
   getAccounts() {
-    return lastValueFrom(this.accounts$);
+    return firstValueFrom(this.accounts$);
   }
 
   async #getModal() {
