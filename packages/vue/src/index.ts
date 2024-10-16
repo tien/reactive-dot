@@ -1,5 +1,6 @@
 export { useAccounts } from "./composables/use-accounts.js";
 export { useChainId, useChainIds } from "./composables/use-chain-id.js";
+export { useChainSpecData } from "./composables/use-chain-spec-data.js";
 export { useClient } from "./composables/use-client.js";
 export { useConfig } from "./composables/use-config.js";
 export { useMutation } from "./composables/use-mutation.js";
@@ -8,7 +9,6 @@ export { useSigner } from "./composables/use-signer.js";
 export { useTypedApi } from "./composables/use-typed-api.js";
 export { useWalletConnector } from "./composables/use-wallet-connector.js";
 export { useWalletDisconnector } from "./composables/use-wallet-disconnector.js";
-export { useWalletsInitializer } from "./composables/use-wallets-initializer.js";
 export { useConnectedWallets, useWallets } from "./composables/use-wallets.js";
 export { ReactiveDotPlugin } from "./plugin.js";
 export { provideChain } from "./providers/chain.js";
