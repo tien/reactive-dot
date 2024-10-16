@@ -1,24 +1,22 @@
 import { SignerContext } from "../contexts/index.js";
-import {
-  type MutationEvent,
-  MutationEventSubjectContext,
-} from "../contexts/mutation.js";
+import { MutationEventSubjectContext } from "../contexts/mutation.js";
 import { typedApiAtomFamily } from "../stores/client.js";
 import type { ChainHookOptions } from "./types.js";
-import { useAsyncState } from "./use-async-state.js";
+import { useAsyncAction } from "./use-async-action.js";
 import { internal_useChainId } from "./use-chain-id.js";
 import { useConfig } from "./use-config.js";
 import type { ChainId, Chains } from "@reactive-dot/core";
-import { MutationError, pending } from "@reactive-dot/core";
+import { MutationError } from "@reactive-dot/core";
 import { useAtomCallback } from "jotai/utils";
 import type {
   PolkadotSigner,
   Transaction,
-  TxEvent,
   TxObservable,
   TypedApi,
 } from "polkadot-api";
 import { useCallback, useContext } from "react";
+import { from } from "rxjs";
+import { tap, switchMap } from "rxjs/operators";
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 type TxOptions<T extends Transaction<any, any, any, any>> = Parameters<
@@ -60,75 +58,54 @@ export function useMutation<
   const mutationEventSubject = useContext(MutationEventSubjectContext);
   const contextSigner = useContext(SignerContext);
 
-  const [event, setEvent] = useAsyncState<TxEvent>();
+  return useAsyncAction(
+    useAtomCallback(
+      useCallback(
+        (
+          get,
+          _set,
+          submitOptions?: TxOptions<ReturnType<TAction>> & {
+            signer?: PolkadotSigner;
+          },
+        ) => {
+          const signer =
+            submitOptions?.signer ?? options?.signer ?? contextSigner;
 
-  const setState = useCallback(
-    (event: Omit<MutationEvent, "chainId">) => {
-      setEvent(event.value);
-      mutationEventSubject.next({ ...event, chainId });
-    },
-    [chainId, mutationEventSubject, setEvent],
-  );
+          if (signer === undefined) {
+            throw new MutationError("No signer provided");
+          }
 
-  const submit = useAtomCallback<
-    void,
-    [options?: TxOptions<ReturnType<TAction>> & { signer: PolkadotSigner }]
-  >(
-    useCallback(
-      async (get, _set, submitOptions) => {
-        const id = globalThis.crypto.randomUUID();
+          const id = globalThis.crypto.randomUUID();
 
-        setState({ id, value: pending });
+          return from(get(typedApiAtomFamily({ config, chainId }))).pipe(
+            switchMap((typedApi) => {
+              const transaction = action(typedApi.tx);
 
-        const signer =
-          submitOptions?.signer ?? options?.signer ?? contextSigner;
-
-        if (signer === undefined) {
-          const error = new MutationError("No signer provided");
-
-          setState({
-            id,
-            value: MutationError.from(error),
-          });
-
-          throw error;
-        }
-
-        const api = await get(typedApiAtomFamily({ config, chainId }));
-
-        const transaction = action(api.tx);
-
-        setState({ id, call: transaction.decodedCall, value: pending });
-
-        return new Promise((resolve, reject) =>
-          transaction
-            .signSubmitAndWatch(signer, submitOptions ?? options?.txOptions)
-            .subscribe({
-              next: (value) =>
-                setState({ id, call: transaction.decodedCall, value }),
-              error: (error) => {
-                setState({
-                  id,
-                  call: transaction.decodedCall,
-                  value: MutationError.from(error),
-                });
-                reject(error);
-              },
-              complete: resolve,
+              return transaction
+                .signSubmitAndWatch(signer, submitOptions ?? options?.txOptions)
+                .pipe(
+                  tap((value) =>
+                    mutationEventSubject.next({
+                      id,
+                      chainId,
+                      call: transaction.decodedCall,
+                      value,
+                    }),
+                  ),
+                );
             }),
-        );
-      },
-      [
-        action,
-        chainId,
-        config,
-        contextSigner,
-        options?.signer,
-        options?.txOptions,
-        setState,
-      ],
+          );
+        },
+        [
+          action,
+          chainId,
+          config,
+          contextSigner,
+          mutationEventSubject,
+          options?.signer,
+          options?.txOptions,
+        ],
+      ),
     ),
   );
-
-  return [event, submit] as [event: typeof event, submit: typeof submit];
 }
