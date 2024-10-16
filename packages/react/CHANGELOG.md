@@ -1,5 +1,11 @@
 # @reactive-dot/react
 
+## 0.17.1
+
+### Patch Changes
+
+- [#258](https://github.com/tien/reactive-dot/pull/258) [`febca6e`](https://github.com/tien/reactive-dot/commit/febca6ef82c68e8f93e58be641606d767f99c926) Thanks [@tien](https://github.com/tien)! - Fixed missing pending & error events.
+
 ## 0.17.0
 
 ### Minor Changes
