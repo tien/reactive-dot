@@ -2,7 +2,7 @@ import { useAsyncAction } from "./use-async-action.js";
 import { useConnectedWalletsObservable } from "./use-wallets.js";
 import { disconnectWallet } from "@reactive-dot/core";
 import type { Wallet } from "@reactive-dot/core/wallets.js";
-import { lastValueFrom } from "rxjs";
+import { firstValueFrom } from "rxjs";
 
 /**
  * Composable for disconnecting wallets
@@ -19,7 +19,7 @@ export function useWalletDisconnector(wallets?: Wallet | Wallet[]) {
     const walletsToDisconnect =
       wallets ??
       composableWallets ??
-      (await lastValueFrom(connectedWalletsObservable.value));
+      (await firstValueFrom(connectedWalletsObservable.value));
 
     await disconnectWallet(walletsToDisconnect);
   });
