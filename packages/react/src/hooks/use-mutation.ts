@@ -6,7 +6,7 @@ import { useAsyncAction } from "./use-async-action.js";
 import { internal_useChainId } from "./use-chain-id.js";
 import { useConfig } from "./use-config.js";
 import type { ChainId, Chains } from "@reactive-dot/core";
-import { MutationError } from "@reactive-dot/core";
+import { MutationError, pending } from "@reactive-dot/core";
 import { useAtomCallback } from "jotai/utils";
 import type {
   PolkadotSigner,
@@ -16,7 +16,7 @@ import type {
 } from "polkadot-api";
 import { useCallback, useContext } from "react";
 import { from } from "rxjs";
-import { tap, switchMap } from "rxjs/operators";
+import { tap, switchMap, catchError } from "rxjs/operators";
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 type TxOptions<T extends Transaction<any, any, any, any>> = Parameters<
@@ -81,17 +81,23 @@ export function useMutation<
             switchMap((typedApi) => {
               const transaction = action(typedApi.tx);
 
+              const eventProps = { id, chainId, call: transaction.decodedCall };
+
+              mutationEventSubject.next({ ...eventProps, value: pending });
+
               return transaction
                 .signSubmitAndWatch(signer, submitOptions ?? options?.txOptions)
                 .pipe(
                   tap((value) =>
-                    mutationEventSubject.next({
-                      id,
-                      chainId,
-                      call: transaction.decodedCall,
-                      value,
-                    }),
+                    mutationEventSubject.next({ ...eventProps, value }),
                   ),
+                  catchError((error) => {
+                    mutationEventSubject.next({
+                      ...eventProps,
+                      value: MutationError.from(error),
+                    });
+                    throw error;
+                  }),
                 );
             }),
           );
