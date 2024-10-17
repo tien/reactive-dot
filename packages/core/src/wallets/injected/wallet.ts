@@ -9,7 +9,9 @@ import {
 import { BehaviorSubject, Observable } from "rxjs";
 import { map, switchMap } from "rxjs/operators";
 
-export class InjectedWallet extends Wallet<"connected"> {
+export type InjectedWalletOptions = WalletOptions & { originName?: string };
+
+export class InjectedWallet extends Wallet<InjectedWalletOptions, "connected"> {
   readonly #extension$ = new BehaviorSubject<InjectedExtension | undefined>(
     undefined,
   );
@@ -20,7 +22,7 @@ export class InjectedWallet extends Wallet<"connected"> {
 
   constructor(
     public readonly name: string,
-    options?: WalletOptions,
+    options?: InjectedWalletOptions,
   ) {
     super(options);
   }
@@ -37,7 +39,9 @@ export class InjectedWallet extends Wallet<"connected"> {
 
   async connect() {
     if (this.#extension$.getValue() === undefined) {
-      this.#extension$.next(await connectInjectedExtension(this.name));
+      this.#extension$.next(
+        await connectInjectedExtension(this.name, this.options?.originName),
+      );
       this.storage.setItem("connected", JSON.stringify(true));
     }
   }

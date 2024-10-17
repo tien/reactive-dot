@@ -1,13 +1,14 @@
 import type { PolkadotSignerAccount } from "./account.js";
-import { Wallet } from "./wallet.js";
+import { Wallet, type WalletOptions } from "./wallet.js";
 
 /**
  * @experimental
  */
 export abstract class LocalWallet<
   TAccount extends Pick<PolkadotSignerAccount, "id">,
+  TOptions extends WalletOptions,
   TStorageKey extends string,
-> extends Wallet<TStorageKey> {
+> extends Wallet<TOptions, TStorageKey> {
   /**
    * @experimental
    */

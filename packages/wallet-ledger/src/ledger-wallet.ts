@@ -20,7 +20,11 @@ type JsonLedgerAccount = Omit<LedgerAccount, "publicKey" | "id"> & {
   publicKey: string;
 };
 
-export class LedgerWallet extends LocalWallet<LedgerAccount, "accounts"> {
+export class LedgerWallet extends LocalWallet<
+  LedgerAccount,
+  WalletOptions,
+  "accounts"
+> {
   readonly id = "ledger";
 
   readonly name = "Ledger";
