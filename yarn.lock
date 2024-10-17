@@ -4909,7 +4909,7 @@ __metadata:
     "@tsconfig/strictest": "npm:^2.0.5"
     "@types/react": "npm:^18.3.11"
     eslint: "npm:^9.12.0"
-    jotai: "npm:^2.10.0"
+    jotai: "npm:^2.10.1"
     polkadot-api: "npm:^1.6.1"
     react: "npm:^18.3.1"
     typescript: "npm:^5.6.3"
@@ -12465,9 +12465,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"jotai@npm:^2.10.0":
-  version: 2.10.0
-  resolution: "jotai@npm:2.10.0"
+"jotai@npm:^2.10.1":
+  version: 2.10.1
+  resolution: "jotai@npm:2.10.1"
   peerDependencies:
     "@types/react": ">=17.0.0"
     react: ">=17.0.0"
@@ -12476,7 +12476,7 @@ __metadata:
       optional: true
     react:
       optional: true
-  checksum: 10c0/81c619c1a82444bff50220dab1e2c10960f41922d46c9227004f6dd34db3a615ad596b277657c21d5935c50918936f04ffa858e494e1caf18e4ed60560e183d9
+  checksum: 10c0/9ec75716e1bae68b41abb2ca8451de0f7b35dd9107064c92d6cca284ebc7cbf884e37656d5bca7db3223b4a21b885b29b490e5922dde7d28d47ff22a058cbae3
   languageName: node
   linkType: hard
 
