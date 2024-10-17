@@ -22,6 +22,8 @@ export function useAsyncAction<
     ...state,
     execute: (...args: TActionArgs) => {
       try {
+        state.status.value = "pending";
+
         const result = action(...args);
 
         const resolve = (value: unknown) => {
