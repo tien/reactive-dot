@@ -1,4 +1,4 @@
-import type { ChainComposableOptions } from "./types.js";
+import type { ChainComposableOptions } from "../types.js";
 import { useAsyncData } from "./use-async-data.js";
 import { internal_useChainId } from "./use-chain-id.js";
 import { useClientPromise } from "./use-client.js";

@@ -1,5 +1,5 @@
+import type { AsyncState } from "../types.js";
 import { refresh } from "../utils/refreshable.js";
-import type { AsyncState } from "./types.js";
 import { useAsyncState } from "./use-async-state.js";
 import type { lazyValue } from "./use-lazy-value.js";
 import type { Falsy } from "@reactive-dot/core/internal.js";

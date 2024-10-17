@@ -1,5 +1,5 @@
 import { chainIdKey } from "../keys.js";
-import type { ChainComposableOptions } from "./types.js";
+import type { ChainComposableOptions } from "../types.js";
 import { useConfig } from "./use-config.js";
 import { type ChainId, ReactiveDotError } from "@reactive-dot/core";
 import { computed, inject, toValue } from "vue";

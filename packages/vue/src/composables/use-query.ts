@@ -1,5 +1,5 @@
+import type { ChainComposableOptions, AsyncState } from "../types.js";
 import { refresh, refreshable } from "../utils/refreshable.js";
-import type { ChainComposableOptions, AsyncState } from "./types.js";
 import { useAsyncData } from "./use-async-data.js";
 import { internal_useChainId } from "./use-chain-id.js";
 import { lazyValue, useLazyValuesCache } from "./use-lazy-value.js";

@@ -1,5 +1,7 @@
-import type { ChainComposableOptions } from "./types.js";
+import { mutationEventKey } from "../keys.js";
+import type { ChainComposableOptions } from "../types.js";
 import { useAsyncAction } from "./use-async-action.js";
+import { useChainId } from "./use-chain-id.js";
 import { useSigner } from "./use-signer.js";
 import { useTypedApiPromise } from "./use-typed-api.js";
 import type { ChainId, Chains } from "@reactive-dot/core";
@@ -11,8 +13,8 @@ import type {
   TypedApi,
 } from "polkadot-api";
 import { from } from "rxjs";
-import { switchMap } from "rxjs/operators";
-import { type MaybeRefOrGetter, toValue } from "vue";
+import { catchError, switchMap, tap } from "rxjs/operators";
+import { inject, type MaybeRefOrGetter, toValue } from "vue";
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 type TxOptions<T extends Transaction<any, any, any, any>> = Parameters<
@@ -51,6 +53,9 @@ export function useMutation<
 ) {
   const injectedSigner = useSigner();
   const typedApiPromise = useTypedApiPromise();
+  const chainId = useChainId();
+
+  const mutationEventRef = inject(mutationEventKey);
 
   return useAsyncAction(
     (
@@ -65,13 +70,44 @@ export function useMutation<
         throw new MutationError("No signer provided");
       }
 
+      const id = globalThis.crypto.randomUUID();
+
       return from(typedApiPromise.value).pipe(
-        switchMap((typedApi) =>
-          action(typedApi.tx).signSubmitAndWatch(
-            signer,
-            submitOptions ?? toValue(options?.txOptions),
-          ),
-        ),
+        switchMap((typedApi) => {
+          const transaction = action(typedApi.tx);
+
+          const eventProps = {
+            id,
+            chainId: chainId.value,
+            call: transaction.decodedCall,
+          };
+
+          mutationEventRef!.value = { ...eventProps, status: "pending" };
+
+          return transaction
+            .signSubmitAndWatch(
+              signer,
+              submitOptions ?? toValue(options?.txOptions),
+            )
+            .pipe(
+              tap(
+                (value) =>
+                  (mutationEventRef!.value = {
+                    ...eventProps,
+                    status: "success",
+                    data: value,
+                  }),
+              ),
+              catchError((error) => {
+                mutationEventRef!.value = {
+                  ...eventProps,
+                  status: "error",
+                  error: MutationError.from(error),
+                };
+                throw error;
+              }),
+            );
+        }),
       );
     },
   );

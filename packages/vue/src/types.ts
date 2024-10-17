@@ -1,4 +1,6 @@
-import type { ChainId } from "@reactive-dot/core";
+import type { ChainId, MutationError } from "@reactive-dot/core";
+import type { MutationEvent as BaseMutationEvent } from "@reactive-dot/core/internal.js";
+import type { TxEvent } from "polkadot-api";
 import type { MaybeRefOrGetter, Ref } from "vue";
 
 export type ChainComposableOptions<TChainId extends ChainId = ChainId> = {
@@ -20,3 +22,10 @@ export type AsyncState<TData, TError = unknown, TDefault = undefined> = {
   status: Readonly<Ref<"idle" | "pending" | "success" | "error">>;
   refresh: () => void;
 };
+
+export type MutationEvent = BaseMutationEvent &
+  (
+    | { status: "pending" }
+    | { status: "error"; error: MutationError }
+    | { status: "success"; data: TxEvent }
+  );
