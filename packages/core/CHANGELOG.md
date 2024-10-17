@@ -1,5 +1,11 @@
 # @reactive-dot/core
 
+## 0.18.0
+
+### Minor Changes
+
+- [#260](https://github.com/tien/reactive-dot/pull/260) [`42d6d34`](https://github.com/tien/reactive-dot/commit/42d6d343bb299d56b14a18dd0d7e54c90d20c1b6) Thanks [@tien](https://github.com/tien)! - Added support for specifying DApp name used by injected wallets.
+
 ## 0.16.5
 
 ### Patch Changes
