@@ -3,11 +3,21 @@ import Mutation from "./mutation.vue";
 import Query from "./query.vue";
 import WalletConnection from "./wallet-connection.vue";
 import type { ChainId } from "@reactive-dot/core";
-import { provideChain, useChainIds } from "@reactive-dot/vue";
-import { ref } from "vue";
+import {
+  provideChain,
+  useChainIds,
+  useQueryErrorResetter,
+} from "@reactive-dot/vue";
+import { onErrorCaptured, ref } from "vue";
 
 const chainIds = useChainIds();
+
 const selectedChainId = ref<ChainId>("polkadot");
+const hasError = ref(false);
+
+const resetError = useQueryErrorResetter();
+
+onErrorCaptured(() => (hasError.value = true));
 
 provideChain(selectedChainId);
 </script>
@@ -23,7 +33,20 @@ provideChain(selectedChainId);
       </select>
     </label>
   </div>
-  <Suspense :key="selectedChainId">
+  <article v-if="hasError">
+    <header>
+      <strong>Oops, something went wrong!</strong>
+    </header>
+    <button
+      @click="
+        resetError();
+        hasError = false;
+      "
+    >
+      Retry
+    </button>
+  </article>
+  <Suspense v-else :key="selectedChainId">
     <div>
       <WalletConnection />
       <Query />

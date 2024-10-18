@@ -1,6 +1,7 @@
 import { lazyValuesKey } from "../keys.js";
 import { refreshable } from "../utils/refreshable.js";
 import { ReactiveDotError } from "@reactive-dot/core";
+import { catchError, isObservable } from "rxjs";
 import {
   type MaybeRefOrGetter,
   type ShallowRef,
@@ -32,6 +33,11 @@ export function useLazyValuesCache() {
   return cache;
 }
 
+/**
+ * @internal
+ */
+export const erroredSymbol = Symbol("errored");
+
 export function lazyValue<T>(
   key: MaybeRefOrGetter<Key[]>,
   get: () => T,
@@ -40,13 +46,38 @@ export function lazyValue<T>(
   const put = (force = false) => {
     const stringKey = toValue(key).join("/");
 
-    const refValue = (toValue(cache).get(stringKey) ??
-      toValue(cache)
-        .set(stringKey, shallowRef(get()))
-        .get(stringKey)!) as ShallowRef<T>;
+    const hasValue = toValue(cache).has(stringKey);
 
-    if (force) {
-      refValue.value = get();
+    const refValue = (
+      hasValue
+        ? toValue(cache).get(stringKey)!
+        : toValue(cache).set(stringKey, shallowRef()).get(stringKey)!
+    ) as ShallowRef<T>;
+
+    const tagAsErrored = () =>
+      Object.assign(refValue, { [erroredSymbol]: true });
+
+    if (!hasValue || force) {
+      try {
+        refValue.value = get();
+      } catch (error) {
+        tagAsErrored();
+        throw error;
+      }
+    }
+
+    if (refValue.value instanceof Promise) {
+      refValue.value = refValue.value.catch((error) => {
+        tagAsErrored();
+        throw error;
+      }) as T;
+    } else if (isObservable(refValue.value)) {
+      refValue.value = refValue.value.pipe(
+        catchError((error) => {
+          tagAsErrored();
+          throw error;
+        }),
+      ) as T;
     }
 
     return refValue.value;

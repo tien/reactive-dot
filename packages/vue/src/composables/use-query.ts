@@ -32,6 +32,13 @@ import {
   type UnwrapRef,
 } from "vue";
 
+/**
+ * Composable for querying data from chain, and returning the response.
+ *
+ * @param builder - The function to create the query
+ * @param options - Additional options
+ * @returns The data response
+ */
 export function useQuery<
   TQuery extends (
     builder: Query<[], TDescriptor>,
