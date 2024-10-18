@@ -1,3 +1,4 @@
+import { atomFamilyWithErrorCatcher } from "../utils/jotai.js";
 import {
   aggregateWallets,
   type Config,
@@ -5,27 +6,33 @@ import {
 } from "@reactive-dot/core";
 import { Wallet, WalletAggregator } from "@reactive-dot/core/wallets.js";
 import { atom } from "jotai";
-import { atomFamily, atomWithObservable } from "jotai/utils";
+import { atomWithObservable } from "jotai/utils";
 
-const aggregatorWallets = atomFamily((config: Config) =>
-  atomWithObservable(() =>
-    aggregateWallets(
-      config.wallets?.filter(
-        (walletOrAggregator) => walletOrAggregator instanceof WalletAggregator,
-      ) ?? [],
+const aggregatorWalletsAtom = atomFamilyWithErrorCatcher(
+  (config: Config, withErrorCatcher) =>
+    withErrorCatcher(atomWithObservable)(() =>
+      aggregateWallets(
+        config.wallets?.filter(
+          (walletOrAggregator) =>
+            walletOrAggregator instanceof WalletAggregator,
+        ) ?? [],
+      ),
     ),
-  ),
 );
 
-export const walletsAtom = atomFamily((config: Config) =>
-  atom(async (get) => [
-    ...(config.wallets?.filter(
-      (walletOrAggregator) => walletOrAggregator instanceof Wallet,
-    ) ?? []),
-    ...(await get(aggregatorWallets(config))),
-  ]),
+export const walletsAtom = atomFamilyWithErrorCatcher(
+  (config: Config, withErrorCatcher) =>
+    withErrorCatcher(atom)(async (get) => [
+      ...(config.wallets?.filter(
+        (walletOrAggregator) => walletOrAggregator instanceof Wallet,
+      ) ?? []),
+      ...(await get(aggregatorWalletsAtom(config))),
+    ]),
 );
 
-export const connectedWalletsAtom = atomFamily((config: Config) =>
-  atomWithObservable((get) => getConnectedWallets(get(walletsAtom(config)))),
+export const connectedWalletsAtom = atomFamilyWithErrorCatcher(
+  (config: Config, withErrorCatcher) =>
+    withErrorCatcher(atomWithObservable)((get) =>
+      getConnectedWallets(get(walletsAtom(config))),
+    ),
 );

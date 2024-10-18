@@ -1,4 +1,4 @@
-import { typedApiAtomFamily } from "../stores/client.js";
+import { typedApiAtom } from "../stores/client.js";
 import type { ChainHookOptions } from "./types.js";
 import { internal_useChainId } from "./use-chain-id.js";
 import { useConfig } from "./use-config.js";
@@ -16,7 +16,7 @@ export function useTypedApi<TChainId extends ChainId>(
   options?: ChainHookOptions<TChainId>,
 ) {
   return useAtomValue(
-    typedApiAtomFamily({
+    typedApiAtom({
       config: useConfig(),
       chainId: internal_useChainId(options),
     }),

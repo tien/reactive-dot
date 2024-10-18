@@ -1,11 +1,11 @@
-import { withAtomFamilyErrorCatcher } from "../utils/jotai.js";
+import { atomFamilyWithErrorCatcher } from "../utils/jotai.js";
 import { stringify } from "../utils/vanilla.js";
-import { typedApiAtomFamily } from "./client.js";
+import { typedApiAtom } from "./client.js";
 import {
-  type Config,
   preflight,
   query,
   type ChainId,
+  type Config,
   type Query,
 } from "@reactive-dot/core";
 import type {
@@ -13,38 +13,33 @@ import type {
   QueryInstruction,
 } from "@reactive-dot/core/internal.js";
 import { atom, type Atom, type WritableAtom } from "jotai";
-import { atomFamily, atomWithObservable, atomWithRefresh } from "jotai/utils";
+import { atomWithObservable, atomWithRefresh } from "jotai/utils";
 import { from, switchMap, type Observable } from "rxjs";
 
-export const instructionPayloadAtomFamily = atomFamily(
-  (param: {
-    config: Config;
-    chainId: ChainId;
-    instruction: Exclude<
-      QueryInstruction,
-      MultiInstruction<// @ts-expect-error need any empty object here
-      // eslint-disable-next-line @typescript-eslint/no-empty-object-type
-      {}>
-    >;
-  }): Atom<unknown> | WritableAtom<Promise<unknown>, [], void> => {
+export const instructionPayloadAtom = atomFamilyWithErrorCatcher(
+  (
+    param: {
+      config: Config;
+      chainId: ChainId;
+      instruction: Exclude<
+        QueryInstruction,
+        MultiInstruction<// @ts-expect-error need any empty object here
+        // eslint-disable-next-line @typescript-eslint/no-empty-object-type
+        {}>
+      >;
+    },
+    withErrorCatcher,
+  ): Atom<unknown> | WritableAtom<Promise<unknown>, [], void> => {
     switch (preflight(param.instruction)) {
       case "promise":
-        return withAtomFamilyErrorCatcher(
-          instructionPayloadAtomFamily,
-          param,
-          atomWithRefresh,
-        )(async (get, { signal }) => {
-          const api = await get(typedApiAtomFamily(param));
+        return withErrorCatcher(atomWithRefresh)(async (get, { signal }) => {
+          const api = await get(typedApiAtom(param));
 
           return query(api, param.instruction, { signal });
         });
       case "observable":
-        return withAtomFamilyErrorCatcher(
-          instructionPayloadAtomFamily,
-          param,
-          atomWithObservable,
-        )((get) =>
-          from(get(typedApiAtomFamily(param))).pipe(
+        return withErrorCatcher(atomWithObservable)((get) =>
+          from(get(typedApiAtom(param))).pipe(
             switchMap(
               (api) => query(api, param.instruction) as Observable<unknown>,
             ),
@@ -65,7 +60,7 @@ export function getQueryInstructionPayloadAtoms(
 ) {
   return query.instructions.map((instruction) => {
     if (!("multi" in instruction)) {
-      return instructionPayloadAtomFamily({
+      return instructionPayloadAtom({
         config,
         chainId,
         instruction,
@@ -75,7 +70,7 @@ export function getQueryInstructionPayloadAtoms(
     return (instruction.args as unknown[]).map((args) => {
       const { multi, ...rest } = instruction;
 
-      return instructionPayloadAtomFamily({
+      return instructionPayloadAtom({
         config,
         chainId,
         instruction: { ...rest, args },
@@ -86,13 +81,12 @@ export function getQueryInstructionPayloadAtoms(
 
 // TODO: should be memoized within render function instead
 // https://github.com/pmndrs/jotai/discussions/1553
-export const queryPayloadAtomFamily = atomFamily(
-  (param: { config: Config; chainId: ChainId; query: Query }): Atom<unknown> =>
-    withAtomFamilyErrorCatcher(
-      queryPayloadAtomFamily,
-      param,
-      atom,
-    )((get) => {
+export const queryPayloadAtom = atomFamilyWithErrorCatcher(
+  (
+    param: { config: Config; chainId: ChainId; query: Query },
+    withErrorCatcher,
+  ): Atom<unknown> =>
+    withErrorCatcher(atom)((get) => {
       const atoms = getQueryInstructionPayloadAtoms(
         param.config,
         param.chainId,

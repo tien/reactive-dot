@@ -1,4 +1,4 @@
-import { queryPayloadAtomFamily } from "../stores/query.js";
+import { queryPayloadAtom } from "../stores/query.js";
 import type { ChainHookOptions } from "./types.js";
 import { internal_useChainId } from "./use-chain-id.js";
 import { useConfig } from "./use-config.js";
@@ -39,7 +39,7 @@ export function useQueryLoader() {
         const query = builder(new Query([]));
 
         void get(
-          queryPayloadAtomFamily({
+          queryPayloadAtom({
             config,
             chainId: options?.chainId ?? chainId,
             query,
