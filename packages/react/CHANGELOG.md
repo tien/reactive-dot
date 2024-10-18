@@ -1,5 +1,11 @@
 # @reactive-dot/react
 
+## 0.18.1
+
+### Patch Changes
+
+- [#264](https://github.com/tien/reactive-dot/pull/264) [`42a81e7`](https://github.com/tien/reactive-dot/commit/42a81e73fe46c5b30ada85c5af481e330bcb4878) Thanks [@tien](https://github.com/tien)! - Improved error resetting to cover all queries.
+
 ## 0.18.0
 
 ### Patch Changes
