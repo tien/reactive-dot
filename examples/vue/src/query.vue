@@ -1,8 +1,8 @@
 <script setup lang="ts">
-import { useAccounts, useLazyLoadQuery } from "@reactive-dot/vue";
+import { useAccounts, useQuery } from "@reactive-dot/vue";
 
 const { data: accounts } = await useAccounts();
-const { data } = await useLazyLoadQuery((builder) =>
+const { data } = await useQuery((builder) =>
   builder
     .readStorage("System", "Number", [])
     .readStorage("Balances", "TotalIssuance", [])

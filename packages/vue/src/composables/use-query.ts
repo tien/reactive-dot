@@ -32,7 +32,7 @@ import {
   type UnwrapRef,
 } from "vue";
 
-export function useLazyLoadQuery<
+export function useQuery<
   TQuery extends (
     builder: Query<[], TDescriptor>,
   ) => Query<QueryInstruction<TDescriptor>[], TDescriptor> | Falsy,
