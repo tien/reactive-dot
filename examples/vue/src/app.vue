@@ -16,7 +16,7 @@ const selectedChainId = ref<ChainId>("polkadot");
 provideChain(selectedChainId);
 
 const hasError = ref(false);
-const resetError = useQueryErrorResetter();
+const { execute: resetError } = useQueryErrorResetter();
 onErrorCaptured(() => (hasError.value = true));
 
 // Useful tracking all submitted transaction, i.e. for toast notification
