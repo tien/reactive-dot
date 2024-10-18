@@ -13,5 +13,6 @@ export function useConfig() {
   if (config === undefined) {
     throw new ReactiveDotError("No config provided");
   }
+
   return config;
 }

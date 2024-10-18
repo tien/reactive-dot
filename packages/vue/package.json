@@ -1,10 +1,11 @@
 {
-  "name": "@reactive-dot/utils",
-  "version": "0.8.1",
-  "description": "Collection of utils from ReactiveDOT",
+  "name": "@reactive-dot/vue",
+  "version": "0.0.0",
+  "description": "Vue library for Reactive DOT",
   "keywords": [
     "substrate",
-    "polkadot"
+    "polkadot",
+    "vue"
   ],
   "homepage": "https://reactivedot.dev/",
   "bugs": {
@@ -16,29 +17,31 @@
   "repository": {
     "type": "git",
     "url": "https://github.com/tien/reactive-dot.git",
-    "directory": "packages/utils"
+    "directory": "packages/vue"
   },
   "type": "module",
   "files": [
     "src",
     "build"
   ],
-  "exports": {
-    ".": "./build/index.js",
-    "./internal.js": "./build/internal.js"
-  },
+  "exports": "./build/index.js",
   "scripts": {
     "dev": "tsc --build --watch",
     "build": "rm -rf build && tsc --build",
-    "lint": "eslint src",
-    "test": "vitest run"
+    "lint": "eslint src"
+  },
+  "dependencies": {
+    "@reactive-dot/core": "workspace:^"
   },
   "devDependencies": {
     "@reactive-dot/eslint-config": "workspace:^",
     "@tsconfig/recommended": "^1.0.7",
     "@tsconfig/strictest": "^2.0.5",
-    "eslint": "^9.12.0",
+    "eslint": "^9.10.0",
     "typescript": "^5.6.3",
-    "vitest": "^2.1.3"
+    "vue": "^3.5.6"
+  },
+  "peerDependencies": {
+    "vue": "3.x"
   }
 }

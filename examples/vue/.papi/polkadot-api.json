@@ -1,0 +1,18 @@
+{
+  "version": 0,
+  "descriptorPath": ".papi/descriptors",
+  "entries": {
+    "polkadot": {
+      "chain": "polkadot",
+      "metadata": ".papi/metadata/polkadot.scale"
+    },
+    "kusama": {
+      "chain": "ksmcc3",
+      "metadata": ".papi/metadata/kusama.scale"
+    },
+    "westend": {
+      "chain": "westend2",
+      "metadata": ".papi/metadata/westend.scale"
+    }
+  }
+}
