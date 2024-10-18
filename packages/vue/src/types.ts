@@ -10,16 +10,19 @@ export type ChainComposableOptions<TChainId extends ChainId = ChainId> = {
   chainId?: MaybeRefOrGetter<TChainId>;
 };
 
+type DeepReadonly<T> = { [P in keyof T]: Readonly<T[P]> };
+
 export type MutableAsyncState<TData, TError = unknown, TDefault = undefined> = {
   data: Ref<TData | TDefault>;
   error: Ref<TError | undefined>;
   status: Ref<"idle" | "pending" | "success" | "error">;
 };
 
-export type AsyncState<TData, TError = unknown, TDefault = undefined> = {
-  data: Readonly<Ref<TData | TDefault>>;
-  error: Readonly<Ref<TError | undefined>>;
-  status: Readonly<Ref<"idle" | "pending" | "success" | "error">>;
+export type AsyncState<
+  TData,
+  TError = unknown,
+  TDefault = undefined,
+> = DeepReadonly<MutableAsyncState<TData, TError, TDefault>> & {
   refresh: () => void;
 };
 
