@@ -55,7 +55,13 @@ export function useMutation<
   const typedApiPromise = useTypedApiPromise();
   const chainId = useChainId();
 
-  const mutationEventRef = inject(mutationEventKey);
+  const mutationEventRef = inject(
+    mutationEventKey,
+    () => {
+      throw new Error("No mutation event ref provided");
+    },
+    true,
+  );
 
   return useAsyncAction(
     (
@@ -82,7 +88,7 @@ export function useMutation<
             call: transaction.decodedCall,
           };
 
-          mutationEventRef!.value = { ...eventProps, status: "pending" };
+          mutationEventRef.value = { ...eventProps, status: "pending" };
 
           return transaction
             .signSubmitAndWatch(
@@ -92,14 +98,14 @@ export function useMutation<
             .pipe(
               tap(
                 (value) =>
-                  (mutationEventRef!.value = {
+                  (mutationEventRef.value = {
                     ...eventProps,
                     status: "success",
                     data: value,
                   }),
               ),
               catchError((error) => {
-                mutationEventRef!.value = {
+                mutationEventRef.value = {
                   ...eventProps,
                   status: "error",
                   error: MutationError.from(error),
