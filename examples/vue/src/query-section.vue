@@ -26,7 +26,7 @@ const { data } = await useQuery((builder) =>
       <dt>Total issuance</dt>
       <dd>{{ data[1].toLocaleString() }}</dd>
 
-      <div v-for="(balance, index) in data[2]">
+      <div v-for="(balance, index) in data[2]" :key="index">
         <dt>Balance of: {{ accounts?.at(index)?.address }}</dt>
         <dd>{{ balance.data.free.toLocaleString() }}</dd>
       </div>

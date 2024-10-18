@@ -26,7 +26,11 @@ const { execute, data, status } = useMutation(
       <header><h4>Signer</h4></header>
       <p v-if="accounts.length === 0">Please connect a wallet</p>
       <select v-else v-model="selectedAccountIndex">
-        <option v-for="(account, index) in accounts" :value="index">
+        <option
+          v-for="(account, index) in accounts"
+          :key="account.id"
+          :value="index"
+        >
           {{ account.name ?? account.address }}
         </option>
       </select>
@@ -41,7 +45,7 @@ const { execute, data, status } = useMutation(
         <p v-else-if="status === 'success'">
           Submitted tx {{ data?.txHash }} is {{ data?.type }}
         </p>
-      </article></template
-    >
+      </article>
+    </template>
   </section>
 </template>

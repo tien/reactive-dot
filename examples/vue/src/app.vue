@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import Mutation from "./mutation.vue";
-import Query from "./query.vue";
+import MutationSection from "./mutation-section.vue";
+import QuerySection from "./query-section.vue";
 import WalletConnection from "./wallet-connection.vue";
 import type { ChainId } from "@reactive-dot/core";
 import {
@@ -27,7 +27,7 @@ provideChain(selectedChainId);
     <label>
       Chain
       <select v-model="selectedChainId">
-        <option v-for="chainId in chainIds" :value="chainId">
+        <option v-for="chainId in chainIds" :key="chainId" :value="chainId">
           {{ chainId }}
         </option>
       </select>
@@ -49,9 +49,9 @@ provideChain(selectedChainId);
   <Suspense v-else :key="selectedChainId">
     <div>
       <WalletConnection />
-      <Query />
-      <Mutation />
+      <QuerySection />
+      <MutationSection />
     </div>
-    <template #fallback>Loading... </template>
+    <template #fallback>Loading...</template>
   </Suspense>
 </template>

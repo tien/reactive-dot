@@ -20,23 +20,23 @@ const { execute: disconnect, status: disconnectStatus } =
   <article>
     <h4>Wallets</h4>
     <ul>
-      <li v-for="wallet in wallets">
+      <li v-for="wallet in wallets" :key="wallet.id">
         {{ wallet.name }}:
         <button
           v-if="!connectedWallets.includes(wallet)"
-          @click="connect(wallet)"
           :disabled="
             connectStatus === 'pending' || disconnectStatus === 'pending'
           "
+          @click="connect(wallet)"
         >
           Connect
         </button>
         <button
           v-if="connectedWallets.includes(wallet)"
-          @click="disconnect(wallet)"
           :disabled="
             connectStatus === 'pending' || disconnectStatus === 'pending'
           "
+          @click="disconnect(wallet)"
         >
           Disconnect
         </button>
