@@ -1,5 +1,12 @@
 # @reactive-dot/wallet-ledger
 
+## 0.16.8
+
+### Patch Changes
+
+- Updated dependencies [[`98bb09e`](https://github.com/tien/reactive-dot/commit/98bb09e623805cf772dd42ce1ed144f569a71bae)]:
+  - @reactive-dot/core@0.19.0
+
 ## 0.16.7
 
 ### Patch Changes
