@@ -9,10 +9,12 @@ import { toValue } from "vue";
 export function useQueryErrorResetter() {
   const cache = useLazyValuesCache();
 
-  return () =>
-    toValue(cache).forEach((value, key) => {
-      if (erroredSymbol in value) {
-        toValue(cache).delete(key);
-      }
-    });
+  return {
+    execute: () =>
+      toValue(cache).forEach((value, key) => {
+        if (erroredSymbol in value) {
+          toValue(cache).delete(key);
+        }
+      }),
+  };
 }
