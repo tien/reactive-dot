@@ -1,7 +1,4 @@
-import {
-  bestBlockAtomFamily,
-  finalizedBlockAtomFamily,
-} from "../stores/block.js";
+import { bestBlockAtom, finalizedBlockAtom } from "../stores/block.js";
 import type { ChainHookOptions } from "./types.js";
 import { internal_useChainId } from "./use-chain-id.js";
 import { useConfig } from "./use-config.js";
@@ -23,7 +20,7 @@ export function useBlock(
 
   return useAtomValue(
     tag === "finalized"
-      ? finalizedBlockAtomFamily({ config, chainId })
-      : bestBlockAtomFamily({ config, chainId }),
+      ? finalizedBlockAtom({ config, chainId })
+      : bestBlockAtom({ config, chainId }),
   );
 }

@@ -1,4 +1,4 @@
-import { queryPayloadAtomFamily } from "../stores/query.js";
+import { queryPayloadAtom } from "../stores/query.js";
 import type { Falsy, FalsyGuard, FlatHead } from "../types.js";
 import { flatHead, stringify } from "../utils/vanilla.js";
 import type { ChainHookOptions } from "./types.js";
@@ -55,7 +55,7 @@ export function useLazyLoadQuery<
       () =>
         !query
           ? atom(idle)
-          : queryPayloadAtomFamily({
+          : queryPayloadAtom({
               config,
               chainId,
               query,

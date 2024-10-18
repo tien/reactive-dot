@@ -1,6 +1,6 @@
 import { SignerContext } from "../contexts/index.js";
 import { MutationEventSubjectContext } from "../contexts/mutation.js";
-import { typedApiAtomFamily } from "../stores/client.js";
+import { typedApiAtom } from "../stores/client.js";
 import type { ChainHookOptions } from "./types.js";
 import { useAsyncAction } from "./use-async-action.js";
 import { internal_useChainId } from "./use-chain-id.js";
@@ -77,7 +77,7 @@ export function useMutation<
 
           const id = globalThis.crypto.randomUUID();
 
-          return from(get(typedApiAtomFamily({ config, chainId }))).pipe(
+          return from(get(typedApiAtom({ config, chainId }))).pipe(
             switchMap((typedApi) => {
               const transaction = action(typedApi.tx);
 

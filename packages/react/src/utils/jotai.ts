@@ -1,5 +1,6 @@
 import { QueryError } from "@reactive-dot/core";
 import type { Atom, Getter } from "jotai";
+import { atomFamily } from "jotai/utils";
 import type { AtomFamily } from "jotai/vanilla/utils/atomFamily";
 import { Observable } from "rxjs";
 import { catchError } from "rxjs/operators";
@@ -29,52 +30,76 @@ export class AtomFamilyError extends QueryError {
   }
 }
 
-export function withAtomFamilyErrorCatcher<
+export function atomFamilyWithErrorCatcher<
   TParam,
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  TRead extends (get: Getter, ...args: unknown[]) => any,
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  TAtomCreator extends (read: TRead, ...args: any[]) => Atom<unknown>,
+  TAtomType extends Atom<unknown>,
+  TWithErrorCatcher extends <
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    TRead extends (get: Getter, ...args: unknown[]) => any,
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    TAtomCreator extends (read: TRead, ...args: any[]) => Atom<unknown>,
+  >(
+    atomCreator: TAtomCreator,
+  ) => TAtomCreator,
 >(
-  atomFamily: AtomFamily<TParam, unknown>,
-  param: TParam,
-  atomCreator: TAtomCreator,
-): TAtomCreator {
-  // @ts-expect-error complex sub-type
-  const atomCatching: TAtomCreator = (read, ...args) => {
+  initializeAtom: (
+    param: TParam,
+    withErrorCatcher: TWithErrorCatcher,
+  ) => TAtomType,
+  areEqual?: (a: TParam, b: TParam) => boolean,
+): AtomFamily<TParam, TAtomType> {
+  const baseAtomFamily = atomFamily((param: TParam) => {
     // @ts-expect-error complex sub-type
-    const readCatching: TRead = (...readArgs) => {
-      try {
-        const value = read(...readArgs);
+    const withErrorCatcher: TWithErrorCatcher = (atomCreator) => {
+      // @ts-expect-error complex sub-type
+      const atomCatching: TAtomCreator = (read, ...args) => {
+        // @ts-expect-error complex sub-type
+        const readCatching: TRead = (...readArgs) => {
+          try {
+            const value = read(...readArgs);
 
-        if (value instanceof Promise) {
-          return value.catch((error) => {
-            throw AtomFamilyError.fromAtomFamilyError(error, atomFamily, param);
-          });
-        }
+            if (value instanceof Promise) {
+              return value.catch((error) => {
+                throw AtomFamilyError.fromAtomFamilyError(
+                  error,
+                  baseAtomFamily,
+                  param,
+                );
+              });
+            }
 
-        if (value instanceof Observable) {
-          return value.pipe(
-            catchError((error) => {
-              throw AtomFamilyError.fromAtomFamilyError(
-                error,
-                atomFamily,
-                param,
+            if (value instanceof Observable) {
+              return value.pipe(
+                catchError((error) => {
+                  throw AtomFamilyError.fromAtomFamilyError(
+                    error,
+                    baseAtomFamily,
+                    param,
+                  );
+                }),
               );
-            }),
-          );
-        }
+            }
 
-        return value;
-      } catch (error) {
-        throw AtomFamilyError.fromAtomFamilyError(error, atomFamily, param);
-      }
+            return value;
+          } catch (error) {
+            throw AtomFamilyError.fromAtomFamilyError(
+              error,
+              baseAtomFamily,
+              param,
+            );
+          }
+        };
+
+        return atomCreator(readCatching, ...args);
+      };
+
+      return atomCatching;
     };
 
-    return atomCreator(readCatching, ...args);
-  };
+    return initializeAtom(param, withErrorCatcher);
+  }, areEqual);
 
-  return atomCatching;
+  return baseAtomFamily;
 }
 
 export function resetQueryError(error: unknown) {
