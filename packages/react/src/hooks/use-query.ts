@@ -10,14 +10,15 @@ import {
   type Chains,
   type CommonDescriptor,
 } from "@reactive-dot/core";
-import type {
-  Falsy,
-  FalsyGuard,
-  FlatHead,
-  InferQueryPayload,
-  QueryInstruction,
+import {
+  flatHead,
+  stringify,
+  type Falsy,
+  type FalsyGuard,
+  type FlatHead,
+  type InferQueryPayload,
+  type QueryInstruction,
 } from "@reactive-dot/core/internal.js";
-import { flatHead, stringify } from "@reactive-dot/utils/internal.js";
 import { atom, useAtomValue } from "jotai";
 import { useMemo } from "react";
 

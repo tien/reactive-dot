@@ -7,11 +7,11 @@ import {
   type Config,
   type Query,
 } from "@reactive-dot/core";
-import type {
-  MultiInstruction,
-  QueryInstruction,
+import {
+  stringify,
+  type MultiInstruction,
+  type QueryInstruction,
 } from "@reactive-dot/core/internal.js";
-import { stringify } from "@reactive-dot/utils/internal.js";
 import { atom, type Atom, type WritableAtom } from "jotai";
 import { atomWithObservable, atomWithRefresh } from "jotai/utils";
 import { from, switchMap, type Observable } from "rxjs";

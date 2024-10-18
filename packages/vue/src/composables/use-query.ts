@@ -1,4 +1,4 @@
-import type { ChainComposableOptions, AsyncState } from "../types.js";
+import type { AsyncState, ChainComposableOptions } from "../types.js";
 import { refresh, refreshable } from "../utils/refreshable.js";
 import { useAsyncData } from "./use-async-data.js";
 import { internal_useChainId } from "./use-chain-id.js";
@@ -13,14 +13,15 @@ import {
   Query,
   type QueryError,
 } from "@reactive-dot/core";
-import type {
-  Falsy,
-  FlatHead,
-  InferQueryPayload,
-  MultiInstruction,
-  QueryInstruction,
+import {
+  type Falsy,
+  type FlatHead,
+  flatHead,
+  type InferQueryPayload,
+  type MultiInstruction,
+  type QueryInstruction,
+  stringify,
 } from "@reactive-dot/core/internal.js";
-import { flatHead, stringify } from "@reactive-dot/utils/internal.js";
 import type { ChainDefinition, TypedApi } from "polkadot-api";
 import { combineLatest, from, type Observable, of } from "rxjs";
 import { map, switchMap } from "rxjs/operators";

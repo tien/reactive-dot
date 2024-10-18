@@ -1,3 +1,4 @@
+export type { MutationEvent } from "./mutation-event.js";
 export {
   type InferQueryPayload,
   type InferQueryResponse,
@@ -5,4 +6,4 @@ export {
   type QueryInstruction,
 } from "./query-builder.js";
 export type { Falsy, FalsyGuard, FlatHead } from "./types.js";
-export type { MutationEvent } from "./mutation-event.js";
+export { flatHead, maybeThen, stringify, toObservable } from "./utils.js";
