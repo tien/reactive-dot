@@ -7,19 +7,20 @@ import {
   provideChain,
   useChainIds,
   useQueryErrorResetter,
+  watchMutationEffect,
 } from "@reactive-dot/vue";
 import { onErrorCaptured, ref } from "vue";
 
 const chainIds = useChainIds();
-
 const selectedChainId = ref<ChainId>("polkadot");
+provideChain(selectedChainId);
+
 const hasError = ref(false);
-
 const resetError = useQueryErrorResetter();
-
 onErrorCaptured(() => (hasError.value = true));
 
-provideChain(selectedChainId);
+// Useful tracking all submitted transaction, i.e. for toast notification
+watchMutationEffect((event) => console.log(event));
 </script>
 
 <template>
