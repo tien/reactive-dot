@@ -7,5 +7,5 @@
     { "repo": "tien/reactive-dot" }
   ],
   "privatePackages": false,
-  "linked": [["@reactive-dot/core", "@reactive-dot/react"]]
+  "linked": [["@reactive-dot/core", "@reactive-dot/react", "@reactive-dot/vue"]]
 }

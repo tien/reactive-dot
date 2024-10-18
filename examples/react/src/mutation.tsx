@@ -53,11 +53,7 @@ export function Mutation() {
       ) : (
         <article>
           <h4>Remark</h4>
-          <button
-            type="button"
-            onClick={() => remark()}
-            disabled={accounts.length === 0}
-          >
+          <button type="button" onClick={() => remark()}>
             Hello
           </button>
           <p>

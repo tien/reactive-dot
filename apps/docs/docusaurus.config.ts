@@ -37,6 +37,7 @@ const config: Config = {
             },
           },
           "packages/react",
+          "packages/vue",
           "packages/utils",
         ],
       },

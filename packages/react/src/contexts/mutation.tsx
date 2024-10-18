@@ -1,22 +1,10 @@
-import type {
-  AsyncValue,
-  ChainId,
-  idle,
-  MutationError,
-} from "@reactive-dot/core";
-import type { Transaction, TxEvent } from "polkadot-api";
+import type { AsyncValue, idle, MutationError } from "@reactive-dot/core";
+import type { MutationEvent as BaseMutationEvent } from "@reactive-dot/core/internal.js";
+import type { TxEvent } from "polkadot-api";
 import { createContext } from "react";
 import { Subject } from "rxjs";
 
-export type MutationEvent = {
-  id: `${string}-${string}-${string}-${string}-${string}`;
-  chainId: ChainId;
-  call?: Transaction<
-    NonNullable<unknown>,
-    string,
-    string,
-    unknown
-  >["decodedCall"];
+export type MutationEvent = BaseMutationEvent & {
   value: Exclude<AsyncValue<TxEvent, MutationError>, typeof idle>;
 };
 
