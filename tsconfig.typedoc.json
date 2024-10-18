@@ -2,5 +2,10 @@
   "compilerOptions": {
     "noEmit": true
   },
-  "include": ["packages/core", "packages/react", "packages/utils"]
+  "include": [
+    "packages/core",
+    "packages/react",
+    "packages/vue",
+    "packages/utils"
+  ]
 }
