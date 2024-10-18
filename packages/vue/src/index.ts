@@ -1,4 +1,5 @@
 export { useAccounts } from "./composables/use-accounts.js";
+export { useBlock } from "./composables/use-block.js";
 export { useChainId, useChainIds } from "./composables/use-chain-id.js";
 export { useChainSpecData } from "./composables/use-chain-spec-data.js";
 export { useClient } from "./composables/use-client.js";
