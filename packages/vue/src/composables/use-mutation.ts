@@ -4,8 +4,9 @@ import { useAsyncAction } from "./use-async-action.js";
 import { useChainId } from "./use-chain-id.js";
 import { useSigner } from "./use-signer.js";
 import { useTypedApiPromise } from "./use-typed-api.js";
-import type { ChainId, Chains } from "@reactive-dot/core";
+import type { ChainId } from "@reactive-dot/core";
 import { MutationError } from "@reactive-dot/core";
+import type { Chains } from "@reactive-dot/core/internal.js";
 import type {
   PolkadotSigner,
   Transaction,

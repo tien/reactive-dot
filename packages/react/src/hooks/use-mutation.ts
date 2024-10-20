@@ -5,8 +5,9 @@ import type { ChainHookOptions } from "./types.js";
 import { useAsyncAction } from "./use-async-action.js";
 import { internal_useChainId } from "./use-chain-id.js";
 import { useConfig } from "./use-config.js";
-import type { ChainId, Chains } from "@reactive-dot/core";
+import type { ChainId } from "@reactive-dot/core";
 import { MutationError, pending } from "@reactive-dot/core";
+import type { Chains } from "@reactive-dot/core/internal.js";
 import { useAtomCallback } from "jotai/utils";
 import type {
   PolkadotSigner,
@@ -16,7 +17,7 @@ import type {
 } from "polkadot-api";
 import { useCallback, useContext } from "react";
 import { from } from "rxjs";
-import { tap, switchMap, catchError } from "rxjs/operators";
+import { catchError, switchMap, tap } from "rxjs/operators";
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 type TxOptions<T extends Transaction<any, any, any, any>> = Parameters<

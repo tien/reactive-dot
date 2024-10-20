@@ -6,14 +6,14 @@ import { lazyValue, useLazyValuesCache } from "./use-lazy-value.js";
 import { useTypedApiPromise } from "./use-typed-api.js";
 import {
   type ChainId,
-  type Chains,
-  type CommonDescriptor,
   query as executeQuery,
   preflight,
   Query,
   type QueryError,
 } from "@reactive-dot/core";
 import {
+  type Chains,
+  type CommonDescriptor,
   type Falsy,
   type FlatHead,
   flatHead,
