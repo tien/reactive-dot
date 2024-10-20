@@ -71,7 +71,7 @@ For more information on metadata syncing and type generation, please refer to th
 ```ts title="config.ts"
 // `dot` is the name we gave to `npx papi add`
 import { dot } from "@polkadot-api/descriptors";
-import type { Config } from "@reactive-dot/core";
+import { defineConfig } from "@reactive-dot/core";
 import { InjectedWalletAggregator } from "@reactive-dot/core/wallets.js";
 import { chainSpec } from "polkadot-api/chains/polkadot";
 import { getSmProvider } from "polkadot-api/sm-provider";
@@ -83,7 +83,7 @@ const smoldot = startFromWorker(
   }),
 );
 
-export const config = {
+export const config = defineConfig({
   chains: {
     // "polkadot" here can be any unique string value
     polkadot: {
@@ -92,7 +92,7 @@ export const config = {
     },
   },
   wallets: [new InjectedWalletAggregator()],
-} as const satisfies Config;
+});
 ```
 
 {/* prettier-ignore-start */}
@@ -105,10 +105,10 @@ export const config = {
 ```ts title="config.ts"
 import { dot } from "@polkadot-api/descriptors";
 import { getWsProvider } from "@polkadot-api/ws-provider/web";
-import type { Config } from "@reactive-dot/core";
+import { defineConfig } from "@reactive-dot/core";
 import { InjectedWalletAggregator } from "@reactive-dot/core/wallets.js";
 
-export const config = {
+export const config = defineConfig({
   chains: {
     polkadot: {
       descriptor: dot,
@@ -116,7 +116,7 @@ export const config = {
     },
   },
   wallets: [new InjectedWalletAggregator()],
-} as const satisfies Config;
+});
 ```
 
 {/* prettier-ignore-start */}

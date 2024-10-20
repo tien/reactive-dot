@@ -1,5 +1,5 @@
 import { kusama, polkadot, westend } from "@polkadot-api/descriptors";
-import type { Config } from "@reactive-dot/core";
+import { defineConfig } from "@reactive-dot/core";
 import { InjectedWalletAggregator } from "@reactive-dot/core/wallets.js";
 import { LedgerWallet } from "@reactive-dot/wallet-ledger";
 import { WalletConnect } from "@reactive-dot/wallet-walletconnect";
@@ -12,7 +12,7 @@ const smoldotPromise = startFromWorker(
   }),
 );
 
-export const config = {
+export const config = defineConfig({
   chains: {
     polkadot: {
       descriptor: polkadot,
@@ -59,4 +59,4 @@ export const config = {
       ],
     }),
   ],
-} as const satisfies Config;
+});
