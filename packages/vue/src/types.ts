@@ -3,7 +3,9 @@ import type { MutationEvent as BaseMutationEvent } from "@reactive-dot/core/inte
 import type { TxEvent } from "polkadot-api";
 import type { MaybeRefOrGetter, Ref } from "vue";
 
-export type ChainComposableOptions<TChainId extends ChainId = ChainId> = {
+export type ChainComposableOptions<
+  TChainId extends ChainId | undefined = ChainId | undefined,
+> = {
   /**
    * Override default chain ID
    */

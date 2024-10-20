@@ -25,7 +25,7 @@ export function useQueryRefresher<
       ) => Query<QueryInstruction<TDescriptor>[], TDescriptor> | Falsy)
     | Falsy,
   TDescriptor extends ChainDescriptorOf<TChainId>,
-  TChainId extends ChainId,
+  TChainId extends ChainId | undefined,
 >(builder: TQuery, options?: ChainHookOptions<TChainId>) {
   const config = useConfig();
   const chainId = internal_useChainId(options);

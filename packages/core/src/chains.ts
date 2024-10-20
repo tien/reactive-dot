@@ -13,10 +13,13 @@ export type ChainId = keyof Chains;
 
 export type CommonDescriptor = Chains[keyof Chains] extends never
   ? ChainDefinition
-  : Chains[keyof Chains];
+  : ResolvedRegister["config"]["targetChains"] extends undefined
+    ? Chains[keyof Chains]
+    : Chains[NonNullable<ResolvedRegister["config"]["targetChains"]>[number]];
 
-export type ChainDescriptorOf<T> = T extends ChainId
-  ? Chains[T] extends ChainDefinition
-    ? Chains[T]
-    : CommonDescriptor
-  : CommonDescriptor;
+export type ChainDescriptorOf<T extends ChainId | undefined> =
+  undefined extends T
+    ? CommonDescriptor
+    : T extends ChainId
+      ? Chains[T]
+      : never;

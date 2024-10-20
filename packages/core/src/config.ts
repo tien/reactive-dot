@@ -8,11 +8,22 @@ export type ChainConfig = {
   readonly provider: Gettable<JsonRpcProvider>;
 };
 
-export type Config = {
-  readonly chains: Record<string, ChainConfig>;
-  readonly wallets?: Array<WalletAggregator | Wallet>;
+export type Config<
+  TChains extends Readonly<Record<string, ChainConfig>> = Readonly<
+    Record<string, ChainConfig>
+  >,
+  TTargetChainIds extends ReadonlyArray<
+    Extract<keyof TChains, string>
+  > = ReadonlyArray<Extract<keyof TChains, string>>,
+> = {
+  readonly chains: TChains;
+  readonly targetChains?: TTargetChainIds;
+  readonly wallets?: ReadonlyArray<WalletAggregator | Wallet>;
 };
 
-export function defineConfig<const TConfig extends Config>(config: TConfig) {
+export function defineConfig<
+  const TChains extends Readonly<Record<string, ChainConfig>>,
+  const TTargetChainIds extends ReadonlyArray<Extract<keyof TChains, string>>,
+>(config: Config<TChains, TTargetChainIds>) {
   return config;
 }
