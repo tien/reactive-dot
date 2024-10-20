@@ -7,14 +7,7 @@ export { getClient } from "./actions/get-client.js";
 export { getConnectedWallets } from "./actions/get-connected-wallets.js";
 export { preflight, query } from "./actions/query.js";
 export type { AsyncValue } from "./async-state.js";
-export type {
-  ChainConfig,
-  ChainId,
-  Chains,
-  CommonDescriptor,
-  Config,
-  InferChains,
-} from "./config.js";
+export type { ChainConfig, ChainId, Config, Register } from "./config.js";
 export { MutationError, QueryError, ReactiveDotError } from "./errors.js";
 export { Query } from "./query-builder.js";
 export { PrefixedStorage } from "./storage.js";

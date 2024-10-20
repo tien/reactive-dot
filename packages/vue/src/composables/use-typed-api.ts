@@ -4,7 +4,8 @@ import { internal_useChainId } from "./use-chain-id.js";
 import { useClientPromise } from "./use-client.js";
 import { useChainConfig } from "./use-config.js";
 import { useLazyValue } from "./use-lazy-value.js";
-import type { ChainId, Chains } from "@reactive-dot/core";
+import type { ChainId } from "@reactive-dot/core";
+import type { Chains } from "@reactive-dot/core/internal.js";
 import type { TypedApi } from "polkadot-api";
 import { computed } from "vue";
 

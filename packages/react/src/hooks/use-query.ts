@@ -3,14 +3,10 @@ import type { ChainHookOptions } from "./types.js";
 import { internal_useChainId } from "./use-chain-id.js";
 import { useConfig } from "./use-config.js";
 import { useQueryRefresher } from "./use-query-refresher.js";
+import { idle, Query, type ChainId } from "@reactive-dot/core";
 import {
-  idle,
-  Query,
-  type ChainId,
   type Chains,
   type CommonDescriptor,
-} from "@reactive-dot/core";
-import {
   flatHead,
   stringify,
   type Falsy,

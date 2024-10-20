@@ -2,13 +2,12 @@ import { queryPayloadAtom } from "../stores/query.js";
 import type { ChainHookOptions } from "./types.js";
 import { internal_useChainId } from "./use-chain-id.js";
 import { useConfig } from "./use-config.js";
-import {
-  type ChainId,
-  type Chains,
-  type CommonDescriptor,
-  Query,
-} from "@reactive-dot/core";
-import type { QueryInstruction } from "@reactive-dot/core/internal.js";
+import { type ChainId, Query } from "@reactive-dot/core";
+import type {
+  Chains,
+  CommonDescriptor,
+  QueryInstruction,
+} from "@reactive-dot/core/internal.js";
 import type { Getter } from "jotai";
 import { useAtomCallback } from "jotai/utils";
 import { useCallback } from "react";

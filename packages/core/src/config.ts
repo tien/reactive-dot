@@ -14,11 +14,20 @@ export type Config = {
 };
 
 // eslint-disable-next-line @typescript-eslint/no-empty-object-type
-export interface Chains {}
+export interface Register {}
 
-export type InferChains<T extends Config> = {
+type ResolvedRegister = {
+  config: Register extends { config: infer config extends Config }
+    ? config
+    : Config;
+};
+
+type InferChains<T extends Config> = {
   [P in keyof T["chains"]]: T["chains"][P]["descriptor"];
 };
+
+// eslint-disable-next-line @typescript-eslint/no-empty-object-type
+export interface Chains extends InferChains<ResolvedRegister["config"]> {}
 
 export type ChainId = keyof Chains;
 
