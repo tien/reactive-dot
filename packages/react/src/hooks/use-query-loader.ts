@@ -4,8 +4,7 @@ import { internal_useChainId } from "./use-chain-id.js";
 import { useConfig } from "./use-config.js";
 import { type ChainId, Query } from "@reactive-dot/core";
 import type {
-  Chains,
-  CommonDescriptor,
+  ChainDescriptorOf,
   QueryInstruction,
 } from "@reactive-dot/core/internal.js";
 import type { Getter } from "jotai";
@@ -27,9 +26,7 @@ export function useQueryLoader() {
         TQuery extends (
           builder: Query<[], TDescriptor>,
         ) => Query<QueryInstruction<TDescriptor>[], TDescriptor>,
-        TDescriptor extends TChainId extends void
-          ? CommonDescriptor
-          : Chains[TChainId],
+        TDescriptor extends ChainDescriptorOf<TChainId>,
         TChainId extends ChainId,
       >(
         builder: TQuery,

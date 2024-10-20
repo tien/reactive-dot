@@ -14,3 +14,9 @@ export type ChainId = keyof Chains;
 export type CommonDescriptor = Chains[keyof Chains] extends never
   ? ChainDefinition
   : Chains[keyof Chains];
+
+export type ChainDescriptorOf<T> = T extends ChainId
+  ? Chains[T] extends ChainDefinition
+    ? Chains[T]
+    : CommonDescriptor
+  : CommonDescriptor;

@@ -1,4 +1,4 @@
-export type { Chains, CommonDescriptor } from "./chains.js";
+export type { ChainDescriptorOf, Chains } from "./chains.js";
 export type { MutationEvent } from "./mutation-event.js";
 export {
   type InferQueryPayload,
