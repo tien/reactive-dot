@@ -1,5 +1,11 @@
 # @reactive-dot/core
 
+## 0.21.0
+
+### Minor Changes
+
+- [#273](https://github.com/tien/reactive-dot/pull/273) [`2c30634`](https://github.com/tien/reactive-dot/commit/2c3063493977b78c95312b507332cced8296e66b) Thanks [@tien](https://github.com/tien)! - Added a helper function to easily define config.
+
 ## 0.20.0
 
 ### Minor Changes
