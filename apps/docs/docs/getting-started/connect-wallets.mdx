@@ -68,12 +68,12 @@ Additional dependencies are required if you use any of be bellow wallet type.
 ## Add wallets to the config
 
 ```ts title="config.ts"
-import type { Config } from "@reactive-dot/core";
+import { defineConfig } from "@reactive-dot/core";
 import { InjectedWalletAggregator } from "@reactive-dot/core/wallets.js";
 import { LedgerWallet } from "@reactive-dot/wallet-ledger";
 import { WalletConnect } from "@reactive-dot/wallet-walletconnect";
 
-export const config = {
+export const config = defineConfig({
   // ...
   wallets: [
     new InjectedWalletAggregator(),
@@ -95,7 +95,7 @@ export const config = {
       ],
     }),
   ],
-} as const satisfies Config;
+});
 ```
 
 ## Connect to wallets

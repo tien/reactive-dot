@@ -1,4 +1,4 @@
-import type { CommonDescriptor } from "../config.js";
+import type { CommonDescriptor } from "../chains.js";
 import type {
   InferInstructionResponse,
   QueryInstruction,

@@ -1,4 +1,4 @@
-import type { ChainId } from "./config.js";
+import type { ChainId } from "./chains.js";
 import type { Transaction } from "polkadot-api";
 
 export type MutationEvent = {

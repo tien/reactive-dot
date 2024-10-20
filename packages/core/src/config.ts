@@ -13,24 +13,6 @@ export type Config = {
   readonly wallets?: Array<WalletAggregator | Wallet>;
 };
 
-// eslint-disable-next-line @typescript-eslint/no-empty-object-type
-export interface Register {}
-
-type ResolvedRegister = {
-  config: Register extends { config: infer config extends Config }
-    ? config
-    : Config;
-};
-
-type InferChains<T extends Config> = {
-  [P in keyof T["chains"]]: T["chains"][P]["descriptor"];
-};
-
-// eslint-disable-next-line @typescript-eslint/no-empty-object-type
-export interface Chains extends InferChains<ResolvedRegister["config"]> {}
-
-export type ChainId = keyof Chains;
-
-export type CommonDescriptor = Chains[keyof Chains] extends never
-  ? ChainDefinition
-  : Chains[keyof Chains];
+export function defineConfig<const TConfig extends Config>(config: TConfig) {
+  return config;
+}
