@@ -18,12 +18,14 @@ export function useAccounts(options?: ChainComposableOptions) {
 }
 
 function useAccountsPromise(options?: ChainComposableOptions) {
-  const chainId = internal_useChainId(options);
+  const chainId = internal_useChainId({ ...options, optionalChainId: true });
   const connectedWalletsObservable = useConnectedWalletsObservable();
   const chainSpecPromise = useChainSpecPromise(options);
 
   return useLazyValue(
-    computed(() => ["accounts", chainId.value]),
+    computed(() =>
+      chainId.value === undefined ? ["accounts"] : ["accounts", chainId.value],
+    ),
     () => getAccounts(connectedWalletsObservable.value, chainSpecPromise.value),
   );
 }
