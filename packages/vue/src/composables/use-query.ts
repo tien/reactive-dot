@@ -12,8 +12,7 @@ import {
   type QueryError,
 } from "@reactive-dot/core";
 import {
-  type Chains,
-  type CommonDescriptor,
+  type ChainDescriptorOf,
   type Falsy,
   type FlatHead,
   flatHead,
@@ -44,9 +43,7 @@ export function useQuery<
   TQuery extends (
     builder: Query<[], TDescriptor>,
   ) => Query<QueryInstruction<TDescriptor>[], TDescriptor> | Falsy,
-  TDescriptor extends TChainId extends void
-    ? CommonDescriptor
-    : Chains[TChainId],
+  TDescriptor extends ChainDescriptorOf<TChainId>,
   TChainId extends ChainId,
 >(builder: TQuery, options?: ChainComposableOptions<TChainId>) {
   const chainId = internal_useChainId(options);

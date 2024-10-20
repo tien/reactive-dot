@@ -6,7 +6,7 @@ import { useSigner } from "./use-signer.js";
 import { useTypedApiPromise } from "./use-typed-api.js";
 import type { ChainId } from "@reactive-dot/core";
 import { MutationError } from "@reactive-dot/core";
-import type { Chains } from "@reactive-dot/core/internal.js";
+import type { ChainDescriptorOf } from "@reactive-dot/core/internal.js";
 import type {
   PolkadotSigner,
   Transaction,
@@ -35,7 +35,7 @@ type TxOptions<T extends Transaction<any, any, any, any>> = Parameters<
  */
 export function useMutation<
   TAction extends (
-    builder: TypedApi<Chains[TChainId]>["tx"],
+    builder: TypedApi<ChainDescriptorOf<TChainId>>["tx"],
   ) => // eslint-disable-next-line @typescript-eslint/no-explicit-any
   Transaction<any, any, any, any>,
   TChainId extends ChainId,

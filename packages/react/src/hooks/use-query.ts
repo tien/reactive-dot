@@ -5,8 +5,7 @@ import { useConfig } from "./use-config.js";
 import { useQueryRefresher } from "./use-query-refresher.js";
 import { idle, Query, type ChainId } from "@reactive-dot/core";
 import {
-  type Chains,
-  type CommonDescriptor,
+  type ChainDescriptorOf,
   flatHead,
   stringify,
   type Falsy,
@@ -31,9 +30,7 @@ export function useLazyLoadQuery<
         builder: Query<[], TDescriptor>,
       ) => Query<QueryInstruction<TDescriptor>[], TDescriptor> | Falsy)
     | Falsy,
-  TDescriptor extends TChainId extends void
-    ? CommonDescriptor
-    : Chains[TChainId],
+  TDescriptor extends ChainDescriptorOf<TChainId>,
   TChainId extends ChainId,
 >(builder: TQuery, options?: ChainHookOptions<TChainId>) {
   const config = useConfig();
@@ -92,9 +89,7 @@ export function useLazyLoadQueryWithRefresh<
         builder: Query<[], TDescriptor>,
       ) => Query<QueryInstruction<TDescriptor>[], TDescriptor> | Falsy)
     | Falsy,
-  TDescriptor extends TChainId extends void
-    ? CommonDescriptor
-    : Chains[TChainId],
+  TDescriptor extends ChainDescriptorOf<TChainId>,
   TChainId extends ChainId,
 >(builder: TQuery, options?: ChainHookOptions<TChainId>) {
   const data = useLazyLoadQuery(builder, options);

@@ -4,8 +4,7 @@ import { internal_useChainId } from "./use-chain-id.js";
 import { useConfig } from "./use-config.js";
 import { Query, type ChainId } from "@reactive-dot/core";
 import type {
-  Chains,
-  CommonDescriptor,
+  ChainDescriptorOf,
   Falsy,
   QueryInstruction,
 } from "@reactive-dot/core/internal.js";
@@ -25,9 +24,7 @@ export function useQueryRefresher<
         builder: Query<[], TDescriptor>,
       ) => Query<QueryInstruction<TDescriptor>[], TDescriptor> | Falsy)
     | Falsy,
-  TDescriptor extends TChainId extends void
-    ? CommonDescriptor
-    : Chains[TChainId],
+  TDescriptor extends ChainDescriptorOf<TChainId>,
   TChainId extends ChainId,
 >(builder: TQuery, options?: ChainHookOptions<TChainId>) {
   const config = useConfig();
