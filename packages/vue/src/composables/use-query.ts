@@ -44,7 +44,7 @@ export function useQuery<
     builder: Query<[], TDescriptor>,
   ) => Query<QueryInstruction<TDescriptor>[], TDescriptor> | Falsy,
   TDescriptor extends ChainDescriptorOf<TChainId>,
-  TChainId extends ChainId,
+  TChainId extends ChainId | undefined,
 >(builder: TQuery, options?: ChainComposableOptions<TChainId>) {
   const chainId = internal_useChainId(options);
   const typedApiPromise = useTypedApiPromise(options);

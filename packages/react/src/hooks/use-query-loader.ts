@@ -27,7 +27,7 @@ export function useQueryLoader() {
           builder: Query<[], TDescriptor>,
         ) => Query<QueryInstruction<TDescriptor>[], TDescriptor>,
         TDescriptor extends ChainDescriptorOf<TChainId>,
-        TChainId extends ChainId,
+        TChainId extends ChainId | undefined,
       >(
         builder: TQuery,
         options?: ChainHookOptions<TChainId>,
@@ -50,8 +50,8 @@ export function useQueryLoader() {
       (
         get,
         _,
-        builder: <TChainId extends ChainId>(
-          query: Query<[]>,
+        builder: <TChainId extends ChainId | undefined>(
+          query: Query<[], ChainDescriptorOf<TChainId>>,
           options?: ChainHookOptions<TChainId>,
         ) => Query<[]>,
       ) => _loadQuery(get)(builder),

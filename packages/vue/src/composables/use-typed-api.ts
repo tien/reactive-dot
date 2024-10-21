@@ -15,7 +15,7 @@ import { computed } from "vue";
  * @param options - Additional options
  * @returns Polkadot-API typed API
  */
-export function useTypedApi<TChainId extends ChainId>(
+export function useTypedApi<TChainId extends ChainId | undefined>(
   options?: ChainComposableOptions<TChainId>,
 ) {
   return useAsyncData(useTypedApiPromise(options));
@@ -24,7 +24,7 @@ export function useTypedApi<TChainId extends ChainId>(
 /**
  * @internal
  */
-export function useTypedApiPromise<TChainId extends ChainId>(
+export function useTypedApiPromise<TChainId extends ChainId | undefined>(
   options?: ChainComposableOptions<TChainId>,
 ) {
   const chainId = internal_useChainId(options);

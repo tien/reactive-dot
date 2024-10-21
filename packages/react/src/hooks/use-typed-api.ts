@@ -13,7 +13,7 @@ import type { TypedApi } from "polkadot-api";
  * @param options - Additional options
  * @returns Polkadot-API typed API
  */
-export function useTypedApi<TChainId extends ChainId>(
+export function useTypedApi<TChainId extends ChainId | undefined>(
   options?: ChainHookOptions<TChainId>,
 ) {
   return useAtomValue(
