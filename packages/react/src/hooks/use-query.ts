@@ -25,13 +25,17 @@ import { useMemo } from "react";
  * @returns The data response
  */
 export function useLazyLoadQuery<
+  TChainId extends ChainId | undefined,
   TQuery extends
     | ((
-        builder: Query<[], TDescriptor>,
-      ) => Query<QueryInstruction<TDescriptor>[], TDescriptor> | Falsy)
+        builder: Query<[], ChainDescriptorOf<TChainId>>,
+      ) =>
+        | Query<
+            QueryInstruction<ChainDescriptorOf<TChainId>>[],
+            ChainDescriptorOf<TChainId>
+          >
+        | Falsy)
     | Falsy,
-  TDescriptor extends ChainDescriptorOf<TChainId>,
-  TChainId extends ChainId | undefined,
 >(builder: TQuery, options?: ChainHookOptions<TChainId>) {
   const config = useConfig();
   const chainId = internal_useChainId(options);
@@ -86,10 +90,14 @@ export function useLazyLoadQuery<
 export function useLazyLoadQueryWithRefresh<
   TQuery extends
     | ((
-        builder: Query<[], TDescriptor>,
-      ) => Query<QueryInstruction<TDescriptor>[], TDescriptor> | Falsy)
+        builder: Query<[], ChainDescriptorOf<TChainId>>,
+      ) =>
+        | Query<
+            QueryInstruction<ChainDescriptorOf<TChainId>>[],
+            ChainDescriptorOf<TChainId>
+          >
+        | Falsy)
     | Falsy,
-  TDescriptor extends ChainDescriptorOf<TChainId>,
   TChainId extends ChainId | undefined,
 >(builder: TQuery, options?: ChainHookOptions<TChainId>) {
   const data = useLazyLoadQuery(builder, options);

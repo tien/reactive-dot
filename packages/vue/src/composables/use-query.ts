@@ -40,11 +40,15 @@ import {
  * @returns The data response
  */
 export function useQuery<
-  TQuery extends (
-    builder: Query<[], TDescriptor>,
-  ) => Query<QueryInstruction<TDescriptor>[], TDescriptor> | Falsy,
-  TDescriptor extends ChainDescriptorOf<TChainId>,
   TChainId extends ChainId | undefined,
+  TQuery extends (
+    builder: Query<[], ChainDescriptorOf<TChainId>>,
+  ) =>
+    | Query<
+        QueryInstruction<ChainDescriptorOf<TChainId>>[],
+        ChainDescriptorOf<TChainId>
+      >
+    | Falsy,
 >(builder: TQuery, options?: ChainComposableOptions<TChainId>) {
   const chainId = internal_useChainId(options);
   const typedApiPromise = useTypedApiPromise(options);

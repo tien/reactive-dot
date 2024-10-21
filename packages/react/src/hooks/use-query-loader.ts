@@ -23,11 +23,13 @@ export function useQueryLoader() {
   const _loadQuery = useCallback(
     (get: Getter) =>
       <
-        TQuery extends (
-          builder: Query<[], TDescriptor>,
-        ) => Query<QueryInstruction<TDescriptor>[], TDescriptor>,
-        TDescriptor extends ChainDescriptorOf<TChainId>,
         TChainId extends ChainId | undefined,
+        TQuery extends (
+          builder: Query<[], ChainDescriptorOf<TChainId>>,
+        ) => Query<
+          QueryInstruction<ChainDescriptorOf<TChainId>>[],
+          ChainDescriptorOf<TChainId>
+        >,
       >(
         builder: TQuery,
         options?: ChainHookOptions<TChainId>,
