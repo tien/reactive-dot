@@ -1,5 +1,11 @@
 # @reactive-dot/react
 
+## 0.22.1
+
+### Patch Changes
+
+- [#280](https://github.com/tien/reactive-dot/pull/280) [`452b79a`](https://github.com/tien/reactive-dot/commit/452b79aa3ff447b998a2aa40b6e0c62b38089a96) Thanks [@tien](https://github.com/tien)! - Refactored generic type parameters for chain IDs & descriptors.
+
 ## 0.22.0
 
 ### Minor Changes
