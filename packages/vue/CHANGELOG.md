@@ -1,5 +1,18 @@
 # @reactive-dot/vue
 
+## 0.23.0
+
+### Minor Changes
+
+- [#284](https://github.com/tien/reactive-dot/pull/284) [`9b831f9`](https://github.com/tien/reactive-dot/commit/9b831f9982d359ba8be0de845b6ede1f9d170ab1) Thanks [@tien](https://github.com/tien)! - BREAKING: Removed `allowlist` and `denylist` functionality. This feature was too specific, and it’s now recommended for users to implement it as a recipe in their own applications if needed.
+
+### Patch Changes
+
+- [#280](https://github.com/tien/reactive-dot/pull/280) [`452b79a`](https://github.com/tien/reactive-dot/commit/452b79aa3ff447b998a2aa40b6e0c62b38089a96) Thanks [@tien](https://github.com/tien)! - Refactored generic type parameters for chain IDs & descriptors.
+
+- Updated dependencies [[`fccd977`](https://github.com/tien/reactive-dot/commit/fccd9778365d71a6903560513455f033fded0b4c)]:
+  - @reactive-dot/core@0.23.0
+
 ## 0.22.0
 
 ### Minor Changes
