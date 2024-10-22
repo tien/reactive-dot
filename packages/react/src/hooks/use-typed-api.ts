@@ -1,10 +1,15 @@
-import { typedApiAtom } from "../stores/client.js";
+import { atomFamilyWithErrorCatcher } from "../utils/jotai.js";
 import type { ChainHookOptions } from "./types.js";
 import { internal_useChainId } from "./use-chain-id.js";
+import { clientAtom } from "./use-client.js";
 import { useConfig } from "./use-config.js";
-import type { ChainId } from "@reactive-dot/core";
+import {
+  ReactiveDotError,
+  type ChainId,
+  type Config,
+} from "@reactive-dot/core";
 import type { ChainDescriptorOf } from "@reactive-dot/core/internal.js";
-import { useAtomValue } from "jotai";
+import { atom, useAtomValue } from "jotai";
 import type { TypedApi } from "polkadot-api";
 
 /**
@@ -23,3 +28,24 @@ export function useTypedApi<TChainId extends ChainId | undefined>(
     }),
   ) as TypedApi<ChainDescriptorOf<TChainId>>;
 }
+
+/**
+ * @internal
+ */
+export const typedApiAtom = atomFamilyWithErrorCatcher(
+  (param: { config: Config; chainId: ChainId }, withErrorCatcher) =>
+    withErrorCatcher(atom)(async (get) => {
+      const config = param.config.chains[param.chainId];
+
+      if (config === undefined) {
+        throw new ReactiveDotError(
+          `No config provided for chain ${param.chainId}`,
+        );
+      }
+
+      const client = await get(clientAtom(param));
+
+      return client.getTypedApi(config.descriptor);
+    }),
+  (a, b) => a.config === b.config && a.chainId === b.chainId,
+);

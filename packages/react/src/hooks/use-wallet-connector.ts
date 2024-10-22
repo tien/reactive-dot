@@ -1,6 +1,6 @@
-import { walletsAtom } from "../stores/wallets.js";
 import { useAsyncAction } from "./use-async-action.js";
 import { useConfig } from "./use-config.js";
+import { walletsAtom } from "./use-wallets.js";
 import { connectWallet } from "@reactive-dot/core";
 import type { Wallet } from "@reactive-dot/core/wallets.js";
 import { useAtomCallback } from "jotai/utils";
