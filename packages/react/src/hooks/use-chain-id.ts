@@ -16,31 +16,16 @@ export function useChainIds() {
 /**
  * Hook for getting the current chain ID.
  *
- * @param options - Additional options
  * @returns The current chain ID
  */
-export function useChainId<
-  const TAllowList extends ChainId[],
-  const TDenylist extends ChainId[] = [],
->(options?: { allowlist?: TAllowList; denylist?: TDenylist }) {
+export function useChainId() {
   const chainId = useContext(ChainIdContext);
 
   if (chainId === undefined) {
     throw new ReactiveDotError("No chain ID provided");
   }
 
-  if (options?.allowlist?.includes(chainId) === false) {
-    throw new ReactiveDotError("Chain ID not allowed", { cause: chainId });
-  }
-
-  if (options?.denylist?.includes(chainId)) {
-    throw new ReactiveDotError("Chain ID denied", { cause: chainId });
-  }
-
-  return chainId as Exclude<
-    Extract<ChainId, TAllowList[number]>,
-    TDenylist[number]
-  >;
+  return chainId as ChainId;
 }
 
 /**

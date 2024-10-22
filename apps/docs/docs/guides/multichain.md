@@ -119,13 +119,13 @@ function Component() {
 
 ## Chain narrowing
 
-By default, ReactiveDOT provides type definitions based on the merged definitions of all chains in the config. For example, if your DApp is set up to be used with Polkadot, Kusama, and Westend, the following code will not work because the Bounties pallet only exists on Polkadot and Kusama, not on Westend:
+By default, ReactiveDOT merges type definitions from all the chains in the config. For instance, if your DApp is set up to work with Polkadot, Kusama, and Westend, the following code will fail because the Bounties pallet is available only on Polkadot and Kusama, not on Westend:
 
 ```tsx
 function Component() {
-  // Since `Bounties` pallet doesn't exist on Westend, this will:
-  // 1. Raise a TypeScript error
-  // 2. Throw an error during runtime if Westend is selected
+  // Since the `Bounties` pallet doesn't exist on Westend, this will:
+  // 1. Trigger a TypeScript error
+  // 2. Cause a runtime error if Westend is selected
   const bountyCount = useLazyLoadQuery((builder) =>
     builder.readStorage("Bounties", "BountyCount", []),
   );
@@ -134,7 +134,7 @@ function Component() {
 }
 ```
 
-You have the option of either explicitly specifying the chain to query, which will override the chain ID provided via context:
+To resolve this, you can explicitly specify the chain to query, which will override the chain ID provided by context:
 
 ```tsx
 function Component() {
@@ -147,21 +147,31 @@ function Component() {
 }
 ```
 
-Or, to continue using the chain ID provided via context, you can use the [`useChainId`](/api/react/function/useChainId) hook along with its allowlist/denylist functionality:
+Alternatively, if you want to keep using the chain ID provided by context, you can use the following pattern:
 
 ```tsx
+function useBountiesChainId() {
+  const chainId = useChainId();
+
+  switch (chainId) {
+    case "polkadot":
+    case "kusama":
+      return chainId;
+    default:
+      throw new Error("This chain does not support bounties", {
+        cause: chainId,
+      });
+  }
+}
+
 function BountiesPalletRequiredComponent() {
   const bountyCount = useLazyLoadQuery(
     (builder) => builder.readStorage("Bounties", "BountyCount", []),
     {
-      // `useChainId` with the allow/deny list will:
-      // 1. Throw an error if the context's chain ID conflicts with the list(s)
-      // 2. Restrict descriptors used by `useLazyLoadQuery` to provide correct intellisense
-      chainId: useChainId({
-        allowlist: ["polkadot", "kusama"],
-        // Or
-        denylist: ["westend"],
-      }),
+      // This will:
+      // 1. Throw an error if the chain ID does not support bounties
+      // 2. Restrict the possible chain types for better intellisense
+      chainId: useBountiesChainId(),
     },
   );
 
@@ -171,7 +181,7 @@ function BountiesPalletRequiredComponent() {
 function App() {
   // ...
 
-  // Only use compatible chain IDs, else an error will be thrown
+  // Use only compatible chain IDs, otherwise an error will be thrown
   const bountiesEnabledChainIds = ["polkadot", "kusama"] satisfies ChainId[];
 
   return (
@@ -185,4 +195,34 @@ function App() {
     </div>
   );
 }
+```
+
+Finally, if your application primarily uses a few chains but interacts with many other supporting chains, you can use the `targetChains` option:
+
+```ts
+import { defineConfig } from "@reactive-dot/core";
+
+const config = defineConfig({
+  chains: {
+    polkadot: {
+      // ...
+    },
+    polkadot_asset_hub: {
+      // ...
+    },
+    polkadot_people: {
+      // ...
+    },
+    polkadot_collectives: {
+      // ...
+    },
+    polkadot_bridge_hub: {
+      // ...
+    },
+  },
+  // This will restrict the default chain types used by hooks
+  // to just Polkadot when no explicit `chainId` is provided
+  targetChains: ["polkadot"],
+  // ...
+});
 ```
