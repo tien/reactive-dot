@@ -31,7 +31,8 @@
   "scripts": {
     "dev": "tsc --build --watch",
     "build": "rm -rf build && tsc --build",
-    "lint": "eslint src"
+    "lint": "eslint src",
+    "test": "vitest run"
   },
   "dependencies": {
     "@reactive-dot/utils": "workspace:^"
@@ -42,7 +43,8 @@
     "@tsconfig/strictest": "^2.0.5",
     "eslint": "^9.13.0",
     "polkadot-api": "^1.6.2",
-    "typescript": "^5.6.3"
+    "typescript": "^5.6.3",
+    "vitest": "^2.1.3"
   },
   "peerDependencies": {
     "polkadot-api": "1.x"
