@@ -1,5 +1,11 @@
 # @reactive-dot/core
 
+## 0.23.0
+
+### Patch Changes
+
+- [#286](https://github.com/tien/reactive-dot/pull/286) [`fccd977`](https://github.com/tien/reactive-dot/commit/fccd9778365d71a6903560513455f033fded0b4c) Thanks [@tien](https://github.com/tien)! - Fixed string key generation of binary data.
+
 ## 0.22.0
 
 ### Minor Changes
