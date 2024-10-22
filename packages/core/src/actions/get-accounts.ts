@@ -1,5 +1,5 @@
 import type { MaybeAsync } from "../types.js";
-import { toObservable } from "../utils.js";
+import { toObservable } from "../utils/to-observable.js";
 import type { WalletAccount } from "../wallets/account.js";
 import type { Wallet } from "../wallets/wallet.js";
 import type { ChainSpecData } from "@polkadot-api/substrate-client";

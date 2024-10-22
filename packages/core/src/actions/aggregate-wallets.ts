@@ -1,5 +1,5 @@
 import type { MaybeAsync } from "../types.js";
-import { toObservable } from "../utils.js";
+import { toObservable } from "../utils/to-observable.js";
 import type { WalletAggregator } from "../wallets/index.js";
 import { combineLatest, from, of } from "rxjs";
 import { map, switchMap } from "rxjs/operators";

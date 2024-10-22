@@ -7,4 +7,6 @@ export {
   type QueryInstruction,
 } from "./query-builder.js";
 export type { Falsy, FalsyGuard, FlatHead } from "./types.js";
-export { flatHead, maybeThen, stringify, toObservable } from "./utils.js";
+export { flatHead } from "./utils/flat-head.js";
+export { toObservable } from "./utils/to-observable.js";
+export { stringify } from "./utils/stringify.js";

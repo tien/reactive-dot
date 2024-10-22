@@ -1,5 +1,3 @@
-import { from, isObservable, of, type Observable } from "rxjs";
-
 function hasObjectPrototype(o: unknown) {
   return Object.prototype.toString.call(o) === "[object Object]";
 }
@@ -47,43 +45,4 @@ export function stringify<T>(queryInstruction: T) {
 
     return value;
   });
-}
-
-export function flatHead<T>(value: T): T extends [infer Head] ? Head : T {
-  if (Array.isArray(value) && value.length === 1) {
-    return value.at(0);
-  }
-
-  // @ts-expect-error TODO: fix this
-  return value;
-}
-
-export function maybeThen<TValueIn, TValueOut>(
-  maybePromise: TValueIn | Promise<TValueIn>,
-  then: (value: TValueIn) => TValueOut,
-) {
-  if (maybePromise instanceof Promise) {
-    return maybePromise.then(then);
-  }
-
-  return then(maybePromise);
-}
-
-export function toObservable<T>(value: T) {
-  type Value =
-    T extends Observable<infer _>
-      ? T
-      : T extends Promise<infer Value>
-        ? Observable<Value>
-        : Observable<T>;
-
-  if (isObservable(value)) {
-    return value as Value;
-  }
-
-  if (value instanceof Promise) {
-    return from(value) as Value;
-  }
-
-  return of(value) as Value;
 }
