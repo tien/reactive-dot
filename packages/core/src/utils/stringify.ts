@@ -1,5 +1,30 @@
-function hasObjectPrototype(o: unknown) {
-  return Object.prototype.toString.call(o) === "[object Object]";
+import { Binary } from "polkadot-api";
+
+export function stringify<T>(queryInstruction: T) {
+  return JSON.stringify(queryInstruction, (_, value) => {
+    if (typeof value === "bigint") {
+      return value.toString();
+    }
+
+    if (value instanceof Binary) {
+      return value.asHex();
+    }
+
+    if (isPlainObject(value)) {
+      return Object.keys(value)
+        .sort()
+        .reduce(
+          (result, key) => {
+            result[key] = value[key as keyof typeof value];
+            return result;
+          },
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
+          {} as any,
+        );
+    }
+
+    return value;
+  });
 }
 
 function isPlainObject(value: unknown): value is object {
@@ -24,25 +49,6 @@ function isPlainObject(value: unknown): value is object {
   return true;
 }
 
-export function stringify<T>(queryInstruction: T) {
-  return JSON.stringify(queryInstruction, (_, value) => {
-    if (typeof value === "bigint") {
-      return value.toString();
-    }
-
-    if (isPlainObject(value)) {
-      return Object.keys(value)
-        .sort()
-        .reduce(
-          (result, key) => {
-            result[key] = value[key as keyof typeof value];
-            return result;
-          },
-          // eslint-disable-next-line @typescript-eslint/no-explicit-any
-          {} as any,
-        );
-    }
-
-    return value;
-  });
+function hasObjectPrototype(o: unknown) {
+  return Object.prototype.toString.call(o) === "[object Object]";
 }
