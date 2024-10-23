@@ -6,8 +6,8 @@ import { Wallet, type WalletOptions } from "./wallet.js";
  */
 export abstract class LocalWallet<
   TAccount extends Pick<PolkadotSignerAccount, "id">,
-  TOptions extends WalletOptions,
-  TStorageKey extends string,
+  TOptions extends WalletOptions = WalletOptions,
+  TStorageKey extends string = string,
 > extends Wallet<TOptions, TStorageKey> {
   /**
    * @experimental

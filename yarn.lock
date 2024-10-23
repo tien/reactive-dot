@@ -4266,6 +4266,22 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@noble/curves@npm:^1.6.0":
+  version: 1.6.0
+  resolution: "@noble/curves@npm:1.6.0"
+  dependencies:
+    "@noble/hashes": "npm:1.5.0"
+  checksum: 10c0/f3262aa4d39148e627cd82b5ac1c93f88c5bb46dd2566b5e8e52ffac3a0fc381ad30c2111656fd2bd3b0d37d43d540543e0d93a5ff96a6cb184bc3bfe10d1cd9
+  languageName: node
+  linkType: hard
+
+"@noble/hashes@npm:1.5.0, @noble/hashes@npm:^1.5.0":
+  version: 1.5.0
+  resolution: "@noble/hashes@npm:1.5.0"
+  checksum: 10c0/1b46539695fbfe4477c0822d90c881a04d4fa2921c08c552375b444a48cac9930cb1ee68de0a3c7859e676554d0f3771999716606dc4d8f826e414c11692cdd9
+  languageName: node
+  linkType: hard
+
 "@noble/hashes@npm:^1.4.0":
   version: 1.4.0
   resolution: "@noble/hashes@npm:1.4.0"
@@ -4853,6 +4869,36 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@polkadot-labs/hdkd-helpers@npm:0.0.8":
+  version: 0.0.8
+  resolution: "@polkadot-labs/hdkd-helpers@npm:0.0.8"
+  dependencies:
+    "@noble/curves": "npm:^1.6.0"
+    "@noble/hashes": "npm:^1.5.0"
+    "@polkadot-labs/schnorrkel-wasm": "npm:0.0.5"
+    "@scure/base": "npm:^1.1.8"
+    scale-ts: "npm:^1.6.0"
+  checksum: 10c0/031c30b6bbaf8d5091e651efc836aa6952f3464762ea537a2318bf9737c70d8044a97f62c7cedb27e543528c9f10d1ce7fe0453646921f4ba0dab3116a2853b2
+  languageName: node
+  linkType: hard
+
+"@polkadot-labs/hdkd@npm:^0.0.8":
+  version: 0.0.8
+  resolution: "@polkadot-labs/hdkd@npm:0.0.8"
+  dependencies:
+    "@polkadot-labs/hdkd-helpers": "npm:0.0.8"
+    "@polkadot-labs/schnorrkel-wasm": "npm:0.0.5"
+  checksum: 10c0/b38c684b73463aae4ea042b5bd044879a84e891d8cdba15ae0e05faa1bb16d78e1c0ed111ed4eea0b7cfefd675b465c4972b8a41b8d2dee03d275844c93eea13
+  languageName: node
+  linkType: hard
+
+"@polkadot-labs/schnorrkel-wasm@npm:0.0.5":
+  version: 0.0.5
+  resolution: "@polkadot-labs/schnorrkel-wasm@npm:0.0.5"
+  checksum: 10c0/d0dcb873ad1078b6aab2a073eb13a6605561decba65fb6b9f65d0ad58549f7cc4ffafa7b5128da51a7e96a4f7b0e4468e7d30e9a1b23d15abe7402fccfb5be03
+  languageName: node
+  linkType: hard
+
 "@reactive-dot/core@workspace:^, @reactive-dot/core@workspace:packages/core":
   version: 0.0.0-use.local
   resolution: "@reactive-dot/core@workspace:packages/core"
@@ -4998,6 +5044,20 @@ __metadata:
     vue: "npm:^3.5.6"
   peerDependencies:
     vue: 3.x
+  languageName: unknown
+  linkType: soft
+
+"@reactive-dot/wallet-development@workspace:packages/wallet-development":
+  version: 0.0.0-use.local
+  resolution: "@reactive-dot/wallet-development@workspace:packages/wallet-development"
+  dependencies:
+    "@polkadot-labs/hdkd": "npm:^0.0.8"
+    "@reactive-dot/core": "workspace:^"
+    "@reactive-dot/eslint-config": "workspace:^"
+    "@tsconfig/recommended": "npm:^1.0.7"
+    "@tsconfig/strictest": "npm:^2.0.5"
+    eslint: "npm:^9.13.0"
+    typescript: "npm:^5.6.3"
   languageName: unknown
   linkType: soft
 
@@ -5160,6 +5220,13 @@ __metadata:
   version: 1.1.7
   resolution: "@scure/base@npm:1.1.7"
   checksum: 10c0/2d06aaf39e6de4b9640eb40d2e5419176ebfe911597856dcbf3bc6209277ddb83f4b4b02cb1fd1208f819654268ec083da68111d3530bbde07bae913e2fc2e5d
+  languageName: node
+  linkType: hard
+
+"@scure/base@npm:^1.1.8":
+  version: 1.1.9
+  resolution: "@scure/base@npm:1.1.9"
+  checksum: 10c0/77a06b9a2db8144d22d9bf198338893d77367c51b58c72b99df990c0a11f7cadd066d4102abb15e3ca6798d1529e3765f55c4355742465e49aed7a0c01fe76e8
   languageName: node
   linkType: hard
 
