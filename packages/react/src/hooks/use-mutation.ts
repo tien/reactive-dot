@@ -1,10 +1,10 @@
 import { SignerContext } from "../contexts/index.js";
 import { MutationEventSubjectContext } from "../contexts/mutation.js";
-import { typedApiAtom } from "../stores/client.js";
 import type { ChainHookOptions } from "./types.js";
 import { useAsyncAction } from "./use-async-action.js";
 import { internal_useChainId } from "./use-chain-id.js";
 import { useConfig } from "./use-config.js";
+import { typedApiAtom } from "./use-typed-api.js";
 import type { ChainId } from "@reactive-dot/core";
 import { MutationError, pending } from "@reactive-dot/core";
 import type { ChainDescriptorOf } from "@reactive-dot/core/internal.js";
