@@ -2,7 +2,7 @@ import { useAsyncData } from "./use-async-data.js";
 import { useConfig } from "./use-config.js";
 import { useLazyValue } from "./use-lazy-value.js";
 import { aggregateWallets, getConnectedWallets } from "@reactive-dot/core";
-import { Wallet, WalletAggregator } from "@reactive-dot/core/wallets.js";
+import { Wallet, WalletProvider } from "@reactive-dot/core/wallets.js";
 import { map } from "rxjs/operators";
 
 /**
@@ -23,7 +23,7 @@ export function useWalletsObservable() {
   return useLazyValue(["wallets"], () =>
     aggregateWallets(
       config.value.wallets?.filter(
-        (wallet) => wallet instanceof WalletAggregator,
+        (wallet) => wallet instanceof WalletProvider,
       ) ?? [],
     ).pipe(
       map((aggregatedWallets) => [

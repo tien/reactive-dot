@@ -1,5 +1,5 @@
 import type { Gettable } from "./types.js";
-import type { Wallet, WalletAggregator } from "./wallets/index.js";
+import type { Wallet, WalletProvider } from "./wallets/index.js";
 import type { JsonRpcProvider } from "@polkadot-api/json-rpc-provider";
 import type { ChainDefinition } from "polkadot-api";
 
@@ -18,7 +18,7 @@ export type Config<
 > = {
   readonly chains: TChains;
   readonly targetChains?: TTargetChainIds;
-  readonly wallets?: ReadonlyArray<WalletAggregator | Wallet>;
+  readonly wallets?: ReadonlyArray<WalletProvider | Wallet>;
 };
 
 export function defineConfig<

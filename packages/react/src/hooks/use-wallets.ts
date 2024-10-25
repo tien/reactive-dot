@@ -5,7 +5,7 @@ import {
   type Config,
   getConnectedWallets,
 } from "@reactive-dot/core";
-import { Wallet, WalletAggregator } from "@reactive-dot/core/wallets.js";
+import { Wallet, WalletProvider } from "@reactive-dot/core/wallets.js";
 import { atom, useAtomValue } from "jotai";
 import { atomWithObservable } from "jotai/utils";
 
@@ -27,13 +27,12 @@ export function useConnectedWallets() {
   return useAtomValue(connectedWalletsAtom(useConfig()));
 }
 
-const aggregatorWalletsAtom = atomFamilyWithErrorCatcher(
+const providerWalletsAtom = atomFamilyWithErrorCatcher(
   (config: Config, withErrorCatcher) =>
     withErrorCatcher(atomWithObservable)(() =>
       aggregateWallets(
         config.wallets?.filter(
-          (walletOrAggregator) =>
-            walletOrAggregator instanceof WalletAggregator,
+          (walletOrProvider) => walletOrProvider instanceof WalletProvider,
         ) ?? [],
       ),
     ),
@@ -46,9 +45,9 @@ export const walletsAtom = atomFamilyWithErrorCatcher(
   (config: Config, withErrorCatcher) =>
     withErrorCatcher(atom)(async (get) => [
       ...(config.wallets?.filter(
-        (walletOrAggregator) => walletOrAggregator instanceof Wallet,
+        (walletOrProvider) => walletOrProvider instanceof Wallet,
       ) ?? []),
-      ...(await get(aggregatorWalletsAtom(config))),
+      ...(await get(providerWalletsAtom(config))),
     ]),
 );
 

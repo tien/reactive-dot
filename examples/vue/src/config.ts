@@ -1,6 +1,6 @@
 import { kusama, polkadot, westend } from "@polkadot-api/descriptors";
 import { defineConfig } from "@reactive-dot/core";
-import { InjectedWalletAggregator } from "@reactive-dot/core/wallets.js";
+import { InjectedWalletProvider } from "@reactive-dot/core/wallets.js";
 import { getSmProvider } from "polkadot-api/sm-provider";
 import { startFromWorker } from "polkadot-api/smoldot/from-worker";
 
@@ -38,6 +38,6 @@ export const config = defineConfig({
     },
   },
   wallets: [
-    new InjectedWalletAggregator({ originName: "ReactiveDOT Vue Example" }),
+    new InjectedWalletProvider({ originName: "ReactiveDOT Vue Example" }),
   ],
 });
