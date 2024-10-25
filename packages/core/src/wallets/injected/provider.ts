@@ -1,10 +1,10 @@
-import { WalletAggregator } from "../aggregator.js";
+import { WalletProvider } from "../provider.js";
 import { InjectedWallet, type InjectedWalletOptions } from "./wallet.js";
 import { getInjectedExtensions } from "polkadot-api/pjs-signer";
 import { BehaviorSubject } from "rxjs";
 import { map } from "rxjs/operators";
 
-export class InjectedWalletAggregator extends WalletAggregator {
+export class InjectedWalletProvider extends WalletProvider {
   constructor(private readonly options?: InjectedWalletOptions) {
     super();
   }

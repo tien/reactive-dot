@@ -1,27 +1,27 @@
 import type { MaybeAsync } from "../types.js";
 import { toObservable } from "../utils/to-observable.js";
-import type { WalletAggregator } from "../wallets/index.js";
+import type { WalletProvider } from "../wallets/index.js";
 import { combineLatest, from, of } from "rxjs";
 import { map, switchMap } from "rxjs/operators";
 
-export function aggregateWallets(aggregators: MaybeAsync<WalletAggregator[]>) {
-  return toObservable(aggregators).pipe(
-    switchMap((aggregators) => {
-      if (aggregators.length === 0) {
+export function aggregateWallets(providers: MaybeAsync<WalletProvider[]>) {
+  return toObservable(providers).pipe(
+    switchMap((providers) => {
+      if (providers.length === 0) {
         return of([]);
       }
 
       return from(
         Promise.all(
-          aggregators.map(async (aggregator) => {
-            await aggregator.scan();
-            return aggregator;
+          providers.map(async (provider) => {
+            await provider.scan();
+            return provider;
           }),
         ),
       );
     }),
-    switchMap((aggregators) =>
-      combineLatest(aggregators.map((aggregator) => aggregator.wallets$)),
+    switchMap((providers) =>
+      combineLatest(providers.map((provider) => provider.wallets$)),
     ),
     map((wallets) => wallets.flat()),
   );

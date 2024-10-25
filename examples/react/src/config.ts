@@ -1,6 +1,6 @@
 import { kusama, polkadot, westend } from "@polkadot-api/descriptors";
 import { defineConfig } from "@reactive-dot/core";
-import { InjectedWalletAggregator } from "@reactive-dot/core/wallets.js";
+import { InjectedWalletProvider } from "@reactive-dot/core/wallets.js";
 import { LedgerWallet } from "@reactive-dot/wallet-ledger";
 import { WalletConnect } from "@reactive-dot/wallet-walletconnect";
 import { getSmProvider } from "polkadot-api/sm-provider";
@@ -40,7 +40,7 @@ export const config = defineConfig({
     },
   },
   wallets: [
-    new InjectedWalletAggregator({ originName: "ReactiveDOT React Example" }),
+    new InjectedWalletProvider({ originName: "ReactiveDOT React Example" }),
     new LedgerWallet(),
     new WalletConnect({
       projectId: "68f5b7e972a51cf379b127f51a791c34",
