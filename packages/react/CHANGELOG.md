@@ -1,5 +1,16 @@
 # @reactive-dot/react
 
+## 0.24.0
+
+### Minor Changes
+
+- [#293](https://github.com/tien/reactive-dot/pull/293) [`2bdab49`](https://github.com/tien/reactive-dot/commit/2bdab4925c736a81245936fb4034984dd4211f23) Thanks [@tien](https://github.com/tien)! - BREAKING: renamed "aggregator" to "provider".
+
+### Patch Changes
+
+- Updated dependencies [[`2bdab49`](https://github.com/tien/reactive-dot/commit/2bdab4925c736a81245936fb4034984dd4211f23)]:
+  - @reactive-dot/core@0.24.0
+
 ## 0.23.0
 
 ### Minor Changes
