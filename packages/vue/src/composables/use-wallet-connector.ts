@@ -1,8 +1,7 @@
 import { useAsyncAction } from "./use-async-action.js";
-import { useWalletsObservable } from "./use-wallets.js";
+import { useWalletsPromise } from "./use-wallets.js";
 import { connectWallet } from "@reactive-dot/core";
 import type { Wallet } from "@reactive-dot/core/wallets.js";
-import { firstValueFrom } from "rxjs";
 
 /**
  * Composable for connecting wallets
@@ -13,13 +12,11 @@ import { firstValueFrom } from "rxjs";
 export function useWalletConnector(wallets?: Wallet | Wallet[]) {
   const composableWallets = wallets;
 
-  const walletsObservable = useWalletsObservable();
+  const walletsPromise = useWalletsPromise();
 
   return useAsyncAction(async (wallets?: Wallet | Wallet[]) => {
     const walletsToConnect =
-      wallets ??
-      composableWallets ??
-      (await firstValueFrom(walletsObservable.value));
+      wallets ?? composableWallets ?? (await walletsPromise.value);
 
     await connectWallet(walletsToConnect);
   });
