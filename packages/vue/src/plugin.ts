@@ -5,7 +5,6 @@ import { shallowRef, type Plugin } from "vue";
 
 export const ReactiveDotPlugin = {
   install(app, config) {
-    app.provide("foo", "bar");
     app.provide(configKey, config);
     app.provide(lazyValuesKey, new Map());
     app.provide(mutationEventKey, shallowRef());
