@@ -1,6 +1,6 @@
 import { type PrefixedStorage, defaultStorage } from "../storage.js";
 import type { PolkadotSignerAccount } from "./account.js";
-import type { Observable } from "rxjs";
+import { firstValueFrom, type Observable } from "rxjs";
 
 export type WalletOptions = {
   storage?: PrefixedStorage | undefined;
@@ -34,7 +34,7 @@ export abstract class Wallet<
 
   abstract readonly accounts$: Observable<PolkadotSignerAccount[]>;
 
-  abstract getAccounts():
-    | PolkadotSignerAccount[]
-    | Promise<PolkadotSignerAccount[]>;
+  getAccounts(): PolkadotSignerAccount[] | Promise<PolkadotSignerAccount[]> {
+    return firstValueFrom(this.accounts$, { defaultValue: [] });
+  }
 }
