@@ -36,9 +36,9 @@
   },
   "devDependencies": {
     "@reactive-dot/eslint-config": "workspace:^",
-    "@tsconfig/recommended": "^1.0.7",
+    "@tsconfig/recommended": "^1.0.8",
     "@tsconfig/strictest": "^2.0.5",
-    "@types/react": "^18.3.11",
+    "@types/react": "^18.3.12",
     "eslint": "^9.13.0",
     "polkadot-api": "^1.6.4",
     "react": "^18.3.1",
