@@ -70,7 +70,7 @@ export class InjectedWallet extends Wallet<InjectedWalletOptions, "connected"> {
     ),
   );
 
-  getAccounts() {
+  override getAccounts() {
     const extension = this.#extension$.getValue();
 
     if (extension === undefined) {
