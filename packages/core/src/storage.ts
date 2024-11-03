@@ -1,18 +1,16 @@
-export type SimpleStorage = Pick<Storage, "getItem" | "removeItem" | "setItem">;
+import type { SimpleStorage } from "./simple-storage.js";
 
-export type PrefixedStorageOptions = {
+export type StorageOptions = {
   prefix: string;
   storage: SimpleStorage;
 };
 
-export class PrefixedStorage<TKey extends string = string>
-  implements SimpleStorage
-{
+export class Storage<TKey extends string = string> implements SimpleStorage {
   readonly prefix: string;
 
   #storage: SimpleStorage;
 
-  constructor(options: PrefixedStorageOptions) {
+  constructor(options: StorageOptions) {
     this.prefix = options.prefix;
     this.#storage = options.storage;
   }
@@ -30,12 +28,10 @@ export class PrefixedStorage<TKey extends string = string>
   }
 
   join<TKeyOverride extends string | void = void>(path: string) {
-    return new PrefixedStorage<TKeyOverride extends void ? TKey : TKeyOverride>(
-      {
-        prefix: `${this.prefix}/${path}`,
-        storage: this.#storage,
-      },
-    );
+    return new Storage<TKeyOverride extends void ? TKey : TKeyOverride>({
+      prefix: `${this.prefix}/${path}`,
+      storage: this.#storage,
+    });
   }
 
   #prefixKey(key: string) {
@@ -43,7 +39,7 @@ export class PrefixedStorage<TKey extends string = string>
   }
 }
 
-export const defaultStorage = new PrefixedStorage({
+export const defaultStorage = new Storage({
   prefix: "@reactive-dot",
   storage: globalThis.localStorage,
 });

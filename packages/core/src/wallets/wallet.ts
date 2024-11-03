@@ -1,9 +1,9 @@
-import { type PrefixedStorage, defaultStorage } from "../storage.js";
+import { type Storage, defaultStorage } from "../storage.js";
 import type { PolkadotSignerAccount } from "./account.js";
 import { firstValueFrom, type Observable } from "rxjs";
 
 export type WalletOptions = {
-  storage?: PrefixedStorage | undefined;
+  storage?: Storage | undefined;
 };
 
 export abstract class Wallet<
@@ -14,7 +14,7 @@ export abstract class Wallet<
 
   abstract readonly name: string;
 
-  readonly #storage: PrefixedStorage;
+  readonly #storage: Storage;
 
   protected get storage() {
     return this.#storage.join<TStorageKey>(this.id);

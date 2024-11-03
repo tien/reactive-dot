@@ -12,5 +12,5 @@ export { defineConfig, type ChainConfig, type Config } from "./config.js";
 export { MutationError, QueryError, ReactiveDotError } from "./errors.js";
 export { Query } from "./query-builder.js";
 export type { Register } from "./register.js";
-export { PrefixedStorage } from "./storage.js";
+export { Storage } from "./storage.js";
 export { idle, pending } from "./symbols.js";
