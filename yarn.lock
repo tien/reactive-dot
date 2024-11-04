@@ -4684,17 +4684,18 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@polkadot-api/ledger-signer@npm:^0.1.4":
-  version: 0.1.4
-  resolution: "@polkadot-api/ledger-signer@npm:0.1.4"
+"@polkadot-api/ledger-signer@npm:^0.1.6":
+  version: 0.1.6
+  resolution: "@polkadot-api/ledger-signer@npm:0.1.6"
   dependencies:
-    "@polkadot-api/merkleize-metadata": "npm:1.1.7"
+    "@polkadot-api/merkleize-metadata": "npm:1.1.9"
     "@polkadot-api/polkadot-signer": "npm:0.1.6"
-    "@polkadot-api/substrate-bindings": "npm:0.9.2"
+    "@polkadot-api/signers-common": "npm:0.1.1"
+    "@polkadot-api/substrate-bindings": "npm:0.9.3"
     "@polkadot-api/utils": "npm:0.1.2"
   peerDependencies:
     "@ledgerhq/hw-transport": 6
-  checksum: 10c0/2076d6d17e51b313fa5d30158ea851de978cfcdf6e74001fc76c87c54806ade34d458f215b7ec13a284fc8978ccf6e48da52ca79bc57d73b5443e3edc6ea817f
+  checksum: 10c0/1c7cc67fa530af1f3481106c62b082052a8c7aec0cf5f2ab7bb63b48c5157bab3abed554a578ee505a5fb3cd96bd127e607513527800d0df634948934ef4b05a
   languageName: node
   linkType: hard
 
@@ -4707,24 +4708,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@polkadot-api/merkleize-metadata@npm:1.1.7":
-  version: 1.1.7
-  resolution: "@polkadot-api/merkleize-metadata@npm:1.1.7"
+"@polkadot-api/merkleize-metadata@npm:1.1.9":
+  version: 1.1.9
+  resolution: "@polkadot-api/merkleize-metadata@npm:1.1.9"
   dependencies:
-    "@polkadot-api/metadata-builders": "npm:0.8.2"
-    "@polkadot-api/substrate-bindings": "npm:0.9.2"
+    "@polkadot-api/metadata-builders": "npm:0.9.1"
+    "@polkadot-api/substrate-bindings": "npm:0.9.3"
     "@polkadot-api/utils": "npm:0.1.2"
-  checksum: 10c0/06add72f2b4f60e0bd6fe065032eb96a59a0b91b74ae6e78e73c3e2455e1fadd77cc80f076ae7a1cb33d934f92e331e9e7342b4992e08458070e42bb34aad88f
-  languageName: node
-  linkType: hard
-
-"@polkadot-api/metadata-builders@npm:0.8.2":
-  version: 0.8.2
-  resolution: "@polkadot-api/metadata-builders@npm:0.8.2"
-  dependencies:
-    "@polkadot-api/substrate-bindings": "npm:0.9.2"
-    "@polkadot-api/utils": "npm:0.1.2"
-  checksum: 10c0/038b7d5ffce244a806dc85f28ac53bc05721bb4e2c67fce4d8268de816694895320831483460341effc945254d5faf2483e3277c408f7e9c3353f1318c7c65ca
+  checksum: 10c0/096ec12790095e6f11e89585caaa061195bcf4724bf8ddec478cf03513c3dc667e8d28ee0aebdbb715674b9763941432d59ab6cbbec4f66a1b12bc8ee3b16f8a
   languageName: node
   linkType: hard
 
@@ -4835,18 +4826,6 @@ __metadata:
     "@types/node": "npm:^22.2.0"
     smoldot: "npm:2.0.30"
   checksum: 10c0/503b8eb4fb47d9a938b42de7a8852f55bc3b997d364cd6952f464f878b70eb99d789f5b275f34b2b00edc3d1faadd49e3f634e03a7f8e3f13049608ae680b1fa
-  languageName: node
-  linkType: hard
-
-"@polkadot-api/substrate-bindings@npm:0.9.2":
-  version: 0.9.2
-  resolution: "@polkadot-api/substrate-bindings@npm:0.9.2"
-  dependencies:
-    "@noble/hashes": "npm:^1.4.0"
-    "@polkadot-api/utils": "npm:0.1.2"
-    "@scure/base": "npm:^1.1.7"
-    scale-ts: "npm:^1.6.0"
-  checksum: 10c0/90cd0176413881ad75e8387d492b4f5137a650b0ae72c78e74e0dfb90ace4105507bb917ef682e695baeb28956ecbfd2202ef1300e1b615785655ad5a8771162
   languageName: node
   linkType: hard
 
@@ -5061,7 +5040,7 @@ __metadata:
   resolution: "@reactive-dot/wallet-ledger@workspace:packages/wallet-ledger"
   dependencies:
     "@ledgerhq/hw-transport-webusb": "npm:^6.29.4"
-    "@polkadot-api/ledger-signer": "npm:^0.1.4"
+    "@polkadot-api/ledger-signer": "npm:^0.1.6"
     "@reactive-dot/core": "workspace:^"
     "@reactive-dot/eslint-config": "workspace:^"
     "@tsconfig/recommended": "npm:^1.0.8"
@@ -17399,13 +17378,6 @@ __metadata:
   version: 1.4.1
   resolution: "sax@npm:1.4.1"
   checksum: 10c0/6bf86318a254c5d898ede6bd3ded15daf68ae08a5495a2739564eb265cd13bcc64a07ab466fb204f67ce472bb534eb8612dac587435515169593f4fffa11de7c
-  languageName: node
-  linkType: hard
-
-"scale-ts@npm:^1.6.0":
-  version: 1.6.0
-  resolution: "scale-ts@npm:1.6.0"
-  checksum: 10c0/ce4ea3559c6b6bdf2a62454aac83cc3151ae93d1a507ddb8e95e83ce1190085aed61c46901bd42d41d8f8ba58279d7e37057c68c2b674c2d39b8cf5d169e90dd
   languageName: node
   linkType: hard
 
