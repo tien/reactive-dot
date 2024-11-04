@@ -1,5 +1,14 @@
 # @reactive-dot/wallet-walletconnect
 
+## 0.16.14
+
+### Patch Changes
+
+- [#304](https://github.com/tien/reactive-dot/pull/304) [`0958ce1`](https://github.com/tien/reactive-dot/commit/0958ce1f6c06f6e163b4ce6e8f012caf4fb34040) Thanks [@tien](https://github.com/tien)! - Added default implementation for `Wallet.getAccounts`.
+
+- Updated dependencies [[`bbda9ef`](https://github.com/tien/reactive-dot/commit/bbda9ef093e87a96d6eb23ba51464ec02ba08bb2), [`0958ce1`](https://github.com/tien/reactive-dot/commit/0958ce1f6c06f6e163b4ce6e8f012caf4fb34040), [`13c5dae`](https://github.com/tien/reactive-dot/commit/13c5dae1a0ca5500d798ac31e3a8b81bc9d3f78a)]:
+  - @reactive-dot/core@0.24.1
+
 ## 0.16.13
 
 ### Patch Changes
