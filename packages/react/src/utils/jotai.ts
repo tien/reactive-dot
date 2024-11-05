@@ -1,34 +1,17 @@
-import { QueryError } from "@reactive-dot/core";
-import type { Atom, Getter } from "jotai";
+import { atom, type Atom, type Getter } from "jotai";
 import { atomFamily } from "jotai/utils";
 import type { AtomFamily } from "jotai/vanilla/utils/atomFamily";
 import { Observable } from "rxjs";
 import { catchError } from "rxjs/operators";
 
-export class AtomFamilyError extends QueryError {
-  constructor(
-    readonly atomFamily: AtomFamily<unknown, unknown>,
-    readonly param: unknown,
-    message: string | undefined,
-    options?: ErrorOptions,
-  ) {
-    super(message, options);
-  }
-
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  static fromAtomFamilyError<TError, TAtomFamily extends AtomFamily<any, any>>(
-    error: TError,
-    atomFamily: TAtomFamily,
-    param: TAtomFamily extends AtomFamily<infer Param, infer _>
-      ? Param
-      : unknown,
-    message?: string,
-  ) {
-    return new this(atomFamily, param, message, {
-      cause: error,
-    });
-  }
-}
+export const atomFamilyErrorsAtom = atom(
+  () =>
+    new Set<{
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      atomFamily: AtomFamily<any, any>;
+      param: unknown;
+    }>(),
+);
 
 export function atomFamilyWithErrorCatcher<
   TParam,
@@ -55,38 +38,35 @@ export function atomFamilyWithErrorCatcher<
       const atomCatching: TAtomCreator = (read, ...args) => {
         // @ts-expect-error complex sub-type
         const readCatching: TRead = (...readArgs) => {
+          const addError = <T>(error: T) => {
+            const get = readArgs[0] as Getter;
+            get(atomFamilyErrorsAtom).add({
+              atomFamily: baseAtomFamily,
+              param,
+            });
+            return error;
+          };
+
           try {
             const value = read(...readArgs);
 
             if (value instanceof Promise) {
               return value.catch((error) => {
-                throw AtomFamilyError.fromAtomFamilyError(
-                  error,
-                  baseAtomFamily,
-                  param,
-                );
+                throw addError(error);
               });
             }
 
             if (value instanceof Observable) {
               return value.pipe(
                 catchError((error) => {
-                  throw AtomFamilyError.fromAtomFamilyError(
-                    error,
-                    baseAtomFamily,
-                    param,
-                  );
+                  throw addError(error);
                 }),
               );
             }
 
             return value;
           } catch (error) {
-            throw AtomFamilyError.fromAtomFamilyError(
-              error,
-              baseAtomFamily,
-              param,
-            );
+            throw addError(error);
           }
         };
 
@@ -100,18 +80,4 @@ export function atomFamilyWithErrorCatcher<
   }, areEqual);
 
   return baseAtomFamily;
-}
-
-export function resetQueryError(error: unknown) {
-  if (!(error instanceof Error)) {
-    return;
-  }
-
-  if (error instanceof AtomFamilyError) {
-    error.atomFamily.remove(error.param);
-  }
-
-  if (error.cause instanceof Error) {
-    resetQueryError(error.cause);
-  }
 }

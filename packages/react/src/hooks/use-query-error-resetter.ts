@@ -1,11 +1,21 @@
-import { resetQueryError } from "../utils/jotai.js";
+import { atomFamilyErrorsAtom } from "../utils/jotai.js";
+import { useAtomCallback } from "jotai/utils";
+import { useCallback } from "react";
 
 /**
  * Hook for getting function to reset query error caught by error boundary
  *
  * @returns Function to reset caught query error
  */
-// eslint-disable-next-line @eslint-react/hooks-extra/no-redundant-custom-hook
 export function useQueryErrorResetter() {
-  return resetQueryError;
+  return useAtomCallback(
+    useCallback((get) => {
+      const atomFamilyErrors = get(atomFamilyErrorsAtom);
+
+      for (const error of atomFamilyErrors) {
+        error.atomFamily.remove(error.param);
+        atomFamilyErrors.delete(error);
+      }
+    }, []),
+  );
 }
