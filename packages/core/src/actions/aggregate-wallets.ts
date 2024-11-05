@@ -7,7 +7,7 @@ export function aggregateWallets(
     providersOrWallets.map((walletOrProvider) =>
       walletOrProvider instanceof Wallet
         ? [walletOrProvider]
-        : walletOrProvider.getWallets(),
+        : walletOrProvider.getOrFetchWallets(),
     ),
   ).then((wallets) => wallets.flat());
 }
