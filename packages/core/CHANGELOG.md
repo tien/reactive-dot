@@ -1,5 +1,11 @@
 # @reactive-dot/core
 
+## 0.25.1
+
+### Patch Changes
+
+- [#318](https://github.com/tien/reactive-dot/pull/318) [`ed4e82d`](https://github.com/tien/reactive-dot/commit/ed4e82d3eed9499f0c59d3bb1fceb151ce1e305a) Thanks [@tien](https://github.com/tien)! - Ensure stable reference of wallets coming from wallet provider.
+
 ## 0.24.1
 
 ### Patch Changes
