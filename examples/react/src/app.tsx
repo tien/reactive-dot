@@ -68,12 +68,7 @@ function Example({ chainName }: ExampleProps) {
     <div>
       <ErrorBoundary
         FallbackComponent={ErrorFallback}
-        onReset={(details) => {
-          if (details.reason === "imperative-api") {
-            const [error] = details.args;
-            resetQueryError(error);
-          }
-        }}
+        onReset={() => resetQueryError()}
       >
         <Suspense fallback={<h2>Loading {chainName}...</h2>}>
           <h2>{chainName}</h2>
@@ -85,13 +80,13 @@ function Example({ chainName }: ExampleProps) {
   );
 }
 
-function ErrorFallback({ error, resetErrorBoundary }: FallbackProps) {
+function ErrorFallback({ resetErrorBoundary }: FallbackProps) {
   return (
     <article>
       <header>
         <strong>Oops, something went wrong!</strong>
       </header>
-      <button type="button" onClick={() => resetErrorBoundary(error)}>
+      <button type="button" onClick={() => resetErrorBoundary()}>
         Retry
       </button>
     </article>
