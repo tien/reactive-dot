@@ -1,5 +1,11 @@
 # @reactive-dot/react
 
+## 0.25.0
+
+### Minor Changes
+
+- [#316](https://github.com/tien/reactive-dot/pull/316) [`c4094a1`](https://github.com/tien/reactive-dot/commit/c4094a14c4e871a791e5495c3434ec2f3834a40e) Thanks [@tien](https://github.com/tien)! - BREAKING: The query error resetter no longer accepts a specific error input; it now defaults to resetting all errors globally.
+
 ## 0.24.1
 
 ### Patch Changes
