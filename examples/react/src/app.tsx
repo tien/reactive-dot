@@ -10,9 +10,15 @@ import {
   useQueryErrorResetter,
 } from "@reactive-dot/react";
 import { DevTools } from "jotai-devtools";
+import { withPolkadotSdkCompat } from "polkadot-api/polkadot-sdk-compat";
+import { getWsProvider } from "polkadot-api/ws-provider/web";
 import { Suspense } from "react";
 import { ErrorBoundary, type FallbackProps } from "react-error-boundary";
 import toast, { Toaster } from "react-hot-toast";
+
+const paseoProvider = withPolkadotSdkCompat(
+  getWsProvider("wss://paseo.rpc.amforc.com"),
+);
 
 export function App() {
   return (
@@ -28,6 +34,9 @@ export function App() {
       </ChainProvider>
       <ChainProvider chainId="westend">
         <Example chainName="Westend" />
+      </ChainProvider>
+      <ChainProvider dangerous_provider={paseoProvider}>
+        <Example chainName="Paseo" />
       </ChainProvider>
       <Toaster />
       <DevTools />

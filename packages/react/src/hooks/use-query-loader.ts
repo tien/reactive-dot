@@ -1,7 +1,9 @@
 import type { ChainHookOptions } from "./types.js";
-import { internal_useChainId } from "./use-chain-id.js";
+import { clientAtom } from "./use-client.js";
 import { useConfig } from "./use-config.js";
+import { useDescriptor } from "./use-descriptor.js";
 import { queryPayloadAtom } from "./use-query.js";
+import { typedApiAtom, useTypedApi } from "./use-typed-api.js";
 import { type ChainId, Query } from "@reactive-dot/core";
 import type {
   ChainDescriptorOf,
@@ -18,11 +20,12 @@ import { useCallback } from "react";
  */
 export function useQueryLoader() {
   const config = useConfig();
-  const chainId = internal_useChainId();
+  const typedApi = useTypedApi();
+  const descriptor = useDescriptor();
 
   const _loadQuery = useCallback(
     (get: Getter) =>
-      <
+      async <
         TChainId extends ChainId | undefined,
         TQuery extends (
           builder: Query<[], ChainDescriptorOf<TChainId>>,
@@ -36,15 +39,26 @@ export function useQueryLoader() {
       ) => {
         const query = builder(new Query([]));
 
+        const api =
+          options?.chainId !== undefined
+            ? get(
+                typedApiAtom({
+                  client: await get(
+                    clientAtom({ config, chainId: options.chainId }),
+                  ),
+                  descriptor,
+                }),
+              )
+            : typedApi;
+
         void get(
           queryPayloadAtom({
-            config,
-            chainId: options?.chainId ?? chainId,
+            api,
             query,
           }),
         );
       },
-    [chainId, config],
+    [config, descriptor, typedApi],
   );
 
   const loadQuery = useAtomCallback(
