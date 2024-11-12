@@ -1,12 +1,13 @@
 import { atomFamilyWithErrorCatcher } from "../utils/jotai.js";
 import type { ChainHookOptions } from "./types.js";
-import { internal_useChainId } from "./use-chain-id.js";
 import { chainSpecDataAtom } from "./use-chain-spec-data.js";
-import { useConfig } from "./use-config.js";
-import { connectedWalletsAtom } from "./use-wallets.js";
-import { getAccounts, type ChainId, type Config } from "@reactive-dot/core";
+import { useMaybeClient } from "./use-client.js";
+import { useConnectedWallets } from "./use-wallets.js";
+import { getAccounts } from "@reactive-dot/core";
+import type { Wallet } from "@reactive-dot/core/wallets.js";
 import { useAtomValue } from "jotai";
 import { atomWithObservable } from "jotai/utils";
+import type { PolkadotClient } from "polkadot-api";
 
 /**
  * Hook for getting currently connected accounts.
@@ -17,8 +18,8 @@ import { atomWithObservable } from "jotai/utils";
 export function useAccounts(options?: ChainHookOptions) {
   return useAtomValue(
     accountsAtom({
-      config: useConfig(),
-      chainId: internal_useChainId({ ...options, optionalChainId: true }),
+      wallets: useConnectedWallets(),
+      client: useMaybeClient(options),
     }),
   );
 }
@@ -27,19 +28,17 @@ export function useAccounts(options?: ChainHookOptions) {
  * @internal
  */
 export const accountsAtom = atomFamilyWithErrorCatcher(
-  (param: { config: Config; chainId: ChainId | undefined }, withErrorCatcher) =>
+  (
+    param: { wallets: readonly Wallet[]; client: PolkadotClient | undefined },
+    withErrorCatcher,
+  ) =>
     withErrorCatcher(atomWithObservable)((get) =>
       getAccounts(
-        get(connectedWalletsAtom(param.config)),
-        param.chainId === undefined
+        param.wallets,
+        param.client === undefined
           ? undefined
-          : get(
-              chainSpecDataAtom(
-                // @ts-expect-error `chainId` will never be undefined
-                param,
-              ),
-            ),
+          : get(chainSpecDataAtom(param.client)),
       ),
     ),
-  (a, b) => a.config === b.config && a.chainId === b.chainId,
+  (a, b) => a.wallets === b.wallets && a.client === b.client,
 );
