@@ -1,5 +1,11 @@
 # @reactive-dot/core
 
+## 0.26.0
+
+### Minor Changes
+
+- [#334](https://github.com/tien/reactive-dot/pull/334) [`ee5d6a3`](https://github.com/tien/reactive-dot/commit/ee5d6a305cd1bfe9213ea82d5c81d0e1bcce2dfa) Thanks [@tien](https://github.com/tien)! - Added `useNativeToken` and `useSpendableBalance` composables.
+
 ## 0.25.1
 
 ### Patch Changes
