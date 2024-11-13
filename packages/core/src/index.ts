@@ -5,6 +5,7 @@ export { getAccounts } from "./actions/get-accounts.js";
 export { getBlock, unstable_getBlockExtrinsics } from "./actions/get-block.js";
 export { getClient } from "./actions/get-client.js";
 export { getConnectedWallets } from "./actions/get-connected-wallets.js";
+export { initializeWallets } from "./actions/initialize-wallets.js";
 export { preflight, query } from "./actions/query.js";
 export type { AsyncValue } from "./async-state.js";
 export type { ChainId } from "./chains.js";
