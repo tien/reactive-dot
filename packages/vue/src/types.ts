@@ -28,6 +28,12 @@ export type AsyncState<
   refresh: () => void;
 };
 
+export type PromiseLikeAsyncState<TData, TError = unknown> = AsyncState<
+  TData,
+  TError
+> &
+  PromiseLike<AsyncState<TData, TError, TData>>;
+
 export type MutationEvent = BaseMutationEvent &
   (
     | { status: "pending" }

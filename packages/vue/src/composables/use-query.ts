@@ -1,5 +1,9 @@
-import type { AsyncState, ChainComposableOptions } from "../types.js";
-import { refresh, refreshable } from "../utils/refreshable.js";
+import type { ChainComposableOptions } from "../types.js";
+import {
+  refresh,
+  type Refreshable,
+  refreshable,
+} from "../utils/refreshable.js";
 import { useAsyncData } from "./use-async-data.js";
 import { internal_useChainId } from "./use-chain-id.js";
 import { lazyValue, useLazyValuesCache } from "./use-lazy-value.js";
@@ -9,7 +13,6 @@ import {
   query as executeQuery,
   preflight,
   Query,
-  type QueryError,
 } from "@reactive-dot/core";
 import {
   type ChainDescriptorOf,
@@ -26,6 +29,7 @@ import { combineLatest, from, type Observable, of } from "rxjs";
 import { map, switchMap } from "rxjs/operators";
 import {
   computed,
+  type ComputedRef,
   type MaybeRefOrGetter,
   type ShallowRef,
   toValue,
@@ -40,6 +44,23 @@ import {
  * @returns The data response
  */
 export function useQuery<
+  TChainId extends ChainId | undefined,
+  TQuery extends (
+    builder: Query<[], ChainDescriptorOf<TChainId>>,
+  ) =>
+    | Query<
+        QueryInstruction<ChainDescriptorOf<TChainId>>[],
+        ChainDescriptorOf<TChainId>
+      >
+    | Falsy,
+>(builder: TQuery, options?: ChainComposableOptions<TChainId>) {
+  return useAsyncData(useQueryObservable(builder, options));
+}
+
+/**
+ * @internal
+ */
+export function useQueryObservable<
   TChainId extends ChainId | undefined,
   TQuery extends (
     builder: Query<[], ChainDescriptorOf<TChainId>>,
@@ -89,62 +110,58 @@ export function useQuery<
     });
   });
 
-  type Data = FlatHead<
-    InferQueryPayload<
-      Exclude<ReturnType<Exclude<UnwrapRef<TQuery>, Falsy>>, Falsy>
-    >
-  >;
+  return refreshable(
+    computed(() => {
+      if (responses.value === undefined) {
+        return;
+      }
 
-  type Return =
-    Data extends Array<infer _>
-      ? AsyncState<Data, QueryError> &
-          PromiseLike<AsyncState<Data, QueryError, Data>>
-      : AsyncState<Data> & PromiseLike<AsyncState<Data, QueryError, Data>>;
-
-  return useAsyncData(
-    refreshable(
-      computed(() => {
-        if (responses.value === undefined) {
-          return;
-        }
-
-        return combineLatest(
-          responses.value.map((response) => {
-            if (!Array.isArray(response)) {
-              return from(response.value);
-            }
-
-            const responses = response.map((response) => response.value);
-
-            if (responses.length === 0) {
-              return of([]);
-            }
-
-            return combineLatest(response.map((response) => response.value));
-          }),
-        ).pipe(map(flatHead));
-      }),
-      () => {
-        if (!responses.value) {
-          return;
-        }
-
-        if (!Array.isArray(responses.value)) {
-          return void refresh(responses.value);
-        }
-
-        for (const response of responses.value) {
+      return combineLatest(
+        responses.value.map((response) => {
           if (!Array.isArray(response)) {
-            refresh(response);
-          } else {
-            for (const subResponse of response) {
-              refresh(subResponse);
-            }
+            return from(response.value);
+          }
+
+          const responses = response.map((response) => response.value);
+
+          if (responses.length === 0) {
+            return of([]);
+          }
+
+          return combineLatest(response.map((response) => response.value));
+        }),
+      ).pipe(map(flatHead));
+    }),
+    () => {
+      if (!responses.value) {
+        return;
+      }
+
+      if (!Array.isArray(responses.value)) {
+        return void refresh(responses.value);
+      }
+
+      for (const response of responses.value) {
+        if (!Array.isArray(response)) {
+          refresh(response);
+        } else {
+          for (const subResponse of response) {
+            refresh(subResponse);
           }
         }
-      },
-    ),
-  ) as Return;
+      }
+    },
+  ) as Refreshable<
+    ComputedRef<
+      Observable<
+        FlatHead<
+          InferQueryPayload<
+            Exclude<ReturnType<Exclude<UnwrapRef<TQuery>, Falsy>>, Falsy>
+          >
+        >
+      >
+    >
+  >;
 }
 
 function queryInstruction(

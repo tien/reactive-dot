@@ -1,16 +1,27 @@
 <script setup lang="ts">
-import { useAccounts, useQuery } from "@reactive-dot/vue";
+import {
+  useAccounts,
+  useNativeToken,
+  useQuery,
+  useSpendableBalance,
+} from "@reactive-dot/vue";
+import { computed } from "vue";
 
+const { data: nativeToken } = await useNativeToken();
 const { data: accounts } = await useAccounts();
+
 const { data } = await useQuery((builder) =>
   builder
     .readStorage("System", "Number", [])
-    .readStorage("Balances", "TotalIssuance", [])
-    .readStorages(
-      "System",
-      "Account",
-      accounts.value?.map((account) => [account.address] as const) ?? [],
-    ),
+    .readStorage("Balances", "TotalIssuance", []),
+);
+
+const totalIssuance = computed(() =>
+  nativeToken.value.amountFromPlanck(data.value[1]),
+);
+
+const { data: balances } = await useSpendableBalance(
+  computed(() => accounts.value.map((account) => account.address)),
 );
 </script>
 
@@ -24,11 +35,11 @@ const { data } = await useQuery((builder) =>
       <dd>{{ data[0].toLocaleString() }}</dd>
 
       <dt>Total issuance</dt>
-      <dd>{{ data[1].toLocaleString() }}</dd>
+      <dd>{{ totalIssuance.toLocaleString() }}</dd>
 
-      <div v-for="(balance, index) in data[2]" :key="index">
-        <dt>Balance of: {{ accounts?.at(index)?.address }}</dt>
-        <dd>{{ balance.data.free.toLocaleString() }}</dd>
+      <div v-for="(balance, index) in balances" :key="index">
+        <dt>Balance of: {{ accounts.at(index)?.address }}</dt>
+        <dd>{{ balance.toLocaleString() }}</dd>
       </div>
     </dl>
   </section>
