@@ -5,7 +5,12 @@ export type {
 } from "./account.js";
 export { WalletProvider } from "./provider.js";
 export { DeepLinkWallet } from "./deep-link-wallet.js";
-export { initializeWallets } from "./initialize-wallets.js";
+export {
+  /**
+   * @deprecated Use the top-level export instead.
+   */
+  initializeWallets,
+} from "../actions/initialize-wallets.js";
 export { InjectedWalletProvider } from "./injected/provider.js";
 export { InjectedWallet } from "./injected/wallet.js";
 export { LocalWallet } from "./local-wallet.js";

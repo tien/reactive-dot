@@ -1,11 +1,11 @@
 import { useWallets } from "./use-wallets.js";
 import {
   idle,
+  initializeWallets,
   pending,
   type AsyncValue,
   type ReactiveDotError,
 } from "@reactive-dot/core";
-import { initializeWallets } from "@reactive-dot/core/wallets.js";
 import { useCallback, useState } from "react";
 
 /**
