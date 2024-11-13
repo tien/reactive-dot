@@ -1,7 +1,7 @@
 // TODO: weird TypeScript error
 const refreshSymbol = Symbol("refresh") as unknown as "_refresh";
 
-type Refreshable<T> = T & {
+export type Refreshable<T> = T & {
   /**
    * @internal
    */

@@ -12,13 +12,13 @@ import { computed } from "vue";
  * @returns The [JSON-RPC spec](https://paritytech.github.io/json-rpc-interface-spec/api/chainSpec.html)
  */
 export function useChainSpecData(options?: ChainComposableOptions) {
-  return useAsyncData(useChainSpecPromise(options));
+  return useAsyncData(useChainSpecDataPromise(options));
 }
 
 /**
  * @internal
  */
-export function useChainSpecPromise(options?: ChainComposableOptions) {
+export function useChainSpecDataPromise(options?: ChainComposableOptions) {
   const chainId = internal_useChainId(options);
   const clientPromise = useClientPromise(options);
 

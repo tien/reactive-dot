@@ -1,4 +1,4 @@
-import type { AsyncState } from "../types.js";
+import type { AsyncState, PromiseLikeAsyncState } from "../types.js";
 import { refresh } from "../utils/refreshable.js";
 import { useAsyncState } from "./use-async-state.js";
 import type { lazyValue } from "./use-lazy-value.js";
@@ -101,5 +101,5 @@ export function useAsyncData<
       onfulfilled: () => unknown,
       onrejected: (reason: unknown) => unknown,
     ) => promiseLike.then(onfulfilled, onrejected),
-  } as AsyncState<Value> & PromiseLike<AsyncState<Value, unknown, Value>>;
+  } as PromiseLikeAsyncState<Value>;
 }

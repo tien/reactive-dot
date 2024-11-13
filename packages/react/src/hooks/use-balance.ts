@@ -1,8 +1,11 @@
 import type { ChainHookOptions } from "./types.js";
 import { useNativeTokenAmountFromPlanck } from "./use-native-token-amount.js";
 import { useLazyLoadQuery } from "./use-query.js";
-import { type DenominatedNumber, BigIntMath } from "@reactive-dot/utils";
+import { flatHead } from "@reactive-dot/core/internal.js";
+import { spendableBalance } from "@reactive-dot/core/internal/maths.js";
+import { type DenominatedNumber } from "@reactive-dot/utils";
 import type { SS58String } from "polkadot-api";
+import { useMemo } from "react";
 
 type SystemAccount = {
   nonce: number;
@@ -63,23 +66,26 @@ export function useSpendableBalance(
 
   const nativeTokenFromPlanck = useNativeTokenAmountFromPlanck(options);
 
-  const spendableNativeTokenFromAccount = ({
-    data: { free, reserved, frozen },
-  }: SystemAccount) =>
-    nativeTokenFromPlanck(
-      BigIntMath.max(
-        0n,
-        free -
-          BigIntMath.max(
-            frozen - reserved,
-            includesExistentialDeposit ? 0n : existentialDeposit,
+  return useMemo(
+    () =>
+      flatHead(
+        accounts.map(({ data: { free, reserved, frozen } }) =>
+          nativeTokenFromPlanck(
+            spendableBalance({
+              free,
+              reserved,
+              frozen,
+              existentialDeposit,
+              includesExistentialDeposit,
+            }),
           ),
+        ),
       ),
-    );
-
-  const spendableBalances = accounts.map(spendableNativeTokenFromAccount);
-
-  return Array.isArray(addressOrAddresses)
-    ? spendableBalances
-    : spendableBalances.at(0)!;
+    [
+      accounts,
+      existentialDeposit,
+      includesExistentialDeposit,
+      nativeTokenFromPlanck,
+    ],
+  );
 }
