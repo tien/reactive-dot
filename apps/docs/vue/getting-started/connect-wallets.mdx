@@ -1,0 +1,131 @@
+---
+sidebar_position: 3
+---
+
+import TabItem from "@theme/TabItem";
+import Tabs from "@theme/Tabs";
+
+# Connect wallets
+
+Wallets & accounts connection can by managed via [`useWallets`](/api/vue/function/useWallets), [`useConnectedWallets`](/api/vue/function/useConnectedWallets) & [`useAccounts`](/api/vue/function/useAccounts) composables.
+
+:::tip
+If you prefer not having to build a wallet connection UI from scratch, checkout [DOT Connect](https://dotconnect.dev/) for a quick and easy way to add a great wallet experience to your DApps.
+:::
+
+## Install optional dependencies
+
+Additional dependencies are required if you use any of be bellow wallet type.
+
+### [WalletConnect](https://walletconnect.com/)
+
+```bash npm2yarn
+npm install @reactive-dot/wallet-walletconnect
+```
+
+### [Ledger](https://www.ledger.com/)
+
+```bash npm2yarn
+npm install @reactive-dot/wallet-ledger
+```
+
+## Add wallets to the config
+
+```ts title="config.ts"
+import { defineConfig } from "@reactive-dot/core";
+import { InjectedWalletProvider } from "@reactive-dot/core/wallets.js";
+import { LedgerWallet } from "@reactive-dot/wallet-ledger";
+import { WalletConnect } from "@reactive-dot/wallet-walletconnect";
+
+export const config = defineConfig({
+  // ...
+  wallets: [
+    new InjectedWalletProvider(),
+    new LedgerWalet(),
+    new WalletConnect({
+      projectId: "WALLET_CONNECT_PROJECT_ID",
+      providerOptions: {
+        metadata: {
+          name: "APP_NAME",
+          description: "APP_DESCRIPTION",
+          url: "APP_URL",
+          icons: ["APP_ICON"],
+        },
+      },
+      chainIds: [
+        // https://github.com/ChainAgnostic/CAIPs/blob/main/CAIPs/caip-13.md
+        "polkadot:91b171bb158e2d3848fa23a9f1c25182", // Polkadot
+        // ...
+      ],
+    }),
+  ],
+});
+```
+
+## Connect to wallets
+
+```vue title="wallets.tsx"
+<script setup lang="ts">
+import {
+  useConnectedWallets,
+  useWallets,
+  useWalletConnector,
+  useWalletDisconnector,
+} from "@reactive-dot/vue";
+
+const { data: wallets } = await useWallets();
+const { data: connectedWallets } = await useConnectedWallets();
+
+const { execute: connectWallet } = useWalletConnector();
+const { execute: disconnectWallet } = useWalletDisconnector();
+</script>
+
+<template>
+  <section>
+    <header>
+      <h3>Wallet connection</h3>
+    </header>
+    <article>
+      <h4>Wallets</h4>
+      <ul>
+        <li v-for="wallet in wallets" :key="wallet.id">
+          <div>{{ wallet.name }}</div>
+          <div>
+            <button
+              v-if="connectedWallets.includes(wallet)"
+              @click="disconnectWallet(wallet)"
+            >
+              Disconnect
+            </button>
+            <button v-else @click="connectWallet(wallet)">Connect</button>
+          </div>
+        </li>
+      </ul>
+    </article>
+  </section>
+</template>
+```
+
+## Display available accounts
+
+```vue title="accounts.tsx"
+<script setup lang="ts">
+import { useAccounts } from "@reactive-dot/vue";
+
+const accounts = await useAccounts();
+</script>
+
+<template>
+  <section>
+    <header>
+      <h3>Accounts</h3>
+    </header>
+    <ul>
+      <li v-for="(account, index) in accounts" :key="index">
+        <div>{{ account.address }}</div>
+        <div>{{ account.name }}</div>
+      </li>
+    </ul>
+  </section>
+</template>
+```

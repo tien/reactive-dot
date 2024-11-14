@@ -22,7 +22,40 @@ const config: Config = {
     locales: ["en"],
   },
 
+  presets: [
+    [
+      "classic",
+      {
+        docs: {
+          path: "react",
+          routeBasePath: "react",
+          sidebarPath: "./sidebars.ts",
+          editUrl: "https://github.com/tien/reactive-dot/tree/main/apps/docs",
+          remarkPlugins: [
+            [require("@docusaurus/remark-plugin-npm2yarn"), { sync: true }],
+          ],
+        },
+        theme: {
+          customCss: "./src/css/custom.css",
+        },
+      } satisfies Preset.Options,
+    ],
+  ],
+
   plugins: [
+    [
+      "@docusaurus/plugin-content-docs",
+      {
+        id: "vue",
+        path: "vue",
+        routeBasePath: "vue",
+        sidebarPath: "./sidebars.ts",
+        editUrl: "https://github.com/tien/reactive-dot/tree/main/apps/docs",
+        remarkPlugins: [
+          [require("@docusaurus/remark-plugin-npm2yarn"), { sync: true }],
+        ],
+      },
+    ],
     [
       "typedoc-api",
       {
@@ -44,24 +77,6 @@ const config: Config = {
     ],
   ],
 
-  presets: [
-    [
-      "classic",
-      {
-        docs: {
-          sidebarPath: "./sidebars.ts",
-          editUrl: "https://github.com/tien/reactive-dot/tree/main/apps/docs",
-          remarkPlugins: [
-            [require("@docusaurus/remark-plugin-npm2yarn"), { sync: true }],
-          ],
-        },
-        theme: {
-          customCss: "./src/css/custom.css",
-        },
-      } satisfies Preset.Options,
-    ],
-  ],
-
   themeConfig: {
     image: "img/social-card.png",
     navbar: {
@@ -75,7 +90,13 @@ const config: Config = {
         {
           type: "docSidebar",
           sidebarId: "docsSidebar",
-          label: "Docs",
+          label: "React",
+        },
+        {
+          type: "docSidebar",
+          sidebarId: "docsSidebar",
+          docsPluginId: "vue",
+          label: "Vue",
         },
         {
           to: "api",

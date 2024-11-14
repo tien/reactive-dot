@@ -1,0 +1,183 @@
+---
+sidebar_position: 1
+---
+
+import Admonition from "@theme/Admonition";
+import TabItem from "@theme/TabItem";
+import Tabs from "@theme/Tabs";
+
+# Setup
+
+This walks you through the process of creating a simple ReactiveDOT application.
+
+<Admonition type="warning" icon="🚧" title="Work-in-progress">
+  This project is under active development, and the API may change at any time.
+</Admonition>
+
+## Installation
+
+First add ReactiveDOT, along with required packages as dependencies to your Vue project.
+
+```bash npm2yarn
+npm install @reactive-dot/vue polkadot-api
+```
+
+## Download & sync metadata
+
+Next, download the latest metadata from the chain you want to connect to and generate the types.
+
+```sh
+# `papi add` is the command
+# `dot` is the name we're giving to this chain (can be any JS variable name)
+# `-n polkadot` specifies to download the metadata from the well-known chain polkadot
+npx papi add dot -n polkadot
+# Wait for the latest metadata to download, then generate the types:
+npx papi
+```
+
+:::info
+
+For more information on metadata syncing and type generation, please refer to this [documentation](https://papi.how/codegen) provided by [Polkadot-API](https://papi.how/).
+
+:::
+
+## Create config
+
+{/* prettier-ignore-start */}
+
+<Tabs>
+  <TabItem value="light-client" label="Light client" default>
+
+{/* prettier-ignore-end */}
+
+```ts title="config.ts"
+// `dot` is the name we gave to `npx papi add`
+import { dot } from "@polkadot-api/descriptors";
+import { defineConfig } from "@reactive-dot/core";
+import { InjectedWalletProvider } from "@reactive-dot/core/wallets.js";
+import { chainSpec } from "polkadot-api/chains/polkadot";
+import { getSmProvider } from "polkadot-api/sm-provider";
+import { startFromWorker } from "polkadot-api/smoldot/from-worker";
+
+const smoldot = startFromWorker(
+  new Worker(new URL("polkadot-api/smoldot/worker", import.meta.url), {
+    type: "module",
+  }),
+);
+
+export const config = defineConfig({
+  chains: {
+    // "polkadot" here can be any unique string value
+    polkadot: {
+      descriptor: dot,
+      provider: getSmProvider(smoldot.addChain({ chainSpec })),
+    },
+  },
+  wallets: [new InjectedWalletProvider()],
+});
+```
+
+{/* prettier-ignore-start */}
+
+  </TabItem>
+  <TabItem value="ws" label="WebSocket">
+
+{/* prettier-ignore-end */}
+
+```ts title="config.ts"
+import { dot } from "@polkadot-api/descriptors";
+import { getWsProvider } from "@polkadot-api/ws-provider/web";
+import { defineConfig } from "@reactive-dot/core";
+import { InjectedWalletProvider } from "@reactive-dot/core/wallets.js";
+
+export const config = defineConfig({
+  chains: {
+    polkadot: {
+      descriptor: dot,
+      provider: getWsProvider("wss://polkadot-rpc.publicnode.com"),
+    },
+  },
+  wallets: [new InjectedWalletProvider()],
+});
+```
+
+{/* prettier-ignore-start */}
+
+  </TabItem>
+</Tabs>
+
+{/* prettier-ignore-end */}
+
+## Add type information
+
+The type declarations extension here will be used to provide you with the right type definitions when using composables.
+
+```ts title="reactive-dot.d.ts"
+import type { config } from "./config.js";
+
+declare module "@reactive-dot/core" {
+  export interface Register {
+    config: typeof config;
+  }
+}
+```
+
+## Install the plugin
+
+```tsx title="index.ts"
+import App from "./app.vue";
+import { config } from "./config.js";
+import { ReactiveDotPlugin } from "@reactive-dot/vue";
+import { createApp } from "vue";
+
+createApp(App).use(ReactiveDotPlugin, config).mount("#root");
+```
+
+## Provide the target chain ID
+
+```vue title="app.vue"
+<script setup lang="ts">
+import MyComponent from "./my-component.vue";
+import { provideChain } from "@reactive-dot/vue";
+
+provideChain("polkadot");
+</script>
+
+<template>
+  <!-- Make sure there is at least one Suspense boundary wrapping the app -->
+  <Suspense><!-- ... --></Suspense>
+</template>
+```
+
+## Use ReactiveDOT
+
+```vue title="my-component.vue"
+<script setup lang="ts">
+import { useQuery, useAccounts } from "@reactive-dot/vue";
+
+const { data: accounts } = await useAccounts();
+const { data: queryResult } = await useQuery((builder) =>
+  builder
+    .readStorage("Timestamp", "Now", [])
+    .readStorage("Balances", "TotalIssuance", []),
+);
+</script>
+
+<template>
+  <div>
+    <ul>
+      <li v-for="account in accounts" :key="account.address">
+        <div>Address: {{ account.address }}</div>
+        <div v-if="account.name !== undefined">Name: {{ account.name }}</div>
+      </li>
+    </ul>
+    <section>
+      <div>
+        Latest block timestamp:
+        {{ new Date(Number(queryResult[0])).toLocaleString() }}
+      </div>
+      <div>Total issuance: {{ queryResult[1].toString() }}</div>
+    </section>
+  </div>
+</template>
+```
