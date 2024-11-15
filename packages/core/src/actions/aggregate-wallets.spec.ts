@@ -54,9 +54,10 @@ it("only aggregate once", async () => {
     new MockProvider(),
   ];
 
-  const firstRunWallets = await aggregateWallets(walletsAndProviders);
-
-  const secondRunWallets = await aggregateWallets(walletsAndProviders);
+  const [firstRunWallets, secondRunWallets] = await Promise.all([
+    aggregateWallets(walletsAndProviders),
+    aggregateWallets(walletsAndProviders),
+  ]);
 
   expect(firstRunWallets).toHaveLength(secondRunWallets.length);
 
