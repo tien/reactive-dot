@@ -1,5 +1,13 @@
 # @reactive-dot/core
 
+## 0.26.1
+
+### Patch Changes
+
+- [#339](https://github.com/tien/reactive-dot/pull/339) [`a638b48`](https://github.com/tien/reactive-dot/commit/a638b48e595f5dd6d87141f12f62616b507f3ed8) Thanks [@tien](https://github.com/tien)! - Refactored wallet aggregation logic.
+
+- [#337](https://github.com/tien/reactive-dot/pull/337) [`e5c37d0`](https://github.com/tien/reactive-dot/commit/e5c37d04fbdf5515c09f65875c4f8f6c6c1c5f01) Thanks [@tien](https://github.com/tien)! - Moved `initializeWallets` function to top-level exports.
+
 ## 0.26.0
 
 ### Minor Changes
