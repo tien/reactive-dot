@@ -1,5 +1,11 @@
 # @reactive-dot/core
 
+## 0.26.2
+
+### Patch Changes
+
+- [#346](https://github.com/tien/reactive-dot/pull/346) [`a3da0de`](https://github.com/tien/reactive-dot/commit/a3da0de4207499ff6e766f7affd08d086803a897) Thanks [@tien](https://github.com/tien)! - Fixed wallet aggregation bug when aggregation happens asynchronously.
+
 ## 0.26.1
 
 ### Patch Changes
