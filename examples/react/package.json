@@ -16,7 +16,7 @@
     "@reactive-dot/wallet-walletconnect": "workspace:^",
     "date-fns": "^4.1.0",
     "jotai-devtools": "^0.10.1",
-    "polkadot-api": "^1.7.3",
+    "polkadot-api": "^1.7.4",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
     "react-error-boundary": "^4.1.1",
