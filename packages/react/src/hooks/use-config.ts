@@ -1,4 +1,4 @@
-import { ConfigContext } from "../contexts/index.js";
+import { ConfigContext } from "../contexts/config.js";
 import { ReactiveDotError } from "@reactive-dot/core";
 import { useContext } from "react";
 
