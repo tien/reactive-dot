@@ -26,8 +26,9 @@
   "exports": {
     ".": "./build/index.js",
     "./wallets.js": "./build/wallets/index.js",
-    "./internal/maths.js": "./build/maths/index.js",
-    "./internal.js": "./build/internal.js"
+    "./internal.js": "./build/internal.js",
+    "./internal/actions.js": "./build/actions/index.js",
+    "./internal/maths.js": "./build/maths/index.js"
   },
   "scripts": {
     "dev": "tsc --build --watch",
