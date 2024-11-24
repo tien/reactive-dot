@@ -6,7 +6,7 @@ import { WalletConnect } from "@reactive-dot/wallet-walletconnect";
 import { getSmProvider } from "polkadot-api/sm-provider";
 import { startFromWorker } from "polkadot-api/smoldot/from-worker";
 
-const smoldotPromise = startFromWorker(
+const smoldot = startFromWorker(
   new Worker(new URL("polkadot-api/smoldot/worker", import.meta.url), {
     type: "module",
   }),
@@ -18,7 +18,7 @@ export const config = defineConfig({
       descriptor: polkadot,
       provider: getSmProvider(
         import("polkadot-api/chains/polkadot").then(({ chainSpec }) =>
-          smoldotPromise.addChain({ chainSpec }),
+          smoldot.addChain({ chainSpec }),
         ),
       ),
     },
@@ -26,7 +26,7 @@ export const config = defineConfig({
       descriptor: kusama,
       provider: getSmProvider(
         import("polkadot-api/chains/ksmcc3").then(({ chainSpec }) =>
-          smoldotPromise.addChain({ chainSpec }),
+          smoldot.addChain({ chainSpec }),
         ),
       ),
     },
@@ -34,7 +34,7 @@ export const config = defineConfig({
       descriptor: westend,
       provider: getSmProvider(
         import("polkadot-api/chains/westend2").then(({ chainSpec }) =>
-          smoldotPromise.addChain({ chainSpec }),
+          smoldot.addChain({ chainSpec }),
         ),
       ),
     },
