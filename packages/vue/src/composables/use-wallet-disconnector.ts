@@ -1,6 +1,6 @@
 import { useAsyncAction } from "./use-async-action.js";
 import { useConnectedWalletsObservable } from "./use-wallets.js";
-import { disconnectWallet } from "@reactive-dot/core";
+import { disconnectWallet } from "@reactive-dot/core/internal/actions.js";
 import type { Wallet } from "@reactive-dot/core/wallets.js";
 import { firstValueFrom } from "rxjs";
 

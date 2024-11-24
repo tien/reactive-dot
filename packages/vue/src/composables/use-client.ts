@@ -3,7 +3,7 @@ import { useAsyncData } from "./use-async-data.js";
 import { internal_useChainId } from "./use-chain-id.js";
 import { useChainConfig } from "./use-config.js";
 import { useLazyValue } from "./use-lazy-value.js";
-import { getClient } from "@reactive-dot/core";
+import { getClient } from "@reactive-dot/core/internal/actions.js";
 import { computed, toValue } from "vue";
 
 /**
