@@ -6,6 +6,14 @@
       "chain": "polkadot",
       "metadata": ".papi/metadata/polkadot.scale"
     },
+    "polkadot_asset_hub": {
+      "chain": "polkadot_asset_hub",
+      "metadata": ".papi/metadata/polkadot_asset_hub.scale"
+    },
+    "polkadot_people": {
+      "chain": "polkadot_people",
+      "metadata": ".papi/metadata/polkadot_people.scale"
+    },
     "kusama": {
       "chain": "ksmcc3",
       "metadata": ".papi/metadata/kusama.scale"

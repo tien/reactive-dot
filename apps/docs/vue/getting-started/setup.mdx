@@ -54,23 +54,17 @@ For more information on metadata syncing and type generation, please refer to th
 // `dot` is the name we gave to `npx papi add`
 import { dot } from "@polkadot-api/descriptors";
 import { defineConfig } from "@reactive-dot/core";
+import { createLightClientProvider } from "@reactive-dot/core/providers/light-client.js";
 import { InjectedWalletProvider } from "@reactive-dot/core/wallets.js";
-import { chainSpec } from "polkadot-api/chains/polkadot";
-import { getSmProvider } from "polkadot-api/sm-provider";
-import { startFromWorker } from "polkadot-api/smoldot/from-worker";
 
-const smoldot = startFromWorker(
-  new Worker(new URL("polkadot-api/smoldot/worker", import.meta.url), {
-    type: "module",
-  }),
-);
+const lightClientProvider = createLightClientProvider();
 
 export const config = defineConfig({
   chains: {
     // "polkadot" here can be any unique string value
     polkadot: {
       descriptor: dot,
-      provider: getSmProvider(smoldot.addChain({ chainSpec })),
+      provider: lightClientProvider.addRelayChain({ id: "polkadot" }),
     },
   },
   wallets: [new InjectedWalletProvider()],
