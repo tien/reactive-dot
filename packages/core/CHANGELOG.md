@@ -1,5 +1,11 @@
 # @reactive-dot/core
 
+## 0.27.0
+
+### Minor Changes
+
+- [#368](https://github.com/tien/reactive-dot/pull/368) [`f1d984f`](https://github.com/tien/reactive-dot/commit/f1d984f0347de0928e09ab9b99a9989586031d52) Thanks [@tien](https://github.com/tien)! - Added SubstrateConnect integration.
+
 ## 0.26.2
 
 ### Patch Changes
