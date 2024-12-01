@@ -25,6 +25,7 @@
   ],
   "exports": {
     ".": "./build/index.js",
+    "./providers/light-client.js": "./build/providers/light-client/index.js",
     "./wallets.js": "./build/wallets/index.js",
     "./internal/maths.js": "./build/maths/index.js",
     "./internal.js": "./build/internal.js"
@@ -36,7 +37,8 @@
     "test": "vitest run"
   },
   "dependencies": {
-    "@reactive-dot/utils": "workspace:^"
+    "@reactive-dot/utils": "workspace:^",
+    "@substrate/smoldot-discovery": "^2.0.1"
   },
   "devDependencies": {
     "@reactive-dot/eslint-config": "workspace:^",

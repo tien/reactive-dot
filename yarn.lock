@@ -4771,6 +4771,7 @@ __metadata:
   dependencies:
     "@reactive-dot/eslint-config": "workspace:^"
     "@reactive-dot/utils": "workspace:^"
+    "@substrate/smoldot-discovery": "npm:^2.0.1"
     "@tsconfig/recommended": "npm:^1.0.8"
     "@tsconfig/strictest": "npm:^2.0.5"
     eslint: "npm:^9.16.0"
@@ -5452,6 +5453,22 @@ __metadata:
     "@stablelib/random": "npm:^1.0.2"
     "@stablelib/wipe": "npm:^1.0.1"
   checksum: 10c0/d8afe8a120923a434359d7d1c6759780426fed117a84a6c0f84d1a4878834cb4c2d7da78a1fa7cf227ce3924fdc300cd6ed6e46cf2508bf17b1545c319ab8418
+  languageName: node
+  linkType: hard
+
+"@substrate/discovery@npm:^0.2.1":
+  version: 0.2.1
+  resolution: "@substrate/discovery@npm:0.2.1"
+  checksum: 10c0/91b101d7cde80a29dfb38fb4b22d92559d1f49f1c6141896f715dab1169f9ee03ce6e8e493c01705cad73d4d82f07b5e6c26d7e5bfea3f9912e2cb7b070b7252
+  languageName: node
+  linkType: hard
+
+"@substrate/smoldot-discovery@npm:^2.0.1":
+  version: 2.0.1
+  resolution: "@substrate/smoldot-discovery@npm:2.0.1"
+  dependencies:
+    "@substrate/discovery": "npm:^0.2.1"
+  checksum: 10c0/81ef9af7d7398b7b53a28487054636d26b65ae3804c6d3465e488248629d94e9c9ded09a0f5c2a3b72ff6feef4efb8409df8c94b79b2adb0028360e69c7b71da
   languageName: node
   linkType: hard
 
