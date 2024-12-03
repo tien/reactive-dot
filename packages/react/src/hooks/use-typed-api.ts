@@ -1,16 +1,13 @@
+import { DANGEROUS_ApiContext } from "../contexts/chain.js";
 import { atomFamilyWithErrorCatcher } from "../utils/jotai.js";
 import type { ChainHookOptions } from "./types.js";
-import { internal_useChainId } from "./use-chain-id.js";
-import { clientAtom } from "./use-client.js";
-import { useConfig } from "./use-config.js";
-import {
-  ReactiveDotError,
-  type ChainId,
-  type Config,
-} from "@reactive-dot/core";
+import { useClient } from "./use-client.js";
+import { useDescriptor } from "./use-descriptor.js";
+import { type ChainId } from "@reactive-dot/core";
 import type { ChainDescriptorOf } from "@reactive-dot/core/internal.js";
 import { atom, useAtomValue } from "jotai";
-import type { TypedApi } from "polkadot-api";
+import type { ChainDefinition, PolkadotClient, TypedApi } from "polkadot-api";
+import { useContext } from "react";
 
 /**
  * Hook for getting Polkadot-API typed API.
@@ -21,11 +18,15 @@ import type { TypedApi } from "polkadot-api";
 export function useTypedApi<TChainId extends ChainId | undefined>(
   options?: ChainHookOptions<TChainId>,
 ) {
+  const client = useClient(options);
+  const descriptor = useDescriptor(options);
+
+  const dangerousApi = useContext(DANGEROUS_ApiContext);
+
   return useAtomValue(
-    typedApiAtom({
-      config: useConfig(),
-      chainId: internal_useChainId(options),
-    }),
+    dangerousApi !== undefined
+      ? atom(dangerousApi)
+      : typedApiAtom({ client, descriptor }),
   ) as TypedApi<ChainDescriptorOf<TChainId>>;
 }
 
@@ -33,19 +34,14 @@ export function useTypedApi<TChainId extends ChainId | undefined>(
  * @internal
  */
 export const typedApiAtom = atomFamilyWithErrorCatcher(
-  (param: { config: Config; chainId: ChainId }, withErrorCatcher) =>
-    withErrorCatcher(atom)(async (get) => {
-      const config = param.config.chains[param.chainId];
-
-      if (config === undefined) {
-        throw new ReactiveDotError(
-          `No config provided for chain ${param.chainId}`,
-        );
-      }
-
-      const client = await get(clientAtom(param));
-
-      return client.getTypedApi(config.descriptor);
-    }),
-  (a, b) => a.config === b.config && a.chainId === b.chainId,
+  (
+    param: { client: PolkadotClient; descriptor: ChainDefinition | undefined },
+    withErrorCatcher,
+  ) =>
+    withErrorCatcher(atom)(() =>
+      param.descriptor === undefined
+        ? (param.client.getUnsafeApi() as unknown as TypedApi<ChainDefinition>)
+        : param.client.getTypedApi(param.descriptor),
+    ),
+  (a, b) => a.client === b.client && a.descriptor === b.descriptor,
 );
