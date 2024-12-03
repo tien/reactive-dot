@@ -1,5 +1,11 @@
 # @reactive-dot/core
 
+## 0.27.1
+
+### Patch Changes
+
+- [#382](https://github.com/tien/reactive-dot/pull/382) [`aeef030`](https://github.com/tien/reactive-dot/commit/aeef0303347668d7c53de3373f581b95a723fb17) Thanks [@tien](https://github.com/tien)! - Fixed PJS wallet detection, this is a workaround for the following [issue](https://github.com/polkadot-js/extension/issues/1475).
+
 ## 0.27.0
 
 ### Minor Changes
