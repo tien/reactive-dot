@@ -28,8 +28,9 @@ function App() {
 
 ```tsx
 import { useAccounts, useMutation } from "@reactive-dot/react";
+import { use } from "react";
 
-const accounts = useAccounts();
+const accounts = use(useAccounts());
 
 const [claimState, claim] = useMutation(
   (tx) => tx.NominationPools.claim_payout(),
@@ -41,8 +42,9 @@ const [claimState, claim] = useMutation(
 
 ```tsx
 import { useAccounts, useMutation } from "@reactive-dot/react";
+import { use } from "react";
 
-const accounts = useAccounts();
+const accounts = use(useAccounts());
 
 const [clearIdentityState, clearIdentity] = useMutation((tx) =>
   tx.Identity.clear_identity(),

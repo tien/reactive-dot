@@ -5,8 +5,9 @@ import { chainSpecDataAtom } from "./use-chain-spec-data.js";
 import { useConfig } from "./use-config.js";
 import { connectedWalletsAtom } from "./use-wallets.js";
 import { getAccounts, type ChainId, type Config } from "@reactive-dot/core";
-import { useAtomValue } from "jotai";
+import { useAtomValue } from "jotai-suspense";
 import { atomWithObservable } from "jotai/utils";
+import { useMemo } from "react";
 
 /**
  * Hook for getting currently connected accounts.
@@ -15,12 +16,14 @@ import { atomWithObservable } from "jotai/utils";
  * @returns The currently connected accounts
  */
 export function useAccounts(options?: ChainHookOptions) {
-  return useAtomValue(
+  const accounts = useAtomValue(
     accountsAtom({
       config: useConfig(),
       chainId: internal_useChainId({ ...options, optionalChainId: true }),
     }),
   );
+
+  return useMemo(() => Promise.resolve(accounts), [accounts]);
 }
 
 /**

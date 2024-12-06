@@ -5,8 +5,10 @@ import {
   type Config,
   getConnectedWallets,
 } from "@reactive-dot/core";
-import { atom, useAtomValue } from "jotai";
+import { atom } from "jotai";
+import { useAtomValue } from "jotai-suspense";
 import { atomWithObservable } from "jotai/utils";
+import { useMemo } from "react";
 
 /**
  * Hook for getting all available wallets.
@@ -23,7 +25,9 @@ export function useWallets() {
  * @returns Connected wallets
  */
 export function useConnectedWallets() {
-  return useAtomValue(connectedWalletsAtom(useConfig()));
+  const connectedWallets = useAtomValue(connectedWalletsAtom(useConfig()));
+
+  return useMemo(() => Promise.resolve(connectedWallets), [connectedWallets]);
 }
 
 /**

@@ -9,7 +9,8 @@ import {
   type Config,
 } from "@reactive-dot/core";
 import type { ChainDescriptorOf } from "@reactive-dot/core/internal.js";
-import { atom, useAtomValue } from "jotai";
+import { atom } from "jotai";
+import { useAtomValue } from "jotai-suspense";
 import type { TypedApi } from "polkadot-api";
 
 /**
@@ -26,7 +27,7 @@ export function useTypedApi<TChainId extends ChainId | undefined>(
       config: useConfig(),
       chainId: internal_useChainId(options),
     }),
-  ) as TypedApi<ChainDescriptorOf<TChainId>>;
+  ) as Promise<TypedApi<ChainDescriptorOf<TChainId>>>;
 }
 
 /**

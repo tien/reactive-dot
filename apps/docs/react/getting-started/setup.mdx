@@ -139,14 +139,17 @@ export function App() {
 
 ```tsx title="my-component.tsx"
 import { config } from "./config";
-import { useAccounts, useLazyLoadQuery } from "@reactive-dot/react";
+import { useAccounts, useQuery } from "@reactive-dot/react";
+import { use } from "react";
 
 export function MyComponent() {
-  const accounts = useAccounts();
-  const [timestamp, totalIssuance] = useLazyLoadQuery((builder) =>
-    builder
-      .readStorage("Timestamp", "Now", [])
-      .readStorage("Balances", "TotalIssuance", []),
+  const accounts = use(useAccounts());
+  const [timestamp, totalIssuance] = use(
+    useQuery((builder) =>
+      builder
+        .readStorage("Timestamp", "Now", [])
+        .readStorage("Balances", "TotalIssuance", []),
+    ),
   );
 
   return (

@@ -5,12 +5,12 @@ import {
   useMutation,
 } from "@reactive-dot/react";
 import { Binary } from "polkadot-api";
-import { useState } from "react";
+import { useState, use } from "react";
 
 export function Mutation() {
   const connectedWallets = useConnectedWallets();
 
-  const accounts = useAccounts();
+  const accounts = use(useAccounts());
   const [selectedAccountIndex, setSelectedAccountIndex] = useState(0);
   const selectedAccount =
     selectedAccountIndex === undefined

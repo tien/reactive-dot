@@ -71,10 +71,11 @@ import {
   useWalletConnector,
   useWalletDisconnector,
 } from "@reactive-dot/react";
+import { use } from "react";
 
 export function Wallets() {
-  const wallets = useWallets();
-  const connectedWallets = useConnectedWallets();
+  const wallets = use(useWallets());
+  const connectedWallets = use(useConnectedWallets());
 
   const [_, connectWallet] = useWalletConnector();
   const [__, disconnectWallet] = useWalletDisconnector();
@@ -112,9 +113,10 @@ export function Wallets() {
 
 ```tsx title="accounts.tsx"
 import { useAccounts } from "@reactive-dot/react";
+import { use } from "react";
 
 export function Accounts() {
-  const accounts = useAccounts();
+  const accounts = use(useAccounts());
 
   return (
     <section>

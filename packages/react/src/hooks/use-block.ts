@@ -4,8 +4,9 @@ import { internal_useChainId } from "./use-chain-id.js";
 import { clientAtom } from "./use-client.js";
 import { useConfig } from "./use-config.js";
 import { type ChainId, type Config, getBlock } from "@reactive-dot/core";
-import { useAtomValue } from "jotai";
+import { useAtomValue } from "jotai-suspense";
 import { atomWithObservable } from "jotai/utils";
+import { useMemo } from "react";
 import { from } from "rxjs";
 import { switchMap } from "rxjs/operators";
 
@@ -23,11 +24,13 @@ export function useBlock(
   const config = useConfig();
   const chainId = internal_useChainId(options);
 
-  return useAtomValue(
+  const blockValue = useAtomValue(
     tag === "finalized"
       ? finalizedBlockAtom({ config, chainId })
       : bestBlockAtom({ config, chainId }),
   );
+
+  return useMemo(() => Promise.resolve(blockValue), [blockValue]);
 }
 
 /**
