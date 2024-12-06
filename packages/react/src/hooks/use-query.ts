@@ -25,7 +25,7 @@ import {
 } from "@reactive-dot/core/internal.js";
 import { type Atom, atom, useAtomValue, type WritableAtom } from "jotai";
 import { atomWithObservable, atomWithRefresh } from "jotai/utils";
-import { useMemo } from "react";
+import { useMemo, version as reactVersion } from "react";
 import { from, type Observable } from "rxjs";
 import { switchMap } from "rxjs/operators";
 
@@ -75,6 +75,8 @@ export function useLazyLoadQuery<
       // eslint-disable-next-line react-hooks/exhaustive-deps
       [hashKey],
     ),
+    // TODO: remove once https://github.com/pmndrs/jotai/issues/2847 is fixed
+    reactVersion.startsWith("19.") ? { delay: 0 } : undefined,
   );
 
   return useMemo(
