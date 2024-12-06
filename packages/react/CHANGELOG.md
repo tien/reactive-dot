@@ -1,5 +1,11 @@
 # @reactive-dot/react
 
+## 0.27.2
+
+### Patch Changes
+
+- [#385](https://github.com/tien/reactive-dot/pull/385) [`a7298be`](https://github.com/tien/reactive-dot/commit/a7298beac90c5c208bdb941417a24a990b95828d) Thanks [@tien](https://github.com/tien)! - Added React 19 support.
+
 ## 0.27.1
 
 ### Patch Changes
