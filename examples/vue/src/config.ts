@@ -38,6 +38,7 @@ export const config = defineConfig({
       provider: lightClientProvider.addRelayChain({ id: "westend" }),
     },
   },
+  targetChains: ["polkadot", "kusama", "westend"],
   wallets: [
     new InjectedWalletProvider({ originName: "ReactiveDOT React Example" }),
     new LedgerWallet(),
