@@ -1,4 +1,5 @@
 import { type Storage, defaultStorage } from "../storage.js";
+import type { MaybePromise } from "../types.js";
 import type { PolkadotSignerAccount } from "./account.js";
 import { firstValueFrom, type Observable } from "rxjs";
 
@@ -24,17 +25,17 @@ export abstract class Wallet<
     this.#storage = (options?.storage ?? defaultStorage).join("wallet");
   }
 
-  abstract initialize(): void | Promise<void>;
+  abstract initialize(): MaybePromise<void>;
 
   abstract readonly connected$: Observable<boolean>;
 
-  abstract connect(): void | Promise<void>;
+  abstract connect(): MaybePromise<void>;
 
-  abstract disconnect(): void | Promise<void>;
+  abstract disconnect(): MaybePromise<void>;
 
   abstract readonly accounts$: Observable<PolkadotSignerAccount[]>;
 
-  getAccounts(): PolkadotSignerAccount[] | Promise<PolkadotSignerAccount[]> {
+  getAccounts(): MaybePromise<PolkadotSignerAccount[]> {
     return firstValueFrom(this.accounts$, { defaultValue: [] });
   }
 }

@@ -1,3 +1,4 @@
+import type { MaybePromise } from "../types.js";
 import { Wallet, type WalletOptions } from "./wallet.js";
 
 type ConnectionHandshake = {
@@ -9,7 +10,5 @@ export abstract class DeepLinkWallet<
   TOptions extends WalletOptions = WalletOptions,
   TStorageKey extends string = string,
 > extends Wallet<TOptions, TStorageKey> {
-  abstract initiateConnectionHandshake():
-    | ConnectionHandshake
-    | Promise<ConnectionHandshake>;
+  abstract initiateConnectionHandshake(): MaybePromise<ConnectionHandshake>;
 }
