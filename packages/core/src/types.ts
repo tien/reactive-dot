@@ -9,10 +9,12 @@ export type FalsyGuard<
   TFalsyValues = Falsy,
 > = TType extends TFalsyValues ? TReturnType | TFallback : TReturnType;
 
+export type MaybePromise<T> = T | Promise<T>;
+
+export type MaybeAsync<T> = T | Promise<T> | Observable<T>;
+
+export type Gettable<T> = MaybePromise<T> | (() => MaybePromise<T>);
+
 export type FlatHead<TArray extends unknown[]> = TArray extends [infer Head]
   ? Head
   : TArray;
-
-export type Gettable<T> = T | PromiseLike<T> | (() => T | PromiseLike<T>);
-
-export type MaybeAsync<T> = T | Promise<T> | Observable<T>;

@@ -1,3 +1,4 @@
+import type { MaybePromise } from "../types.js";
 import type { PolkadotSignerAccount } from "./account.js";
 import { Wallet, type WalletOptions } from "./wallet.js";
 
@@ -13,12 +14,12 @@ export abstract class LocalWallet<
    * @experimental
    */
   abstract accountStore: {
-    add(account: TAccount): void | Promise<void>;
-    clear(): void | Promise<void>;
-    delete(account: { id: TAccount["id"] }): void | Promise<void>;
-    delete(accountId: TAccount["id"]): void | Promise<void>;
-    has(account: { id: TAccount["id"] }): boolean | Promise<boolean>;
-    has(accountId: TAccount["id"]): boolean | Promise<boolean>;
+    add(account: TAccount): MaybePromise<void>;
+    clear(): MaybePromise<void>;
+    delete(account: { id: TAccount["id"] }): MaybePromise<void>;
+    delete(accountId: TAccount["id"]): MaybePromise<void>;
+    has(account: { id: TAccount["id"] }): MaybePromise<boolean>;
+    has(accountId: TAccount["id"]): MaybePromise<boolean>;
     values(): Iterable<TAccount>;
   };
 }
