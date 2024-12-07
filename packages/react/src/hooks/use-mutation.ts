@@ -65,8 +65,9 @@ export function useMutation<
         (
           get,
           _set,
-          submitOptions?: TxOptions<ReturnType<TAction>> & {
+          submitOptions?: {
             signer?: PolkadotSigner;
+            txOptions?: TxOptions<ReturnType<TAction>>;
           },
         ) => {
           const signer =
@@ -87,7 +88,10 @@ export function useMutation<
               mutationEventSubject.next({ ...eventProps, value: pending });
 
               return transaction
-                .signSubmitAndWatch(signer, submitOptions ?? options?.txOptions)
+                .signSubmitAndWatch(
+                  signer,
+                  submitOptions?.txOptions ?? options?.txOptions,
+                )
                 .pipe(
                   tap((value) =>
                     mutationEventSubject.next({ ...eventProps, value }),
