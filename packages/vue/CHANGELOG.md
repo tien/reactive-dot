@@ -1,5 +1,11 @@
 # @reactive-dot/vue
 
+## 0.28.0
+
+### Minor Changes
+
+- [#390](https://github.com/tien/reactive-dot/pull/390) [`a723319`](https://github.com/tien/reactive-dot/commit/a7233193c59fab35c8682895d18c7e47fb3bd4f9) Thanks [@tien](https://github.com/tien)! - BREAKING: nested tx options to avoid possible property clash.
+
 ## 0.27.1
 
 ### Patch Changes

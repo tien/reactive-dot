@@ -1,5 +1,11 @@
 # @reactive-dot/react
 
+## 0.28.0
+
+### Minor Changes
+
+- [#387](https://github.com/tien/reactive-dot/pull/387) [`8ca10b3`](https://github.com/tien/reactive-dot/commit/8ca10b3f94b612a5d3ac1305d1674ff384e8d5a9) Thanks [@tien](https://github.com/tien)! - BREAKING: nested tx options to avoid possible property clash.
+
 ## 0.27.2
 
 ### Patch Changes
