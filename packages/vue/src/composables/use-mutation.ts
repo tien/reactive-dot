@@ -65,11 +65,10 @@ export function useMutation<
   );
 
   return useAsyncAction(
-    (
-      submitOptions?: TxOptions<ReturnType<TAction>> & {
-        signer: PolkadotSigner;
-      },
-    ) => {
+    (submitOptions?: {
+      signer: PolkadotSigner;
+      txOptions: TxOptions<ReturnType<TAction>>;
+    }) => {
       const signer =
         submitOptions?.signer ?? toValue(options?.signer) ?? injectedSigner;
 
@@ -94,7 +93,7 @@ export function useMutation<
           return transaction
             .signSubmitAndWatch(
               signer,
-              submitOptions ?? toValue(options?.txOptions),
+              submitOptions?.txOptions ?? toValue(options?.txOptions),
             )
             .pipe(
               tap(
