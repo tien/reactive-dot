@@ -111,9 +111,9 @@ All hooks provide an option to specify which chain to target.
 import { useBlock } from "@reactive-dot/react";
 
 function Component() {
-  const polkadotBlock = useBlock({ chainId: "polkadot" });
-  const kusamaBlock = useBlock({ chainId: "kusama" });
-  const westendBlock = useBlock({ chainId: "westend" });
+  const polkadotBlock = use(useBlock({ chainId: "polkadot" }));
+  const kusamaBlock = use(useBlock({ chainId: "kusama" }));
+  const westendBlock = use(useBlock({ chainId: "westend" }));
 }
 ```
 
@@ -126,8 +126,8 @@ function Component() {
   // Since the `Bounties` pallet doesn't exist on Westend, this will:
   // 1. Trigger a TypeScript error
   // 2. Cause a runtime error if Westend is selected
-  const bountyCount = useLazyLoadQuery((builder) =>
-    builder.readStorage("Bounties", "BountyCount", []),
+  const bountyCount = use(
+    useQuery((builder) => builder.readStorage("Bounties", "BountyCount", [])),
   );
 
   // ...
@@ -138,9 +138,10 @@ To resolve this, you can explicitly specify the chain to query, which will overr
 
 ```tsx
 function Component() {
-  const bountyCount = useLazyLoadQuery(
-    (builder) => builder.readStorage("Bounties", "BountyCount", []),
-    { chainId: "polkadot" },
+  const bountyCount = use(
+    useQuery((builder) => builder.readStorage("Bounties", "BountyCount", []), {
+      chainId: "polkadot",
+    }),
   );
 
   // ...
@@ -165,7 +166,7 @@ function useBountiesChainId() {
 }
 
 function BountiesPalletRequiredComponent() {
-  const bountyCount = useLazyLoadQuery(
+  const bountyCount = useQuery(
     (builder) => builder.readStorage("Bounties", "BountyCount", []),
     {
       // This will:

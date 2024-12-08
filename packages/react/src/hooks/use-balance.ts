@@ -1,6 +1,6 @@
 import type { ChainHookOptions } from "./types.js";
 import { useNativeTokenAmountFromPlanck } from "./use-native-token-amount.js";
-import { useLazyLoadQuery } from "./use-query.js";
+import { useQuery } from "./use-query.js";
 import { flatHead } from "@reactive-dot/core/internal.js";
 import { spendableBalance } from "@reactive-dot/core/internal/maths.js";
 import { type DenominatedNumber } from "@reactive-dot/utils";
@@ -34,7 +34,7 @@ type Options = ChainHookOptions & {
 export function useSpendableBalance(
   address: SS58String,
   options?: Options,
-): DenominatedNumber;
+): Promise<DenominatedNumber>;
 /**
  * Hook for getting accounts’ spendable balances.
  *
@@ -45,16 +45,16 @@ export function useSpendableBalance(
 export function useSpendableBalance(
   addresses: SS58String[],
   options?: Options,
-): DenominatedNumber[];
+): Promise<DenominatedNumber[]>;
 export function useSpendableBalance(
   addressOrAddresses: SS58String | SS58String[],
   { includesExistentialDeposit = false, ...options }: Options = {},
-): DenominatedNumber | DenominatedNumber[] {
+): Promise<DenominatedNumber | DenominatedNumber[]> {
   const addresses = Array.isArray(addressOrAddresses)
     ? addressOrAddresses
     : [addressOrAddresses];
 
-  const [existentialDeposit, accounts] = useLazyLoadQuery(
+  const dataPromise = useQuery(
     (builder) =>
       builder.getConstant("Balances", "ExistentialDeposit").readStorages(
         "System",
@@ -62,30 +62,28 @@ export function useSpendableBalance(
         addresses.map((address) => [address] as const),
       ),
     options,
-  ) as [bigint, SystemAccount[]];
+  ) as Promise<[bigint, SystemAccount[]]>;
 
-  const nativeTokenFromPlanck = useNativeTokenAmountFromPlanck(options);
+  const nativeTokenFromPlanckPromise = useNativeTokenAmountFromPlanck(options);
 
   return useMemo(
     () =>
-      flatHead(
-        accounts.map(({ data: { free, reserved, frozen } }) =>
-          nativeTokenFromPlanck(
-            spendableBalance({
-              free,
-              reserved,
-              frozen,
-              existentialDeposit,
-              includesExistentialDeposit,
-            }),
+      Promise.all([dataPromise, nativeTokenFromPlanckPromise]).then(
+        ([[existentialDeposit, accounts], nativeTokenFromPlanck]) =>
+          flatHead(
+            accounts.map(({ data: { free, reserved, frozen } }) =>
+              nativeTokenFromPlanck(
+                spendableBalance({
+                  free,
+                  reserved,
+                  frozen,
+                  existentialDeposit,
+                  includesExistentialDeposit,
+                }),
+              ),
+            ),
           ),
-        ),
       ),
-    [
-      accounts,
-      existentialDeposit,
-      includesExistentialDeposit,
-      nativeTokenFromPlanck,
-    ],
+    [dataPromise, includesExistentialDeposit, nativeTokenFromPlanckPromise],
   );
 }

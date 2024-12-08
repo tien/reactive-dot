@@ -59,15 +59,15 @@ import {
   useNativeTokenAmountFromPlanck,
 } from "@reactive-dot/react";
 
-let amount = useNativeTokenAmountFromPlanck(10_000_000_000n);
+let amount = use(useNativeTokenAmountFromPlanck(10_000_000_000n));
 // Or
-amount = useNativeTokenAmountFromNumber(1);
+amount = use(useNativeTokenAmountFromNumber(1));
 
 console.log(amount.toLocaleString("en-NZ")); // DOT 1.00
 
 // Partial application is also supported by omitting the planck/number value.
 // Here, a conversion function will be returned instead.
-const amountFromPlanck = useNativeTokenAmountFromPlanck();
+const amountFromPlanck = use(useNativeTokenAmountFromPlanck());
 
 [10_000_000_000n, 20_000_000_000n, 30_000_000_000n]
   .map(amountFromPlanck)
@@ -85,15 +85,17 @@ The [`useSpendableBalance`](/api/react/function/useSpendableBalance) hook can be
 ```ts
 import { useSpendableBalance } from "@reactive-dot/react";
 
-const spendableBalance = useSpendableBalance(ACCOUNT_ADDRESS);
+const spendableBalance = use(useSpendableBalance(ACCOUNT_ADDRESS));
 
 console.log(spendableBalance.toLocaleString("en-NZ")); // DOT 10.00
 
-const spendableBalances = useSpendableBalance([
-  ACCOUNT_ADDRESS_1,
-  ACCOUNT_ADDRESS_2,
-  ACCOUNT_ADDRESS_3,
-]);
+const spendableBalances = use(
+  useSpendableBalance([
+    ACCOUNT_ADDRESS_1,
+    ACCOUNT_ADDRESS_2,
+    ACCOUNT_ADDRESS_3,
+  ]),
+);
 
 console.log(
   spendableBalances.map((balance) => balance.toLocaleString("en-NZ")),

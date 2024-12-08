@@ -1,6 +1,7 @@
 import type { ChainHookOptions } from "./types.js";
 import { useChainSpecData } from "./use-chain-spec-data.js";
 import { DenominatedNumber } from "@reactive-dot/utils";
+import { useMemo } from "react";
 
 /**
  * Hook for returning the native token amount from a planck value.
@@ -12,7 +13,7 @@ import { DenominatedNumber } from "@reactive-dot/utils";
 export function useNativeTokenAmountFromPlanck(
   planck: bigint | number | string,
   options?: ChainHookOptions,
-): DenominatedNumber;
+): Promise<DenominatedNumber>;
 /**
  * Hook for returning a function that converts planck value to native token amount.
  *
@@ -21,35 +22,41 @@ export function useNativeTokenAmountFromPlanck(
  */
 export function useNativeTokenAmountFromPlanck(
   options?: ChainHookOptions,
-): (planck: bigint | number | string) => DenominatedNumber;
+): Promise<(planck: bigint | number | string) => DenominatedNumber>;
 export function useNativeTokenAmountFromPlanck(
   planckOrOptions?: bigint | number | string | ChainHookOptions,
   maybeOptions?: ChainHookOptions,
-):
-  | DenominatedNumber
-  | ((planck: bigint | number | string) => DenominatedNumber) {
+): Promise<
+  DenominatedNumber | ((planck: bigint | number | string) => DenominatedNumber)
+> {
   const options =
     typeof planckOrOptions === "object" ? planckOrOptions : maybeOptions;
 
-  const chainSpecData = useChainSpecData(options);
+  const chainSpecDataPromise = useChainSpecData(options);
 
-  switch (typeof planckOrOptions) {
-    case "bigint":
-    case "number":
-    case "string":
-      return new DenominatedNumber(
-        planckOrOptions,
-        chainSpecData.properties.tokenDecimals,
-        chainSpecData.properties.tokenSymbol,
-      );
-    default:
-      return (planck: bigint | number | string) =>
-        new DenominatedNumber(
-          planck,
-          chainSpecData.properties.tokenDecimals,
-          chainSpecData.properties.tokenSymbol,
-        );
-  }
+  return useMemo(
+    () =>
+      chainSpecDataPromise.then((chainSpecData) => {
+        switch (typeof planckOrOptions) {
+          case "bigint":
+          case "number":
+          case "string":
+            return new DenominatedNumber(
+              planckOrOptions,
+              chainSpecData.properties.tokenDecimals,
+              chainSpecData.properties.tokenSymbol,
+            );
+          default:
+            return (planck: bigint | number | string) =>
+              new DenominatedNumber(
+                planck,
+                chainSpecData.properties.tokenDecimals,
+                chainSpecData.properties.tokenSymbol,
+              );
+        }
+      }),
+    [chainSpecDataPromise, planckOrOptions],
+  );
 }
 
 /**
@@ -62,7 +69,7 @@ export function useNativeTokenAmountFromPlanck(
 export function useNativeTokenAmountFromNumber(
   number: number | string,
   options?: ChainHookOptions,
-): DenominatedNumber;
+): Promise<DenominatedNumber>;
 /**
  * Hook for returning a function that converts number value to native token amount
  *
@@ -71,30 +78,36 @@ export function useNativeTokenAmountFromNumber(
  */
 export function useNativeTokenAmountFromNumber(
   options?: ChainHookOptions,
-): (number: number | string) => DenominatedNumber;
+): Promise<(number: number | string) => DenominatedNumber>;
 export function useNativeTokenAmountFromNumber(
   numberOrOptions?: number | string | ChainHookOptions,
   maybeOptions?: ChainHookOptions,
-): DenominatedNumber | ((planck: number) => DenominatedNumber) {
+): Promise<DenominatedNumber | ((planck: number) => DenominatedNumber)> {
   const options =
     typeof numberOrOptions === "object" ? numberOrOptions : maybeOptions;
 
-  const chainSpecData = useChainSpecData(options);
+  const chainSpecDataPromise = useChainSpecData(options);
 
-  switch (typeof numberOrOptions) {
-    case "number":
-    case "string":
-      return new DenominatedNumber(
-        numberOrOptions,
-        chainSpecData.properties.tokenDecimals,
-        chainSpecData.properties.tokenSymbol,
-      );
-    default:
-      return (number: number | string) =>
-        DenominatedNumber.fromNumber(
-          number,
-          chainSpecData.properties.tokenDecimals,
-          chainSpecData.properties.tokenSymbol,
-        );
-  }
+  return useMemo(
+    () =>
+      chainSpecDataPromise.then((chainSpecData) => {
+        switch (typeof numberOrOptions) {
+          case "number":
+          case "string":
+            return new DenominatedNumber(
+              numberOrOptions,
+              chainSpecData.properties.tokenDecimals,
+              chainSpecData.properties.tokenSymbol,
+            );
+          default:
+            return (number: number | string) =>
+              DenominatedNumber.fromNumber(
+                number,
+                chainSpecData.properties.tokenDecimals,
+                chainSpecData.properties.tokenSymbol,
+              );
+        }
+      }),
+    [chainSpecDataPromise, numberOrOptions],
+  );
 }

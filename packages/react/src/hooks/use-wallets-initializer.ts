@@ -1,4 +1,5 @@
-import { useWallets } from "./use-wallets.js";
+import { useConfig } from "./use-config.js";
+import { walletsAtom } from "./use-wallets.js";
 import {
   idle,
   initializeWallets,
@@ -6,6 +7,7 @@ import {
   type AsyncValue,
   type ReactiveDotError,
 } from "@reactive-dot/core";
+import { useAtomCallback } from "jotai/utils";
 import { useCallback, useState } from "react";
 
 /**
@@ -15,14 +17,19 @@ import { useCallback, useState } from "react";
  * @returns The initialization state and initialize function
  */
 export function useWalletsInitializer() {
-  const wallets = useWallets();
-
+  const config = useConfig();
   const [state, setState] = useState<AsyncValue<true, ReactiveDotError>>(idle);
 
-  const initialize = useCallback(async () => {
-    setState(pending);
-    initializeWallets(wallets);
-  }, [wallets]);
+  const initialize = useAtomCallback(
+    useCallback(
+      async (get) => {
+        setState(pending);
+        await initializeWallets(await get(walletsAtom(config)));
+        setState(true);
+      },
+      [config],
+    ),
+  );
 
   return [state, initialize] as [
     state: typeof state,

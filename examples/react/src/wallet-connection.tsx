@@ -6,9 +6,10 @@ import {
   useWalletDisconnector,
   useWallets,
 } from "@reactive-dot/react";
+import { use } from "react";
 
 export function WalletConnection() {
-  const wallets = useWallets();
+  const wallets = use(useWallets());
 
   return (
     <section>
@@ -32,7 +33,7 @@ type WalletItemProps = {
 };
 
 function WalletItem({ wallet }: WalletItemProps) {
-  const connectedWallets = useConnectedWallets();
+  const connectedWallets = use(useConnectedWallets());
 
   const [connectingState, connect] = useWalletConnector(wallet);
   const [disconnectingState, disconnect] = useWalletDisconnector(wallet);

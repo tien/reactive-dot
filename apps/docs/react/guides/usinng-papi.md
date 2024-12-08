@@ -12,9 +12,10 @@ ReactiveDOT is designed as a convenient layer over [PAPI](https://papi.how/) for
 
 ```ts
 import { useClient } from "@reactive-dot/react";
+import "react";
 
 function Component() {
-  const client = useClient();
+  const client = use(useClient());
 
   useEffect(() => {
     client._request<string>("system_version", []).then(console.log);
@@ -28,9 +29,10 @@ The `TypedApi` allows easy interaction with the runtime metadata, with a great d
 
 ```ts
 import { useTypedApi } from "@reactive-dot/react";
+import { use } from "react";
 
 function Component() {
-  const typedApi = useTypedApi();
+  const typedApi = use(useTypedApi());
 
   useEffect(() => {
     typedApi.event.Balances.Burned.watch(({ amount }) => amount > 10n ** 10n)

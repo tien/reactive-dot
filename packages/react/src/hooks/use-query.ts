@@ -23,7 +23,8 @@ import {
   type QueryInstruction,
   stringify,
 } from "@reactive-dot/core/internal.js";
-import { type Atom, atom, useAtomValue, type WritableAtom } from "jotai";
+import { type Atom, atom, type WritableAtom } from "jotai";
+import { useAtomValue } from "jotai-suspense";
 import { atomWithObservable, atomWithRefresh } from "jotai/utils";
 import { useMemo, version as reactVersion } from "react";
 import { from, type Observable } from "rxjs";
@@ -36,7 +37,7 @@ import { switchMap } from "rxjs/operators";
  * @param options - Additional options
  * @returns The data response
  */
-export function useLazyLoadQuery<
+export function useQuery<
   TChainId extends ChainId | undefined,
   TQuery extends
     | ((
@@ -79,19 +80,27 @@ export function useLazyLoadQuery<
     reactVersion.startsWith("19.") ? { delay: 0 } : undefined,
   );
 
-  return useMemo(
-    () =>
-      query && query.instructions.length === 1 ? flatHead(rawData) : rawData,
-    [query, rawData],
-  ) as TQuery extends Falsy
-    ? typeof idle
-    : FalsyGuard<
-        ReturnType<Exclude<TQuery, Falsy>>,
-        FlatHead<
-          InferQueryPayload<Exclude<ReturnType<Exclude<TQuery, Falsy>>, Falsy>>
-        >,
-        typeof idle
-      >;
+  return useMemo(() => {
+    if (rawData === idle) {
+      return Promise.resolve(rawData);
+    }
+
+    return rawData.then((data) =>
+      query && query.instructions.length === 1 ? flatHead(data) : data,
+    );
+  }, [query, rawData]) as Promise<
+    TQuery extends Falsy
+      ? typeof idle
+      : FalsyGuard<
+          ReturnType<Exclude<TQuery, Falsy>>,
+          FlatHead<
+            InferQueryPayload<
+              Exclude<ReturnType<Exclude<TQuery, Falsy>>, Falsy>
+            >
+          >,
+          typeof idle
+        >
+  >;
 }
 
 /**
@@ -101,7 +110,7 @@ export function useLazyLoadQuery<
  * @param options - Additional options
  * @returns The data response & a function to refresh it
  */
-export function useLazyLoadQueryWithRefresh<
+export function useQueryWithRefresh<
   TQuery extends
     | ((
         builder: Query<[], ChainDescriptorOf<TChainId>>,
@@ -114,7 +123,7 @@ export function useLazyLoadQueryWithRefresh<
     | Falsy,
   TChainId extends ChainId | undefined,
 >(builder: TQuery, options?: ChainHookOptions<TChainId>) {
-  const data = useLazyLoadQuery(builder, options);
+  const data = useQuery(builder, options);
   const refresh = useQueryRefresher(builder, options);
 
   return [data, refresh] as [data: typeof data, refresh: typeof refresh];
@@ -198,7 +207,7 @@ export const queryPayloadAtom = atomFamilyWithErrorCatcher(
   (
     param: { config: Config; chainId: ChainId; query: Query },
     withErrorCatcher,
-  ): Atom<unknown> =>
+  ) =>
     withErrorCatcher(atom)((get) => {
       const atoms = getQueryInstructionPayloadAtoms(
         param.config,

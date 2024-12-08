@@ -32,7 +32,8 @@
   },
   "dependencies": {
     "@reactive-dot/core": "workspace:^",
-    "jotai": "^2.10.3"
+    "jotai": "^2.10.3",
+    "jotai-suspense": "^0.4.0"
   },
   "devDependencies": {
     "@reactive-dot/eslint-config": "workspace:^",

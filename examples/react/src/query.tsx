@@ -2,16 +2,16 @@ import type { PolkadotAccount } from "@reactive-dot/core/wallets.js";
 import {
   useAccounts,
   useBlock,
-  useLazyLoadQuery,
-  useLazyLoadQueryWithRefresh,
+  useQuery,
+  useQueryWithRefresh,
   useNativeTokenAmountFromPlanck,
   useSpendableBalance,
 } from "@reactive-dot/react";
 import { formatDistance } from "date-fns";
-import { useTransition } from "react";
+import { use, useTransition } from "react";
 
 export function Query() {
-  const block = useBlock();
+  const block = use(useBlock());
 
   const [
     expectedBlockTime,
@@ -23,17 +23,19 @@ export function Query() {
     activeEra,
     totalValueLocked,
     poolMetadatum,
-  ] = useLazyLoadQuery((builder) =>
-    builder
-      .getConstant("Babe", "ExpectedBlockTime")
-      .getConstant("Babe", "EpochDuration")
-      .getConstant("Staking", "SessionsPerEra")
-      .getConstant("Staking", "BondingDuration")
-      .readStorage("Timestamp", "Now", [])
-      .readStorage("Balances", "TotalIssuance", [])
-      .readStorage("Staking", "ActiveEra", [])
-      .readStorage("NominationPools", "TotalValueLocked", [])
-      .readStorages("NominationPools", "Metadata", [[0], [1], [2], [3], [4]]),
+  ] = use(
+    useQuery((builder) =>
+      builder
+        .getConstant("Babe", "ExpectedBlockTime")
+        .getConstant("Babe", "EpochDuration")
+        .getConstant("Staking", "SessionsPerEra")
+        .getConstant("Staking", "BondingDuration")
+        .readStorage("Timestamp", "Now", [])
+        .readStorage("Balances", "TotalIssuance", [])
+        .readStorage("Staking", "ActiveEra", [])
+        .readStorage("NominationPools", "TotalValueLocked", [])
+        .readStorages("NominationPools", "Metadata", [[0], [1], [2], [3], [4]]),
+    ),
   );
 
   const bondingDurationMs =
@@ -42,7 +44,7 @@ export function Query() {
     sessionsPerEra *
     bondingDuration;
 
-  const totalStaked = useLazyLoadQuery((builder) =>
+  const totalStaked = useQuery((builder) =>
     activeEra === undefined
       ? undefined
       : builder.readStorage("Staking", "ErasTotalStake", [activeEra.index]),
@@ -65,7 +67,9 @@ export function Query() {
       </article>
       <article>
         <h4>Total issuance</h4>
-        <p>{useNativeTokenAmountFromPlanck(totalIssuance).toLocaleString()}</p>
+        <p>
+          {use(useNativeTokenAmountFromPlanck(totalIssuance)).toLocaleString()}
+        </p>
       </article>
       <article>
         <h4>Bonding duration</h4>
@@ -74,15 +78,19 @@ export function Query() {
       <article>
         <h4>Total value staked</h4>
         <p>
-          {useNativeTokenAmountFromPlanck(
-            typeof totalStaked === "bigint" ? totalStaked : 0n,
+          {use(
+            useNativeTokenAmountFromPlanck(
+              typeof totalStaked === "bigint" ? totalStaked : 0n,
+            ),
           ).toLocaleString()}
         </p>
       </article>
       <article>
         <h4>Total value locked in nomination Pools</h4>
         <p>
-          {useNativeTokenAmountFromPlanck(totalValueLocked).toLocaleString()}
+          {use(
+            useNativeTokenAmountFromPlanck(totalValueLocked),
+          ).toLocaleString()}
         </p>
       </article>
       <article>
@@ -99,7 +107,7 @@ export function Query() {
 }
 
 function SpendableBalances() {
-  const accounts = useAccounts();
+  const accounts = use(useAccounts());
 
   if (accounts.length === 0) {
     return (
@@ -133,16 +141,16 @@ function SpendableBalance({ account }: SpendableBalanceProps) {
   return (
     <li>
       {account.name ?? account.address}:{" "}
-      {useSpendableBalance(account.address).toLocaleString()}
+      {use(useSpendableBalance(account.address)).toLocaleString()}
     </li>
   );
 }
 
 function PendingPoolRewards() {
-  const accounts = useAccounts();
+  const accounts = use(useAccounts());
 
   const [isPending, startTransition] = useTransition();
-  const [pendingRewards, refreshPendingRewards] = useLazyLoadQueryWithRefresh(
+  const [pendingRewardsPromise, refreshPendingRewards] = useQueryWithRefresh(
     (builder) =>
       builder.callApis(
         "NominationPoolsApi",
@@ -150,6 +158,7 @@ function PendingPoolRewards() {
         accounts.map((account) => [account.address] as const),
       ),
   );
+  const pendingRewards = use(pendingRewardsPromise);
 
   if (accounts.length === 0) {
     return (
@@ -192,7 +201,7 @@ function PendingRewards({ account, rewards }: PendingRewardsProps) {
   return (
     <li>
       {account.name ?? account.address}:{" "}
-      {useNativeTokenAmountFromPlanck(rewards).toLocaleString()}
+      {use(useNativeTokenAmountFromPlanck(rewards)).toLocaleString()}
     </li>
   );
 }

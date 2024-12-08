@@ -4,16 +4,16 @@ sidebar_position: 2
 
 # Query
 
-The [`useLazyLoadQuery`](/api/react/function/useLazyLoadQuery) hook allow you to read any data from chain, while maintaining updates, concurrency, caching & deduplication behind the scene for you.
+The [`useQuery`](/api/react/function/useQuery) hook allow you to read any data from chain, while maintaining updates, concurrency, caching & deduplication behind the scene for you.
 
 ## Async handling
 
-[`useLazyLoadQuery`](/api/react/function/useLazyLoadQuery) utilize React's Suspense API for data fetching & error handling.
+[`useQuery`](/api/react/function/useQuery) utilize React's Suspense API for data fetching & error handling.
 
 ```tsx
 function ActiveEra() {
-  const activeEra = useLazyLoadQuery((builder) =>
-    builder.readStorage("Staking", "ActiveEra", []),
+  const activeEra = use(
+    useQuery((builder) => builder.readStorage("Staking", "ActiveEra", [])),
   );
 
   return <div>Active era: {activeEra}</div>;
@@ -32,16 +32,17 @@ function App() {
 
 ## Fetching multiple data
 
-Fetching multiple data can be done by chaining queries together, [`useLazyLoadQuery`](/api/react/function/useLazyLoadQuery) (with TypeScript) will automatically infer that you want to fetch multiple data concurrently & will return an array of data instead.
+Fetching multiple data can be done by chaining queries together, [`useQuery`](/api/react/function/useQuery) (with TypeScript) will automatically infer that you want to fetch multiple data concurrently & will return an array of data instead.
 
 ```tsx
 function MultiQuery() {
-  const [expectedBlockTime, epochDuration, proposalCount] = useLazyLoadQuery(
-    (builder) =>
+  const [expectedBlockTime, epochDuration, proposalCount] = use(
+    useQuery((builder) =>
       builder
         .getConstant("Babe", "ExpectedBlockTime")
         .getConstant("Babe", "EpochDuration")
         .readStorage("Treasury", "ProposalCount", []),
+    ),
   );
 
   return (
@@ -62,18 +63,20 @@ function MultiQuery() {
 Multiple queries of the same type can also be fetched using [`callApis`](/api/core/class/Query#callApis) & [`readStorages`](/api/core/class/Query#readStorages).
 
 ```tsx
-const [rewards, metadatum] = useLazyLoadQuery((builder) =>
-  builder
-    .callApis("NominationPoolsApi", "pending_rewards", [
-      [ADDRESS_1],
-      [ADDRESS_2],
-      [ADDRESS_3],
-    ])
-    .readStorages("NominationPools", "Metadata", [
-      [POOL_ID_1],
-      [POOL_ID_2],
-      [POOL_ID_3],
-    ]),
+const [rewards, metadatum] = use(
+  useQuery((builder) =>
+    builder
+      .callApis("NominationPoolsApi", "pending_rewards", [
+        [ADDRESS_1],
+        [ADDRESS_2],
+        [ADDRESS_3],
+      ])
+      .readStorages("NominationPools", "Metadata", [
+        [POOL_ID_1],
+        [POOL_ID_2],
+        [POOL_ID_3],
+      ]),
+  ),
 );
 ```
 
@@ -83,15 +86,19 @@ Result of a query can be used as variables in subsequent queries.
 
 ```tsx
 function Query() {
-  const pools = useLazyLoadQuery((builder) =>
-    builder.readStorageEntries("NominationPools", "BondedPools", []),
+  const pools = use(
+    useQuery((builder) =>
+      builder.readStorageEntries("NominationPools", "BondedPools", []),
+    ),
   );
 
-  const poolMetadatum = useLazyLoadQuery((builder) =>
-    builder.readStorages(
-      "NominationPools",
-      "Metadata",
-      pools.map(({ keyArgs: [poolId] }) => [poolId] as const),
+  const poolMetadatum = use(
+    useQuery((builder) =>
+      builder.readStorages(
+        "NominationPools",
+        "Metadata",
+        pools.map(({ keyArgs: [poolId] }) => [poolId] as const),
+      ),
     ),
   );
 
@@ -115,23 +122,27 @@ Use a falsy value (`undefined`, `null` or `false`) to conditionally fetch data. 
 ```ts
 import { idle } from "@reactive-dot/core";
 
-const conditionalReturn = useLazyLoadQuery((builder) =>
-  account === undefined
-    ? undefined
-    : builder.callApi("NominationPoolsApi", "pending_rewards", [
-        account.address,
-      ]),
+const conditionalReturn = use(
+  useQuery((builder) =>
+    account === undefined
+      ? undefined
+      : builder.callApi("NominationPoolsApi", "pending_rewards", [
+          account.address,
+        ]),
+  ),
 );
 
 // Or
 
-const conditionalFunction = useLazyLoadQuery(
-  account === undefined
-    ? undefined
-    : (builder) =>
-        builder.callApi("NominationPoolsApi", "pending_rewards", [
-          account.address,
-        ]),
+const conditionalFunction = use(
+  useQuery(
+    account === undefined
+      ? undefined
+      : (builder) =>
+          builder.callApi("NominationPoolsApi", "pending_rewards", [
+            account.address,
+          ]),
+  ),
 );
 
 // Result will be `idle` if the query hasn't been executed
@@ -142,19 +153,21 @@ if (conditionalReturn === idle || conditionalFunction === idle) {
 
 ## Refreshing queries
 
-Certain query, like runtime API calls & reading of storage entries doesn't create any subscriptions. In order to get the latest data, they must be manually refreshed with the [`useLazyLoadQueryWithRefresh`](/api/react/function/useLazyLoadQueryWithRefresh) hook.
+Certain query, like runtime API calls & reading of storage entries doesn't create any subscriptions. In order to get the latest data, they must be manually refreshed with the [`useQueryWithRefresh`](/api/react/function/useQueryWithRefresh) hook.
 
 ```tsx
-import { useTransition } from "react";
+import { use, useTransition } from "react";
 
 function QueryWithRefresh() {
   const [isPending, startTransition] = useTransition();
-  const [pendingRewards, refreshPendingRewards] = useLazyLoadQueryWithRefresh(
+  const [pendingRewardsPromise, refreshPendingRewards] = useQueryWithRefresh(
     (builder) =>
       builder.callApi("NominationPoolsApi", "pending_rewards", [
         ACCOUNT_ADDRESS,
       ]),
   );
+
+  const pendingRewards = use(pendingRewardsPromise);
 
   return (
     <div>
@@ -175,10 +188,12 @@ The above will refresh all refreshable data in the query. If you want to target 
 ```tsx
 function QueryWithRefresh() {
   const [isPending, startTransition] = useTransition();
-  const [account1Rewards, account2Rewards] = useLazyLoadQuery((builder) =>
-    builder
-      .callApi("NominationPoolsApi", "pending_rewards", [ACCOUNT_ADDRESS_1])
-      .callApi("NominationPoolsApi", "pending_rewards", [ACCOUNT_ADDRESS_2]),
+  const [account1Rewards, account2Rewards] = use(
+    useQuery((builder) =>
+      builder
+        .callApi("NominationPoolsApi", "pending_rewards", [ACCOUNT_ADDRESS_1])
+        .callApi("NominationPoolsApi", "pending_rewards", [ACCOUNT_ADDRESS_2]),
+    ),
   );
   const refreshAccount2Rewards = useQueryRefresher((builder) =>
     builder.callApi("NominationPoolsApi", "pending_rewards", [

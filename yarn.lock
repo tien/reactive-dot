@@ -4912,6 +4912,7 @@ __metadata:
     "@types/react": "npm:^19.0.0"
     eslint: "npm:^9.16.0"
     jotai: "npm:^2.10.3"
+    jotai-suspense: "npm:^0.4.0"
     polkadot-api: "npm:^1.7.6"
     react: "npm:^19.0.0"
     typescript: "npm:^5.7.2"
@@ -12788,6 +12789,16 @@ __metadata:
   peerDependencies:
     react: ">=17.0.0"
   checksum: 10c0/bf2e02110ce23b6d1a77f8644ca63513f90623c9ab2179d097d2a628c8bbf383df003cd930b0c1b88530d228a163dfa93d3bcf14be16d8053ae0d87cd92051c4
+  languageName: node
+  linkType: hard
+
+"jotai-suspense@npm:^0.4.0":
+  version: 0.4.0
+  resolution: "jotai-suspense@npm:0.4.0"
+  peerDependencies:
+    jotai: ">=2.0.0"
+    react: ">=18.0.0"
+  checksum: 10c0/fac8b2a1dd8f3ec5c0ec071521851ce9570661c036a1469b901654b1c7f00906e63a21f013bee2fc61830dc7195b0d3ac9c2d5236463a8d220176e29352a6671
   languageName: node
   linkType: hard
 

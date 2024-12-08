@@ -4,8 +4,8 @@ import { internal_useChainId } from "./use-chain-id.js";
 import { useConfig } from "./use-config.js";
 import type { ChainId, Config } from "@reactive-dot/core";
 import { getClient, ReactiveDotError } from "@reactive-dot/core";
-import { useAtomValue } from "jotai";
 import { atom } from "jotai";
+import { useAtomValue } from "jotai-suspense";
 
 /**
  * Hook for getting Polkadot-API client instance.
