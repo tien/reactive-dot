@@ -4,14 +4,7 @@ import { internal_useChainId } from "./use-chain-id.js";
 import { useConfig } from "./use-config.js";
 import { useQueryRefresher } from "./use-query-refresher.js";
 import { typedApiAtom } from "./use-typed-api.js";
-import {
-  type ChainId,
-  type Config,
-  idle,
-  preflight,
-  query,
-  Query,
-} from "@reactive-dot/core";
+import { type ChainId, type Config, idle, Query } from "@reactive-dot/core";
 import {
   type ChainDescriptorOf,
   type Falsy,
@@ -23,6 +16,7 @@ import {
   type QueryInstruction,
   stringify,
 } from "@reactive-dot/core/internal.js";
+import { preflight, query } from "@reactive-dot/core/internal/actions.js";
 import { type Atom, atom, useAtomValue, type WritableAtom } from "jotai";
 import { atomWithObservable, atomWithRefresh } from "jotai/utils";
 import { useMemo, version as reactVersion } from "react";

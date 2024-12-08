@@ -3,7 +3,7 @@ import { useAsyncData } from "./use-async-data.js";
 import { internal_useChainId } from "./use-chain-id.js";
 import { useClientPromise } from "./use-client.js";
 import { useLazyValue } from "./use-lazy-value.js";
-import { getBlock } from "@reactive-dot/core";
+import { getBlock } from "@reactive-dot/core/internal/actions.js";
 import { from, switchMap } from "rxjs";
 import { computed, type MaybeRefOrGetter, toValue } from "vue";
 
