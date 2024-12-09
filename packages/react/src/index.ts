@@ -16,6 +16,7 @@ export {
   useNativeTokenAmountFromNumber,
   useNativeTokenAmountFromPlanck,
 } from "./hooks/use-native-token-amount.js";
+export { useQueryDisposer } from "./hooks/use-query-disposer.js";
 export { useQueryErrorResetter } from "./hooks/use-query-error-resetter.js";
 export { useQueryLoader } from "./hooks/use-query-loader.js";
 export { useQueryRefresher } from "./hooks/use-query-refresher.js";
