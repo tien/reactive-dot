@@ -12,7 +12,7 @@
   "dependencies": {
     "@polkadot-api/descriptors": "portal:.papi/descriptors",
     "@reactive-dot/vue": "workspace:^",
-    "polkadot-api": "^1.7.6",
+    "polkadot-api": "^1.7.7",
     "vue": "^3.5.12"
   },
   "devDependencies": {
