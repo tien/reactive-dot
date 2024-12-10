@@ -1,5 +1,11 @@
 # @reactive-dot/wallet-walletconnect
 
+## 0.17.0
+
+### Minor Changes
+
+- [#400](https://github.com/tien/reactive-dot/pull/400) [`bef0909`](https://github.com/tien/reactive-dot/commit/bef090989c9908d87be31068d157b1aa7f985c4a) Thanks [@Tbaut](https://github.com/Tbaut)! - `chainIds` is now optional. Either `chainIds` or `optionalChainIds` must be set.
+
 ## 0.16.20
 
 ### Patch Changes
