@@ -43,7 +43,7 @@ export class WalletConnect extends DeepLinkWallet {
     projectId?: string;
     providerOptions: Omit<UniversalProviderOpts, "projectId">;
     modalOptions?: Omit<WalletConnectModalConfig, "projectId">;
-    chainIds: string[];
+    chainIds?: string[];
     optionalChainIds?: string[];
   }) {
     super(undefined);
@@ -58,7 +58,7 @@ export class WalletConnect extends DeepLinkWallet {
       projectId: options.projectId,
     };
 
-    this.#chainIds = options.chainIds;
+    this.#chainIds = options.chainIds ?? [];
     this.#optionalChainIds = options.optionalChainIds ?? [];
   }
 
@@ -87,15 +87,23 @@ export class WalletConnect extends DeepLinkWallet {
       );
     }
 
-    const connectOptions: Parameters<ISignClient["connect"]>[0] = {
-      requiredNamespaces: {
+    if (this.#chainIds.length === 0 && this.#optionalChainIds.length === 0) {
+      throw new ReactiveDotError(
+        "Either chainIds or optionalChainIds must be provided",
+      );
+    }
+
+    const connectOptions: Parameters<ISignClient["connect"]>[0] = {};
+
+    if (this.#chainIds.length > 0) {
+      connectOptions.requiredNamespaces = {
         polkadot: {
           methods: ["polkadot_signTransaction", "polkadot_signMessage"],
           chains: this.#chainIds,
           events: ['chainChanged", "accountsChanged'],
         },
-      },
-    };
+      };
+    }
 
     if (this.#optionalChainIds.length > 0) {
       connectOptions.optionalNamespaces = {
