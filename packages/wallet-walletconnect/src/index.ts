@@ -58,7 +58,7 @@ export class WalletConnect extends DeepLinkWallet {
       projectId: options.projectId,
     };
 
-    this.#chainIds = options.chainIds;
+    this.#chainIds = options.chainIds ?? [];
     this.#optionalChainIds = options.optionalChainIds ?? [];
   }
 
