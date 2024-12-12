@@ -1,6 +1,6 @@
 import { useAsyncAction } from "./use-async-action.js";
 import { useWalletsPromise } from "./use-wallets.js";
-import { initializeWallets } from "@reactive-dot/core";
+import { initializeWallets } from "@reactive-dot/core/internal/actions.js";
 
 /**
  * Composable for initializing wallets.

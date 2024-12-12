@@ -1,10 +1,10 @@
 import { atomFamilyWithErrorCatcher } from "../utils/jotai.js";
 import { useConfig } from "./use-config.js";
+import type { Config } from "@reactive-dot/core";
 import {
   aggregateWallets,
-  type Config,
   getConnectedWallets,
-} from "@reactive-dot/core";
+} from "@reactive-dot/core/internal/actions.js";
 import { atom, useAtomValue } from "jotai";
 import { atomWithObservable } from "jotai/utils";
 

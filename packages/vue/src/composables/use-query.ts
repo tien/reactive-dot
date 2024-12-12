@@ -8,12 +8,7 @@ import { useAsyncData } from "./use-async-data.js";
 import { internal_useChainId } from "./use-chain-id.js";
 import { lazyValue, useLazyValuesCache } from "./use-lazy-value.js";
 import { useTypedApiPromise } from "./use-typed-api.js";
-import {
-  type ChainId,
-  query as executeQuery,
-  preflight,
-  Query,
-} from "@reactive-dot/core";
+import { type ChainId, Query } from "@reactive-dot/core";
 import {
   type ChainDescriptorOf,
   type Falsy,
@@ -24,6 +19,10 @@ import {
   type QueryInstruction,
   stringify,
 } from "@reactive-dot/core/internal.js";
+import {
+  query as executeQuery,
+  preflight,
+} from "@reactive-dot/core/internal/actions.js";
 import type { ChainDefinition, TypedApi } from "polkadot-api";
 import { combineLatest, from, type Observable, of } from "rxjs";
 import { map, switchMap } from "rxjs/operators";
