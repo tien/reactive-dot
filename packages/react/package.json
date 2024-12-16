@@ -39,7 +39,7 @@
     "@tsconfig/recommended": "^1.0.8",
     "@tsconfig/strictest": "^2.0.5",
     "@types/react": "^19.0.1",
-    "eslint": "^9.16.0",
+    "eslint": "^9.17.0",
     "polkadot-api": "^1.7.8",
     "react": "^19.0.0",
     "typescript": "^5.7.2"

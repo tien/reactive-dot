@@ -20,7 +20,7 @@
     "@tsconfig/recommended": "^1.0.8",
     "@tsconfig/strictest": "^2.0.5",
     "@vitejs/plugin-vue": "^5.2.1",
-    "eslint": "^9.16.0",
+    "eslint": "^9.17.0",
     "typescript": "^5.7.2",
     "vite": "^6.0.3"
   }
