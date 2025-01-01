@@ -23,6 +23,7 @@ export const wellknownChains = {
   paseo: [
     () => import("polkadot-api/chains/paseo"),
     { paseo_asset_hub: () => import("polkadot-api/chains/paseo_asset_hub") },
+    { paseo_people: () => import("polkadot-api/chains/paseo_people") },
   ],
   westend: [
     () => import("polkadot-api/chains/westend2"),
