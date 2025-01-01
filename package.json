@@ -44,5 +44,8 @@
     "husky": "^9.1.7",
     "nx": "^20.2.1",
     "prettier": "^3.4.2"
+  },
+  "dependencies": {
+    "polkadot-api": "1.8.0"
   }
 }
