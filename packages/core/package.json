@@ -50,6 +50,6 @@
     "vitest": "^2.1.8"
   },
   "peerDependencies": {
-    "polkadot-api": "^1.x"
+    "polkadot-api": "1.x"
   }
 }
