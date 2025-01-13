@@ -4965,10 +4965,11 @@ __metadata:
     "@tsconfig/recommended": "npm:^1.0.8"
     "@tsconfig/strictest": "npm:^2.0.5"
     eslint: "npm:^9.16.0"
+    polkadot-api: "npm:^1.8.0"
     typescript: "npm:^5.7.2"
     vitest: "npm:^2.1.8"
   peerDependencies:
-    polkadot-api: ^1.8.0
+    polkadot-api: 1.x
   languageName: unknown
   linkType: soft
 
@@ -16050,38 +16051,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"polkadot-api@npm:1.8.0":
-  version: 1.8.0
-  resolution: "polkadot-api@npm:1.8.0"
-  dependencies:
-    "@polkadot-api/cli": "npm:0.10.0"
-    "@polkadot-api/ink-contracts": "npm:0.2.4"
-    "@polkadot-api/json-rpc-provider": "npm:0.0.4"
-    "@polkadot-api/known-chains": "npm:0.6.0"
-    "@polkadot-api/logs-provider": "npm:0.0.6"
-    "@polkadot-api/metadata-builders": "npm:0.10.0"
-    "@polkadot-api/metadata-compatibility": "npm:0.1.14"
-    "@polkadot-api/observable-client": "npm:0.7.0"
-    "@polkadot-api/pjs-signer": "npm:0.6.3"
-    "@polkadot-api/polkadot-sdk-compat": "npm:2.3.1"
-    "@polkadot-api/polkadot-signer": "npm:0.1.6"
-    "@polkadot-api/signer": "npm:0.1.13"
-    "@polkadot-api/sm-provider": "npm:0.1.7"
-    "@polkadot-api/smoldot": "npm:0.3.8"
-    "@polkadot-api/substrate-bindings": "npm:0.11.0"
-    "@polkadot-api/substrate-client": "npm:0.3.0"
-    "@polkadot-api/utils": "npm:0.1.2"
-    "@polkadot-api/ws-provider": "npm:0.3.6"
-    "@rx-state/core": "npm:^0.1.4"
-  peerDependencies:
-    rxjs: ">=7.8.0"
-  bin:
-    papi: bin/cli.mjs
-    polkadot-api: bin/cli.mjs
-  checksum: 10c0/3a77289fe5eaecd33fe5a335a1d289c474b182c178467fdc3e222cea477d5d2e9f54eb8fe86742a1a9a63ab910abbc0f2b88babc858707f8b908c353b8dd99a6
-  languageName: node
-  linkType: hard
-
 "polkadot-api@npm:^1.8.0":
   version: 1.8.1
   resolution: "polkadot-api@npm:1.8.1"
@@ -17311,7 +17280,6 @@ __metadata:
     "@trivago/prettier-plugin-sort-imports": "npm:^5.2.0"
     husky: "npm:^9.1.7"
     nx: "npm:^20.2.1"
-    polkadot-api: "npm:1.8.0"
     prettier: "npm:^3.4.2"
   languageName: unknown
   linkType: soft
