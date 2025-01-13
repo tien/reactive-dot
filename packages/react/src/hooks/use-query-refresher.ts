@@ -1,7 +1,6 @@
 import type { ChainHookOptions } from "./types.js";
-import { internal_useChainId } from "./use-chain-id.js";
-import { useConfig } from "./use-config.js";
 import { getQueryInstructionPayloadAtoms } from "./use-query.js";
+import { useTypedApi } from "./use-typed-api.js";
 import { Query, type ChainId } from "@reactive-dot/core";
 import type {
   ChainDescriptorOf,
@@ -31,8 +30,7 @@ export function useQueryRefresher<
         | Falsy)
     | Falsy,
 >(builder: TQuery, options?: ChainHookOptions<TChainId>) {
-  const config = useConfig();
-  const chainId = internal_useChainId(options);
+  const api = useTypedApi(options);
 
   const refresh = useAtomCallback(
     useCallback(
@@ -47,11 +45,7 @@ export function useQueryRefresher<
           return;
         }
 
-        const atoms = getQueryInstructionPayloadAtoms(
-          config,
-          chainId,
-          query,
-        ).flat();
+        const atoms = getQueryInstructionPayloadAtoms(api, query).flat();
 
         for (const atom of atoms) {
           if ("write" in atom) {
@@ -59,7 +53,7 @@ export function useQueryRefresher<
           }
         }
       },
-      [builder, chainId, config],
+      [api, builder],
     ),
   );
 

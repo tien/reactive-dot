@@ -1,3 +1,4 @@
+import { DANGEROUS_ClientContext } from "../contexts/chain.js";
 import { atomFamilyWithErrorCatcher } from "../utils/jotai.js";
 import type { ChainHookOptions } from "./types.js";
 import { internal_useChainId } from "./use-chain-id.js";
@@ -6,6 +7,7 @@ import type { ChainId, Config } from "@reactive-dot/core";
 import { getClient, ReactiveDotError } from "@reactive-dot/core";
 import { useAtomValue } from "jotai";
 import { atom } from "jotai";
+import { useContext } from "react";
 
 /**
  * Hook for getting Polkadot-API client instance.
@@ -14,11 +16,33 @@ import { atom } from "jotai";
  * @returns Polkadot-API client
  */
 export function useClient(options?: ChainHookOptions) {
+  return useMaybeClient({ ...options, optionalChainId: false })!;
+}
+
+/**
+ * @internal
+ */
+export function useMaybeClient({
+  optionalChainId = true,
+  ...options
+}: ChainHookOptions & { optionalChainId?: boolean } = {}) {
+  const dangerous_client = useContext(DANGEROUS_ClientContext);
+
+  const config = useConfig();
+  const chainId = internal_useChainId({
+    ...options,
+    optionalChainId: optionalChainId || dangerous_client !== undefined,
+  });
+
   return useAtomValue(
-    clientAtom({
-      config: useConfig(),
-      chainId: internal_useChainId(options),
-    }),
+    dangerous_client !== undefined
+      ? atom(dangerous_client)
+      : chainId === undefined
+        ? atom(undefined)
+        : clientAtom({
+            config,
+            chainId,
+          }),
   );
 }
 

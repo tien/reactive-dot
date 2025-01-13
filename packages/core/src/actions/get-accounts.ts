@@ -8,7 +8,7 @@ import { combineLatest, of } from "rxjs";
 import { map, switchMap } from "rxjs/operators";
 
 export function getAccounts(
-  wallets: MaybeAsync<Wallet[]>,
+  wallets: MaybeAsync<readonly Wallet[]>,
   chainSpec?: MaybeAsync<ChainSpecData>,
 ) {
   return combineLatest([toObservable(wallets), toObservable(chainSpec)]).pipe(
