@@ -1,5 +1,11 @@
 # @reactive-dot/core
 
+## 0.29.0
+
+### Minor Changes
+
+- [#411](https://github.com/tien/reactive-dot/pull/411) [`6e1ded0`](https://github.com/tien/reactive-dot/commit/6e1ded07876d9ee6471830038e8910c369f14a4b) Thanks [@71walceli](https://github.com/71walceli)! - Added "Paseo People" to light client well-known parachains.
+
 ## 0.27.1
 
 ### Patch Changes
