@@ -35,7 +35,9 @@ export function ReactiveDotProvider({
   children,
 }: ReactiveDotProviderProps) {
   return (
+    // eslint-disable-next-line @eslint-react/no-context-provider
     <ConfigContext.Provider value={config}>
+      {/* eslint-disable-next-line @eslint-react/no-context-provider */}
       <MutationEventSubjectContext.Provider
         value={useMemo(() => new Subject(), [])}
       >
