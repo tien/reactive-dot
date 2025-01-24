@@ -20,6 +20,7 @@ export type SignerProviderProps = PropsWithChildren<{
  */
 export function SignerProvider(props: SignerProviderProps) {
   return (
+    // eslint-disable-next-line @eslint-react/no-context-provider
     <SignerContext.Provider value={props.signer}>
       {props.children}
     </SignerContext.Provider>
