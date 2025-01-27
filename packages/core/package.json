@@ -44,7 +44,7 @@
     "@reactive-dot/eslint-config": "workspace:^",
     "@tsconfig/recommended": "^1.0.8",
     "@tsconfig/strictest": "^2.0.5",
-    "eslint": "^9.18.0",
+    "eslint": "^9.19.0",
     "polkadot-api": "^1.8.3",
     "typescript": "^5.7.3",
     "vitest": "^3.0.4"
