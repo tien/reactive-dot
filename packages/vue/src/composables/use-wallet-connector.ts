@@ -1,6 +1,6 @@
 import { useAsyncAction } from "./use-async-action.js";
 import { useWalletsPromise } from "./use-wallets.js";
-import { connectWallet } from "@reactive-dot/core";
+import { connectWallet } from "@reactive-dot/core/internal/actions.js";
 import type { Wallet } from "@reactive-dot/core/wallets.js";
 
 /**

@@ -4,7 +4,7 @@ import { internal_useChainId } from "./use-chain-id.js";
 import { useChainSpecDataPromise } from "./use-chain-spec-data.js";
 import { useLazyValue } from "./use-lazy-value.js";
 import { useConnectedWalletsObservable } from "./use-wallets.js";
-import { getAccounts } from "@reactive-dot/core";
+import { getAccounts } from "@reactive-dot/core/internal/actions.js";
 import { computed } from "vue";
 
 /**

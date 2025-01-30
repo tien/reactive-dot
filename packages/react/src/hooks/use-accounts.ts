@@ -4,7 +4,8 @@ import { internal_useChainId } from "./use-chain-id.js";
 import { chainSpecDataAtom } from "./use-chain-spec-data.js";
 import { useConfig } from "./use-config.js";
 import { connectedWalletsAtom } from "./use-wallets.js";
-import { getAccounts, type ChainId, type Config } from "@reactive-dot/core";
+import { type ChainId, type Config } from "@reactive-dot/core";
+import { getAccounts } from "@reactive-dot/core/internal/actions.js";
 import { useAtomValue } from "jotai";
 import { atomWithObservable } from "jotai/utils";
 

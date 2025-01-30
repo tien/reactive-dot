@@ -1,7 +1,10 @@
 import { useAsyncData } from "./use-async-data.js";
 import { useConfig } from "./use-config.js";
 import { useLazyValue } from "./use-lazy-value.js";
-import { aggregateWallets, getConnectedWallets } from "@reactive-dot/core";
+import {
+  aggregateWallets,
+  getConnectedWallets,
+} from "@reactive-dot/core/internal/actions.js";
 
 /**
  * Composable for getting all available wallets.
