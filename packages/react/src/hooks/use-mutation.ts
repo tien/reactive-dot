@@ -15,6 +15,7 @@ import type {
   TxObservable,
   TypedApi,
 } from "polkadot-api";
+// eslint-disable-next-line @eslint-react/no-use-context
 import { useCallback, useContext } from "react";
 import { from } from "rxjs";
 import { catchError, switchMap, tap } from "rxjs/operators";
@@ -56,7 +57,9 @@ export function useMutation<
 ) {
   const config = useConfig();
   const chainId = internal_useChainId(options);
+  // eslint-disable-next-line @eslint-react/no-use-context
   const mutationEventSubject = useContext(MutationEventSubjectContext);
+  // eslint-disable-next-line @eslint-react/no-use-context
   const contextSigner = useContext(SignerContext);
 
   return useAsyncAction(

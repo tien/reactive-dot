@@ -2,6 +2,7 @@ import {
   type MutationEvent,
   MutationEventSubjectContext,
 } from "../contexts/mutation.js";
+// eslint-disable-next-line @eslint-react/no-use-context
 import { useContext, useEffect } from "react";
 
 /**
@@ -10,6 +11,7 @@ import { useContext, useEffect } from "react";
  * @param effect - Callback when new mutation event is emitted
  */
 export function useMutationEffect(effect: (event: MutationEvent) => void) {
+  // eslint-disable-next-line @eslint-react/no-use-context
   const mutationEventSubject = useContext(MutationEventSubjectContext);
 
   useEffect(() => {

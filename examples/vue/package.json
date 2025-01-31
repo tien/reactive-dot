@@ -12,7 +12,7 @@
   "dependencies": {
     "@polkadot-api/descriptors": "portal:.papi/descriptors",
     "@reactive-dot/vue": "workspace:^",
-    "polkadot-api": "^1.8.3",
+    "polkadot-api": "^1.8.4",
     "vue": "^3.5.13"
   },
   "devDependencies": {
@@ -20,7 +20,7 @@
     "@tsconfig/recommended": "^1.0.8",
     "@tsconfig/strictest": "^2.0.5",
     "@vitejs/plugin-vue": "^5.2.1",
-    "eslint": "^9.18.0",
+    "eslint": "^9.19.0",
     "typescript": "^5.7.3",
     "vite": "^6.0.11"
   }
