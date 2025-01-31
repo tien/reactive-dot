@@ -1,5 +1,6 @@
 import { ConfigContext } from "../contexts/config.js";
 import { ReactiveDotError } from "@reactive-dot/core";
+// eslint-disable-next-line @eslint-react/no-use-context
 import { useContext } from "react";
 
 /**
@@ -8,6 +9,7 @@ import { useContext } from "react";
  * @returns The current config
  */
 export function useConfig() {
+  // eslint-disable-next-line @eslint-react/no-use-context
   const config = useContext(ConfigContext);
 
   if (config === undefined) {

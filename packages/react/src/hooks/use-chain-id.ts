@@ -2,6 +2,7 @@ import { ChainIdContext } from "../contexts/index.js";
 import type { ChainHookOptions } from "./types.js";
 import { useConfig } from "./use-config.js";
 import { type ChainId, ReactiveDotError } from "@reactive-dot/core";
+// eslint-disable-next-line @eslint-react/no-use-context
 import { useContext } from "react";
 
 /**
@@ -19,6 +20,7 @@ export function useChainIds() {
  * @returns The current chain ID
  */
 export function useChainId() {
+  // eslint-disable-next-line @eslint-react/no-use-context
   const chainId = useContext(ChainIdContext);
 
   if (chainId === undefined) {
@@ -37,7 +39,7 @@ export function internal_useChainId<TOptionalChainId extends boolean = false>({
 }: ChainHookOptions & {
   optionalChainId?: TOptionalChainId;
 } = {}) {
-  // eslint-disable-next-line react-hooks/rules-of-hooks
+  // eslint-disable-next-line  @eslint-react/no-use-context, react-hooks/rules-of-hooks
   const contextChainId = useContext(ChainIdContext);
   const chainId = options?.chainId ?? contextChainId;
 
