@@ -8,7 +8,6 @@ import {
 import { getSmoldotExtensionProviders } from "@substrate/smoldot-discovery";
 import { createClient } from "polkadot-api";
 import { getSmProvider } from "polkadot-api/sm-provider";
-import type { Client } from "polkadot-api/smoldot";
 import { startFromWorker } from "polkadot-api/smoldot/from-worker";
 import type { JsonRpcProvider } from "polkadot-api/ws-provider/web";
 
@@ -84,10 +83,18 @@ export function createLightClientProvider() {
               ]).then(([relayChain, chainSpec]) =>
                 "addChain" in relayChain
                   ? relayChain.addChain(chainSpec)
-                  : (getSmoldot() as Client).addChain({
-                      chainSpec,
-                      potentialRelayChains: [relayChain],
-                    }),
+                  : (() => {
+                      const smoldot = getSmoldot();
+
+                      return smoldot instanceof Promise
+                        ? smoldot.then(async (smoldot) =>
+                            smoldot.addChain(chainSpec),
+                          )
+                        : smoldot.addChain({
+                            chainSpec,
+                            potentialRelayChains: [relayChain],
+                          });
+                    })(),
               );
 
               return getSmProvider(await parachainPromise);

@@ -36,11 +36,13 @@ export {
    * @deprecated Use the "/internal/actions.js" subpath export instead.
    */
   getBlock,
+} from "./actions/get-block.js";
+export {
   /**
    * @deprecated Use the "/internal/actions.js" subpath export instead.
    */
   unstable_getBlockExtrinsics,
-} from "./actions/get-block.js";
+} from "./actions/get-block-extrinsics.js";
 export {
   /**
    * @deprecated Use the "/internal/actions.js" subpath export instead.
