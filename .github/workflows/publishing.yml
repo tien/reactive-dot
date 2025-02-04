@@ -2,7 +2,7 @@ name: Publishing
 
 on:
   workflow_run:
-    workflows: ["Verification"]
+    workflows: [Verification]
     branches: [main]
     types: [completed]
 
