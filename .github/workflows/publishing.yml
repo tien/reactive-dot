@@ -1,8 +1,10 @@
 name: Publishing
 
 on:
-  push:
+  workflow_run:
+    workflows: ["Verification"]
     branches: [main]
+    types: [completed]
 
 concurrency: ${{ github.workflow }}-${{ github.ref }}
 

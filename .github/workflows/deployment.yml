@@ -1,8 +1,14 @@
 name: Deployment
 
 on:
-  push:
+  workflow_run:
+    workflows: ["Verification"]
     branches: [main]
+    types: [completed]
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
 
 jobs:
   deploy-documentation:

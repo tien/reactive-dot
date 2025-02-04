@@ -1,6 +1,13 @@
 name: Verification
 
-on: [workflow_call, workflow_dispatch]
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+    # Add trigger for `ready_for_review`
+    # https://github.com/changesets/action/issues/187
+    types: [opened, reopened, synchronize, ready_for_review]
 
 jobs:
   verify:
