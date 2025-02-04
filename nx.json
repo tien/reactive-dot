@@ -12,10 +12,6 @@
     },
     "lint": {
       "cache": true
-    },
-    "test": {
-      "dependsOn": ["^build"],
-      "cache": true
     }
   },
   "parallel": 9

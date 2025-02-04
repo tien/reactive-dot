@@ -11,5 +11,10 @@ jobs:
       - uses: ./.github/actions/setup
       - run: yarn prettier --check .
       - run: yarn lint
-      - run: yarn test
       - run: yarn build
+
+      - run: yarn test run --coverage
+      - if: always()
+        uses: codecov/codecov-action@v5
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
