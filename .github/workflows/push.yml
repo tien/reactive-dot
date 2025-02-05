@@ -20,6 +20,9 @@ jobs:
   deploy:
     needs: verify
     uses: ./.github/workflows/deployment.yml
+    permissions:
+      contents: read
+      deployments: write
     secrets: inherit
     concurrency:
       group: ${{ github.workflow }}-${{ github.ref }}
