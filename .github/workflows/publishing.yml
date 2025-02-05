@@ -2,6 +2,8 @@ name: Publishing
 
 on: [workflow_call]
 
+concurrency: ${{ github.workflow }}-${{ github.ref }}
+
 jobs:
   publish:
     runs-on: ubuntu-latest

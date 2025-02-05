@@ -15,7 +15,6 @@ jobs:
       contents: write
       pull-requests: write
     secrets: inherit
-    concurrency: ${{ github.workflow }}-${{ github.ref }}
 
   deploy:
     needs: verify
@@ -24,6 +23,3 @@ jobs:
       contents: read
       deployments: write
     secrets: inherit
-    concurrency:
-      group: ${{ github.workflow }}-${{ github.ref }}
-      cancel-in-progress: true
