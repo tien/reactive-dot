@@ -11,6 +11,9 @@ jobs:
   publish:
     needs: verify
     uses: ./.github/workflows/publishing.yml
+    permissions:
+      contents: write
+      pull-requests: write
     secrets: inherit
     concurrency: ${{ github.workflow }}-${{ github.ref }}
 
