@@ -1,0 +1,23 @@
+name: Push
+
+on:
+  push:
+    branches: [main]
+
+jobs:
+  verify:
+    uses: ./.github/workflows/verification.yml
+
+  publish:
+    needs: verify
+    uses: ./.github/workflows/publishing.yml
+    secrets: inherit
+    concurrency: ${{ github.workflow }}-${{ github.ref }}
+
+  deploy:
+    needs: verify
+    uses: ./.github/workflows/deployment.yml
+    secrets: inherit
+    concurrency:
+      group: ${{ github.workflow }}-${{ github.ref }}
+      cancel-in-progress: true
