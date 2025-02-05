@@ -1,12 +1,6 @@
 name: Publishing
 
-on:
-  workflow_run:
-    workflows: [Verification]
-    branches: [main]
-    types: [completed]
-
-concurrency: ${{ github.workflow }}-${{ github.ref }}
+on: [workflow_call]
 
 jobs:
   publish:
