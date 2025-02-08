@@ -4,6 +4,7 @@ import type {
   QueryInstruction,
 } from "../query-builder.js";
 import type { ChainDefinition, TypedApi } from "polkadot-api";
+import { map } from "rxjs/operators";
 
 export function preflight<TInstruction extends QueryInstruction>(
   instruction: TInstruction,
@@ -25,8 +26,8 @@ export function preflight<TInstruction extends QueryInstruction>(
   switch (instruction.instruction) {
     case "get-constant":
     case "call-api":
-    case "read-storage-entries":
       return "promise" as Return;
+    case "read-storage-entries":
     case "read-storage":
       return "observable" as Return;
   }
@@ -66,15 +67,42 @@ export function query<
           );
     }
     case "read-storage-entries":
-      return (
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        (api.query[instruction.pallet]![instruction.storage] as any).getEntries(
-          ...instruction.args,
-          {
-            signal: options?.signal,
-            at: instruction.at,
-          },
-        )
-      );
+      return instruction.at?.startsWith("0x")
+        ? // eslint-disable-next-line @typescript-eslint/no-explicit-any
+          (api.query[instruction.pallet]![instruction.storage] as any) // Comment to prevent formatting
+            .getEntries(...instruction.args, {
+              signal: options?.signal,
+              at: instruction.at,
+            })
+            .then((response: Array<{ keyArgs: unknown; value: unknown }>) =>
+              response.map(({ keyArgs, value }) =>
+                Object.assign([keyArgs, value], {
+                  /** @deprecated Use index access instead. */
+                  keyArgs,
+                  /** @deprecated Use index access instead. */
+                  value,
+                }),
+              ),
+            )
+        : // eslint-disable-next-line @typescript-eslint/no-explicit-any
+          (api.query[instruction.pallet]![instruction.storage] as any) // Comment to prevent formatting
+            .watchEntries(...instruction.args, {
+              at: instruction.at,
+            })
+            .pipe(
+              map(
+                (response: {
+                  entries: Array<{ args: unknown; value: unknown }>;
+                }) =>
+                  response.entries.map(({ args, value }) =>
+                    Object.assign([args, value], {
+                      /** @deprecated Use index access instead. */
+                      keyArgs: args,
+                      /** @deprecated Use index access instead. */
+                      value,
+                    }),
+                  ),
+              ),
+            );
   }
 }
