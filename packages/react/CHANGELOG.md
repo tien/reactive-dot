@@ -1,5 +1,14 @@
 # @reactive-dot/react
 
+## 0.30.0
+
+### Patch Changes
+
+- [#365](https://github.com/tien/reactive-dot/pull/365) [`dcc8c24`](https://github.com/tien/reactive-dot/commit/dcc8c241c7543bebecdc73438f627d6f7fd0610e) Thanks [@tien](https://github.com/tien)! - Moved core actions to internal exports.
+
+- Updated dependencies [[`821f21b`](https://github.com/tien/reactive-dot/commit/821f21b511b4c7ef8b0eff2e3f9eb0a3addb36ac), [`dcc8c24`](https://github.com/tien/reactive-dot/commit/dcc8c241c7543bebecdc73438f627d6f7fd0610e)]:
+  - @reactive-dot/core@0.30.0
+
 ## 0.29.0
 
 ### Patch Changes
