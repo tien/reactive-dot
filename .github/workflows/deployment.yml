@@ -2,10 +2,6 @@ name: Deployment
 
 on: [workflow_call]
 
-concurrency:
-  group: ${{ github.workflow }}-${{ github.ref }}-${{ github.job }}
-  cancel-in-progress: true
-
 jobs:
   deploy-documentation:
     runs-on: ubuntu-latest

@@ -11,6 +11,7 @@ jobs:
   publish:
     needs: verify
     uses: ./.github/workflows/publishing.yml
+    concurrency: ${{ github.workflow }}-${{ github.ref }}-${{ github.job }}
     permissions:
       contents: write
       pull-requests: write
@@ -19,6 +20,9 @@ jobs:
   deploy:
     needs: verify
     uses: ./.github/workflows/deployment.yml
+    concurrency:
+      group: ${{ github.workflow }}-${{ github.ref }}-${{ github.job }}
+      cancel-in-progress: true
     permissions:
       contents: read
       deployments: write
