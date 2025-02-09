@@ -2,7 +2,7 @@ name: Publishing
 
 on: [workflow_call]
 
-concurrency: ${{ github.workflow }}-${{ github.ref }}
+concurrency: ${{ github.workflow }}-${{ github.ref }}-${{ github.job }}
 
 jobs:
   publish:
