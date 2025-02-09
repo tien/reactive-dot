@@ -24,9 +24,23 @@ type InferPapiStorageEntry<T> = T extends {
   : { args: unknown[]; response: unknown };
 
 type InferPapiStorageEntries<T> = T extends {
-  getEntries: (...args: infer Args) => infer Response;
+  getEntries: (
+    ...args: infer Args
+  ) => Promise<Array<{ keyArgs: infer Key; value: infer Value }>>;
 }
-  ? { args: OmitCallOptions<Args>; response: Response }
+  ? {
+      args: OmitCallOptions<Args>;
+      response: Promise<
+        Array<
+          [Key, Value] & {
+            /** @deprecated Use index access instead. */
+            keyArgs: Key;
+            /** @deprecated Use index access instead. */
+            value: Value;
+          }
+        >
+      >;
+    }
   : { args: unknown[]; response: unknown };
 
 type InferPapiRuntimeCall<T> = T extends (...args: infer Args) => infer Response
