@@ -105,7 +105,7 @@ if (status === "idle") {
 
 ## Refreshing queries
 
-Certain query, like runtime API calls & reading of storage entries doesn't create any subscriptions. In order to get the latest data, they must be manually refreshed.
+Certain query, like runtime API calls doesn't create any subscriptions. In order to get the latest data, they must be manually refreshed.
 
 ```vue
 <script setup lang="ts">

@@ -91,7 +91,7 @@ function Query() {
     builder.readStorages(
       "NominationPools",
       "Metadata",
-      pools.map(({ keyArgs: [poolId] }) => [poolId] as const),
+      pools.map(([[poolId], _]) => [poolId] as const),
     ),
   );
 
@@ -142,7 +142,7 @@ if (conditionalReturn === idle || conditionalFunction === idle) {
 
 ## Refreshing queries
 
-Certain query, like runtime API calls & reading of storage entries doesn't create any subscriptions. In order to get the latest data, they must be manually refreshed with the [`useLazyLoadQueryWithRefresh`](/api/react/function/useLazyLoadQueryWithRefresh) hook.
+Certain query, like runtime API calls doesn't create any subscriptions. In order to get the latest data, they must be manually refreshed with the [`useLazyLoadQueryWithRefresh`](/api/react/function/useLazyLoadQueryWithRefresh) hook.
 
 ```tsx
 import { useTransition } from "react";
