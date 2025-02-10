@@ -70,7 +70,7 @@ describe("atomFamilyWithErrorCatcher", () => {
     );
 
     expect(await store.get(myAtomFamily("World"))).toBe("Hello World");
-    expect(() => store.get(myAtomFamily("Error"))).rejects.toThrowError(
+    await expect(() => store.get(myAtomFamily("Error"))).rejects.toThrowError(
       "Intentional Promise Error",
     );
   });
