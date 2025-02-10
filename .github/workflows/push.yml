@@ -7,6 +7,7 @@ on:
 jobs:
   verify:
     uses: ./.github/workflows/verification.yml
+    secrets: inherit
 
   publish:
     needs: verify
