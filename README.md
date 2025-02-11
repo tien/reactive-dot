@@ -1,3 +1,5 @@
+[![codecov](https://codecov.io/gh/tien/reactive-dot/graph/badge.svg?token=Q97JBVAD19)](https://codecov.io/gh/tien/reactive-dot)
+
 # ReactiveDOT
 
 A reactive library for building Substrate front-ends.
