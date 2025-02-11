@@ -51,9 +51,7 @@ describe("atomFamilyWithErrorCatcher", () => {
     );
 
     expect(store.get(myAtomFamily("World"))).toBe("Hello World");
-    expect(() => store.get(myAtomFamily("Error"))).toThrowError(
-      "Intentional Error",
-    );
+    expect(() => store.get(myAtomFamily("Error"))).toThrow("Intentional Error");
   });
 
   it("should catch errors in Promise reads", async () => {
@@ -70,7 +68,7 @@ describe("atomFamilyWithErrorCatcher", () => {
     );
 
     expect(await store.get(myAtomFamily("World"))).toBe("Hello World");
-    await expect(() => store.get(myAtomFamily("Error"))).rejects.toThrowError(
+    await expect(() => store.get(myAtomFamily("Error"))).rejects.toThrow(
       "Intentional Promise Error",
     );
   });
@@ -87,7 +85,7 @@ describe("atomFamilyWithErrorCatcher", () => {
     );
 
     expect(await store.get(myAtomFamily("World"))).toBe("Hello World");
-    expect(() => store.get(myAtomFamily("Error"))).toThrowError(
+    expect(() => store.get(myAtomFamily("Error"))).toThrow(
       "Intentional Observable Error",
     );
   });

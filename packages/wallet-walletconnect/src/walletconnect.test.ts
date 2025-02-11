@@ -91,9 +91,9 @@ describe("initiateConnectionHandshake", () => {
     // @ts-expect-error this is actually possible
     mockProvider.client = undefined;
 
-    await expect(
-      walletConnect.initiateConnectionHandshake(),
-    ).rejects.toThrowError(ReactiveDotError);
+    await expect(walletConnect.initiateConnectionHandshake()).rejects.toThrow(
+      ReactiveDotError,
+    );
   });
 
   it("should throw an error if neither chainIds nor optionalChainIds are provided", async () => {
@@ -109,9 +109,9 @@ describe("initiateConnectionHandshake", () => {
 
     await walletConnect.initialize();
 
-    await expect(
-      walletConnect.initiateConnectionHandshake(),
-    ).rejects.toThrowError(ReactiveDotError);
+    await expect(walletConnect.initiateConnectionHandshake()).rejects.toThrow(
+      ReactiveDotError,
+    );
   });
 
   it("should call connect on the client with the correct parameters", async () => {
@@ -149,9 +149,9 @@ describe("initiateConnectionHandshake", () => {
 
     vi.mocked(mockProvider.client.connect).mockResolvedValue(mockConnectResult);
 
-    await expect(
-      walletConnect.initiateConnectionHandshake(),
-    ).rejects.toThrowError(ReactiveDotError);
+    await expect(walletConnect.initiateConnectionHandshake()).rejects.toThrow(
+      ReactiveDotError,
+    );
   });
 
   it("should return the URI and a promise that resolves when the session is settled", async () => {
@@ -246,9 +246,7 @@ describe("connect", () => {
 
     vi.mocked(WalletConnectModal).mockImplementation(() => modal);
 
-    await expect(walletConnect.connect()).rejects.toThrowError(
-      "Modal was closed",
-    );
+    await expect(walletConnect.connect()).rejects.toThrow("Modal was closed");
   });
 });
 

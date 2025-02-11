@@ -232,7 +232,7 @@ it("should throw AccountMismatchError if public keys do not match", async () => 
       // @ts-expect-error we know that this is a function
       .polkadotSigner({ tokenSymbol: "DOT", tokenDecimals: 10 })
       .signBytes(new Uint8Array([10, 11, 12])),
-  ).rejects.toThrowError(AccountMismatchError);
+  ).rejects.toThrow(AccountMismatchError);
 });
 
 it("connected$ should emit true when accounts are added", async () => {

@@ -195,7 +195,7 @@ describe("getAccounts", () => {
   });
 
   it("should throw an error when the extension is not connected", () => {
-    expect(() => wallet.getAccounts()).toThrowError(ReactiveDotError);
+    expect(() => wallet.getAccounts()).toThrow(ReactiveDotError);
   });
 });
 

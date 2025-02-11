@@ -45,75 +45,75 @@ describe("fromPlanck", () => {
 
 describe("fromNumber", () => {
   it("throws helpful error message for invalid characters", () => {
-    expect(() => DenominatedNumber.fromNumber(" 13", 5)).toThrowError(
+    expect(() => DenominatedNumber.fromNumber(" 13", 5)).toThrow(
       /invalid character at position 1/i,
     );
-    expect(() => DenominatedNumber.fromNumber("1,3", 5)).toThrowError(
+    expect(() => DenominatedNumber.fromNumber("1,3", 5)).toThrow(
       /invalid character at position 2/i,
     );
-    expect(() => DenominatedNumber.fromNumber("13-", 5)).toThrowError(
+    expect(() => DenominatedNumber.fromNumber("13-", 5)).toThrow(
       /invalid character at position 3/i,
     );
-    expect(() => DenominatedNumber.fromNumber("13/", 5)).toThrowError(
+    expect(() => DenominatedNumber.fromNumber("13/", 5)).toThrow(
       /invalid character at position 3/i,
     );
-    expect(() => DenominatedNumber.fromNumber("13\\", 5)).toThrowError(
+    expect(() => DenominatedNumber.fromNumber("13\\", 5)).toThrow(
       /invalid character at position 3/i,
     );
   });
 
   it("throws for more than one separator", () => {
-    expect(() => DenominatedNumber.fromNumber("1.3.5", 5)).toThrowError(
+    expect(() => DenominatedNumber.fromNumber("1.3.5", 5)).toThrow(
       /more than one separator found/i,
     );
-    expect(() => DenominatedNumber.fromNumber("1..3", 5)).toThrowError(
+    expect(() => DenominatedNumber.fromNumber("1..3", 5)).toThrow(
       /more than one separator found/i,
     );
-    expect(() => DenominatedNumber.fromNumber("..", 5)).toThrowError(
+    expect(() => DenominatedNumber.fromNumber("..", 5)).toThrow(
       /more than one separator found/i,
     );
   });
 
   it("throws for separator only", () => {
-    expect(() => DenominatedNumber.fromNumber(".", 5)).toThrowError(
+    expect(() => DenominatedNumber.fromNumber(".", 5)).toThrow(
       /fractional part missing/i,
     );
   });
 
   it.skip("throws for more decimals than supported", () => {
-    expect(() => DenominatedNumber.fromNumber("44.123456", 5)).toThrowError(
+    expect(() => DenominatedNumber.fromNumber("44.123456", 5)).toThrow(
       /got more DenominatedNumbers than supported/i,
     );
-    expect(() => DenominatedNumber.fromNumber("44.1", 0)).toThrowError(
+    expect(() => DenominatedNumber.fromNumber("44.1", 0)).toThrow(
       /got more DenominatedNumbers than supported/i,
     );
   });
 
   it("throws for decimals that are not non-negative integers", () => {
     // no integer
-    expect(() => DenominatedNumber.fromNumber("1", Number.NaN)).toThrowError(
+    expect(() => DenominatedNumber.fromNumber("1", Number.NaN)).toThrow(
       /Decimals is not an integer/i,
     );
     expect(() =>
       DenominatedNumber.fromNumber("1", Number.POSITIVE_INFINITY),
-    ).toThrowError(/Decimals is not an integer/i);
+    ).toThrow(/Decimals is not an integer/i);
     expect(() =>
       DenominatedNumber.fromNumber("1", Number.NEGATIVE_INFINITY),
-    ).toThrowError(/Decimals is not an integer/i);
-    expect(() => DenominatedNumber.fromNumber("1", 1.78945544484)).toThrowError(
+    ).toThrow(/Decimals is not an integer/i);
+    expect(() => DenominatedNumber.fromNumber("1", 1.78945544484)).toThrow(
       /Decimals is not an integer/i,
     );
 
     // negative
-    expect(() => DenominatedNumber.fromNumber("1", -1)).toThrowError(
+    expect(() => DenominatedNumber.fromNumber("1", -1)).toThrow(
       /Decimals must not be negative/i,
     );
     expect(() =>
       DenominatedNumber.fromNumber("1", Number.MIN_SAFE_INTEGER),
-    ).toThrowError(/Decimals must not be negative/i);
+    ).toThrow(/Decimals must not be negative/i);
 
     // exceeds supported range
-    expect(() => DenominatedNumber.fromNumber("1", 101)).toThrowError(
+    expect(() => DenominatedNumber.fromNumber("1", 101)).toThrow(
       /Decimals must not exceed 100/i,
     );
   });
