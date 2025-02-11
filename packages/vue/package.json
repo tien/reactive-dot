@@ -28,7 +28,8 @@
   "scripts": {
     "dev": "tsc --build --watch",
     "build": "rm -rf build && tsc --build",
-    "lint": "eslint src"
+    "lint": "eslint src",
+    "test": "vitest"
   },
   "dependencies": {
     "@reactive-dot/core": "workspace:^"
@@ -39,6 +40,7 @@
     "@tsconfig/strictest": "^2.0.5",
     "eslint": "^9.20.0",
     "typescript": "^5.7.3",
+    "vitest": "^3.0.5",
     "vue": "^3.5.13"
   },
   "peerDependencies": {

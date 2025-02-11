@@ -5108,6 +5108,7 @@ __metadata:
     "@tsconfig/strictest": "npm:^2.0.5"
     eslint: "npm:^9.20.0"
     typescript: "npm:^5.7.3"
+    vitest: "npm:^3.0.5"
     vue: "npm:^3.5.13"
   peerDependencies:
     vue: 3.x
