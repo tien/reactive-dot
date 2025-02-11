@@ -1,4 +1,4 @@
-import { ChainIdContext } from "../contexts/index.js";
+import { ChainIdContext } from "../contexts/chain.js";
 import type { ChainHookOptions } from "./types.js";
 import { useConfig } from "./use-config.js";
 import { type ChainId, ReactiveDotError } from "@reactive-dot/core";

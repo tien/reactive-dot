@@ -1,5 +1,5 @@
-import { SignerContext } from "../contexts/index.js";
 import { MutationEventSubjectContext } from "../contexts/mutation.js";
+import { SignerContext } from "../contexts/signer.js";
 import type { ChainHookOptions } from "./types.js";
 import { useAsyncAction } from "./use-async-action.js";
 import { internal_useChainId } from "./use-chain-id.js";
