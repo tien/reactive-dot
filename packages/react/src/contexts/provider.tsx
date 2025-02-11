@@ -2,20 +2,8 @@ import { useWalletsInitializer } from "../hooks/use-wallets-initializer.js";
 import { ConfigContext } from "./config.js";
 import { MutationEventSubjectContext } from "./mutation.js";
 import type { Config } from "@reactive-dot/core";
-import { Suspense, useEffect, useMemo, type PropsWithChildren } from "react";
+import { type PropsWithChildren, Suspense, useEffect, useMemo } from "react";
 import { Subject } from "rxjs";
-
-export {
-  ChainIdContext,
-  ChainProvider,
-  type ChainProviderProps,
-} from "./chain.js";
-
-export {
-  SignerContext,
-  SignerProvider,
-  type SignerProviderProps,
-} from "./signer.js";
 
 export type ReactiveDotProviderProps = PropsWithChildren<{
   /**

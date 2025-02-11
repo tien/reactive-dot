@@ -1,8 +1,6 @@
-export {
-  ChainProvider,
-  ReactiveDotProvider,
-  SignerProvider,
-} from "./contexts/index.js";
+export { ChainProvider } from "./contexts/chain.js";
+export { ReactiveDotProvider } from "./contexts/provider.js";
+export { SignerProvider } from "./contexts/signer.js";
 export { useAccounts } from "./hooks/use-accounts.js";
 export { useSpendableBalance } from "./hooks/use-balance.js";
 export { useBlock } from "./hooks/use-block.js";
