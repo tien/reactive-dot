@@ -37,7 +37,10 @@ export function useAsyncAction<
         };
 
         if (result instanceof Promise) {
-          return result.then(resolve).catch(reject);
+          return result.then(resolve).catch((error) => {
+            reject(error);
+            throw error;
+          });
         } else {
           return result.subscribe({ next: resolve, error: reject });
         }
