@@ -1,6 +1,6 @@
 {
   "name": "@reactive-dot/core",
-  "version": "0.30.0",
+  "version": "0.31.0",
   "description": "VanillaJS library for ReactiveDOT",
   "keywords": [
     "substrate",

@@ -1,5 +1,11 @@
 # @reactive-dot/core
 
+## 0.31.0
+
+### Minor Changes
+
+- [#479](https://github.com/tien/reactive-dot/pull/479) [`776d1ef`](https://github.com/tien/reactive-dot/commit/776d1ef29777550fdcec83b11713e53a68624d14) Thanks [@tien](https://github.com/tien)! - Added "Polkadot Coretime" to wellknown chains.
+
 ## 0.30.0
 
 ### Minor Changes

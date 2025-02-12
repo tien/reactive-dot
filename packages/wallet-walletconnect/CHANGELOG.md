@@ -1,5 +1,14 @@
 # @reactive-dot/wallet-walletconnect
 
+## 0.17.3
+
+### Patch Changes
+
+- [#463](https://github.com/tien/reactive-dot/pull/463) [`2b4d6f3`](https://github.com/tien/reactive-dot/commit/2b4d6f30bd464b7e3feef4ddd7a372e00501d332) Thanks [@tien](https://github.com/tien)! - Use `getPolkadotSignerFromPjs` from `@polkadot-api/pjs-signer`.
+
+- Updated dependencies [[`776d1ef`](https://github.com/tien/reactive-dot/commit/776d1ef29777550fdcec83b11713e53a68624d14)]:
+  - @reactive-dot/core@0.31.0
+
 ## 0.17.2
 
 ### Patch Changes
