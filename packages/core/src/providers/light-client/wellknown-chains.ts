@@ -8,6 +8,7 @@ export const wellknownChains = {
         import("polkadot-api/chains/polkadot_bridge_hub"),
       polkadot_collectives: () =>
         import("polkadot-api/chains/polkadot_collectives"),
+      polkadot_coretime: () => import("polkadot-api/chains/polkadot_coretime"),
       polkadot_people: () => import("polkadot-api/chains/polkadot_people"),
     },
   ],
