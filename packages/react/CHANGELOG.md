@@ -1,5 +1,11 @@
 # @reactive-dot/react
 
+## 0.31.1
+
+### Patch Changes
+
+- [#483](https://github.com/tien/reactive-dot/pull/483) [`2a7ae77`](https://github.com/tien/reactive-dot/commit/2a7ae77f555565831cb93468586b4c6f4abc8362) Thanks [@tien](https://github.com/tien)! - Fixed incorrect conversion from number to native token amount .
+
 ## 0.31.0
 
 ### Patch Changes
