@@ -84,8 +84,8 @@ export function useNativeTokenAmountFromNumber(
   switch (typeof numberOrOptions) {
     case "number":
     case "string":
-      return new DenominatedNumber(
-        numberOrOptions,
+      return DenominatedNumber.fromNumber(
+        Number(numberOrOptions),
         chainSpecData.properties.tokenDecimals,
         chainSpecData.properties.tokenSymbol,
       );
