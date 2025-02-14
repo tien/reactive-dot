@@ -85,7 +85,7 @@ export function useNativeTokenAmountFromNumber(
     case "number":
     case "string":
       return DenominatedNumber.fromNumber(
-        Number(numberOrOptions),
+        numberOrOptions,
         chainSpecData.properties.tokenDecimals,
         chainSpecData.properties.tokenSymbol,
       );
