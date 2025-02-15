@@ -1,5 +1,13 @@
 # @reactive-dot/react
 
+## 0.31.3
+
+### Patch Changes
+
+- [#488](https://github.com/tien/reactive-dot/pull/488) [`be7ab3d`](https://github.com/tien/reactive-dot/commit/be7ab3df4736d7c3f3291ee000903403b3cae3ef) Thanks [@tien](https://github.com/tien)! - Memoize `useNativeTokenAmountFromPlanck` & `useNativeTokenAmountFromNumber` hooks' return value.
+
+- [#490](https://github.com/tien/reactive-dot/pull/490) [`7bb0237`](https://github.com/tien/reactive-dot/commit/7bb023777642c9eee76ac81df80276b7fd78bf9d) Thanks [@tien](https://github.com/tien)! - Fixed possible infinite read loop.
+
 ## 0.31.2
 
 ### Patch Changes
