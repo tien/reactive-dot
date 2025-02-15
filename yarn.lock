@@ -5075,7 +5075,7 @@ __metadata:
     "@tsconfig/strictest": "npm:^2.0.5"
     "@types/react": "npm:^19.0.8"
     eslint: "npm:^9.20.0"
-    jotai: "npm:^2.11.2"
+    jotai: "npm:^2.12.0"
     jsdom: "npm:^26.0.0"
     react: "npm:^19.0.0"
     typescript: "npm:^5.7.3"
@@ -13238,9 +13238,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"jotai@npm:^2.11.2":
-  version: 2.11.2
-  resolution: "jotai@npm:2.11.2"
+"jotai@npm:^2.12.0":
+  version: 2.12.0
+  resolution: "jotai@npm:2.12.0"
   peerDependencies:
     "@types/react": ">=17.0.0"
     react: ">=17.0.0"
@@ -13249,7 +13249,7 @@ __metadata:
       optional: true
     react:
       optional: true
-  checksum: 10c0/8922d2d9c2cf14b45d62a8d41750b29cb5faf1214f824bb514e8b73f31734b1800f1184b35e8cd143557680334b870f13b88fbead3b981349c4491aaa468d07a
+  checksum: 10c0/8a66bcb15183ed4e8ce35d84fd32f72d239092f0c5226cf652f37757489cd1b635183105c3c23ea7e21eb646074a91a4585a3cdaa12d72dfce79e7397b0ed623
   languageName: node
   linkType: hard
 

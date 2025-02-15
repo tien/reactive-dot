@@ -192,14 +192,14 @@ export const queryPayloadAtom = atomFamilyWithErrorCatcher(
   (
     param: { config: Config; chainId: ChainId; query: Query },
     withErrorCatcher,
-  ): Atom<unknown> =>
-    withErrorCatcher(atom)((get) => {
-      const atoms = getQueryInstructionPayloadAtoms(
-        param.config,
-        param.chainId,
-        param.query,
-      );
+  ): Atom<unknown> => {
+    const atoms = getQueryInstructionPayloadAtoms(
+      param.config,
+      param.chainId,
+      param.query,
+    );
 
+    return withErrorCatcher(atom)((get) => {
       return Promise.all(
         atoms.map((atomOrAtoms) => {
           if (Array.isArray(atomOrAtoms)) {
@@ -209,7 +209,8 @@ export const queryPayloadAtom = atomFamilyWithErrorCatcher(
           return get(atomOrAtoms);
         }),
       );
-    }),
+    });
+  },
   (a, b) =>
     a.config === b.config &&
     a.chainId === b.chainId &&
