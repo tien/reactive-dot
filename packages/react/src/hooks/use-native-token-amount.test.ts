@@ -5,6 +5,10 @@ import {
 import { DenominatedNumber } from "@reactive-dot/utils";
 import { describe, expect, it, vi } from "vitest";
 
+vi.mock("react", () => ({
+  useMemo: vi.fn((value: (...args: unknown[]) => unknown) => value()),
+}));
+
 vi.mock("./use-chain-spec-data", () => ({
   useChainSpecData: vi.fn(() => ({
     properties: {
