@@ -1,6 +1,7 @@
 import type { ChainHookOptions } from "./types.js";
 import { useChainSpecData } from "./use-chain-spec-data.js";
 import { DenominatedNumber } from "@reactive-dot/utils";
+import { useMemo } from "react";
 
 /**
  * Hook for returning the native token amount from a planck value.
@@ -33,23 +34,35 @@ export function useNativeTokenAmountFromPlanck(
 
   const chainSpecData = useChainSpecData(options);
 
-  switch (typeof planckOrOptions) {
-    case "bigint":
-    case "number":
-    case "string":
-      return new DenominatedNumber(
-        planckOrOptions,
-        chainSpecData.properties.tokenDecimals,
-        chainSpecData.properties.tokenSymbol,
-      );
-    default:
-      return (planck: bigint | number | string) =>
-        new DenominatedNumber(
-          planck,
-          chainSpecData.properties.tokenDecimals,
-          chainSpecData.properties.tokenSymbol,
-        );
-  }
+  return useMemo(
+    () => {
+      switch (typeof planckOrOptions) {
+        case "bigint":
+        case "number":
+        case "string":
+          return new DenominatedNumber(
+            planckOrOptions,
+            chainSpecData.properties.tokenDecimals,
+            chainSpecData.properties.tokenSymbol,
+          );
+        default:
+          return (planck: bigint | number | string) =>
+            new DenominatedNumber(
+              planck,
+              chainSpecData.properties.tokenDecimals,
+              chainSpecData.properties.tokenSymbol,
+            );
+      }
+    },
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [
+      chainSpecData.properties.tokenDecimals,
+      chainSpecData.properties.tokenSymbol,
+      // eslint-disable-next-line react-hooks/exhaustive-deps
+      typeof planckOrOptions,
+    ],
+  );
 }
 
 /**
@@ -81,20 +94,31 @@ export function useNativeTokenAmountFromNumber(
 
   const chainSpecData = useChainSpecData(options);
 
-  switch (typeof numberOrOptions) {
-    case "number":
-    case "string":
-      return DenominatedNumber.fromNumber(
-        numberOrOptions,
-        chainSpecData.properties.tokenDecimals,
-        chainSpecData.properties.tokenSymbol,
-      );
-    default:
-      return (number: number | string) =>
-        DenominatedNumber.fromNumber(
-          number,
-          chainSpecData.properties.tokenDecimals,
-          chainSpecData.properties.tokenSymbol,
-        );
-  }
+  return useMemo(
+    () => {
+      switch (typeof numberOrOptions) {
+        case "number":
+        case "string":
+          return DenominatedNumber.fromNumber(
+            numberOrOptions,
+            chainSpecData.properties.tokenDecimals,
+            chainSpecData.properties.tokenSymbol,
+          );
+        default:
+          return (number: number | string) =>
+            DenominatedNumber.fromNumber(
+              number,
+              chainSpecData.properties.tokenDecimals,
+              chainSpecData.properties.tokenSymbol,
+            );
+      }
+    },
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [
+      chainSpecData.properties.tokenDecimals,
+      chainSpecData.properties.tokenSymbol,
+      // eslint-disable-next-line react-hooks/exhaustive-deps
+      typeof numberOrOptions,
+    ],
+  );
 }
