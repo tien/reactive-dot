@@ -1,4 +1,5 @@
-import { atomFamilyWithErrorCatcher } from "../utils/jotai.js";
+import { atomFamilyWithErrorCatcher } from "../utils/jotai/atom-family-with-error-catcher.js";
+import { objectId } from "../utils/object-id.js";
 import type { ChainHookOptions } from "./types.js";
 import { internal_useChainId } from "./use-chain-id.js";
 import { useConfig } from "./use-config.js";
@@ -19,7 +20,7 @@ import {
 import { preflight, query } from "@reactive-dot/core/internal/actions.js";
 import { type Atom, atom, useAtomValue, type WritableAtom } from "jotai";
 import { atomWithObservable, atomWithRefresh } from "jotai/utils";
-import { useMemo, version as reactVersion } from "react";
+import { version as reactVersion, useMemo } from "react";
 import { from, type Observable } from "rxjs";
 import { switchMap } from "rxjs/operators";
 
@@ -58,14 +59,7 @@ export function useLazyLoadQuery<
 
   const rawData = useAtomValue(
     useMemo(
-      () =>
-        !query
-          ? atom(idle)
-          : queryPayloadAtom({
-              config,
-              chainId,
-              query,
-            }),
+      () => (!query ? atom(idle) : queryPayloadAtom(config, chainId, query)),
       // eslint-disable-next-line react-hooks/exhaustive-deps
       [hashKey],
     ),
@@ -114,44 +108,35 @@ export function useLazyLoadQueryWithRefresh<
   return [data, refresh] as [data: typeof data, refresh: typeof refresh];
 }
 
-/**
- * @internal
- */
-export const instructionPayloadAtom = atomFamilyWithErrorCatcher(
+const instructionPayloadAtom = atomFamilyWithErrorCatcher(
   (
-    param: {
-      config: Config;
-      chainId: ChainId;
-      instruction: Exclude<
-        QueryInstruction,
-        MultiInstruction<// @ts-expect-error need any empty object here
-        // eslint-disable-next-line @typescript-eslint/no-empty-object-type
-        {}>
-      >;
-    },
     withErrorCatcher,
+    config: Config,
+    chainId: ChainId,
+    instruction: Exclude<
+      QueryInstruction,
+      MultiInstruction<// @ts-expect-error need any empty object here
+      // eslint-disable-next-line @typescript-eslint/no-empty-object-type
+      {}>
+    >,
   ): Atom<unknown> | WritableAtom<Promise<unknown>, [], void> => {
-    switch (preflight(param.instruction)) {
+    switch (preflight(instruction)) {
       case "promise":
         return withErrorCatcher(atomWithRefresh)(async (get, { signal }) => {
-          const api = await get(typedApiAtom(param));
+          const api = await get(typedApiAtom(config, chainId));
 
-          return query(api, param.instruction, { signal });
+          return query(api, instruction, { signal });
         });
       case "observable":
         return withErrorCatcher(atomWithObservable)((get) =>
-          from(get(typedApiAtom(param))).pipe(
-            switchMap(
-              (api) => query(api, param.instruction) as Observable<unknown>,
-            ),
+          from(get(typedApiAtom(config, chainId))).pipe(
+            switchMap((api) => query(api, instruction) as Observable<unknown>),
           ),
         );
     }
   },
-  (a, b) =>
-    a.config === b.config &&
-    a.chainId === b.chainId &&
-    stringify(a.instruction) === stringify(b.instruction),
+  (config, chainId, instruction) =>
+    [objectId(config), chainId, stringify(instruction)].join(),
 );
 
 /**
@@ -164,21 +149,13 @@ export function getQueryInstructionPayloadAtoms(
 ) {
   return query.instructions.map((instruction) => {
     if (!("multi" in instruction)) {
-      return instructionPayloadAtom({
-        config,
-        chainId,
-        instruction,
-      });
+      return instructionPayloadAtom(config, chainId, instruction);
     }
 
     return (instruction.args as unknown[]).map((args) => {
       const { multi, ...rest } = instruction;
 
-      return instructionPayloadAtom({
-        config,
-        chainId,
-        instruction: { ...rest, args },
-      });
+      return instructionPayloadAtom(config, chainId, { ...rest, args });
     });
   });
 }
@@ -190,14 +167,12 @@ export function getQueryInstructionPayloadAtoms(
  */
 export const queryPayloadAtom = atomFamilyWithErrorCatcher(
   (
-    param: { config: Config; chainId: ChainId; query: Query },
     withErrorCatcher,
+    config: Config,
+    chainId: ChainId,
+    query: Query,
   ): Atom<unknown> => {
-    const atoms = getQueryInstructionPayloadAtoms(
-      param.config,
-      param.chainId,
-      param.query,
-    );
+    const atoms = getQueryInstructionPayloadAtoms(config, chainId, query);
 
     return withErrorCatcher(atom)((get) => {
       return Promise.all(
@@ -211,8 +186,6 @@ export const queryPayloadAtom = atomFamilyWithErrorCatcher(
       );
     });
   },
-  (a, b) =>
-    a.config === b.config &&
-    a.chainId === b.chainId &&
-    stringify(a.query.instructions) === stringify(b.query.instructions),
+  (config, chainId, query) =>
+    [objectId(config), chainId, stringify(query.instructions)].join(),
 );

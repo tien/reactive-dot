@@ -1,4 +1,4 @@
-import { atomFamilyErrorsAtom } from "../utils/jotai.js";
+import { atomFamilyErrorsAtom } from "../utils/jotai/atom-family-with-error-catcher.js";
 import { useAtomCallback } from "jotai/utils";
 import { useCallback } from "react";
 
@@ -13,7 +13,7 @@ export function useQueryErrorResetter() {
       const atomFamilyErrors = get(atomFamilyErrorsAtom);
 
       for (const error of atomFamilyErrors) {
-        error.atomFamily.remove(error.param);
+        error.atomFamily.delete(error.args);
         atomFamilyErrors.delete(error);
       }
     }, []),

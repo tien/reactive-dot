@@ -1,4 +1,4 @@
-import { atomFamilyWithErrorCatcher } from "../utils/jotai.js";
+import { atomFamilyWithErrorCatcher } from "../utils/jotai/atom-family-with-error-catcher.js";
 import type { ChainHookOptions } from "./types.js";
 import { internal_useChainId } from "./use-chain-id.js";
 import { useConfig } from "./use-config.js";
@@ -15,27 +15,21 @@ import { atom } from "jotai";
  * @returns Polkadot-API client
  */
 export function useClient(options?: ChainHookOptions) {
-  return useAtomValue(
-    clientAtom({
-      config: useConfig(),
-      chainId: internal_useChainId(options),
-    }),
-  );
+  return useAtomValue(clientAtom(useConfig(), internal_useChainId(options)));
 }
 
 /**
  * @internal
  */
 export const clientAtom = atomFamilyWithErrorCatcher(
-  (param: { config: Config; chainId: ChainId }, withErrorCatcher) =>
+  (withErrorCatcher, config: Config, chainId: ChainId) =>
     withErrorCatcher(atom)(async () => {
-      const chainConfig = param.config.chains[param.chainId];
+      const chainConfig = config.chains[chainId];
 
       if (chainConfig === undefined) {
-        throw new ReactiveDotError(`No config provided for ${param.chainId}`);
+        throw new ReactiveDotError(`No config provided for ${chainId}`);
       }
 
       return getClient(chainConfig);
     }),
-  (a, b) => a.config === b.config && a.chainId === b.chainId,
 );

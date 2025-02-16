@@ -1,4 +1,4 @@
-import { atomFamilyWithErrorCatcher } from "../utils/jotai.js";
+import { atomFamilyWithErrorCatcher } from "../utils/jotai/atom-family-with-error-catcher.js";
 import { useConfig } from "./use-config.js";
 import type { Config } from "@reactive-dot/core";
 import {
@@ -30,7 +30,7 @@ export function useConnectedWallets() {
  * @internal
  */
 export const walletsAtom = atomFamilyWithErrorCatcher(
-  (config: Config, withErrorCatcher) =>
+  (withErrorCatcher, config: Config) =>
     withErrorCatcher(atom)(() => aggregateWallets(config.wallets ?? [])),
 );
 
@@ -38,7 +38,7 @@ export const walletsAtom = atomFamilyWithErrorCatcher(
  * @internal
  */
 export const connectedWalletsAtom = atomFamilyWithErrorCatcher(
-  (config: Config, withErrorCatcher) =>
+  (withErrorCatcher, config: Config) =>
     withErrorCatcher(atomWithObservable)((get) =>
       getConnectedWallets(get(walletsAtom(config))),
     ),
