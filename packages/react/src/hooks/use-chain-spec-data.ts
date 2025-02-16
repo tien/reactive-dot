@@ -1,4 +1,4 @@
-import { atomFamilyWithErrorCatcher } from "../utils/jotai.js";
+import { atomFamilyWithErrorCatcher } from "../utils/jotai/atom-family-with-error-catcher.js";
 import type { ChainHookOptions } from "./types.js";
 import { internal_useChainId } from "./use-chain-id.js";
 import { clientAtom } from "./use-client.js";
@@ -14,10 +14,7 @@ import { atom, useAtomValue } from "jotai";
  */
 export function useChainSpecData(options?: ChainHookOptions) {
   return useAtomValue(
-    chainSpecDataAtom({
-      config: useConfig(),
-      chainId: internal_useChainId(options),
-    }),
+    chainSpecDataAtom(useConfig(), internal_useChainId(options)),
   );
 }
 
@@ -25,11 +22,10 @@ export function useChainSpecData(options?: ChainHookOptions) {
  * @internal
  */
 export const chainSpecDataAtom = atomFamilyWithErrorCatcher(
-  (param: { config: Config; chainId: ChainId }, withErrorCatcher) =>
+  (withErrorCatcher, config: Config, chainId: ChainId) =>
     withErrorCatcher(atom)(async (get) => {
-      const client = await get(clientAtom(param));
+      const client = await get(clientAtom(config, chainId));
 
       return client.getChainSpecData();
     }),
-  (a, b) => a.config === b.config && a.chainId === b.chainId,
 );

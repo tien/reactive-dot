@@ -1,4 +1,4 @@
-import { atomFamilyWithErrorCatcher } from "../utils/jotai.js";
+import { atomFamilyWithErrorCatcher } from "../utils/jotai/atom-family-with-error-catcher.js";
 import type { ChainHookOptions } from "./types.js";
 import { internal_useChainId } from "./use-chain-id.js";
 import { chainSpecDataAtom } from "./use-chain-spec-data.js";
@@ -17,10 +17,10 @@ import { atomWithObservable } from "jotai/utils";
  */
 export function useAccounts(options?: ChainHookOptions) {
   return useAtomValue(
-    accountsAtom({
-      config: useConfig(),
-      chainId: internal_useChainId({ ...options, optionalChainId: true }),
-    }),
+    accountsAtom(
+      useConfig(),
+      internal_useChainId({ ...options, optionalChainId: true }),
+    ),
   );
 }
 
@@ -28,19 +28,13 @@ export function useAccounts(options?: ChainHookOptions) {
  * @internal
  */
 export const accountsAtom = atomFamilyWithErrorCatcher(
-  (param: { config: Config; chainId: ChainId | undefined }, withErrorCatcher) =>
+  (withErrorCatcher, config: Config, chainId: ChainId | undefined) =>
     withErrorCatcher(atomWithObservable)((get) =>
       getAccounts(
-        get(connectedWalletsAtom(param.config)),
-        param.chainId === undefined
+        get(connectedWalletsAtom(config)),
+        chainId === undefined
           ? undefined
-          : get(
-              chainSpecDataAtom(
-                // @ts-expect-error `chainId` will never be undefined
-                param,
-              ),
-            ),
+          : get(chainSpecDataAtom(config, chainId)),
       ),
     ),
-  (a, b) => a.config === b.config && a.chainId === b.chainId,
 );

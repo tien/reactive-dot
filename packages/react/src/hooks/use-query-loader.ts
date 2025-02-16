@@ -36,13 +36,7 @@ export function useQueryLoader() {
       ) => {
         const query = builder(new Query([]));
 
-        void get(
-          queryPayloadAtom({
-            config,
-            chainId: options?.chainId ?? chainId,
-            query,
-          }),
-        );
+        void get(queryPayloadAtom(config, options?.chainId ?? chainId, query));
       },
     [chainId, config],
   );

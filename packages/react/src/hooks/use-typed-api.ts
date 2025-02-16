@@ -1,4 +1,4 @@
-import { atomFamilyWithErrorCatcher } from "../utils/jotai.js";
+import { atomFamilyWithErrorCatcher } from "../utils/jotai/atom-family-with-error-catcher.js";
 import type { ChainHookOptions } from "./types.js";
 import { internal_useChainId } from "./use-chain-id.js";
 import { clientAtom } from "./use-client.js";
@@ -22,10 +22,7 @@ export function useTypedApi<TChainId extends ChainId | undefined>(
   options?: ChainHookOptions<TChainId>,
 ) {
   return useAtomValue(
-    typedApiAtom({
-      config: useConfig(),
-      chainId: internal_useChainId(options),
-    }),
+    typedApiAtom(useConfig(), internal_useChainId(options)),
   ) as TypedApi<ChainDescriptorOf<TChainId>>;
 }
 
@@ -33,19 +30,16 @@ export function useTypedApi<TChainId extends ChainId | undefined>(
  * @internal
  */
 export const typedApiAtom = atomFamilyWithErrorCatcher(
-  (param: { config: Config; chainId: ChainId }, withErrorCatcher) =>
+  (withErrorCatcher, config: Config, chainId: ChainId) =>
     withErrorCatcher(atom)(async (get) => {
-      const config = param.config.chains[param.chainId];
+      const chainConfig = config.chains[chainId];
 
-      if (config === undefined) {
-        throw new ReactiveDotError(
-          `No config provided for chain ${param.chainId}`,
-        );
+      if (chainConfig === undefined) {
+        throw new ReactiveDotError(`No config provided for chain ${chainId}`);
       }
 
-      const client = await get(clientAtom(param));
+      const client = await get(clientAtom(config, chainId));
 
-      return client.getTypedApi(config.descriptor);
+      return client.getTypedApi(chainConfig.descriptor);
     }),
-  (a, b) => a.config === b.config && a.chainId === b.chainId,
 );

@@ -1,4 +1,4 @@
-import { atomFamilyWithErrorCatcher } from "../utils/jotai.js";
+import { atomFamilyWithErrorCatcher } from "../utils/jotai/atom-family-with-error-catcher.js";
 import type { ChainHookOptions } from "./types.js";
 import { internal_useChainId } from "./use-chain-id.js";
 import { clientAtom } from "./use-client.js";
@@ -26,8 +26,8 @@ export function useBlock(
 
   return useAtomValue(
     tag === "finalized"
-      ? finalizedBlockAtom({ config, chainId })
-      : bestBlockAtom({ config, chainId }),
+      ? finalizedBlockAtom(config, chainId)
+      : bestBlockAtom(config, chainId),
   );
 }
 
@@ -35,24 +35,22 @@ export function useBlock(
  * @internal
  */
 export const finalizedBlockAtom = atomFamilyWithErrorCatcher(
-  (param: { config: Config; chainId: ChainId }, withErrorCatcher) =>
+  (withErrorCatcher, config: Config, chainId: ChainId) =>
     withErrorCatcher(atomWithObservable)((get) =>
-      from(get(clientAtom(param))).pipe(
+      from(get(clientAtom(config, chainId))).pipe(
         switchMap((client) => getBlock(client, { tag: "finalized" })),
       ),
     ),
-  (a, b) => a.config === b.config && a.chainId === b.chainId,
 );
 
 /**
  * @internal
  */
 export const bestBlockAtom = atomFamilyWithErrorCatcher(
-  (param: { config: Config; chainId: ChainId }, withErrorCatcher) =>
+  (withErrorCatcher, config: Config, chainId: ChainId) =>
     withErrorCatcher(atomWithObservable)((get) =>
-      from(get(clientAtom(param))).pipe(
+      from(get(clientAtom(config, chainId))).pipe(
         switchMap((client) => getBlock(client, { tag: "best" })),
       ),
     ),
-  (a, b) => a.config === b.config && a.chainId === b.chainId,
 );

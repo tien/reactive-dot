@@ -1,20 +1,23 @@
+import { type AtomFamily, atomFamily } from "./atom-family.js";
 import { atom, type Atom, type Getter } from "jotai";
-import { atomFamily } from "jotai/utils";
-import type { AtomFamily } from "jotai/vanilla/utils/atomFamily";
 import { Observable } from "rxjs";
 import { catchError } from "rxjs/operators";
 
 export const atomFamilyErrorsAtom = atom(
   () =>
     new Set<{
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      atomFamily: AtomFamily<any, any>;
-      param: unknown;
+      atomFamily: AtomFamily<
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        any[],
+        Atom<unknown>
+      >;
+      args: unknown;
     }>(),
 );
 
 export function atomFamilyWithErrorCatcher<
-  TParam,
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  TArguments extends any[],
   TAtomType extends Atom<unknown>,
   TWithErrorCatcher extends <
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -26,12 +29,12 @@ export function atomFamilyWithErrorCatcher<
   ) => TAtomCreator,
 >(
   initializeAtom: (
-    param: TParam,
     withErrorCatcher: TWithErrorCatcher,
+    ...args: TArguments
   ) => TAtomType,
-  areEqual?: (a: TParam, b: TParam) => boolean,
-): AtomFamily<TParam, TAtomType> {
-  const baseAtomFamily = atomFamily((param: TParam) => {
+  getKey?: (...args: TArguments) => unknown,
+): AtomFamily<TArguments, TAtomType> {
+  const baseAtomFamily = atomFamily((...args: TArguments) => {
     // @ts-expect-error complex sub-type
     const withErrorCatcher: TWithErrorCatcher = (atomCreator) => {
       // @ts-expect-error complex sub-type
@@ -42,7 +45,7 @@ export function atomFamilyWithErrorCatcher<
             const get = readArgs[0] as Getter;
             get(atomFamilyErrorsAtom).add({
               atomFamily: baseAtomFamily,
-              param,
+              args,
             });
             return error;
           };
@@ -76,8 +79,8 @@ export function atomFamilyWithErrorCatcher<
       return atomCatching;
     };
 
-    return initializeAtom(param, withErrorCatcher);
-  }, areEqual);
+    return initializeAtom(withErrorCatcher, ...args);
+  }, getKey);
 
   return baseAtomFamily;
 }
