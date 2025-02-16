@@ -12,5 +12,6 @@
     "sourceMap": true,
     "outDir": "build"
   },
-  "include": ["src"]
+  "include": ["src"],
+  "exclude": ["**/*.test.*"]
 }
