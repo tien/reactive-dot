@@ -1,5 +1,11 @@
 # @reactive-dot/react
 
+## 0.31.4
+
+### Patch Changes
+
+- [#491](https://github.com/tien/reactive-dot/pull/491) [`6ac1a56`](https://github.com/tien/reactive-dot/commit/6ac1a560c18a25cf76a52799d42904d43f23b6a7) Thanks [@tien](https://github.com/tien)! - Drastically improved query lookup performance.
+
 ## 0.31.3
 
 ### Patch Changes
