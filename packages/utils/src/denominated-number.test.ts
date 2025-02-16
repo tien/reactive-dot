@@ -1,5 +1,5 @@
 import { DenominatedNumber } from "./denominated-number.js";
-import { describe, expect, it } from "vitest";
+import { describe, expect, it, test } from "vitest";
 
 describe("fromPlanck", () => {
   it("leads to correct atomics value", () => {
@@ -238,4 +238,20 @@ describe("toLocaleString", () => {
     expect(string).toContain("DOT");
     expect(string).toContain("30K");
   });
+});
+
+test("mapPlanck", () => {
+  const number = new DenominatedNumber(30, 0, "DOT").mapPlanck(
+    (planck) => planck * 2n,
+  );
+
+  expect(number.toString()).toEqual("60");
+});
+
+test("mapNumber", () => {
+  const number = new DenominatedNumber(30, 0, "DOT").mapNumber(
+    (number) => number * 2,
+  );
+
+  expect(number.toString()).toEqual("60");
 });

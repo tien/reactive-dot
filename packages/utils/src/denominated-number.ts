@@ -112,7 +112,7 @@ export class DenominatedNumber extends Number {
       .replace("XTS", this.denomination);
   }
 
-  mapFromPlanck(mapper: (planck: bigint) => bigint) {
+  mapPlanck(mapper: (planck: bigint) => bigint) {
     return new DenominatedNumber(
       mapper(this.planck),
       this.decimals,
@@ -120,13 +120,23 @@ export class DenominatedNumber extends Number {
     );
   }
 
-  mapFromNumber(mapper: (number: number) => number) {
+  /**
+   * @deprecated Use {@link DenominatedNumber.mapPlanck} instead.
+   */
+  mapFromPlanck = this.mapPlanck;
+
+  mapNumber(mapper: (number: number) => number) {
     return DenominatedNumber.fromNumber(
       mapper(this.valueOf()),
       this.decimals,
       this.denomination,
     );
   }
+
+  /**
+   * @deprecated Use {@link DenominatedNumber.mapNumber} instead.
+   */
+  mapFromNumber = this.mapNumber;
 
   static #verifyDecimals(fractionalDigits: number): void {
     if (!Number.isInteger(fractionalDigits))
