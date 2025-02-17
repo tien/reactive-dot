@@ -1,5 +1,6 @@
 import type { PolkadotAccount } from "@reactive-dot/core/wallets.js";
 import {
+  QueryRenderer,
   useAccounts,
   useBlock,
   useLazyLoadQuery,
@@ -8,7 +9,7 @@ import {
   useSpendableBalance,
 } from "@reactive-dot/react";
 import { formatDistance } from "date-fns";
-import { useTransition } from "react";
+import { Suspense, useTransition } from "react";
 
 export function Query() {
   const block = useBlock();
@@ -42,11 +43,7 @@ export function Query() {
     sessionsPerEra *
     bondingDuration;
 
-  const totalStaked = useLazyLoadQuery((builder) =>
-    activeEra === undefined
-      ? undefined
-      : builder.readStorage("Staking", "ErasTotalStake", [activeEra.index]),
-  );
+  const nativeTokenAmountFromPlanck = useNativeTokenAmountFromPlanck();
 
   return (
     <section>
@@ -71,14 +68,26 @@ export function Query() {
         <h4>Bonding duration</h4>
         <p>{formatDistance(0, bondingDurationMs)}</p>
       </article>
-      <article>
-        <h4>Total value staked</h4>
-        <p>
-          {useNativeTokenAmountFromPlanck(
-            typeof totalStaked === "bigint" ? totalStaked : 0n,
-          ).toLocaleString()}
-        </p>
-      </article>
+      {activeEra && (
+        <article>
+          <h4>Total value staked</h4>
+          <p>
+            <Suspense fallback="...">
+              <QueryRenderer
+                query={(builder) =>
+                  builder.readStorage("Staking", "ErasTotalStake", [
+                    activeEra.index,
+                  ])
+                }
+              >
+                {(totalStaked) =>
+                  nativeTokenAmountFromPlanck(totalStaked).toLocaleString()
+                }
+              </QueryRenderer>
+            </Suspense>
+          </p>
+        </article>
+      )}
       <article>
         <h4>Total value locked in nomination Pools</h4>
         <p>

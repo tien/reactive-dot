@@ -4,6 +4,7 @@ import { expect, it } from "vitest";
 it("should match inline snapshot", () =>
   expect(Object.keys(exports)).toMatchInlineSnapshot(`
     [
+      "QueryRenderer",
       "ChainProvider",
       "ReactiveDotProvider",
       "SignerProvider",

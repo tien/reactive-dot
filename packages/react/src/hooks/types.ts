@@ -6,5 +6,5 @@ export type ChainHookOptions<
   /**
    * Override default chain ID
    */
-  chainId?: TChainId;
+  chainId?: TChainId | undefined;
 };
