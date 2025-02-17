@@ -1,43 +1,18 @@
-import { useLazyLoadQuery } from "../hooks/use-query.js";
-import type { ChainId, idle, Query } from "@reactive-dot/core";
 import type {
-  ChainDescriptorOf,
-  Falsy,
-  FalsyGuard,
-  FlatHead,
-  InferQueryPayload,
-  QueryInstruction,
-} from "@reactive-dot/core/internal.js";
+  InferQueryArgumentResult,
+  QueryArgument,
+} from "../hooks/types.js";
+import { useLazyLoadQuery } from "../hooks/use-query.js";
+import type { ChainId } from "@reactive-dot/core";
 import type { ReactNode } from "react";
 
 type QueryRendererProps<
   TChainId extends ChainId | undefined,
-  TQuery extends
-    | ((
-        builder: Query<[], ChainDescriptorOf<TChainId>>,
-      ) =>
-        | Query<
-            QueryInstruction<ChainDescriptorOf<TChainId>>[],
-            ChainDescriptorOf<TChainId>
-          >
-        | Falsy)
-    | Falsy,
+  TQuery extends QueryArgument<TChainId>,
 > = {
   query: TQuery;
   chainId?: TChainId;
-  children: (
-    result: TQuery extends Falsy
-      ? typeof idle
-      : FalsyGuard<
-          ReturnType<Exclude<TQuery, Falsy>>,
-          FlatHead<
-            InferQueryPayload<
-              Exclude<ReturnType<Exclude<TQuery, Falsy>>, Falsy>
-            >
-          >,
-          typeof idle
-        >,
-  ) => ReactNode;
+  children: (result: InferQueryArgumentResult<TChainId, TQuery>) => ReactNode;
 };
 
 /**
@@ -47,16 +22,7 @@ type QueryRendererProps<
  */
 export function QueryRenderer<
   TChainId extends ChainId | undefined,
-  TQuery extends
-    | ((
-        builder: Query<[], ChainDescriptorOf<TChainId>>,
-      ) =>
-        | Query<
-            QueryInstruction<ChainDescriptorOf<TChainId>>[],
-            ChainDescriptorOf<TChainId>
-          >
-        | Falsy)
-    | Falsy,
+  TQuery extends QueryArgument<TChainId>,
 >({ query, chainId, children }: QueryRendererProps<TChainId, TQuery>) {
   return children(useLazyLoadQuery(query, { chainId }));
 }

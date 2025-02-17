@@ -1,18 +1,17 @@
 import { atomFamilyWithErrorCatcher } from "../utils/jotai/atom-family-with-error-catcher.js";
 import { objectId } from "../utils/object-id.js";
-import type { ChainHookOptions } from "./types.js";
+import type {
+  ChainHookOptions,
+  InferQueryArgumentResult,
+  QueryArgument,
+} from "./types.js";
 import { internal_useChainId } from "./use-chain-id.js";
 import { useConfig } from "./use-config.js";
 import { useQueryRefresher } from "./use-query-refresher.js";
 import { typedApiAtom } from "./use-typed-api.js";
 import { type ChainId, type Config, idle, Query } from "@reactive-dot/core";
 import {
-  type ChainDescriptorOf,
-  type Falsy,
-  type FalsyGuard,
   flatHead,
-  type FlatHead,
-  type InferQueryPayload,
   type MultiInstruction,
   type QueryInstruction,
   stringify,
@@ -27,39 +26,38 @@ import { switchMap } from "rxjs/operators";
 /**
  * Hook for querying data from chain, and returning the response.
  *
- * @param builder - The function to create the query
+ * @param query - The function to create the query
  * @param options - Additional options
  * @returns The data response
  */
 export function useLazyLoadQuery<
   TChainId extends ChainId | undefined,
-  TQuery extends
-    | ((
-        builder: Query<[], ChainDescriptorOf<TChainId>>,
-      ) =>
-        | Query<
-            QueryInstruction<ChainDescriptorOf<TChainId>>[],
-            ChainDescriptorOf<TChainId>
-          >
-        | Falsy)
-    | Falsy,
->(builder: TQuery, options?: ChainHookOptions<TChainId>) {
+  TQuery extends QueryArgument<TChainId>,
+>(query: TQuery, options?: ChainHookOptions<TChainId>) {
   const config = useConfig();
   const chainId = internal_useChainId(options);
 
-  const query = useMemo(
-    () => (!builder ? undefined : builder(new Query([]))),
-    [builder],
+  const queryValue = useMemo(
+    () =>
+      !query
+        ? undefined
+        : query instanceof Query
+          ? query
+          : query(new Query([])),
+    [query],
   );
 
   const hashKey = useMemo(
-    () => (!query ? query : stringify(query.instructions)),
-    [query],
+    () => (!queryValue ? queryValue : stringify(queryValue.instructions)),
+    [queryValue],
   );
 
   const rawData = useAtomValue(
     useMemo(
-      () => (!query ? atom(idle) : queryPayloadAtom(config, chainId, query)),
+      () =>
+        !queryValue
+          ? atom(idle)
+          : queryPayloadAtom(config, chainId, queryValue),
       // eslint-disable-next-line react-hooks/exhaustive-deps
       [hashKey],
     ),
@@ -69,41 +67,26 @@ export function useLazyLoadQuery<
 
   return useMemo(
     () =>
-      query && query.instructions.length === 1 ? flatHead(rawData) : rawData,
-    [query, rawData],
-  ) as TQuery extends Falsy
-    ? typeof idle
-    : FalsyGuard<
-        ReturnType<Exclude<TQuery, Falsy>>,
-        FlatHead<
-          InferQueryPayload<Exclude<ReturnType<Exclude<TQuery, Falsy>>, Falsy>>
-        >,
-        typeof idle
-      >;
+      queryValue && queryValue.instructions.length === 1
+        ? flatHead(rawData)
+        : rawData,
+    [queryValue, rawData],
+  ) as InferQueryArgumentResult<TChainId, TQuery>;
 }
 
 /**
  * Hook for querying data from chain, returning the response & a refresher function.
  *
- * @param builder - The function to create the query
+ * @param query - The function to create the query
  * @param options - Additional options
  * @returns The data response & a function to refresh it
  */
 export function useLazyLoadQueryWithRefresh<
-  TQuery extends
-    | ((
-        builder: Query<[], ChainDescriptorOf<TChainId>>,
-      ) =>
-        | Query<
-            QueryInstruction<ChainDescriptorOf<TChainId>>[],
-            ChainDescriptorOf<TChainId>
-          >
-        | Falsy)
-    | Falsy,
   TChainId extends ChainId | undefined,
->(builder: TQuery, options?: ChainHookOptions<TChainId>) {
-  const data = useLazyLoadQuery(builder, options);
-  const refresh = useQueryRefresher(builder, options);
+  TQuery extends QueryArgument<TChainId>,
+>(query: TQuery, options?: ChainHookOptions<TChainId>) {
+  const data = useLazyLoadQuery(query, options);
+  const refresh = useQueryRefresher(query, options);
 
   return [data, refresh] as [data: typeof data, refresh: typeof refresh];
 }
