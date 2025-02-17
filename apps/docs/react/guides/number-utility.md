@@ -37,14 +37,14 @@ let dotAmount = DenominatedNumber.fromNumber(10, 10, "DOT");
 
 // Arithmetic operations can be performed using the number's planck value
 
-dotAmount = dotAmount.mapFromPlanck((planck) => planck + 5_000_000_000n);
+dotAmount = dotAmount.mapPlanck((planck) => planck + 5_000_000_000n);
 
 console.log(dotAmount.toLocaleString()); // DOT 10.50
 
 // Arithmetic operations can also be carried out with the number value
 // instead of planck if possible lost of precision is acceptable
 
-dotAmount = dotAmount.mapFromNumber((number) => (number * 2) / 4);
+dotAmount = dotAmount.mapNumber((number) => (number * 2) / 4);
 
 console.log(dotAmount.toLocaleString()); // DOT 5.25
 ```
