@@ -222,6 +222,12 @@ describe("toNumber", () => {
 });
 
 describe("toLocaleString", () => {
+  it("acts like normal number when denominator is omitted", () => {
+    const string = new DenominatedNumber(30, 0).toLocaleString("en-NZ");
+
+    expect(string).toBe((30).toLocaleString("en-NZ"));
+  });
+
   it("add denomination to the string value", () => {
     const string = new DenominatedNumber(30, 0, "DOT").toLocaleString("en-NZ");
 
