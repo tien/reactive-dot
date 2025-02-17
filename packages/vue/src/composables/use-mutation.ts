@@ -35,7 +35,7 @@ type TxOptions<T extends Transaction<any, any, any, any>> = Parameters<
  */
 export function useMutation<
   TAction extends (
-    builder: TypedApi<ChainDescriptorOf<TChainId>>["tx"],
+    tx: TypedApi<ChainDescriptorOf<TChainId>>["tx"],
   ) => // eslint-disable-next-line @typescript-eslint/no-explicit-any
   Transaction<any, any, any, any>,
   TChainId extends ChainId | undefined,

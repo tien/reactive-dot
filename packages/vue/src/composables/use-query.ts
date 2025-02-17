@@ -1,4 +1,8 @@
-import type { ChainComposableOptions } from "../types.js";
+import type {
+  ChainComposableOptions,
+  InferQueryArgumentResult,
+  QueryArgument,
+} from "../types.js";
 import {
   refresh,
   type Refreshable,
@@ -10,11 +14,8 @@ import { lazyValue, useLazyValuesCache } from "./use-lazy-value.js";
 import { useTypedApiPromise } from "./use-typed-api.js";
 import { type ChainId, Query } from "@reactive-dot/core";
 import {
-  type ChainDescriptorOf,
-  type Falsy,
   type FlatHead,
   flatHead,
-  type InferQueryPayload,
   type MultiInstruction,
   type QueryInstruction,
   stringify,
@@ -32,28 +33,21 @@ import {
   type MaybeRefOrGetter,
   type ShallowRef,
   toValue,
-  type UnwrapRef,
+  unref,
 } from "vue";
 
 /**
  * Composable for querying data from chain, and returning the response.
  *
- * @param builder - The function to create the query
+ * @param query - The function to create the query
  * @param options - Additional options
  * @returns The data response
  */
 export function useQuery<
   TChainId extends ChainId | undefined,
-  TQuery extends (
-    builder: Query<[], ChainDescriptorOf<TChainId>>,
-  ) =>
-    | Query<
-        QueryInstruction<ChainDescriptorOf<TChainId>>[],
-        ChainDescriptorOf<TChainId>
-      >
-    | Falsy,
->(builder: TQuery, options?: ChainComposableOptions<TChainId>) {
-  return useAsyncData(useQueryObservable(builder, options));
+  TQuery extends QueryArgument<TChainId>,
+>(query: TQuery, options?: ChainComposableOptions<TChainId>) {
+  return useAsyncData(useQueryObservable(query, options));
 }
 
 /**
@@ -61,30 +55,28 @@ export function useQuery<
  */
 export function useQueryObservable<
   TChainId extends ChainId | undefined,
-  TQuery extends (
-    builder: Query<[], ChainDescriptorOf<TChainId>>,
-  ) =>
-    | Query<
-        QueryInstruction<ChainDescriptorOf<TChainId>>[],
-        ChainDescriptorOf<TChainId>
-      >
-    | Falsy,
->(builder: TQuery, options?: ChainComposableOptions<TChainId>) {
+  TQuery extends QueryArgument<TChainId>,
+>(query: TQuery, options?: ChainComposableOptions<TChainId>) {
   const chainId = internal_useChainId(options);
   const typedApiPromise = useTypedApiPromise(options);
   const cache = useLazyValuesCache();
 
   const responses = computed(() => {
-    const query = builder(new Query([]));
+    const unwrappedQuery = unref(query);
 
-    if (!query) {
+    const queryValue =
+      typeof unwrappedQuery !== "function"
+        ? unwrappedQuery
+        : unwrappedQuery(new Query([]));
+
+    if (!queryValue) {
       return;
     }
 
-    if (query.instructions.length === 1) {
+    if (queryValue.instructions.length === 1) {
       return [
         queryInstruction(
-          query.instructions.at(0)!,
+          queryValue.instructions.at(0)!,
           chainId,
           typedApiPromise,
           cache,
@@ -92,7 +84,7 @@ export function useQueryObservable<
       ];
     }
 
-    return query.instructions.map((instruction) => {
+    return queryValue.instructions.map((instruction) => {
       if (!("multi" in instruction)) {
         return queryInstruction(instruction, chainId, typedApiPromise, cache);
       }
@@ -152,13 +144,7 @@ export function useQueryObservable<
     },
   ) as Refreshable<
     ComputedRef<
-      Observable<
-        FlatHead<
-          InferQueryPayload<
-            Exclude<ReturnType<Exclude<UnwrapRef<TQuery>, Falsy>>, Falsy>
-          >
-        >
-      >
+      Observable<FlatHead<InferQueryArgumentResult<TChainId, TQuery>>>
     >
   >;
 }
