@@ -1,5 +1,11 @@
 # @reactive-dot/utils
 
+## 0.10.0
+
+### Minor Changes
+
+- [#493](https://github.com/tien/reactive-dot/pull/493) [`7b6c493`](https://github.com/tien/reactive-dot/commit/7b6c493fabb3e81df0dccc3025ad7dd64ba4a9cc) Thanks [@tien](https://github.com/tien)! - Renamed `DenominatedNumber` mapping methods.
+
 ## 0.9.0
 
 ### Minor Changes
