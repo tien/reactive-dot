@@ -18,3 +18,12 @@ export type Gettable<T> = MaybePromise<T> | (() => MaybePromise<T>);
 export type FlatHead<TArray extends unknown[]> = TArray extends [infer Head]
   ? Head
   : TArray;
+
+export type Flatten<T extends unknown[]> = T extends [
+  infer First,
+  ...infer Rest,
+]
+  ? First extends unknown[]
+    ? Flatten<[...First, ...Rest]>
+    : [First, ...Rest]
+  : [];

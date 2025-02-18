@@ -1,5 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import type { CommonDescriptor } from "./chains.js";
+import type { Flatten } from "./types.js";
 import type { ChainDefinition, TypedApi } from "polkadot-api";
 import type { Observable } from "rxjs";
 
@@ -359,6 +360,26 @@ export class Query<
       at: options?.at,
       multi: true,
     });
+  }
+
+  concat<TQueries extends Query[]>(...queries: TQueries) {
+    return new Query(
+      this.#instructions.concat(...queries.map((query) => query.#instructions)),
+    ) as Query<
+      // @ts-expect-error TODO: fix this
+      [
+        ...TInstructions,
+        ...Flatten<{
+          [P in keyof TQueries]: TQueries[P] extends Query<
+            infer Instructions,
+            infer _
+          >
+            ? Instructions
+            : never;
+        }>,
+      ],
+      TDescriptor
+    >;
   }
 
   #append<const TInstruction extends QueryInstruction>(
