@@ -34,7 +34,7 @@ export function useQueryLoader() {
         builder: TQuery,
         options?: ChainHookOptions<TChainId>,
       ) => {
-        const query = builder(new Query([]));
+        const query = builder(new Query());
 
         void get(queryPayloadAtom(config, options?.chainId ?? chainId, query));
       },

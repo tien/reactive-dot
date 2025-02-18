@@ -2,7 +2,7 @@ import { Query } from "./query-builder.js";
 import { expect, it } from "vitest";
 
 it("should append a get-constant instruction", () => {
-  const query = new Query([]);
+  const query = new Query();
   const newQuery = query.getConstant("TestPallet", "TestConstant");
   const instructions = newQuery.instructions;
 
@@ -15,7 +15,7 @@ it("should append a get-constant instruction", () => {
 });
 
 it("should append a read-storage instruction", () => {
-  const query = new Query([]);
+  const query = new Query();
   const newQuery = query.readStorage("TestPallet", "TestStorage", ["arg1"], {
     at: "finalized",
   });
@@ -32,7 +32,7 @@ it("should append a read-storage instruction", () => {
 });
 
 it("should append a multi read-storage instruction using readStorages", () => {
-  const query = new Query([]);
+  const query = new Query();
   const newQuery = query.readStorages(
     "TestPallet",
     "TestStorage",
@@ -53,7 +53,7 @@ it("should append a multi read-storage instruction using readStorages", () => {
 });
 
 it("should append a read-storage-entries instruction", () => {
-  const query = new Query([]);
+  const query = new Query();
   const newQuery = query.readStorageEntries(
     "TestPallet",
     "TestStorage",
@@ -73,7 +73,7 @@ it("should append a read-storage-entries instruction", () => {
 });
 
 it("should append a call-api instruction", () => {
-  const query = new Query([]);
+  const query = new Query();
   const newQuery = query.callApi("TestPallet", "TestApi", ["arg1"], {
     at: "best",
   });
@@ -90,7 +90,7 @@ it("should append a call-api instruction", () => {
 });
 
 it("should append a multi call-api instruction using callApis", () => {
-  const query = new Query([]);
+  const query = new Query();
   const newQuery = query.callApis(
     "TestPallet",
     "TestApi",
@@ -111,16 +111,16 @@ it("should append a multi call-api instruction using callApis", () => {
 });
 
 it("should return a frozen instructions array", () => {
-  const query = new Query([]);
+  const query = new Query();
   const instructions = query.instructions;
 
   expect(Object.isFrozen(instructions)).toBe(true);
 });
 
 it("should concatenate two queries", () => {
-  const query1 = new Query([]).getConstant("TestPallet", "TestConstant");
-  const query2 = new Query([]).readStorage("TestPallet", "TestStorage", []);
-  const query3 = new Query([]).callApi("TestPallet", "TestApi", []);
+  const query1 = new Query().getConstant("TestPallet", "TestConstant");
+  const query2 = new Query().readStorage("TestPallet", "TestStorage", []);
+  const query3 = new Query().callApi("TestPallet", "TestApi", []);
 
   const concatenated = query1.concat(query2, query3);
   const instructions = concatenated.instructions;

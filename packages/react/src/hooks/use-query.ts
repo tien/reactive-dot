@@ -39,11 +39,7 @@ export function useLazyLoadQuery<
 
   const queryValue = useMemo(
     () =>
-      !query
-        ? undefined
-        : query instanceof Query
-          ? query
-          : query(new Query([])),
+      !query ? undefined : query instanceof Query ? query : query(new Query()),
     [query],
   );
 
