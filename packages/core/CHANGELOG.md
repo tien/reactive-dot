@@ -1,5 +1,11 @@
 # @reactive-dot/core
 
+## 0.33.0
+
+### Minor Changes
+
+- [#506](https://github.com/tien/reactive-dot/pull/506) [`b6c5cc7`](https://github.com/tien/reactive-dot/commit/b6c5cc7a9d4ba82b2d8c890cfcc569fe6703951f) Thanks [@tien](https://github.com/tien)! - Added `Query.concat` method for merging queries.
+
 ## 0.32.0
 
 ### Patch Changes
