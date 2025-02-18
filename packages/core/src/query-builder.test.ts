@@ -116,3 +116,29 @@ it("should return a frozen instructions array", () => {
 
   expect(Object.isFrozen(instructions)).toBe(true);
 });
+
+it("should concatenate two queries", () => {
+  const query1 = new Query([]).getConstant("TestPallet", "TestConstant");
+  const query2 = new Query([]).readStorage("TestPallet", "TestStorage", []);
+  const query3 = new Query([]).callApi("TestPallet", "TestApi", []);
+
+  const concatenated = query1.concat(query2, query3);
+  const instructions = concatenated.instructions;
+
+  expect(instructions).toHaveLength(3);
+  expect(instructions[0]).toMatchObject({
+    instruction: "get-constant",
+    pallet: "TestPallet",
+    constant: "TestConstant",
+  });
+  expect(instructions[1]).toMatchObject({
+    instruction: "read-storage",
+    pallet: "TestPallet",
+    storage: "TestStorage",
+  });
+  expect(instructions[2]).toMatchObject({
+    instruction: "call-api",
+    pallet: "TestPallet",
+    api: "TestApi",
+  });
+});
