@@ -1,5 +1,16 @@
 # @reactive-dot/react
 
+## 0.33.0
+
+### Minor Changes
+
+- [#504](https://github.com/tien/reactive-dot/pull/504) [`b8486a9`](https://github.com/tien/reactive-dot/commit/b8486a9f2d19049306e77f41199c8393c300e3b0) Thanks [@tien](https://github.com/tien)! - Added support for using pre-built queries. A pre-built query can now be passed directly to hooks & composables.
+
+### Patch Changes
+
+- Updated dependencies [[`b6c5cc7`](https://github.com/tien/reactive-dot/commit/b6c5cc7a9d4ba82b2d8c890cfcc569fe6703951f)]:
+  - @reactive-dot/core@0.33.0
+
 ## 0.32.0
 
 ### Minor Changes
