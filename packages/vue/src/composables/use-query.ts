@@ -67,7 +67,7 @@ export function useQueryObservable<
     const queryValue =
       typeof unwrappedQuery !== "function"
         ? unwrappedQuery
-        : unwrappedQuery(new Query([]));
+        : unwrappedQuery(new Query());
 
     if (!queryValue) {
       return;

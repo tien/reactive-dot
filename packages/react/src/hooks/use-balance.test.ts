@@ -16,7 +16,7 @@ vi.mocked(useLazyLoadQuery).mockImplementation((builder) => {
     return idle;
   }
 
-  const query = builder(new Query([]));
+  const query = builder(new Query());
 
   if (!query) {
     return idle;

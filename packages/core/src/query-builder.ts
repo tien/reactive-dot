@@ -246,7 +246,9 @@ export class Query<
 > {
   #instructions: TInstructions;
 
-  constructor(instructions: TInstructions) {
+  constructor(
+    instructions: TInstructions = [] as QueryInstruction[] as TInstructions,
+  ) {
     this.#instructions = instructions;
   }
 

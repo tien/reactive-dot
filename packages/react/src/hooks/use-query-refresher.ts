@@ -27,8 +27,7 @@ export function useQueryRefresher<
           return;
         }
 
-        const queryValue =
-          query instanceof Query ? query : query(new Query([]));
+        const queryValue = query instanceof Query ? query : query(new Query());
 
         if (!queryValue) {
           return;
