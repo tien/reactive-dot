@@ -1,6 +1,5 @@
 import { SignerContext } from "../contexts/signer.js";
-// eslint-disable-next-line @eslint-react/no-use-context
-import { useContext } from "react";
+import { use } from "react";
 
 /**
  * Hook for getting the current signer.
@@ -8,6 +7,5 @@ import { useContext } from "react";
  * @returns The current signer
  */
 export function useSigner() {
-  // eslint-disable-next-line @eslint-react/no-use-context
-  return useContext(SignerContext);
+  return use(SignerContext);
 }

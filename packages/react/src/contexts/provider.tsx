@@ -23,18 +23,14 @@ export function ReactiveDotProvider({
   children,
 }: ReactiveDotProviderProps) {
   return (
-    // eslint-disable-next-line @eslint-react/no-context-provider
-    <ConfigContext.Provider value={config}>
-      {/* eslint-disable-next-line @eslint-react/no-context-provider */}
-      <MutationEventSubjectContext.Provider
-        value={useMemo(() => new Subject(), [])}
-      >
+    <ConfigContext value={config}>
+      <MutationEventSubjectContext value={useMemo(() => new Subject(), [])}>
         <Suspense>
           <WalletsInitializer />
         </Suspense>
         {children}
-      </MutationEventSubjectContext.Provider>
-    </ConfigContext.Provider>
+      </MutationEventSubjectContext>
+    </ConfigContext>
   );
 }
 
