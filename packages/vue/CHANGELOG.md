@@ -1,5 +1,16 @@
 # @reactive-dot/vue
 
+## 0.34.0
+
+### Patch Changes
+
+- [#509](https://github.com/tien/reactive-dot/pull/509) [`dfd214b`](https://github.com/tien/reactive-dot/commit/dfd214b405355994fb37afb9a7d223fdaf21295f) Thanks [@tien](https://github.com/tien)! - Made `instructions` parameter optional in `Query` constructor.
+
+- [#516](https://github.com/tien/reactive-dot/pull/516) [`91d8a77`](https://github.com/tien/reactive-dot/commit/91d8a771d557c25f18a1bd972eb16300e3705b3d) Thanks [@tien](https://github.com/tien)! - Added descriptive names to Symbols for better clarity.
+
+- Updated dependencies [[`dfd214b`](https://github.com/tien/reactive-dot/commit/dfd214b405355994fb37afb9a7d223fdaf21295f), [`91d8a77`](https://github.com/tien/reactive-dot/commit/91d8a771d557c25f18a1bd972eb16300e3705b3d)]:
+  - @reactive-dot/core@0.34.0
+
 ## 0.33.0
 
 ### Minor Changes
