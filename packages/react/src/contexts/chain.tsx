@@ -15,9 +15,6 @@ export type ChainProviderProps = PropsWithChildren<{
  */
 export function ChainProvider(props: ChainProviderProps) {
   return (
-    // eslint-disable-next-line @eslint-react/no-context-provider
-    <ChainIdContext.Provider value={props.chainId}>
-      {props.children}
-    </ChainIdContext.Provider>
+    <ChainIdContext value={props.chainId}>{props.children}</ChainIdContext>
   );
 }

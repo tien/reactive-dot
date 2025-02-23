@@ -19,7 +19,7 @@ import {
 import { preflight, query } from "@reactive-dot/core/internal/actions.js";
 import { type Atom, atom, useAtomValue, type WritableAtom } from "jotai";
 import { atomWithObservable, atomWithRefresh } from "jotai/utils";
-import { version as reactVersion, useMemo } from "react";
+import { useMemo } from "react";
 import { from, type Observable } from "rxjs";
 import { switchMap } from "rxjs/operators";
 
@@ -58,7 +58,7 @@ export function useLazyLoadQuery<
       [hashKey],
     ),
     // TODO: remove once https://github.com/pmndrs/jotai/issues/2847 is fixed
-    reactVersion.startsWith("19.") ? { delay: 0 } : undefined,
+    { delay: 0 },
   );
 
   return useMemo(

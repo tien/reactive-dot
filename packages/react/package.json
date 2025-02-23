@@ -49,6 +49,6 @@
     "vitest": "^3.0.6"
   },
   "peerDependencies": {
-    "react": "18.x || 19.x"
+    "react": "19.x"
   }
 }

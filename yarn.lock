@@ -5078,7 +5078,7 @@ __metadata:
     typescript: "npm:^5.7.3"
     vitest: "npm:^3.0.6"
   peerDependencies:
-    react: 18.x || 19.x
+    react: 19.x
   languageName: unknown
   linkType: soft
 
