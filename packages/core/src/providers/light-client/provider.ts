@@ -11,7 +11,7 @@ import { getSmProvider } from "polkadot-api/sm-provider";
 import { startFromWorker } from "polkadot-api/smoldot/from-worker";
 import type { JsonRpcProvider } from "polkadot-api/ws-provider/web";
 
-const getProviderSymbol = Symbol();
+const getProviderSymbol = Symbol("getProvider");
 
 export type LightClientProvider = {
   [getProviderSymbol]: () => Promise<JsonRpcProvider>;
