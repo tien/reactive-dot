@@ -1,5 +1,20 @@
 # @reactive-dot/react
 
+## 0.34.0
+
+### Minor Changes
+
+- [#514](https://github.com/tien/reactive-dot/pull/514) [`9de08c9`](https://github.com/tien/reactive-dot/commit/9de08c934f01a3eae8b4011b281f240ea70b06ed) Thanks [@tien](https://github.com/tien)! - BREAKING CHANGE: required React 19 as peer dependency.
+
+- [#515](https://github.com/tien/reactive-dot/pull/515) [`00d1414`](https://github.com/tien/reactive-dot/commit/00d14149ed334bcacda523f2c86e21f631f986df) Thanks [@tien](https://github.com/tien)! - Added concurrent multi-chain query capability hooks.
+
+### Patch Changes
+
+- [#509](https://github.com/tien/reactive-dot/pull/509) [`dfd214b`](https://github.com/tien/reactive-dot/commit/dfd214b405355994fb37afb9a7d223fdaf21295f) Thanks [@tien](https://github.com/tien)! - Made `instructions` parameter optional in `Query` constructor.
+
+- Updated dependencies [[`dfd214b`](https://github.com/tien/reactive-dot/commit/dfd214b405355994fb37afb9a7d223fdaf21295f), [`91d8a77`](https://github.com/tien/reactive-dot/commit/91d8a771d557c25f18a1bd972eb16300e3705b3d)]:
+  - @reactive-dot/core@0.34.0
+
 ## 0.33.0
 
 ### Minor Changes
