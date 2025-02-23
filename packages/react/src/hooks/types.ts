@@ -8,14 +8,19 @@ import type {
   InferQueryPayload,
 } from "@reactive-dot/core/internal.js";
 
-export type ChainHookOptions<
-  TChainId extends ChainId | undefined = ChainId | undefined,
-> = {
+type ChainOptions<TChainId extends ChainId | undefined> = {
   /**
    * Override default chain ID
    */
-  chainId?: TChainId | undefined;
+  chainId: TChainId | undefined;
 };
+
+export type ChainHookOptions<
+  TChainId extends ChainId | undefined = ChainId | undefined,
+> = Partial<ChainOptions<TChainId>>;
+
+export type QueryOptions<TChainId extends ChainId | undefined> =
+  ChainOptions<TChainId> & { query: QueryArgument<TChainId> };
 
 export type QueryArgument<TChainId extends ChainId | undefined> =
   | Query<

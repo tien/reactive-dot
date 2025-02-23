@@ -1,9 +1,11 @@
 import {
   kusama,
+  kusama_asset_hub,
   polkadot,
   polkadot_asset_hub,
   polkadot_people,
   westend,
+  westend_asset_hub,
 } from "@polkadot-api/descriptors";
 import { defineConfig } from "@reactive-dot/core";
 import { createLightClientProvider } from "@reactive-dot/core/providers/light-client.js";
@@ -14,6 +16,10 @@ import { WalletConnect } from "@reactive-dot/wallet-walletconnect";
 const lightClientProvider = createLightClientProvider();
 
 const polkadotProvider = lightClientProvider.addRelayChain({ id: "polkadot" });
+
+const kusamaProvider = lightClientProvider.addRelayChain({ id: "kusama" });
+
+const westendProvider = lightClientProvider.addRelayChain({ id: "westend" });
 
 export const config = defineConfig({
   chains: {
@@ -31,11 +37,19 @@ export const config = defineConfig({
     },
     kusama: {
       descriptor: kusama,
-      provider: lightClientProvider.addRelayChain({ id: "kusama" }),
+      provider: kusamaProvider,
+    },
+    kusama_asset_hub: {
+      descriptor: kusama_asset_hub,
+      provider: kusamaProvider.addParachain({ id: "kusama_asset_hub" }),
     },
     westend: {
       descriptor: westend,
-      provider: lightClientProvider.addRelayChain({ id: "westend" }),
+      provider: westendProvider,
+    },
+    westend_asset_hub: {
+      descriptor: westend_asset_hub,
+      provider: westendProvider.addParachain({ id: "westend_asset_hub" }),
     },
   },
   targetChains: ["polkadot", "kusama", "westend"],
