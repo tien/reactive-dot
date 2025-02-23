@@ -1,4 +1,4 @@
-const empty = Symbol();
+const empty = Symbol("empty");
 
 export function lazy<T>(get: () => T) {
   let value: T | typeof empty = empty;
