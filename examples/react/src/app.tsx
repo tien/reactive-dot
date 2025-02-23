@@ -1,4 +1,5 @@
 import { config } from "./config";
+import { MultichainQuery } from "./multichain-query";
 import { Mutation } from "./mutation";
 import { Query } from "./query";
 import { WalletConnection } from "./wallet-connection";
@@ -73,6 +74,7 @@ function Example({ chainName }: ExampleProps) {
         <Suspense fallback={<h2>Loading {chainName}...</h2>}>
           <h2>{chainName}</h2>
           <Query />
+          <MultichainQuery />
           <Mutation />
         </Suspense>
       </ErrorBoundary>
