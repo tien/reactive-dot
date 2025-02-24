@@ -29,19 +29,27 @@ npm install @reactive-dot/wallet-walletconnect
 npm install @reactive-dot/wallet-ledger
 ```
 
+### [Mimir](https://mimir.global/)
+
+```bash npm2yarn
+npm install @reactive-dot/wallet-mimir
+```
+
 ## Add wallets to the config
 
 ```ts title="config.ts"
 import { defineConfig } from "@reactive-dot/core";
 import { InjectedWalletProvider } from "@reactive-dot/core/wallets.js";
 import { LedgerWallet } from "@reactive-dot/wallet-ledger";
+import { MimirWalletProvider } from "@reactive-dot/wallet-mimir";
 import { WalletConnect } from "@reactive-dot/wallet-walletconnect";
 
 export const config = defineConfig({
   // ...
   wallets: [
     new InjectedWalletProvider(),
-    new LedgerWalet(),
+    new LedgerWallet(),
+    new MimirWalletProvider(),
     new WalletConnect({
       projectId: "WALLET_CONNECT_PROJECT_ID",
       providerOptions: {

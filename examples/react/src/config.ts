@@ -11,6 +11,7 @@ import { defineConfig } from "@reactive-dot/core";
 import { createLightClientProvider } from "@reactive-dot/core/providers/light-client.js";
 import { InjectedWalletProvider } from "@reactive-dot/core/wallets.js";
 import { LedgerWallet } from "@reactive-dot/wallet-ledger";
+import { MimirWalletProvider } from "@reactive-dot/wallet-mimir";
 import { WalletConnect } from "@reactive-dot/wallet-walletconnect";
 
 const lightClientProvider = createLightClientProvider();
@@ -55,6 +56,7 @@ export const config = defineConfig({
   targetChains: ["polkadot", "kusama", "westend"],
   wallets: [
     new InjectedWalletProvider({ originName: "ReactiveDOT React Example" }),
+    new MimirWalletProvider({ originName: "ReactiveDOT React Example" }),
     new LedgerWallet(),
     new WalletConnect({
       projectId: "68f5b7e972a51cf379b127f51a791c34",
