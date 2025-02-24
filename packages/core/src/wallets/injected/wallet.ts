@@ -6,7 +6,7 @@ import {
   type InjectedExtension,
   type InjectedPolkadotAccount,
 } from "polkadot-api/pjs-signer";
-import { BehaviorSubject, Observable } from "rxjs";
+import { BehaviorSubject, Observable, of } from "rxjs";
 import { map, switchMap } from "rxjs/operators";
 
 export type InjectedWalletOptions = WalletOptions & { originName?: string };
@@ -33,7 +33,7 @@ export class InjectedWallet extends Wallet<InjectedWalletOptions, "connected"> {
     }
   }
 
-  connected$ = this.#extension$.pipe(
+  readonly connected$ = this.#extension$.pipe(
     map((extension) => extension !== undefined),
   );
 
@@ -53,21 +53,20 @@ export class InjectedWallet extends Wallet<InjectedWalletOptions, "connected"> {
   }
 
   readonly accounts$ = this.#extension$.pipe(
-    switchMap(
-      (extension) =>
-        new Observable<PolkadotSignerAccount[]>((subscriber) => {
-          if (extension === undefined) {
-            subscriber.next([]);
-          } else {
-            subscriber.next(this.#withIds(extension.getAccounts()));
-            subscriber.add(
-              extension.subscribe((accounts) =>
-                subscriber.next(this.#withIds(accounts)),
-              ),
-            );
-          }
-        }),
-    ),
+    switchMap((extension) => {
+      if (extension === undefined) {
+        return of([]);
+      }
+
+      return new Observable<PolkadotSignerAccount[]>((subscriber) => {
+        subscriber.next(this.#withIds(extension.getAccounts()));
+        subscriber.add(
+          extension.subscribe((accounts) =>
+            subscriber.next(this.#withIds(accounts)),
+          ),
+        );
+      });
+    }),
   );
 
   override getAccounts() {
