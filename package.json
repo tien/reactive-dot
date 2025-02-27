@@ -44,10 +44,10 @@
     "@commitlint/cli": "^19.7.1",
     "@commitlint/config-conventional": "^19.7.1",
     "@trivago/prettier-plugin-sort-imports": "^5.2.2",
-    "@vitest/coverage-v8": "3.0.6",
+    "@vitest/coverage-v8": "3.0.7",
     "husky": "^9.1.7",
     "nx": "^20.4.6",
     "prettier": "^3.5.2",
-    "vitest": "^3.0.6"
+    "vitest": "^3.0.7"
   }
 }
