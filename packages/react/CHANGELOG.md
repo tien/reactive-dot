@@ -1,5 +1,13 @@
 # @reactive-dot/react
 
+## 0.35.1
+
+### Patch Changes
+
+- [#531](https://github.com/tien/reactive-dot/pull/531) [`ddf9c66`](https://github.com/tien/reactive-dot/commit/ddf9c6661d2bf500054569c72e1eb6bce113eb88) Thanks [@tien](https://github.com/tien)! - Removed useless & dangling promises.
+
+- [#529](https://github.com/tien/reactive-dot/pull/529) [`436fb6c`](https://github.com/tien/reactive-dot/commit/436fb6cfbbcb440db920321b2b248ed3115d2f90) Thanks [@tien](https://github.com/tien)! - Fixed observable error propagation.
+
 ## 0.35.0
 
 ### Minor Changes
