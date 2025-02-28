@@ -2,6 +2,7 @@ export { QueryRenderer } from "./components/query-renderer.js";
 export { ChainProvider } from "./contexts/chain.js";
 export { ReactiveDotProvider } from "./contexts/provider.js";
 export { SignerProvider } from "./contexts/signer.js";
+export { QueryOptionsProvider } from "./contexts/query-options.js";
 export { useAccounts } from "./hooks/use-accounts.js";
 export { useSpendableBalance } from "./hooks/use-balance.js";
 export { useBlock } from "./hooks/use-block.js";

@@ -27,13 +27,14 @@
   "exports": "./build/index.js",
   "scripts": {
     "dev": "tsc --build --watch",
-    "build": "rm -rf build && tsc --build",
+    "build": "tsc --build --clean && tsc --build",
     "lint": "eslint src",
     "test": "vitest"
   },
   "dependencies": {
     "@reactive-dot/core": "workspace:^",
-    "jotai": "^2.12.1"
+    "jotai": "^2.12.1",
+    "jotai-effect": "^2.0.1"
   },
   "devDependencies": {
     "@reactive-dot/eslint-config": "workspace:^",

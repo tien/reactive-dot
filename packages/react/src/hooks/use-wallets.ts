@@ -1,12 +1,13 @@
 import { atomFamilyWithErrorCatcher } from "../utils/jotai/atom-family-with-error-catcher.js";
+import { atomWithObservableAndPromise } from "../utils/jotai/atom-with-observable-and-promise.js";
 import { useConfig } from "./use-config.js";
+import { usePausableAtomValue } from "./use-pausable-atom-value.js";
 import type { Config } from "@reactive-dot/core";
 import {
   aggregateWallets,
   getConnectedWallets,
 } from "@reactive-dot/core/internal/actions.js";
 import { atom, useAtomValue } from "jotai";
-import { atomWithObservable } from "jotai/utils";
 
 /**
  * Hook for getting all available wallets.
@@ -23,7 +24,7 @@ export function useWallets() {
  * @returns Connected wallets
  */
 export function useConnectedWallets() {
-  return useAtomValue(connectedWalletsAtom(useConfig()));
+  return usePausableAtomValue(connectedWalletsAtom(useConfig()));
 }
 
 /**
@@ -39,7 +40,8 @@ export const walletsAtom = atomFamilyWithErrorCatcher(
  */
 export const connectedWalletsAtom = atomFamilyWithErrorCatcher(
   (withErrorCatcher, config: Config) =>
-    withErrorCatcher(atomWithObservable)((get) =>
-      getConnectedWallets(get(walletsAtom(config))),
+    atomWithObservableAndPromise(
+      (get) => getConnectedWallets(get(walletsAtom(config))),
+      withErrorCatcher,
     ),
 );

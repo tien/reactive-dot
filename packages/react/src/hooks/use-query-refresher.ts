@@ -72,8 +72,10 @@ export function useQueryRefresher(
           ).flat();
 
           for (const atom of atoms) {
-            if ("write" in atom) {
-              set(atom as WritableAtom<unknown, unknown[], unknown>);
+            if ("write" in atom.promiseAtom) {
+              set(
+                atom.promiseAtom as WritableAtom<unknown, unknown[], unknown>,
+              );
             }
           }
         }

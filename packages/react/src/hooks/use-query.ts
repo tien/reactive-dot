@@ -1,6 +1,7 @@
 import { findAllIndexes } from "../utils/find-all-indexes.js";
 import { interlace } from "../utils/interlace.js";
 import { atomFamilyWithErrorCatcher } from "../utils/jotai/atom-family-with-error-catcher.js";
+import { atomWithObservableAndPromise } from "../utils/jotai/atom-with-observable-and-promise.js";
 import { objectId } from "../utils/object-id.js";
 import type {
   ChainHookOptions,
@@ -9,6 +10,7 @@ import type {
   QueryOptions,
 } from "./types.js";
 import { useConfig } from "./use-config.js";
+import { usePausableAtomValue } from "./use-pausable-atom-value.js";
 import { useQueryOptions } from "./use-query-options.js";
 import { useQueryRefresher } from "./use-query-refresher.js";
 import { typedApiAtom } from "./use-typed-api.js";
@@ -25,8 +27,8 @@ import {
   stringify,
 } from "@reactive-dot/core/internal.js";
 import { preflight, query } from "@reactive-dot/core/internal/actions.js";
-import { atom, useAtomValue } from "jotai";
-import { atomWithObservable, atomWithRefresh } from "jotai/utils";
+import { atom } from "jotai";
+import { atomWithRefresh } from "jotai/utils";
 import { useMemo } from "react";
 import { from, type Observable } from "rxjs";
 import { switchMap } from "rxjs/operators";
@@ -80,7 +82,7 @@ export function useLazyLoadQuery(
     mayBeOptions,
   );
 
-  const partialData = useAtomValue(
+  const partialData = usePausableAtomValue(
     queryPayloadAtom(
       useConfig(),
       useMemo(
@@ -183,17 +185,30 @@ const instructionPayloadAtom = atomFamilyWithErrorCatcher(
     >,
   ) => {
     switch (preflight(instruction)) {
-      case "promise":
-        return withErrorCatcher(atomWithRefresh)(async (get, { signal }) => {
+      case "promise": {
+        const atom = withErrorCatcher(atomWithRefresh)(async (
+          get,
+          { signal },
+        ) => {
           const api = await get(typedApiAtom(config, chainId));
 
           return query(api, instruction, { signal });
         });
+
+        return {
+          observableAtom: atom,
+          promiseAtom: atom,
+        };
+      }
       case "observable":
-        return withErrorCatcher(atomWithObservable)((get) =>
-          from(get(typedApiAtom(config, chainId))).pipe(
-            switchMap((api) => query(api, instruction) as Observable<unknown>),
-          ),
+        return atomWithObservableAndPromise(
+          (get) =>
+            from(get(typedApiAtom(config, chainId))).pipe(
+              switchMap(
+                (api) => query(api, instruction) as Observable<unknown>,
+              ),
+            ),
+          withErrorCatcher,
         );
     }
   },
@@ -237,23 +252,35 @@ export const queryPayloadAtom = atomFamilyWithErrorCatcher(
       getQueryInstructionPayloadAtoms(config, param.chainId, param.query),
     );
 
-    return withErrorCatcher(atom)((get) => {
-      return Promise.all(
-        atoms.map((atomOrAtoms) =>
-          !Array.isArray(atomOrAtoms)
-            ? atomOrAtoms
-            : Promise.all(
-                atomOrAtoms.map((atomOrAtoms) => {
-                  if (Array.isArray(atomOrAtoms)) {
-                    return Promise.all(atomOrAtoms.map(get));
-                  }
+    const unwrap = (
+      atoms: ReturnType<typeof atomWithObservableAndPromise>,
+      asObservable: boolean,
+    ) => (asObservable ? atoms.observableAtom : atoms.promiseAtom);
 
-                  return get(atomOrAtoms);
-                }),
-              ).then(flatHead),
-        ),
-      );
-    });
+    const createAtom = (asObservable: boolean) =>
+      withErrorCatcher(atom)((get) => {
+        return Promise.all(
+          atoms.map((atomOrAtoms) =>
+            !Array.isArray(atomOrAtoms)
+              ? atomOrAtoms
+              : Promise.all(
+                  atomOrAtoms.map((atomOrAtoms) => {
+                    if (Array.isArray(atomOrAtoms)) {
+                      return Promise.all(
+                        atomOrAtoms.map((atom) =>
+                          get(unwrap(atom, asObservable)),
+                        ),
+                      );
+                    }
+
+                    return get(unwrap(atomOrAtoms, asObservable));
+                  }),
+                ).then(flatHead),
+          ),
+        );
+      });
+
+    return { promiseAtom: createAtom(false), observableAtom: createAtom(true) };
   },
   (config, params) =>
     [
