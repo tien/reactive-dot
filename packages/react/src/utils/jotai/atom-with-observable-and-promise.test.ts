@@ -43,19 +43,56 @@ it("should return a promise atom that resolves with the first value from the obs
 
   expect(render.result.current).toBe("initial");
 
-  act(() => {
-    subject$.next("updated");
-  });
+  act(() => subject$.next("updated"));
 
   expect(render.result.current).toBe("initial");
 });
 
-// TODO: resolve uncaught exception
-it.skip("should handle errors in the observable", async () => {
+it("should return a promise atom that will be updated from an observable atom mounted elsewhere", async () => {
+  const subject$ = new BehaviorSubject("initial");
+  const { promiseAtom, observableAtom } = atomWithObservableAndPromise(
+    () => subject$,
+  );
+  const render = await act(() => renderHook(() => useAtomValue(promiseAtom)));
+
+  expect(render.result.current).toBe("initial");
+
+  act(() => subject$.next("updated"));
+
+  expect(render.result.current).toBe("initial");
+
+  renderHook(() => useAtomValue(observableAtom));
+
+  expect(render.result.current).toBe("updated");
+});
+
+it("should handle errors in the observable", async () => {
   const observable$ = new BehaviorSubject("initial");
   const { observableAtom } = atomWithObservableAndPromise(() => observable$);
 
   const render = renderHook(() => useAtomValue(observableAtom));
+
+  expect(render.result.current).toBe("initial");
+
+  const error = new Error("Test");
+
+  try {
+    act(() => observable$.error(error));
+  } catch {
+    /* empty */
+  }
+
+  expect(() => render.rerender()).toThrow(error);
+});
+
+it("should propagate errors from the observable atom to the promise atom", async () => {
+  const observable$ = new BehaviorSubject("initial");
+  const { promiseAtom, observableAtom } = atomWithObservableAndPromise(
+    () => observable$,
+  );
+
+  const render = await act(() => renderHook(() => useAtomValue(promiseAtom)));
+  renderHook(() => useAtomValue(observableAtom));
 
   expect(render.result.current).toBe("initial");
 
