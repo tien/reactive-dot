@@ -50,8 +50,8 @@ it("should return accounts from multiple wallets", async () => {
   );
 
   expect(accounts.length).toBe(2);
-  expect(accounts[0].address).toBeDefined();
-  expect(accounts[1].address).toBeDefined();
+  expect(accounts[0]?.address).toBeDefined();
+  expect(accounts[1]?.address).toBeDefined();
 });
 
 it("should filter accounts based on genesisHash when chainSpec is provided", async () => {
@@ -93,7 +93,7 @@ it("should filter accounts based on genesisHash when chainSpec is provided", asy
   const accounts = await firstValueFrom(getAccounts([mockWallet], chainSpec));
 
   expect(accounts.length).toBe(1);
-  expect(accounts[0].genesisHash).toBe("genesisHash2");
+  expect(accounts[0]?.genesisHash).toBe("genesisHash2");
 });
 
 it("should handle undefined genesisHash in account", async () => {
@@ -145,7 +145,7 @@ it("should handle undefined chainSpec", async () => {
   const accounts = await firstValueFrom(getAccounts([mockWallet], undefined));
 
   expect(accounts.length).toBe(1);
-  expect(accounts[0].address).toBeDefined();
+  expect(accounts[0]?.address).toBeDefined();
 });
 
 it("should handle account.polkadotSigner as a function", async () => {
@@ -177,7 +177,7 @@ it("should handle account.polkadotSigner as a function", async () => {
   const accounts = await firstValueFrom(getAccounts([mockWallet], chainSpec));
 
   expect(accounts.length).toBe(1);
-  expect(accounts[0].address).toBeDefined();
+  expect(accounts[0]?.address).toBeDefined();
 });
 
 it("should handle account.polkadotSigner as a function and return undefined if chainSpec is undefined", async () => {

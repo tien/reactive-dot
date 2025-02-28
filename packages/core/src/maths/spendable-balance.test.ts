@@ -1,4 +1,4 @@
-import { spendableBalance } from "./spendable-balance";
+import { spendableBalance } from "./spendable-balance.js";
 import { expect, test } from "vitest";
 
 // https://wiki.polkadot.network/docs/learn-account-balances
@@ -15,7 +15,13 @@ test.each([
   },
 ])(
   "$spendable = $free - max($frozen - $reserved, existentialDeposit ($includesExistentialDeposit))",
-  ({ free, frozen, reserved, spendable, includesExistentialDeposit }) => {
+  ({
+    free,
+    frozen,
+    reserved,
+    spendable,
+    includesExistentialDeposit = false,
+  }) => {
     const existentialDeposit = 1n;
 
     expect(

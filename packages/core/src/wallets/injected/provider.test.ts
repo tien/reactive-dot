@@ -1,5 +1,5 @@
-import { InjectedWalletProvider } from "./provider";
-import { InjectedWallet } from "./wallet";
+import { InjectedWalletProvider } from "./provider.js";
+import { InjectedWallet } from "./wallet.js";
 import { getInjectedExtensions } from "polkadot-api/pjs-signer";
 import { beforeEach, expect, it, vi } from "vitest";
 
@@ -37,5 +37,5 @@ it("should pass options to created wallets", async () => {
   const wallets = await provider.getWallets();
 
   // @ts-expect-error for testing purposes
-  expect(wallets[0].options).toEqual(options);
+  expect(wallets[0]?.options).toEqual(options);
 });

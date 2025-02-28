@@ -38,7 +38,7 @@ it("should return same atom for multiple arguments with matching order and value
 it("should use custom key generator", () => {
   const countAtomFamily = atomFamily(
     (a: number, b: number) => atom(a + b),
-    (a, b) => [a, b].toSorted().join(),
+    (a, b) => [a, b]?.toSorted().join(),
   );
 
   const atom1 = countAtomFamily(1, 2);
