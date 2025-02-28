@@ -1,5 +1,11 @@
 # @reactive-dot/react
 
+## 0.35.0
+
+### Minor Changes
+
+- [#525](https://github.com/tien/reactive-dot/pull/525) [`d51bb86`](https://github.com/tien/reactive-dot/commit/d51bb8624e39a9d5a89f7d31b9398d4b79f26c84) Thanks [@tien](https://github.com/tien)! - Added the ability to pause subscriptions via `<QueryOptionsProvider active={false} />` context.
+
 ## 0.34.0
 
 ### Minor Changes
