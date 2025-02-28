@@ -39,7 +39,7 @@
   },
   "dependencies": {
     "@reactive-dot/utils": "workspace:^",
-    "@substrate/smoldot-discovery": "^2.0.1"
+    "@substrate/smoldot-discovery": "^2.0.2"
   },
   "devDependencies": {
     "@reactive-dot/eslint-config": "workspace:^",
