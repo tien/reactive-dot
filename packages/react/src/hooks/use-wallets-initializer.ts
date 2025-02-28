@@ -21,7 +21,7 @@ export function useWalletsInitializer() {
 
   const initialize = useCallback(async () => {
     setState(pending);
-    initializeWallets(wallets);
+    await initializeWallets(wallets);
   }, [wallets]);
 
   return [state, initialize] as [

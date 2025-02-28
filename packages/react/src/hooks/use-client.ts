@@ -23,7 +23,7 @@ export function useClient(options?: ChainHookOptions) {
  */
 export const clientAtom = atomFamilyWithErrorCatcher(
   (withErrorCatcher, config: Config, chainId: ChainId) =>
-    withErrorCatcher(atom)(async () => {
+    withErrorCatcher(atom)(() => {
       const chainConfig = config.chains[chainId];
 
       if (chainConfig === undefined) {
