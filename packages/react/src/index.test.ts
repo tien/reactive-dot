@@ -8,6 +8,7 @@ it("should match inline snapshot", () =>
       "ChainProvider",
       "ReactiveDotProvider",
       "SignerProvider",
+      "QueryOptionsProvider",
       "useAccounts",
       "useSpendableBalance",
       "useBlock",

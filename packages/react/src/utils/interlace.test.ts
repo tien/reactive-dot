@@ -1,4 +1,4 @@
-import { interlace } from "./interlace";
+import { interlace } from "./interlace.js";
 import { expect, it } from "vitest";
 
 it.each([

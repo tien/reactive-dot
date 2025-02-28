@@ -1,18 +1,11 @@
 import { objectId } from "../object-id.js";
-import type { Atom } from "jotai";
 
-export type AtomFamily<
-  TArguments extends unknown[],
-  TAtomType extends Atom<unknown>,
-> = {
+export type AtomFamily<TArguments extends unknown[], TAtomType> = {
   (...args: TArguments): TAtomType;
   delete: (...args: TArguments) => boolean;
 };
 
-export function atomFamily<
-  TArguments extends unknown[],
-  TAtomType extends Atom<unknown>,
->(
+export function atomFamily<TArguments extends unknown[], TAtomType>(
   initializeAtom: (...args: TArguments) => TAtomType,
   getKey?: (...args: TArguments) => unknown,
 ): AtomFamily<TArguments, TAtomType> {

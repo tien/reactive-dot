@@ -1,0 +1,19 @@
+import { createContext, type PropsWithChildren } from "react";
+
+export const SubscriptionContext = createContext({ active: true });
+
+type SubscriptionProps = PropsWithChildren<{
+  active: boolean;
+}>;
+
+/**
+ * React context to control subscription options.
+ *
+ * @param props - Component props
+ * @returns React element
+ */
+export function QueryOptionsProvider({ active, children }: SubscriptionProps) {
+  return (
+    <SubscriptionContext value={{ active }}>{children}</SubscriptionContext>
+  );
+}

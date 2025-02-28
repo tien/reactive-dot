@@ -1,4 +1,4 @@
-import { findAllIndexes } from "./find-all-indexes";
+import { findAllIndexes } from "./find-all-indexes.js";
 import { expect, it } from "vitest";
 
 it("should return empty array when no matches found", () => {

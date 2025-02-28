@@ -42,7 +42,7 @@ export function useQueryLoader() {
               query,
               chainId: options?.chainId ?? chainId,
             },
-          ]),
+          ]).observableAtom,
         );
       },
     [chainId, config],

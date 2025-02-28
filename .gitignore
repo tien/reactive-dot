@@ -1,5 +1,6 @@
 node_modules
 coverage
+*.tsbuildinfo
 .yarn/*
 !.yarn/patches
 .nx/cache

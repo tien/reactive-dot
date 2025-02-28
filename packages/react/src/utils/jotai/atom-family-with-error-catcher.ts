@@ -1,5 +1,5 @@
 import { type AtomFamily, atomFamily } from "./atom-family.js";
-import { atom, type Atom, type Getter } from "jotai";
+import { atom, type Getter } from "jotai";
 import { Observable } from "rxjs";
 import { catchError } from "rxjs/operators";
 
@@ -9,7 +9,7 @@ export const atomFamilyErrorsAtom = atom(
       atomFamily: AtomFamily<
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
         any[],
-        Atom<unknown>
+        unknown
       >;
       args: unknown;
     }>(),
@@ -18,25 +18,23 @@ export const atomFamilyErrorsAtom = atom(
 export function atomFamilyWithErrorCatcher<
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   TArguments extends any[],
-  TAtomType extends Atom<unknown>,
-  TWithErrorCatcher extends <
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    TRead extends (get: Getter, ...args: unknown[]) => any,
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    TAtomCreator extends (read: TRead, ...args: any[]) => Atom<unknown>,
-  >(
-    atomCreator: TAtomCreator,
-  ) => TAtomCreator,
+  TAtomType,
 >(
   initializeAtom: (
-    withErrorCatcher: TWithErrorCatcher,
+    withErrorCatcher: <TAtomCreator>(atomCreator: TAtomCreator) => TAtomCreator,
     ...args: TArguments
   ) => TAtomType,
   getKey?: (...args: TArguments) => unknown,
 ): AtomFamily<TArguments, TAtomType> {
   const baseAtomFamily = atomFamily((...args: TArguments) => {
-    // @ts-expect-error complex sub-type
-    const withErrorCatcher: TWithErrorCatcher = (atomCreator) => {
+    const withErrorCatcher: <
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      TRead extends (get: Getter, ...args: unknown[]) => any,
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      TAtomCreator extends (read: TRead, ...args: any[]) => unknown,
+    >(
+      atomCreator: TAtomCreator,
+    ) => TAtomCreator = (atomCreator) => {
       // @ts-expect-error complex sub-type
       const atomCatching: TAtomCreator = (read, ...args) => {
         // @ts-expect-error complex sub-type
@@ -79,7 +77,11 @@ export function atomFamilyWithErrorCatcher<
       return atomCatching;
     };
 
-    return initializeAtom(withErrorCatcher, ...args);
+    return initializeAtom(
+      // @ts-expect-error complex type
+      withErrorCatcher,
+      ...args,
+    );
   }, getKey);
 
   return baseAtomFamily;

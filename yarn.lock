@@ -5113,6 +5113,7 @@ __metadata:
     "@types/react": "npm:^19.0.10"
     eslint: "npm:^9.21.0"
     jotai: "npm:^2.12.1"
+    jotai-effect: "npm:^2.0.1"
     jsdom: "npm:^26.0.0"
     react: "npm:^19.0.0"
     typescript: "npm:^5.7.3"
@@ -13278,6 +13279,15 @@ __metadata:
   peerDependencies:
     react: ">=17.0.0"
   checksum: 10c0/9c814f5637a274dd2f202b54906764d7014a64dc336da4ea728dcf8ae85e85f16a94bbd1b031a0462bf35a410c155697ced88f505d555ef37d79b12127273b3f
+  languageName: node
+  linkType: hard
+
+"jotai-effect@npm:^2.0.1":
+  version: 2.0.1
+  resolution: "jotai-effect@npm:2.0.1"
+  peerDependencies:
+    jotai: ">=2.12.1"
+  checksum: 10c0/79df42f5d0ae2cf5e0e02152faaa123202e6dc0c00dc0826d936027d7eea3883bfc337033e024ac175170e3fe7afef141b0bd18b347d34779e19bc483fdbd093
   languageName: node
   linkType: hard
 

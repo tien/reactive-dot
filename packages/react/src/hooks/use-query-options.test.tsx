@@ -23,8 +23,8 @@ it("handles single query with context chainId", () => {
   });
 
   expect(result.current).toHaveLength(1);
-  expect(result.current[0].chainId).toBe(chainId);
-  expect(result.current[0].query).toBeInstanceOf(Query);
+  expect(result.current[0]?.chainId).toBe(chainId);
+  expect(result.current[0]?.query).toBeInstanceOf(Query);
 });
 
 it("handles single query with explicit chainId", () => {
@@ -34,8 +34,8 @@ it("handles single query with explicit chainId", () => {
   );
 
   expect(result.current).toHaveLength(1);
-  expect(result.current[0].chainId).toBe(chainId);
-  expect(result.current[0].query).toBeInstanceOf(Query);
+  expect(result.current[0]?.chainId).toBe(chainId);
+  expect(result.current[0]?.query).toBeInstanceOf(Query);
 });
 
 it("handles multiple queries with different chainIds", () => {
@@ -47,10 +47,10 @@ it("handles multiple queries with different chainIds", () => {
   const { result } = renderHook(() => useQueryOptions(options));
 
   expect(result.current).toHaveLength(2);
-  expect(result.current[0].chainId).toBe(1);
-  expect(result.current[1].chainId).toBe(2);
-  expect(result.current[0].query).toBeInstanceOf(Query);
-  expect(result.current[1].query).toBeInstanceOf(Query);
+  expect(result.current[0]?.chainId).toBe(1);
+  expect(result.current[1]?.chainId).toBe(2);
+  expect(result.current[0]?.query).toBeInstanceOf(Query);
+  expect(result.current[1]?.query).toBeInstanceOf(Query);
 });
 
 it("handles Query instance directly", () => {
@@ -60,6 +60,6 @@ it("handles Query instance directly", () => {
   const { result } = renderHook(() => useQueryOptions(query, { chainId }));
 
   expect(result.current).toHaveLength(1);
-  expect(result.current[0].chainId).toBe(chainId);
-  expect(result.current[0].query).toBe(query);
+  expect(result.current[0]?.chainId).toBe(chainId);
+  expect(result.current[0]?.query).toBe(query);
 });
