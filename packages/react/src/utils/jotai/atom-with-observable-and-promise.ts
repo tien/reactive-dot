@@ -3,6 +3,8 @@ import { withAtomEffect } from "jotai-effect";
 import { atomWithObservable } from "jotai/utils";
 import { firstValueFrom, type Observable } from "rxjs";
 
+type Data<T> = { value: T | Promise<T> } | { error: unknown };
+
 export function atomWithObservableAndPromise<
   TValue,
   TAtomEnhancer extends <
@@ -19,15 +21,19 @@ export function atomWithObservableAndPromise<
 } {
   const rawObservableAtom = atom(getObservable);
 
-  const initialPromise = new Promise<TValue>(() => {});
+  const { promise: initialPromise } = Promise.withResolvers<TValue>();
 
-  const promiseStateAtom = atom<TValue | Promise<TValue>>(initialPromise);
+  const dataAtom = atom<Data<TValue>>({ value: initialPromise });
 
   const promiseAtom = enhanceAtom(atom)((get) => {
-    const promiseState = get(promiseStateAtom);
+    const data = get(dataAtom);
 
-    if (promiseState !== initialPromise) {
-      return promiseState;
+    if ("error" in data) {
+      throw data.error;
+    }
+
+    if ("value" in data && data.value !== initialPromise) {
+      return data.value;
     }
 
     return firstValueFrom(get(rawObservableAtom));
@@ -36,7 +42,11 @@ export function atomWithObservableAndPromise<
   const observableAtom = withAtomEffect(
     enhanceAtom(atomWithObservable)((get) => get(rawObservableAtom)),
     (get, set) => {
-      set(promiseStateAtom, get(observableAtom));
+      try {
+        set(dataAtom, { value: get(observableAtom) });
+      } catch (error) {
+        set(dataAtom, { error });
+      }
     },
   );
 
