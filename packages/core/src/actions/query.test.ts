@@ -118,7 +118,7 @@ it('should handle "call-api" instruction', async () => {
     args: [1, 2],
   } as QueryInstruction;
 
-  const result = await query(fakeApi, instruction, { signal: undefined });
+  const result = await query(fakeApi, instruction);
 
   expect(result).toEqual({
     args: [1, 2, { signal: undefined, at: undefined }],

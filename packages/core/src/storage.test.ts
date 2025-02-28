@@ -6,9 +6,7 @@ class InMemoryStorage {
   private store: Record<string, string> = {};
 
   getItem(key: string): string | null {
-    return Object.prototype.hasOwnProperty.call(this.store, key)
-      ? this.store[key]
-      : null;
+    return this.store[key] ?? null;
   }
 
   setItem(key: string, value: string): void {

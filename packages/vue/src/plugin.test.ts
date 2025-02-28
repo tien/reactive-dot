@@ -1,4 +1,4 @@
-import * as walletsInitializer from "./composables/use-wallets-initializer";
+import * as walletsInitializer from "./composables/use-wallets-initializer.js";
 import { configKey, lazyValuesKey, mutationEventKey } from "./keys.js";
 import { ReactiveDotPlugin } from "./plugin.js";
 import type { Config } from "@reactive-dot/core";

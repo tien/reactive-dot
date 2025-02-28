@@ -33,12 +33,10 @@ it("should append a read-storage instruction", () => {
 
 it("should append a multi read-storage instruction using readStorages", () => {
   const query = new Query();
-  const newQuery = query.readStorages(
-    "TestPallet",
-    "TestStorage",
-    [["arg1"], ["arg2"]],
-    { at: undefined },
-  );
+  const newQuery = query.readStorages("TestPallet", "TestStorage", [
+    ["arg1"],
+    ["arg2"],
+  ]);
   const instructions = newQuery.instructions;
 
   expect(instructions).toHaveLength(1);

@@ -9,7 +9,7 @@ it("should return the single element for a one-item tuple", () => {
 });
 
 it("should return unchanged value for an empty array", () => {
-  const value = [];
+  const value: unknown[] = [];
   const result = flatHead(value);
 
   expect(result).toEqual(value);

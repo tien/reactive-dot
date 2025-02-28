@@ -26,7 +26,7 @@
   "exports": "./build/index.js",
   "scripts": {
     "dev": "tsc --build --watch",
-    "build": "rm -rf build && tsc --build",
+    "build": " tsc --build --clean && tsc --build",
     "lint": "eslint src",
     "test": "vitest"
   },

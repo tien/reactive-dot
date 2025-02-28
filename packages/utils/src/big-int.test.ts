@@ -1,4 +1,4 @@
-import { BigIntMath } from "./big-int";
+import { BigIntMath } from "./big-int.js";
 import { describe, expect, it } from "vitest";
 
 describe("min", () => {

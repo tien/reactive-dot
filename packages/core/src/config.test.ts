@@ -1,5 +1,4 @@
-import type { Config } from "./config";
-import { defineConfig } from "./config";
+import { type Config, defineConfig } from "./config.js";
 import { expect, it } from "vitest";
 
 it("should return the config object as-is", () => {
