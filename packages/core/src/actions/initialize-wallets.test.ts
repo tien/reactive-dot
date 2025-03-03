@@ -20,6 +20,24 @@ it("calls wallet.initialize for each wallet and returns their results", async ()
   expect(results).toEqual([undefined, undefined]);
 });
 
+it("only calls wallet.initialize once for each wallet", async () => {
+  const wallet1 = {
+    initialize: vi.fn(() => Promise.resolve()),
+  } as unknown as Wallet;
+
+  const wallet2 = {
+    initialize: vi.fn(() => Promise.resolve()),
+  } as unknown as Wallet;
+
+  const wallets = [wallet1, wallet2];
+
+  await initializeWallets(wallets);
+  await initializeWallets(wallets);
+
+  expect(wallet1.initialize).toHaveBeenCalledTimes(1);
+  expect(wallet2.initialize).toHaveBeenCalledTimes(1);
+});
+
 it("returns an empty array when given no wallets", async () => {
   const wallets: Wallet[] = [];
 
