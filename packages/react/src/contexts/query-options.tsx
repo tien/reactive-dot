@@ -1,4 +1,4 @@
-import { createContext, type PropsWithChildren } from "react";
+import { createContext, useMemo, type PropsWithChildren } from "react";
 
 export const SubscriptionContext = createContext({ active: true });
 
@@ -14,6 +14,8 @@ type SubscriptionProps = PropsWithChildren<{
  */
 export function QueryOptionsProvider({ active, children }: SubscriptionProps) {
   return (
-    <SubscriptionContext value={{ active }}>{children}</SubscriptionContext>
+    <SubscriptionContext value={useMemo(() => ({ active }), [active])}>
+      {children}
+    </SubscriptionContext>
   );
 }
