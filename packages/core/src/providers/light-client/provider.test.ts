@@ -1,83 +1,144 @@
 import {
+  createClientFromLightClientProvider,
   createLightClientProvider,
   isLightClientProvider,
-  createClientFromLightClientProvider,
+  type LightClientProvider,
 } from "./provider.js";
-import { it, expect, beforeEach, vi } from "vitest";
+import { beforeEach, describe, expect, it, vi } from "vitest";
 
-// Create fake implementations for dependencies
-
-const fakeSmoldot = {
-  addChain: vi.fn((chain: string | { chainSpec: string }) =>
-    Promise.resolve({ chainSpec: chain, id: "added" }),
-  ),
-};
-
-// Mock @substrate/smoldot-discovery to return a fake smoldot provider
-vi.mock("@substrate/smoldot-discovery", () => ({
-  getSmoldotExtensionProviders: () => [
-    { provider: Promise.resolve(fakeSmoldot) },
-  ],
-}));
-
-// Mock polkadot-api/sm-provider to wrap chains in a fake provider
-vi.mock("polkadot-api/sm-provider", () => ({
-  getSmProvider: vi.fn((chain) => Promise.resolve({ clientChain: chain })),
-}));
-
-// Mock polkadot-api to return a fake client with the provided provider
 vi.mock("polkadot-api", () => ({
-  createClient: vi.fn((provider) => ({ sm_client: provider })),
+  createClient: vi.fn().mockReturnValue({ mockClient: true }),
 }));
 
-beforeEach(() => {
-  vi.clearAllMocks();
-});
+vi.mock("polkadot-api/sm-provider", () => ({
+  getSmProvider: vi.fn().mockImplementation((chain) => ({
+    provider: true,
+    chain,
+  })),
+}));
 
-it("should create a relay chain provider with chainSpec", async () => {
-  const lightClient = createLightClientProvider();
-  const relayProvider = lightClient.addRelayChain({
-    chainSpec: "fakeRelayChainSpec",
-  });
+vi.mock("./wellknown-chains.js", () => ({
+  wellknownChains: {
+    polkadot: [
+      vi.fn().mockResolvedValue({ chainSpec: "polkadot-spec" }),
+      {
+        polkadot_asset_hub: vi
+          .fn()
+          .mockResolvedValue({ chainSpec: "asset-hub-spec" }),
+      },
+    ],
+    kusama: [
+      vi.fn().mockResolvedValue({ chainSpec: "kusama-spec" }),
+      {
+        polkadot_asset_hub: vi
+          .fn()
+          .mockResolvedValue({ chainSpec: "asset-hub-kusama-spec" }),
+      },
+    ],
+  },
+}));
 
-  const client = await createClientFromLightClientProvider(relayProvider);
+global.Worker = class {
+  constructor() {}
+  postMessage = vi.fn();
+  addEventListener = vi.fn();
+} as unknown as typeof Worker;
 
-  // Expect the fake sm-provider to have been called with the result of smoldot.addChain.
-  expect(client).toEqual({
-    sm_client: {
-      clientChain: { chainSpec: "fakeRelayChainSpec", id: "added" },
+// Mock smoldot imports
+vi.mock("polkadot-api/smoldot/from-worker", () => ({
+  startFromWorker: vi.fn().mockResolvedValue({
+    addChain: vi.fn().mockImplementation(({ chainSpec }) => ({
+      chainId: "chain-id",
+      chainSpec,
+    })),
+  }),
+}));
+
+vi.mock("@substrate/smoldot-discovery", () => ({
+  getSmoldotExtensionProviders: vi.fn().mockReturnValue([
+    {
+      provider: {
+        addChain: vi.fn().mockImplementation((chainSpec) => ({
+          chainId: "sc-chain-id",
+          chainSpec,
+        })),
+      },
     },
-  });
-  expect(fakeSmoldot.addChain).toHaveBeenCalledWith("fakeRelayChainSpec");
-});
+  ]),
+}));
 
-it("should create a parachain provider with chainSpec", async () => {
-  const lightClient = createLightClientProvider();
-  const relayProvider = lightClient.addRelayChain({
-    chainSpec: "fakeRelayChainSpec",
-  });
-  const parachainProvider = relayProvider.addParachain({
-    chainSpec: "fakeParachainSpec",
+describe("Light Client Provider", () => {
+  beforeEach(() => {
+    vi.clearAllMocks();
   });
 
-  const client = await createClientFromLightClientProvider(parachainProvider);
+  it("should create a light client provider without substrate connect", async () => {
+    const provider = createLightClientProvider();
 
-  // Expect the parachain chain addition to use its own chainSpec.
-  expect(client).toEqual({
-    sm_client: {
-      clientChain: { chainSpec: "fakeParachainSpec", id: "added" },
-    },
+    expect(provider).toBeDefined();
+    expect(provider.addRelayChain).toBeInstanceOf(Function);
   });
-  expect(fakeSmoldot.addChain).toHaveBeenCalledTimes(2);
-});
 
-it("should recognize a valid LightClientProvider", () => {
-  const lightClient = createLightClientProvider();
-  const relayProvider = lightClient.addRelayChain({
-    chainSpec: "fakeRelayChainSpec",
+  it("should create a light client provider with substrate connect enabled", async () => {
+    const provider = createLightClientProvider({
+      useExtensionProvider: true,
+    });
+
+    expect(provider).toBeDefined();
+    expect(provider.addRelayChain).toBeInstanceOf(Function);
   });
-  const nonProvider = {};
 
-  expect(isLightClientProvider(relayProvider)).toBe(true);
-  expect(isLightClientProvider(nonProvider)).toBe(false);
+  it("should add relay chain with chain spec", async () => {
+    const provider = createLightClientProvider();
+    const relayChain = provider.addRelayChain({ chainSpec: "test-chain-spec" });
+
+    expect(relayChain).toBeDefined();
+    expect(isLightClientProvider(relayChain)).toBeTruthy();
+  });
+
+  it("should add relay chain with wellknown id", async () => {
+    const provider = createLightClientProvider();
+    const relayChain = provider.addRelayChain({ id: "polkadot" });
+
+    expect(relayChain).toBeDefined();
+    expect(isLightClientProvider(relayChain)).toBeTruthy();
+  });
+
+  it("should add parachain to relay chain", async () => {
+    const provider = createLightClientProvider();
+    const relayChain = provider.addRelayChain({ id: "polkadot" });
+    const parachain = relayChain.addParachain({ id: "polkadot_asset_hub" });
+
+    expect(parachain).toBeDefined();
+    expect(isLightClientProvider(parachain)).toBeTruthy();
+  });
+
+  it("should add parachain with chain spec to relay chain", async () => {
+    const provider = createLightClientProvider();
+    const relayChain = provider.addRelayChain({ id: "polkadot" });
+    const parachain = relayChain.addParachain({ chainSpec: "parachain-spec" });
+
+    expect(parachain).toBeDefined();
+    expect(isLightClientProvider(parachain)).toBeTruthy();
+  });
+
+  it("should identify light client providers correctly", () => {
+    const provider = createLightClientProvider();
+    const relayChain = provider.addRelayChain({ id: "polkadot" });
+
+    expect(isLightClientProvider(relayChain)).toBeTruthy();
+    expect(isLightClientProvider({})).toBeFalsy();
+    expect(isLightClientProvider(null)).toBeFalsy();
+    expect(isLightClientProvider(undefined)).toBeFalsy();
+  });
+
+  it("should create client from light client provider", () => {
+    const provider = createLightClientProvider();
+    const relayChain = provider.addRelayChain({ id: "polkadot" });
+    const client = createClientFromLightClientProvider(
+      relayChain as LightClientProvider,
+    );
+
+    expect(client).toEqual({ mockClient: true });
+  });
 });
