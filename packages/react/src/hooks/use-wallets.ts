@@ -33,7 +33,7 @@ export function useConnectedWallets() {
  */
 export const walletsAtom = atomFamilyWithErrorCatcher(
   (withErrorCatcher, config: Config) =>
-    withErrorCatcher(atom)(() => aggregateWallets(config.wallets ?? [])),
+    withErrorCatcher(atom(() => aggregateWallets(config.wallets ?? []))),
 );
 
 /**

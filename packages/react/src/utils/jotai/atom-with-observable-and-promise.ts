@@ -7,11 +7,9 @@ type Data<T> = { value: T | Promise<T> } | { error: unknown };
 
 export function atomWithObservableAndPromise<
   TValue,
-  TAtomEnhancer extends <
-    TAtomCreator extends (...args: never[]) => Atom<unknown>,
-  >(
-    atomCreator: TAtomCreator,
-  ) => TAtomCreator,
+  TAtomEnhancer extends <TAtomType extends Atom<unknown>>(
+    atomType: TAtomType,
+  ) => TAtomType,
 >(
   getObservable: (get: Getter) => Observable<TValue>,
   enhanceAtom: TAtomEnhancer = ((atomCreator) => atomCreator) as TAtomEnhancer,
@@ -25,22 +23,24 @@ export function atomWithObservableAndPromise<
 
   const dataAtom = atom<Data<TValue>>({ value: initialPromise });
 
-  const promiseAtom = enhanceAtom(atom)((get) => {
-    const data = get(dataAtom);
+  const promiseAtom = enhanceAtom(
+    atom((get) => {
+      const data = get(dataAtom);
 
-    if ("error" in data) {
-      throw data.error;
-    }
+      if ("error" in data) {
+        throw data.error;
+      }
 
-    if ("value" in data && data.value !== initialPromise) {
-      return data.value;
-    }
+      if ("value" in data && data.value !== initialPromise) {
+        return data.value;
+      }
 
-    return firstValueFrom(get(rawObservableAtom));
-  });
+      return firstValueFrom(get(rawObservableAtom));
+    }),
+  );
 
   const observableAtom = withAtomEffect(
-    enhanceAtom(atomWithObservable)((get) => get(rawObservableAtom)),
+    enhanceAtom(atomWithObservable((get) => get(rawObservableAtom))),
     (get, set) => {
       try {
         set(dataAtom, { value: get(observableAtom) });
