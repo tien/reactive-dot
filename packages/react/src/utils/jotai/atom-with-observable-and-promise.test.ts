@@ -1,6 +1,6 @@
+import { useAtomValue } from "../../hooks/use-atom-value.js";
 import { atomWithObservableAndPromise } from "./atom-with-observable-and-promise.js";
 import { act, renderHook, waitFor } from "@testing-library/react";
-import { useAtomValue } from "jotai/react";
 import { BehaviorSubject, firstValueFrom, of, switchMap } from "rxjs";
 import { expect, it } from "vitest";
 

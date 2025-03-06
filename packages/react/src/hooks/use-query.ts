@@ -97,8 +97,6 @@ export function useLazyLoadQuery(
         [options],
       ),
     ),
-    // TODO: remove once https://github.com/pmndrs/jotai/issues/2847 is fixed
-    { delay: 0 },
   );
 
   return useMemo<unknown>(() => {

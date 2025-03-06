@@ -1,5 +1,6 @@
 import { atomFamilyWithErrorCatcher } from "../utils/jotai/atom-family-with-error-catcher.js";
 import type { ChainHookOptions } from "./types.js";
+import { useAtomValue } from "./use-atom-value.js";
 import { internal_useChainId } from "./use-chain-id.js";
 import { clientAtom } from "./use-client.js";
 import { useConfig } from "./use-config.js";
@@ -9,7 +10,7 @@ import {
   type Config,
 } from "@reactive-dot/core";
 import type { ChainDescriptorOf } from "@reactive-dot/core/internal.js";
-import { atom, useAtomValue } from "jotai";
+import { atom } from "jotai";
 import type { TypedApi } from "polkadot-api";
 
 /**
