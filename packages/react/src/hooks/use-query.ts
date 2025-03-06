@@ -2,6 +2,7 @@ import { findAllIndexes } from "../utils/find-all-indexes.js";
 import { interlace } from "../utils/interlace.js";
 import { atomFamilyWithErrorCatcher } from "../utils/jotai/atom-family-with-error-catcher.js";
 import { atomWithObservableAndPromise } from "../utils/jotai/atom-with-observable-and-promise.js";
+import { maybePromiseAll } from "../utils/maybe-promise-all.js";
 import { objectId } from "../utils/object-id.js";
 import type {
   ChainHookOptions,
@@ -28,6 +29,7 @@ import {
 } from "@reactive-dot/core/internal.js";
 import { preflight, query } from "@reactive-dot/core/internal/actions.js";
 import { atom } from "jotai";
+import { soon } from "jotai-derive";
 import { atomWithRefresh } from "jotai/utils";
 import { useMemo } from "react";
 import { from, type Observable } from "rxjs";
@@ -185,11 +187,11 @@ const instructionPayloadAtom = atomFamilyWithErrorCatcher(
     switch (preflight(instruction)) {
       case "promise": {
         const atom = withErrorCatcher(
-          atomWithRefresh(async (get, { signal }) => {
-            const api = await get(typedApiAtom(config, chainId));
-
-            return query(api, instruction, { signal });
-          }),
+          atomWithRefresh((get, { signal }) =>
+            soon(get(typedApiAtom(config, chainId)), (api) =>
+              query(api, instruction, { signal }),
+            ),
+          ),
         );
 
         return {
@@ -200,7 +202,7 @@ const instructionPayloadAtom = atomFamilyWithErrorCatcher(
       case "observable":
         return atomWithObservableAndPromise(
           (get) =>
-            from(get(typedApiAtom(config, chainId))).pipe(
+            from(Promise.resolve(get(typedApiAtom(config, chainId)))).pipe(
               switchMap(
                 (api) => query(api, instruction) as Observable<unknown>,
               ),
@@ -257,23 +259,26 @@ export const queryPayloadAtom = atomFamilyWithErrorCatcher(
     const createAtom = (asObservable: boolean) =>
       withErrorCatcher(
         atom((get) => {
-          return Promise.all(
+          return maybePromiseAll(
             atoms.map((atomOrAtoms) =>
               !Array.isArray(atomOrAtoms)
                 ? atomOrAtoms
-                : Promise.all(
-                    atomOrAtoms.map((atomOrAtoms) => {
-                      if (Array.isArray(atomOrAtoms)) {
-                        return Promise.all(
-                          atomOrAtoms.map((atom) =>
-                            get(unwrap(atom, asObservable)),
-                          ),
-                        );
-                      }
+                : soon(
+                    maybePromiseAll(
+                      atomOrAtoms.map((atomOrAtoms) => {
+                        if (Array.isArray(atomOrAtoms)) {
+                          return maybePromiseAll(
+                            atomOrAtoms.map((atom) =>
+                              get(unwrap(atom, asObservable)),
+                            ),
+                          );
+                        }
 
-                      return get(unwrap(atomOrAtoms, asObservable));
-                    }),
-                  ).then(flatHead),
+                        return get(unwrap(atomOrAtoms, asObservable));
+                      }),
+                    ),
+                    flatHead,
+                  ),
             ),
           );
         }),

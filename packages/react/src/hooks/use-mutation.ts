@@ -79,7 +79,7 @@ export function useMutation<
 
           const id = globalThis.crypto.randomUUID();
 
-          return from(get(typedApiAtom(config, chainId))).pipe(
+          return from(Promise.resolve(get(typedApiAtom(config, chainId)))).pipe(
             switchMap((typedApi) => {
               const transaction = action(typedApi.tx);
 

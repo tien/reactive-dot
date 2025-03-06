@@ -1,13 +1,20 @@
-import { atomFamilyWithErrorCatcher } from "./atom-family-with-error-catcher.js";
+import {
+  atomFamilyErrorsAtom,
+  atomFamilyWithErrorCatcher,
+} from "./atom-family-with-error-catcher.js";
 import { atom, createStore } from "jotai";
 import { atomWithObservable } from "jotai/utils";
 import { of, throwError } from "rxjs";
-import { beforeEach, expect, it } from "vitest";
+import { afterEach, beforeEach, expect, it } from "vitest";
 
 let store: ReturnType<typeof createStore>;
 
 beforeEach(() => {
   store = createStore();
+});
+
+afterEach(() => {
+  store.get(atomFamilyErrorsAtom).clear();
 });
 
 it("should create an atom family", () => {
@@ -53,6 +60,7 @@ it("should catch errors in synchronous reads", () => {
 
   expect(store.get(myAtomFamily("World"))).toBe("Hello World");
   expect(() => store.get(myAtomFamily("Error"))).toThrow("Intentional Error");
+  expect(store.get(atomFamilyErrorsAtom).size).toBe(1);
 });
 
 it("should catch errors in Promise reads", async () => {
@@ -74,6 +82,7 @@ it("should catch errors in Promise reads", async () => {
   await expect(() => store.get(myAtomFamily("Error"))).rejects.toThrow(
     "Intentional Promise Error",
   );
+  expect(store.get(atomFamilyErrorsAtom).size).toBe(1);
 });
 
 it("should catch errors in Observable reads", async () => {
@@ -93,4 +102,5 @@ it("should catch errors in Observable reads", async () => {
   expect(() => store.get(myAtomFamily("Error"))).toThrow(
     "Intentional Observable Error",
   );
+  expect(store.get(atomFamilyErrorsAtom).size).toBe(1);
 });

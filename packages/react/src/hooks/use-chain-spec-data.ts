@@ -4,8 +4,8 @@ import { useAtomValue } from "./use-atom-value.js";
 import { internal_useChainId } from "./use-chain-id.js";
 import { clientAtom } from "./use-client.js";
 import { useConfig } from "./use-config.js";
-import type { Config, ChainId } from "@reactive-dot/core";
-import { atom } from "jotai";
+import type { ChainId, Config } from "@reactive-dot/core";
+import { derive } from "jotai-derive";
 
 /**
  * Hook for fetching the [JSON-RPC spec](https://paritytech.github.io/json-rpc-interface-spec/api/chainSpec.html).
@@ -25,10 +25,8 @@ export function useChainSpecData(options?: ChainHookOptions) {
 export const chainSpecDataAtom = atomFamilyWithErrorCatcher(
   (withErrorCatcher, config: Config, chainId: ChainId) =>
     withErrorCatcher(
-      atom(async (get) => {
-        const client = await get(clientAtom(config, chainId));
-
-        return client.getChainSpecData();
-      }),
+      derive([clientAtom(config, chainId)], (client) =>
+        client.getChainSpecData(),
+      ),
     ),
 );
