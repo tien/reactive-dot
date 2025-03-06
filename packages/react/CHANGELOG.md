@@ -1,5 +1,13 @@
 # @reactive-dot/react
 
+## 0.36.2
+
+### Patch Changes
+
+- [#543](https://github.com/tien/reactive-dot/pull/543) [`a58bbd6`](https://github.com/tien/reactive-dot/commit/a58bbd69addbc8f618b9f63b5714bab27ad69124) Thanks [@tien](https://github.com/tien)! - Refactored error handling.
+
+- [#545](https://github.com/tien/reactive-dot/pull/545) [`87fcd8d`](https://github.com/tien/reactive-dot/commit/87fcd8d8361b535dca0670776d95c72cbe07e665) Thanks [@tien](https://github.com/tien)! - Reduced unnecessary promise creation.
+
 ## 0.36.1
 
 ### Patch Changes
