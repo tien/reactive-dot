@@ -5018,6 +5018,7 @@ __metadata:
     "@types/react": "npm:^19.0.10"
     eslint: "npm:^9.21.0"
     jotai: "npm:^2.12.1"
+    jotai-derive: "npm:^0.1.2"
     jotai-effect: "npm:^2.0.1"
     jsdom: "npm:^26.0.0"
     react: "npm:^19.0.0"
@@ -13109,6 +13110,15 @@ __metadata:
     "@sideway/formula": "npm:^3.0.1"
     "@sideway/pinpoint": "npm:^2.0.0"
   checksum: 10c0/485627809c5e424fc4af4310e06bc31a34fe10635b0bdbfcc425336db5e06b1da3ff8b35101878ffcbcd94c0187e7134c935fb2d1aeba641c92d7f505e6ffd8d
+  languageName: node
+  linkType: hard
+
+"jotai-derive@npm:^0.1.2":
+  version: 0.1.2
+  resolution: "jotai-derive@npm:0.1.2"
+  peerDependencies:
+    jotai: ">=2.0.0"
+  checksum: 10c0/72ad1769dcdcd08edae2c6e829bc51313653edbb3693cb271e43dde8779239967a80d5d0af56cca786097c395213b629aff08a10aed31d13bdfcc666aadd1ace
   languageName: node
   linkType: hard
 
