@@ -1,8 +1,8 @@
 import { QueryOptionsProvider } from "../contexts/query-options.js";
 import { atomWithObservableAndPromise } from "../utils/jotai/atom-with-observable-and-promise.js";
+import { useAtomValue } from "./use-atom-value.js";
 import { usePausableAtomValue } from "./use-pausable-atom-value.js";
 import { renderHook } from "@testing-library/react";
-import { useAtomValue } from "jotai";
 import { atomWithObservable } from "jotai/utils";
 import { act, type PropsWithChildren } from "react";
 import { BehaviorSubject } from "rxjs";
