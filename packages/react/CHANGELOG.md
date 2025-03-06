@@ -1,5 +1,11 @@
 # @reactive-dot/react
 
+## 0.36.1
+
+### Patch Changes
+
+- [#541](https://github.com/tien/reactive-dot/pull/541) [`3279d4c`](https://github.com/tien/reactive-dot/commit/3279d4c1136b8c171dbfdb4847ef635e76ab67d6) Thanks [@tien](https://github.com/tien)! - Fixed unexpected micro-suspensions on React 19.
+
 ## 0.36.0
 
 ### Patch Changes
