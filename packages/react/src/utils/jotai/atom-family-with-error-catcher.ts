@@ -1,7 +1,5 @@
 import { type AtomFamily, atomFamily } from "./atom-family.js";
-import { atom, type Getter } from "jotai";
-import { Observable } from "rxjs";
-import { catchError } from "rxjs/operators";
+import { type Atom, atom, type Getter, type WritableAtom } from "jotai";
 
 export const atomFamilyErrorsAtom = atom(
   () =>
@@ -18,70 +16,58 @@ export const atomFamilyErrorsAtom = atom(
 export function atomFamilyWithErrorCatcher<
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   TArguments extends any[],
-  TAtomType,
+  TCached,
 >(
   initializeAtom: (
-    withErrorCatcher: <TAtomCreator>(atomCreator: TAtomCreator) => TAtomCreator,
+    withErrorCatcher: <TAtomType extends Atom<unknown>>(
+      atom: TAtomType,
+    ) => TAtomType,
     ...args: TArguments
-  ) => TAtomType,
+  ) => TCached,
   getKey?: (...args: TArguments) => unknown,
-): AtomFamily<TArguments, TAtomType> {
+): AtomFamily<TArguments, TCached> {
   const baseAtomFamily = atomFamily((...args: TArguments) => {
-    const withErrorCatcher: <
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      TRead extends (get: Getter, ...args: unknown[]) => any,
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      TAtomCreator extends (read: TRead, ...args: any[]) => unknown,
-    >(
-      atomCreator: TAtomCreator,
-    ) => TAtomCreator = (atomCreator) => {
-      // @ts-expect-error complex sub-type
-      const atomCatching: TAtomCreator = (read, ...args) => {
-        // @ts-expect-error complex sub-type
-        const readCatching: TRead = (...readArgs) => {
-          const addError = <T>(error: T) => {
-            const get = readArgs[0] as Getter;
+    const withErrorCatcher = <TAtomType extends Atom<unknown>>(
+      childAtom: TAtomType,
+    ) => {
+      const read = (get: Getter) => {
+        try {
+          const value = get(childAtom);
+
+          if (!(value instanceof Promise)) {
+            return value;
+          }
+
+          return value.catch((error) => {
             get(atomFamilyErrorsAtom).add({
               atomFamily: baseAtomFamily,
               args,
             });
-            return error;
-          };
 
-          try {
-            const value = read(...readArgs);
+            throw error;
+          });
+        } catch (error) {
+          get(atomFamilyErrorsAtom).add({
+            atomFamily: baseAtomFamily,
+            args,
+          });
 
-            if (value instanceof Promise) {
-              return value.catch((error) => {
-                throw addError(error);
-              });
-            }
-
-            if (value instanceof Observable) {
-              return value.pipe(
-                catchError((error) => {
-                  throw addError(error);
-                }),
-              );
-            }
-
-            return value;
-          } catch (error) {
-            throw addError(error);
-          }
-        };
-
-        return atomCreator(readCatching, ...args);
+          throw error;
+        }
       };
 
-      return atomCatching;
+      return "write" in childAtom
+        ? atom(read, (_, set, ...args: unknown[]) =>
+            set(
+              childAtom as unknown as WritableAtom<unknown, unknown[], unknown>,
+              ...args,
+            ),
+          )
+        : atom(read);
     };
 
-    return initializeAtom(
-      // @ts-expect-error complex type
-      withErrorCatcher,
-      ...args,
-    );
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    return initializeAtom(withErrorCatcher as any, ...args);
   }, getKey);
 
   return baseAtomFamily;

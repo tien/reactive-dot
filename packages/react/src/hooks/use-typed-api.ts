@@ -32,15 +32,17 @@ export function useTypedApi<TChainId extends ChainId | undefined>(
  */
 export const typedApiAtom = atomFamilyWithErrorCatcher(
   (withErrorCatcher, config: Config, chainId: ChainId) =>
-    withErrorCatcher(atom)(async (get) => {
-      const chainConfig = config.chains[chainId];
+    withErrorCatcher(
+      atom(async (get) => {
+        const chainConfig = config.chains[chainId];
 
-      if (chainConfig === undefined) {
-        throw new ReactiveDotError(`No config provided for chain ${chainId}`);
-      }
+        if (chainConfig === undefined) {
+          throw new ReactiveDotError(`No config provided for chain ${chainId}`);
+        }
 
-      const client = await get(clientAtom(config, chainId));
+        const client = await get(clientAtom(config, chainId));
 
-      return client.getTypedApi(chainConfig.descriptor);
-    }),
+        return client.getTypedApi(chainConfig.descriptor);
+      }),
+    ),
 );

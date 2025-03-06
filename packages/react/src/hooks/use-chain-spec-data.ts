@@ -24,9 +24,11 @@ export function useChainSpecData(options?: ChainHookOptions) {
  */
 export const chainSpecDataAtom = atomFamilyWithErrorCatcher(
   (withErrorCatcher, config: Config, chainId: ChainId) =>
-    withErrorCatcher(atom)(async (get) => {
-      const client = await get(clientAtom(config, chainId));
+    withErrorCatcher(
+      atom(async (get) => {
+        const client = await get(clientAtom(config, chainId));
 
-      return client.getChainSpecData();
-    }),
+        return client.getChainSpecData();
+      }),
+    ),
 );

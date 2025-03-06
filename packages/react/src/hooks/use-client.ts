@@ -23,13 +23,15 @@ export function useClient(options?: ChainHookOptions) {
  */
 export const clientAtom = atomFamilyWithErrorCatcher(
   (withErrorCatcher, config: Config, chainId: ChainId) =>
-    withErrorCatcher(atom)(() => {
-      const chainConfig = config.chains[chainId];
+    withErrorCatcher(
+      atom(() => {
+        const chainConfig = config.chains[chainId];
 
-      if (chainConfig === undefined) {
-        throw new ReactiveDotError(`No config provided for ${chainId}`);
-      }
+        if (chainConfig === undefined) {
+          throw new ReactiveDotError(`No config provided for ${chainId}`);
+        }
 
-      return getClient(chainConfig);
-    }),
+        return getClient(chainConfig);
+      }),
+    ),
 );

@@ -13,7 +13,7 @@ beforeEach(() => {
 it("should create an atom family", () => {
   const myAtomFamily = atomFamilyWithErrorCatcher(
     (withErrorCatcher, param: string) => {
-      return withErrorCatcher(atom)(`Hello ${param}`);
+      return withErrorCatcher(atom(`Hello ${param}`));
     },
   );
 
@@ -26,7 +26,7 @@ it("should create an atom family", () => {
 it("should return different atoms for different params", () => {
   const myAtomFamily = atomFamilyWithErrorCatcher(
     (withErrorCatcher, param: string) => {
-      return withErrorCatcher(atom)(`Hello ${param}`);
+      return withErrorCatcher(atom(`Hello ${param}`));
     },
   );
 
@@ -39,13 +39,15 @@ it("should return different atoms for different params", () => {
 it("should catch errors in synchronous reads", () => {
   const myAtomFamily = atomFamilyWithErrorCatcher(
     (withErrorCatcher, param: string) => {
-      return withErrorCatcher(atom)(() => {
-        if (param === "Error") {
-          throw new Error("Intentional Error");
-        }
+      return withErrorCatcher(
+        atom(() => {
+          if (param === "Error") {
+            throw new Error("Intentional Error");
+          }
 
-        return `Hello ${param}`;
-      });
+          return `Hello ${param}`;
+        }),
+      );
     },
   );
 
@@ -56,13 +58,15 @@ it("should catch errors in synchronous reads", () => {
 it("should catch errors in Promise reads", async () => {
   const myAtomFamily = atomFamilyWithErrorCatcher(
     (withErrorCatcher, param: string) => {
-      return withErrorCatcher(atom)(async () => {
-        if (param === "Error") {
-          throw new Error("Intentional Promise Error");
-        }
+      return withErrorCatcher(
+        atom(async () => {
+          if (param === "Error") {
+            throw new Error("Intentional Promise Error");
+          }
 
-        return `Hello ${param}`;
-      });
+          return `Hello ${param}`;
+        }),
+      );
     },
   );
 
@@ -75,10 +79,12 @@ it("should catch errors in Promise reads", async () => {
 it("should catch errors in Observable reads", async () => {
   const myAtomFamily = atomFamilyWithErrorCatcher(
     (withErrorCatcher, param: string) => {
-      return withErrorCatcher(atomWithObservable)(() =>
-        param === "Error"
-          ? throwError(() => new Error("Intentional Observable Error"))
-          : of(`Hello ${param}`),
+      return withErrorCatcher(
+        atomWithObservable(() =>
+          param === "Error"
+            ? throwError(() => new Error("Intentional Observable Error"))
+            : of(`Hello ${param}`),
+        ),
       );
     },
   );

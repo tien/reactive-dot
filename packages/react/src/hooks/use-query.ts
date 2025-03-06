@@ -184,14 +184,13 @@ const instructionPayloadAtom = atomFamilyWithErrorCatcher(
   ) => {
     switch (preflight(instruction)) {
       case "promise": {
-        const atom = withErrorCatcher(atomWithRefresh)(async (
-          get,
-          { signal },
-        ) => {
-          const api = await get(typedApiAtom(config, chainId));
+        const atom = withErrorCatcher(
+          atomWithRefresh(async (get, { signal }) => {
+            const api = await get(typedApiAtom(config, chainId));
 
-          return query(api, instruction, { signal });
-        });
+            return query(api, instruction, { signal });
+          }),
+        );
 
         return {
           observableAtom: atom,
@@ -256,27 +255,29 @@ export const queryPayloadAtom = atomFamilyWithErrorCatcher(
     ) => (asObservable ? atoms.observableAtom : atoms.promiseAtom);
 
     const createAtom = (asObservable: boolean) =>
-      withErrorCatcher(atom)((get) => {
-        return Promise.all(
-          atoms.map((atomOrAtoms) =>
-            !Array.isArray(atomOrAtoms)
-              ? atomOrAtoms
-              : Promise.all(
-                  atomOrAtoms.map((atomOrAtoms) => {
-                    if (Array.isArray(atomOrAtoms)) {
-                      return Promise.all(
-                        atomOrAtoms.map((atom) =>
-                          get(unwrap(atom, asObservable)),
-                        ),
-                      );
-                    }
+      withErrorCatcher(
+        atom((get) => {
+          return Promise.all(
+            atoms.map((atomOrAtoms) =>
+              !Array.isArray(atomOrAtoms)
+                ? atomOrAtoms
+                : Promise.all(
+                    atomOrAtoms.map((atomOrAtoms) => {
+                      if (Array.isArray(atomOrAtoms)) {
+                        return Promise.all(
+                          atomOrAtoms.map((atom) =>
+                            get(unwrap(atom, asObservable)),
+                          ),
+                        );
+                      }
 
-                    return get(unwrap(atomOrAtoms, asObservable));
-                  }),
-                ).then(flatHead),
-          ),
-        );
-      });
+                      return get(unwrap(atomOrAtoms, asObservable));
+                    }),
+                  ).then(flatHead),
+            ),
+          );
+        }),
+      );
 
     return { promiseAtom: createAtom(false), observableAtom: createAtom(true) };
   },
