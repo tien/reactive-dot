@@ -1,5 +1,11 @@
 # @reactive-dot/core
 
+## 0.36.3
+
+### Patch Changes
+
+- [#547](https://github.com/tien/reactive-dot/pull/547) [`3958fe9`](https://github.com/tien/reactive-dot/commit/3958fe9ab2e8281632685eb72227c4052cc93a30) Thanks [@tien](https://github.com/tien)! - Fixed incorrect native token info when dealing with non-common chain's spec (array for `tokenSymbol` & `tokenDecimals`).
+
 ## 0.36.0
 
 ### Minor Changes
