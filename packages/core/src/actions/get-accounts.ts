@@ -1,4 +1,5 @@
 import type { MaybeAsync } from "../types.js";
+import { nativeTokenInfoFromChainSpecData } from "../utils/native-token-info-from-chain-spec-data.js";
 import { toObservable } from "../utils/to-observable.js";
 import type { WalletAccount } from "../wallets/account.js";
 import type { Wallet } from "../wallets/wallet.js";
@@ -39,10 +40,12 @@ export function getAccounts(
                       return undefined;
                     }
 
+                    const nativeTokenInfo =
+                      nativeTokenInfoFromChainSpecData(chainSpec);
+
                     return account.polkadotSigner({
-                      tokenSymbol: chainSpec.properties.tokenSymbol as string,
-                      tokenDecimals: chainSpec.properties
-                        .tokenDecimals as number,
+                      tokenSymbol: nativeTokenInfo.code ?? "",
+                      tokenDecimals: nativeTokenInfo.decimals ?? 0,
                     });
                   })();
 
