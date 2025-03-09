@@ -5,7 +5,8 @@ it("should match inline snapshot", () =>
   expect(Object.keys(exports)).toMatchInlineSnapshot(`
     [
       "flatHead",
-      "toObservable",
+      "nativeTokenInfoFromChainSpecData",
       "stringify",
+      "toObservable",
     ]
   `));

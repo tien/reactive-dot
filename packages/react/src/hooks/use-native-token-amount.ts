@@ -1,5 +1,6 @@
 import type { ChainHookOptions } from "./types.js";
 import { useChainSpecData } from "./use-chain-spec-data.js";
+import { nativeTokenInfoFromChainSpecData } from "@reactive-dot/core/internal.js";
 import { DenominatedNumber } from "@reactive-dot/utils";
 import { useMemo } from "react";
 
@@ -33,6 +34,10 @@ export function useNativeTokenAmountFromPlanck(
     typeof planckOrOptions === "object" ? planckOrOptions : maybeOptions;
 
   const chainSpecData = useChainSpecData(options);
+  const nativeTokenInfo = useMemo(
+    () => nativeTokenInfoFromChainSpecData(chainSpecData),
+    [chainSpecData],
+  );
 
   return useMemo(
     () => {
@@ -42,26 +47,20 @@ export function useNativeTokenAmountFromPlanck(
         case "string":
           return new DenominatedNumber(
             planckOrOptions,
-            chainSpecData.properties.tokenDecimals,
-            chainSpecData.properties.tokenSymbol,
+            nativeTokenInfo.decimals ?? 0,
+            nativeTokenInfo.code,
           );
         default:
           return (planck: bigint | number | string) =>
             new DenominatedNumber(
               planck,
-              chainSpecData.properties.tokenDecimals,
-              chainSpecData.properties.tokenSymbol,
+              nativeTokenInfo.decimals ?? 0,
+              nativeTokenInfo.code,
             );
       }
     },
-
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    [
-      chainSpecData.properties.tokenDecimals,
-      chainSpecData.properties.tokenSymbol,
-      // eslint-disable-next-line react-hooks/exhaustive-deps
-      typeof planckOrOptions,
-    ],
+    [nativeTokenInfo.code, nativeTokenInfo.decimals, typeof planckOrOptions],
   );
 }
 
@@ -93,6 +92,10 @@ export function useNativeTokenAmountFromNumber(
     typeof numberOrOptions === "object" ? numberOrOptions : maybeOptions;
 
   const chainSpecData = useChainSpecData(options);
+  const nativeTokenInfo = useMemo(
+    () => nativeTokenInfoFromChainSpecData(chainSpecData),
+    [chainSpecData],
+  );
 
   return useMemo(
     () => {
@@ -101,24 +104,19 @@ export function useNativeTokenAmountFromNumber(
         case "string":
           return DenominatedNumber.fromNumber(
             numberOrOptions,
-            chainSpecData.properties.tokenDecimals,
-            chainSpecData.properties.tokenSymbol,
+            nativeTokenInfo.decimals ?? 0,
+            nativeTokenInfo.code,
           );
         default:
           return (number: number | string) =>
             DenominatedNumber.fromNumber(
               number,
-              chainSpecData.properties.tokenDecimals,
-              chainSpecData.properties.tokenSymbol,
+              nativeTokenInfo.decimals ?? 0,
+              nativeTokenInfo.code,
             );
       }
     },
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    [
-      chainSpecData.properties.tokenDecimals,
-      chainSpecData.properties.tokenSymbol,
-      // eslint-disable-next-line react-hooks/exhaustive-deps
-      typeof numberOrOptions,
-    ],
+    [nativeTokenInfo.code, nativeTokenInfo.decimals, typeof numberOrOptions],
   );
 }
