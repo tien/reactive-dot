@@ -1,7 +1,7 @@
 import { atom, type Atom, type Getter } from "jotai";
 import { withAtomEffect } from "jotai-effect";
 import { atomWithObservable } from "jotai/utils";
-import { firstValueFrom, type Observable } from "rxjs";
+import { type Observable } from "rxjs";
 
 type Data<T> = { value: T | Promise<T> } | { error: unknown };
 
@@ -17,11 +17,20 @@ export function atomWithObservableAndPromise<
   observableAtom: Atom<TValue | Promise<TValue>>;
   promiseAtom: Atom<TValue | Promise<TValue>>;
 } {
-  const rawObservableAtom = atom(getObservable);
-
   const { promise: initialPromise } = Promise.withResolvers<TValue>();
 
   const dataAtom = atom<Data<TValue>>({ value: initialPromise });
+
+  const observableAtom = withAtomEffect(
+    enhanceAtom(atomWithObservable(getObservable)),
+    (get, set) => {
+      try {
+        set(dataAtom, { value: get(observableAtom) });
+      } catch (error) {
+        set(dataAtom, { error });
+      }
+    },
+  );
 
   const promiseAtom = enhanceAtom(
     atom((get) => {
@@ -35,19 +44,8 @@ export function atomWithObservableAndPromise<
         return data.value;
       }
 
-      return firstValueFrom(get(rawObservableAtom));
+      return get(observableAtom);
     }),
-  );
-
-  const observableAtom = withAtomEffect(
-    enhanceAtom(atomWithObservable((get) => get(rawObservableAtom))),
-    (get, set) => {
-      try {
-        set(dataAtom, { value: get(observableAtom) });
-      } catch (error) {
-        set(dataAtom, { error });
-      }
-    },
   );
 
   return { promiseAtom, observableAtom };
