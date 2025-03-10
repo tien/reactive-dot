@@ -1,5 +1,11 @@
 # @reactive-dot/react
 
+## 0.36.4
+
+### Patch Changes
+
+- [#553](https://github.com/tien/reactive-dot/pull/553) [`47ba871`](https://github.com/tien/reactive-dot/commit/47ba8714c9ad603745a00a9e96ebd3229633631b) Thanks [@tien](https://github.com/tien)! - Fixed observable initial value not being populated after reading promise.
+
 ## 0.36.3
 
 ### Patch Changes
