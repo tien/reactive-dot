@@ -1,6 +1,8 @@
 import { useAtomValue } from "../../hooks/use-atom-value.js";
 import { atomWithObservableAndPromise } from "./atom-with-observable-and-promise.js";
 import { act, renderHook, waitFor } from "@testing-library/react";
+import { useStore } from "jotai";
+import { useMemo } from "react";
 import { BehaviorSubject, firstValueFrom, of, switchMap } from "rxjs";
 import { expect, it } from "vitest";
 
@@ -64,6 +66,38 @@ it("should return a promise atom that will be updated from an observable atom mo
   renderHook(() => useAtomValue(observableAtom));
 
   expect(render.result.current).toBe("updated");
+});
+
+it("should populate the observable atom initial value with result from promise atom", async () => {
+  const delay = Promise.withResolvers<void>();
+
+  const observable$ = new BehaviorSubject("value").pipe(
+    switchMap(async (value) => {
+      await delay.promise;
+      return value;
+    }),
+  );
+
+  const { promiseAtom, observableAtom } = atomWithObservableAndPromise(
+    () => observable$,
+  );
+
+  const promiseRender = await act(() =>
+    renderHook(() => useAtomValue(promiseAtom)),
+  );
+
+  delay.resolve();
+
+  await act(async () => promiseRender.rerender());
+
+  expect(promiseRender.result.current).toBe("value");
+
+  const observableRender = renderHook(() => {
+    const store = useStore();
+    return useMemo(() => store.get(observableAtom), [store]);
+  });
+
+  expect(observableRender.result.current).not.toBeInstanceOf(Promise);
 });
 
 it("should handle errors in the observable", async () => {
