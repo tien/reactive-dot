@@ -1,5 +1,16 @@
 # @reactive-dot/react
 
+## 0.37.0
+
+### Minor Changes
+
+- [#556](https://github.com/tien/reactive-dot/pull/556) [`d753bba`](https://github.com/tien/reactive-dot/commit/d753bbaf96a44965a93eccd6eb90fb0add416b70) Thanks [@tien](https://github.com/tien)! - Renamed query builder methods.
+
+### Patch Changes
+
+- Updated dependencies [[`d753bba`](https://github.com/tien/reactive-dot/commit/d753bbaf96a44965a93eccd6eb90fb0add416b70)]:
+  - @reactive-dot/core@0.37.0
+
 ## 0.36.4
 
 ### Patch Changes
