@@ -129,11 +129,11 @@ function Component() {
     {
       chainId: "polkadot",
       query: (builder) =>
-        builder.readStorage("NominationPools", "TotalValueLocked", []),
+        builder.storage("NominationPools", "TotalValueLocked", []),
     },
     {
       chainId: "polkadot_asset_hub",
-      query: (builder) => builder.readStorageEntries("Assets", "Asset", []),
+      query: (builder) => builder.storageEntries("Assets", "Asset", []),
     },
   ]);
 }
@@ -149,7 +149,7 @@ function Component() {
   // 1. Trigger a TypeScript error
   // 2. Cause a runtime error if Westend is selected
   const bountyCount = useLazyLoadQuery((builder) =>
-    builder.readStorage("Bounties", "BountyCount", []),
+    builder.storage("Bounties", "BountyCount", []),
   );
 
   // ...
@@ -161,7 +161,7 @@ To resolve this, you can explicitly specify the chain to query, which will overr
 ```tsx
 function Component() {
   const bountyCount = useLazyLoadQuery(
-    (builder) => builder.readStorage("Bounties", "BountyCount", []),
+    (builder) => builder.storage("Bounties", "BountyCount", []),
     { chainId: "polkadot" },
   );
 
@@ -188,7 +188,7 @@ function useBountiesChainId() {
 
 function BountiesPalletRequiredComponent() {
   const bountyCount = useLazyLoadQuery(
-    (builder) => builder.readStorage("Bounties", "BountyCount", []),
+    (builder) => builder.storage("Bounties", "BountyCount", []),
     {
       // This will:
       // 1. Throw an error if the chain ID does not support bounties

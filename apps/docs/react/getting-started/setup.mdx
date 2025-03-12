@@ -145,8 +145,8 @@ export function MyComponent() {
   const accounts = useAccounts();
   const [timestamp, totalIssuance] = useLazyLoadQuery((builder) =>
     builder
-      .readStorage("Timestamp", "Now", [])
-      .readStorage("Balances", "TotalIssuance", []),
+      .storage("Timestamp", "Now", [])
+      .storage("Balances", "TotalIssuance", []),
   );
 
   return (

@@ -13,7 +13,7 @@ The [`useQuery`](/api/vue/function/useQuery) composable allow you to read any da
 ```vue title="async-component.vue"
 <script setup lang="ts">
 const { data: activeEra } = await useQuery((builder) =>
-  builder.readStorage("Staking", "ActiveEra", []),
+  builder.storage("Staking", "ActiveEra", []),
 );
 </script>
 
@@ -49,9 +49,9 @@ import { computed } from "vue";
 
 const { data } = await useQuery((builder) =>
   builder
-    .getConstant("Babe", "ExpectedBlockTime")
-    .getConstant("Babe", "EpochDuration")
-    .readStorage("Treasury", "ProposalCount", []),
+    .constant("Babe", "ExpectedBlockTime")
+    .constant("Babe", "EpochDuration")
+    .storage("Treasury", "ProposalCount", []),
 );
 
 const expectedBlockTime = computed(() => data.value[0]);
@@ -60,7 +60,7 @@ const proposalCount = computed(() => data.value[2]);
 </script>
 ```
 
-Multiple queries of the same type can also be fetched using [`callApis`](/api/core/class/Query#callApis) & [`readStorages`](/api/core/class/Query#readStorages).
+Multiple queries of the same type can also be fetched using [`runtimeApis`](/api/core/class/Query#runtimeApis) & [`storages`](/api/core/class/Query#storages).
 
 ```vue
 <script setup lang="ts">
@@ -68,12 +68,12 @@ import { useQuery } from "@reactive-dot/vue";
 
 const { data } = await useQuery((builder) =>
   builder
-    .callApis("NominationPoolsApi", "pending_rewards", [
+    .runtimeApis("NominationPoolsApi", "pending_rewards", [
       [ADDRESS_1],
       [ADDRESS_2],
       [ADDRESS_3],
     ])
-    .readStorages("NominationPools", "Metadata", [
+    .storages("NominationPools", "Metadata", [
       [POOL_ID_1],
       [POOL_ID_2],
       [POOL_ID_3],
@@ -93,7 +93,9 @@ import { useQuery } from "@reactive-dot/vue";
 const { status } = await useQuery((builder) =>
   address.value === undefined
     ? undefined
-    : builder.callApi("NominationPoolsApi", "pending_rewards", [address.value]),
+    : builder.runtimeApi("NominationPoolsApi", "pending_rewards", [
+        address.value,
+      ]),
 );
 
 // Status will be "idle" if the query hasn't been executed
@@ -116,7 +118,9 @@ const {
   refresh,
   status,
 } = await useQuery((builder) =>
-  builder.callApi("NominationPoolsApi", "pending_rewards", [ACCOUNT_ADDRESS]),
+  builder.runtimeApi("NominationPoolsApi", "pending_rewards", [
+    ACCOUNT_ADDRESS,
+  ]),
 );
 </script>
 
