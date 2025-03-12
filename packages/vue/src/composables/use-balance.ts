@@ -72,7 +72,7 @@ export function useSpendableBalance(
 
   const dataObservable = useQueryObservable(
     (builder) =>
-      builder.getConstant("Balances", "ExistentialDeposit").readStorages(
+      builder.constant("Balances", "ExistentialDeposit").storages(
         "System",
         "Account",
         addresses.value.map((address) => [address] as const),

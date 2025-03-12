@@ -12,8 +12,8 @@ const { data: accounts } = await useAccounts();
 
 const { data } = await useQuery((builder) =>
   builder
-    .readStorage("System", "Number", [])
-    .readStorage("Balances", "TotalIssuance", []),
+    .storage("System", "Number", [])
+    .storage("Balances", "TotalIssuance", []),
 );
 
 const totalIssuance = computed(() =>

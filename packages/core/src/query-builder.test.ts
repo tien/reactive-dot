@@ -3,7 +3,7 @@ import { expect, it } from "vitest";
 
 it("should append a get-constant instruction", () => {
   const query = new Query();
-  const newQuery = query.getConstant("TestPallet", "TestConstant");
+  const newQuery = query.constant("TestPallet", "TestConstant");
   const instructions = newQuery.instructions;
 
   expect(instructions).toHaveLength(1);
@@ -16,7 +16,7 @@ it("should append a get-constant instruction", () => {
 
 it("should append a read-storage instruction", () => {
   const query = new Query();
-  const newQuery = query.readStorage("TestPallet", "TestStorage", ["arg1"], {
+  const newQuery = query.storage("TestPallet", "TestStorage", ["arg1"], {
     at: "finalized",
   });
   const instructions = newQuery.instructions;
@@ -31,9 +31,9 @@ it("should append a read-storage instruction", () => {
   });
 });
 
-it("should append a multi read-storage instruction using readStorages", () => {
+it("should append a multi read-storage instruction using storages", () => {
   const query = new Query();
-  const newQuery = query.readStorages("TestPallet", "TestStorage", [
+  const newQuery = query.storages("TestPallet", "TestStorage", [
     ["arg1"],
     ["arg2"],
   ]);
@@ -52,12 +52,9 @@ it("should append a multi read-storage instruction using readStorages", () => {
 
 it("should append a read-storage-entries instruction", () => {
   const query = new Query();
-  const newQuery = query.readStorageEntries(
-    "TestPallet",
-    "TestStorage",
-    ["arg1"],
-    { at: "best" },
-  );
+  const newQuery = query.storageEntries("TestPallet", "TestStorage", ["arg1"], {
+    at: "best",
+  });
   const instructions = newQuery.instructions;
 
   expect(instructions).toHaveLength(1);
@@ -72,7 +69,7 @@ it("should append a read-storage-entries instruction", () => {
 
 it("should append a call-api instruction", () => {
   const query = new Query();
-  const newQuery = query.callApi("TestPallet", "TestApi", ["arg1"], {
+  const newQuery = query.runtimeApi("TestPallet", "TestApi", ["arg1"], {
     at: "best",
   });
   const instructions = newQuery.instructions;
@@ -87,9 +84,9 @@ it("should append a call-api instruction", () => {
   });
 });
 
-it("should append a multi call-api instruction using callApis", () => {
+it("should append a multi call-api instruction using runtimeApis", () => {
   const query = new Query();
-  const newQuery = query.callApis(
+  const newQuery = query.runtimeApis(
     "TestPallet",
     "TestApi",
     [["arg1"], ["arg2"]],
@@ -116,9 +113,9 @@ it("should return a frozen instructions array", () => {
 });
 
 it("should concatenate two queries", () => {
-  const query1 = new Query().getConstant("TestPallet", "TestConstant");
-  const query2 = new Query().readStorage("TestPallet", "TestStorage", []);
-  const query3 = new Query().callApi("TestPallet", "TestApi", []);
+  const query1 = new Query().constant("TestPallet", "TestConstant");
+  const query2 = new Query().storage("TestPallet", "TestStorage", []);
+  const query3 = new Query().runtimeApi("TestPallet", "TestApi", []);
 
   const concatenated = query1.concat(query2, query3);
   const instructions = concatenated.instructions;

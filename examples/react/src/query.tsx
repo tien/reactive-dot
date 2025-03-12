@@ -26,15 +26,15 @@ export function Query() {
     poolMetadatum,
   ] = useLazyLoadQuery((builder) =>
     builder
-      .getConstant("Babe", "ExpectedBlockTime")
-      .getConstant("Babe", "EpochDuration")
-      .getConstant("Staking", "SessionsPerEra")
-      .getConstant("Staking", "BondingDuration")
-      .readStorage("Timestamp", "Now", [])
-      .readStorage("Balances", "TotalIssuance", [])
-      .readStorage("Staking", "ActiveEra", [])
-      .readStorage("NominationPools", "TotalValueLocked", [])
-      .readStorages("NominationPools", "Metadata", [[0], [1], [2], [3], [4]]),
+      .constant("Babe", "ExpectedBlockTime")
+      .constant("Babe", "EpochDuration")
+      .constant("Staking", "SessionsPerEra")
+      .constant("Staking", "BondingDuration")
+      .storage("Timestamp", "Now", [])
+      .storage("Balances", "TotalIssuance", [])
+      .storage("Staking", "ActiveEra", [])
+      .storage("NominationPools", "TotalValueLocked", [])
+      .storages("NominationPools", "Metadata", [[0], [1], [2], [3], [4]]),
   );
 
   const bondingDurationMs =
@@ -75,7 +75,7 @@ export function Query() {
             <Suspense fallback="...">
               <QueryRenderer
                 query={(builder) =>
-                  builder.readStorage("Staking", "ErasTotalStake", [
+                  builder.storage("Staking", "ErasTotalStake", [
                     activeEra.index,
                   ])
                 }
@@ -153,7 +153,7 @@ function PendingPoolRewards() {
   const [isPending, startTransition] = useTransition();
   const [pendingRewards, refreshPendingRewards] = useLazyLoadQueryWithRefresh(
     (builder) =>
-      builder.callApis(
+      builder.runtimeApis(
         "NominationPoolsApi",
         "pending_rewards",
         accounts.map((account) => [account.address] as const),

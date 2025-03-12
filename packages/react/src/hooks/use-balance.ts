@@ -56,7 +56,7 @@ export function useSpendableBalance(
 
   const [existentialDeposit, accounts] = useLazyLoadQuery(
     (builder) =>
-      builder.getConstant("Balances", "ExistentialDeposit").readStorages(
+      builder.constant("Balances", "ExistentialDeposit").storages(
         "System",
         "Account",
         addresses.map((address) => [address] as const),

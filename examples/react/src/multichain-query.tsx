@@ -7,7 +7,7 @@ export function MultichainQuery() {
   const [parachains, assetHubParaId] = useLazyLoadQuery([
     {
       chainId: undefined,
-      query: (builder) => builder.readStorage("Paras", "Parachains", []),
+      query: (builder) => builder.storage("Paras", "Parachains", []),
     },
     {
       chainId: useMemo(() => {
@@ -24,8 +24,7 @@ export function MultichainQuery() {
             return "westend_asset_hub";
         }
       }, [chainId]),
-      query: (builder) =>
-        builder.readStorage("ParachainInfo", "ParachainId", []),
+      query: (builder) => builder.storage("ParachainInfo", "ParachainId", []),
     },
   ]);
 

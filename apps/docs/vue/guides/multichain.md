@@ -105,7 +105,7 @@ import { useQuery } from "@reactive-dot/vue";
 // 1. Trigger a TypeScript error
 // 2. Cause a runtime error if Westend is selected
 const { data: bountyCount } = await useQuery((builder) =>
-  builder.readStorage("Bounties", "BountyCount", []),
+  builder.storage("Bounties", "BountyCount", []),
 );
 
 // ...
@@ -119,7 +119,7 @@ To resolve this, you can explicitly specify the chain to query, which will overr
 import { useQuery } from "@reactive-dot/vue";
 
 const bountyCount = useQuery(
-  (builder) => builder.readStorage("Bounties", "BountyCount", []),
+  (builder) => builder.storage("Bounties", "BountyCount", []),
   { chainId: "polkadot" },
 );
 
@@ -151,7 +151,7 @@ function useBountiesChainId() {
 }
 
 const { data: bountyCount } = await useQuery(
-  (builder) => builder.readStorage("Bounties", "BountyCount", []),
+  (builder) => builder.storage("Bounties", "BountyCount", []),
   {
     // This will:
     // 1. Throw an error if the chain ID does not support bounties

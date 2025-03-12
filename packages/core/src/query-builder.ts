@@ -256,7 +256,7 @@ export class Query<
     return Object.freeze(this.#instructions.slice()) as Readonly<TInstructions>;
   }
 
-  getConstant<
+  constant<
     TPallet extends keyof TypedApi<TDescriptor>["constants"],
     TConstant extends keyof TypedApi<TDescriptor>["constants"][TPallet],
   >(pallet: TPallet, constant: TConstant) {
@@ -267,7 +267,12 @@ export class Query<
     });
   }
 
-  readStorage<
+  /**
+   * @deprecated Use {@link Query.constant} instead.
+   */
+  getConstant = this.constant;
+
+  storage<
     TPallet extends keyof TypedApi<TDescriptor>["query"],
     TStorage extends keyof TypedApi<TDescriptor>["query"][TPallet],
     TArguments extends InferPapiStorageEntry<
@@ -288,7 +293,12 @@ export class Query<
     });
   }
 
-  readStorages<
+  /**
+   * @deprecated Use {@link Query.storage} instead.
+   */
+  readStorage = this.storage;
+
+  storages<
     TPallet extends keyof TypedApi<TDescriptor>["query"],
     TStorage extends keyof TypedApi<TDescriptor>["query"][TPallet],
     TArguments extends InferPapiStorageEntry<
@@ -310,7 +320,12 @@ export class Query<
     });
   }
 
-  readStorageEntries<
+  /**
+   * @deprecated Use {@link Query.storages} instead.
+   */
+  readStorages = this.storages;
+
+  storageEntries<
     TPallet extends keyof TypedApi<TDescriptor>["query"],
     TStorage extends keyof TypedApi<TDescriptor>["query"][TPallet],
     TArguments extends InferPapiStorageEntries<
@@ -331,7 +346,12 @@ export class Query<
     });
   }
 
-  callApi<
+  /**
+   * @deprecated Use {@link Query.storageEntries} instead.
+   */
+  readStorageEntries = this.storageEntries;
+
+  runtimeApi<
     TPallet extends keyof TypedApi<TDescriptor>["apis"],
     TApi extends keyof TypedApi<TDescriptor>["apis"][TPallet],
     TArguments extends InferPapiRuntimeCall<
@@ -347,7 +367,12 @@ export class Query<
     });
   }
 
-  callApis<
+  /**
+   * @deprecated Use {@link Query.runtimeApi} instead.
+   */
+  callApi = this.runtimeApi;
+
+  runtimeApis<
     TPallet extends keyof TypedApi<TDescriptor>["apis"],
     TApi extends keyof TypedApi<TDescriptor>["apis"][TPallet],
     TArguments extends InferPapiRuntimeCall<
@@ -363,6 +388,11 @@ export class Query<
       multi: true,
     });
   }
+
+  /**
+   * @deprecated Use {@link Query.runtimeApis} instead.
+   */
+  callApis = this.runtimeApis;
 
   concat<TQueries extends Query[]>(...queries: TQueries) {
     return new Query(
