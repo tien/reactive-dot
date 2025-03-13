@@ -281,14 +281,20 @@ export class Query<
   >(
     pallet: TPallet,
     storage: TStorage,
-    args: TArguments,
-    options?: { at?: At },
+    ...argsAndOptions: TArguments extends []
+      ? [args?: TArguments, options?: { at?: At }]
+      : [args: TArguments, options?: { at?: At }]
   ) {
+    const [args, options] = argsAndOptions as [
+      TArguments | undefined,
+      { at?: At } | undefined,
+    ];
+
     return this.#append({
       instruction: "read-storage",
       pallet,
       storage,
-      args,
+      args: args ?? [],
       at: options?.at,
     });
   }
@@ -357,12 +363,23 @@ export class Query<
     TArguments extends InferPapiRuntimeCall<
       TypedApi<TDescriptor>["apis"][TPallet][TApi]
     >["args"],
-  >(pallet: TPallet, api: TApi, args: TArguments, options?: { at?: At }) {
+  >(
+    pallet: TPallet,
+    api: TApi,
+    ...argsAndOptions: TArguments extends []
+      ? [args?: TArguments, options?: { at?: At }]
+      : [args: TArguments, options?: { at?: At }]
+  ) {
+    const [args, options] = argsAndOptions as [
+      TArguments | undefined,
+      { at?: At } | undefined,
+    ];
+
     return this.#append({
       instruction: "call-api",
       pallet,
       api,
-      args,
+      args: args ?? [],
       at: options?.at,
     });
   }

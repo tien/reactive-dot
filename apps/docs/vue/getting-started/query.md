@@ -13,7 +13,7 @@ The [`useQuery`](/api/vue/function/useQuery) composable allow you to read any da
 ```vue title="async-component.vue"
 <script setup lang="ts">
 const { data: activeEra } = await useQuery((builder) =>
-  builder.storage("Staking", "ActiveEra", []),
+  builder.storage("Staking", "ActiveEra"),
 );
 </script>
 
@@ -51,7 +51,7 @@ const { data } = await useQuery((builder) =>
   builder
     .constant("Babe", "ExpectedBlockTime")
     .constant("Babe", "EpochDuration")
-    .storage("Treasury", "ProposalCount", []),
+    .storage("Treasury", "ProposalCount"),
 );
 
 const expectedBlockTime = computed(() => data.value[0]);

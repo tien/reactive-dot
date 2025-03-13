@@ -144,9 +144,7 @@ import { useAccounts, useLazyLoadQuery } from "@reactive-dot/react";
 export function MyComponent() {
   const accounts = useAccounts();
   const [timestamp, totalIssuance] = useLazyLoadQuery((builder) =>
-    builder
-      .storage("Timestamp", "Now", [])
-      .storage("Balances", "TotalIssuance", []),
+    builder.storage("Timestamp", "Now").storage("Balances", "TotalIssuance"),
   );
 
   return (

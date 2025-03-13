@@ -30,10 +30,10 @@ export function Query() {
       .constant("Babe", "EpochDuration")
       .constant("Staking", "SessionsPerEra")
       .constant("Staking", "BondingDuration")
-      .storage("Timestamp", "Now", [])
-      .storage("Balances", "TotalIssuance", [])
-      .storage("Staking", "ActiveEra", [])
-      .storage("NominationPools", "TotalValueLocked", [])
+      .storage("Timestamp", "Now")
+      .storage("Balances", "TotalIssuance")
+      .storage("Staking", "ActiveEra")
+      .storage("NominationPools", "TotalValueLocked")
       .storages("NominationPools", "Metadata", [[0], [1], [2], [3], [4]]),
   );
 
