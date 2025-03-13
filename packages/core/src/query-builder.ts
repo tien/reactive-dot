@@ -340,14 +340,14 @@ export class Query<
   >(
     pallet: TPallet,
     storage: TStorage,
-    args: TArguments,
+    args?: TArguments,
     options?: { at?: At },
   ) {
     return this.#append({
       instruction: "read-storage-entries",
       pallet,
       storage,
-      args,
+      args: args ?? [],
       at: options?.at,
     });
   }
