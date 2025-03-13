@@ -1,5 +1,12 @@
 # @reactive-dot/react
 
+## 0.38.0
+
+### Patch Changes
+
+- Updated dependencies [[`c741a7d`](https://github.com/tien/reactive-dot/commit/c741a7db3390984157c84e6bc6e127cdacddd9fa)]:
+  - @reactive-dot/core@0.38.0
+
 ## 0.37.0
 
 ### Minor Changes
