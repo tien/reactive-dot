@@ -11,9 +11,7 @@ const { data: nativeToken } = await useNativeToken();
 const { data: accounts } = await useAccounts();
 
 const { data } = await useQuery((builder) =>
-  builder
-    .storage("System", "Number", [])
-    .storage("Balances", "TotalIssuance", []),
+  builder.storage("System", "Number").storage("Balances", "TotalIssuance"),
 );
 
 const totalIssuance = computed(() =>

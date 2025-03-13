@@ -13,7 +13,7 @@ The [`useLazyLoadQuery`](/api/react/function/useLazyLoadQuery) hook allow you to
 ```tsx
 function ActiveEra() {
   const activeEra = useLazyLoadQuery((builder) =>
-    builder.storage("Staking", "ActiveEra", []),
+    builder.storage("Staking", "ActiveEra"),
   );
 
   return <div>Active era: {activeEra}</div>;
@@ -41,7 +41,7 @@ function MultiQuery() {
       builder
         .constant("Babe", "ExpectedBlockTime")
         .constant("Babe", "EpochDuration")
-        .storage("Treasury", "ProposalCount", []),
+        .storage("Treasury", "ProposalCount"),
   );
 
   return (
@@ -84,7 +84,7 @@ Result of a query can be used as variables in subsequent queries.
 ```tsx
 function Query() {
   const pools = useLazyLoadQuery((builder) =>
-    builder.storageEntries("NominationPools", "BondedPools", []),
+    builder.storageEntries("NominationPools", "BondedPools"),
   );
 
   const poolMetadatum = useLazyLoadQuery((builder) =>

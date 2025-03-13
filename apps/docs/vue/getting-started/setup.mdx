@@ -151,9 +151,7 @@ import { useQuery, useAccounts } from "@reactive-dot/vue";
 
 const { data: accounts } = await useAccounts();
 const { data: queryResult } = await useQuery((builder) =>
-  builder
-    .storage("Timestamp", "Now", [])
-    .storage("Balances", "TotalIssuance", []),
+  builder.storage("Timestamp", "Now").storage("Balances", "TotalIssuance"),
 );
 </script>
 
