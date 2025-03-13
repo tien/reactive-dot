@@ -1,5 +1,11 @@
 # @reactive-dot/core
 
+## 0.38.1
+
+### Patch Changes
+
+- [#564](https://github.com/tien/reactive-dot/pull/564) [`35c0f4d`](https://github.com/tien/reactive-dot/commit/35c0f4daf554ab4845aaca88beaf3364e49d7936) Thanks [@tien](https://github.com/tien)! - Fixed optional storage entries arguments.
+
 ## 0.38.0
 
 ### Minor Changes
