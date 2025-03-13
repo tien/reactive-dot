@@ -1,5 +1,11 @@
 # @reactive-dot/core
 
+## 0.38.0
+
+### Minor Changes
+
+- [#562](https://github.com/tien/reactive-dot/pull/562) [`c741a7d`](https://github.com/tien/reactive-dot/commit/c741a7db3390984157c84e6bc6e127cdacddd9fa) Thanks [@tien](https://github.com/tien)! - Made the arguments array optional for queries with zero arguments.
+
 ## 0.37.0
 
 ### Minor Changes
