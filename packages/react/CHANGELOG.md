@@ -1,5 +1,11 @@
 # @reactive-dot/react
 
+## 0.38.4
+
+### Patch Changes
+
+- [#574](https://github.com/tien/reactive-dot/pull/574) [`a7effd8`](https://github.com/tien/reactive-dot/commit/a7effd891072d9fbac0b59d799b32630c345ce17) Thanks [@tien](https://github.com/tien)! - Fixed a potential issue where an observable could unsubscribe before the component was mounted.
+
 ## 0.38.3
 
 ### Patch Changes
