@@ -1,5 +1,4 @@
 // TODO: temporary workaround for https://github.com/pmndrs/jotai/discussions/2848
-/* v8 ignore start */
 import { type Getter, type WritableAtom, type Atom, atom } from "jotai";
 
 type Timeout = ReturnType<typeof setTimeout>;
@@ -88,7 +87,7 @@ export function atomWithObservable<Data>(
         resolve = r;
       }).finally(() => {
         if (isNotMounted()) {
-          unsubscribe();
+          timer = setTimeout(unsubscribe, 1000);
         }
       });
     const initialResult: Result | Promise<Result> =
