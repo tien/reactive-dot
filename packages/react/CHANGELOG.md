@@ -1,5 +1,11 @@
 # @reactive-dot/react
 
+## 0.38.2
+
+### Patch Changes
+
+- [#570](https://github.com/tien/reactive-dot/pull/570) [`059e104`](https://github.com/tien/reactive-dot/commit/059e10497c7e5cc4b9e595bb9d8ef97fdc7f0b57) Thanks [@tien](https://github.com/tien)! - Fixed potential dangling subscriptions, significantly enhancing performance.
+
 ## 0.38.1
 
 ### Patch Changes
