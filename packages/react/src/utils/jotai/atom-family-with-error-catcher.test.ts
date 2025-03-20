@@ -2,8 +2,8 @@ import {
   atomFamilyErrorsAtom,
   atomFamilyWithErrorCatcher,
 } from "./atom-family-with-error-catcher.js";
+import { atomWithObservable } from "./atom-with-observable.js";
 import { atom, createStore } from "jotai";
-import { atomWithObservable } from "jotai/utils";
 import { of, throwError } from "rxjs";
 import { afterEach, beforeEach, expect, it } from "vitest";
 
