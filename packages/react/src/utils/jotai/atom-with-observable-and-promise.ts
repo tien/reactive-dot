@@ -1,7 +1,7 @@
 import { atomWithObservable } from "./atom-with-observable.js";
 import { atom, type Atom, type Getter } from "jotai";
 import { withAtomEffect } from "jotai-effect";
-import { type Observable } from "rxjs";
+import { firstValueFrom, shareReplay, type Observable } from "rxjs";
 
 type Data<T> = { value: T | Promise<T> } | { error: unknown };
 
@@ -17,12 +17,16 @@ export function atomWithObservableAndPromise<
   observableAtom: Atom<TValue | Promise<TValue>>;
   promiseAtom: Atom<TValue | Promise<TValue>>;
 } {
+  const sourceObservable = atom((get) =>
+    getObservable(get).pipe(shareReplay({ bufferSize: 1, refCount: true })),
+  );
+
   const { promise: initialPromise } = Promise.withResolvers<TValue>();
 
   const dataAtom = atom<Data<TValue>>({ value: initialPromise });
 
   const observableAtom = withAtomEffect(
-    enhanceAtom(atomWithObservable(getObservable)),
+    enhanceAtom(atomWithObservable((get) => get(sourceObservable))),
     (get, set) => {
       try {
         set(dataAtom, { value: get(observableAtom) });
@@ -44,7 +48,7 @@ export function atomWithObservableAndPromise<
         return data.value;
       }
 
-      return get(observableAtom);
+      return firstValueFrom(get(sourceObservable));
     }),
   );
 
