@@ -1,5 +1,11 @@
 # @reactive-dot/react
 
+## 0.38.3
+
+### Patch Changes
+
+- [#572](https://github.com/tien/reactive-dot/pull/572) [`799f9f0`](https://github.com/tien/reactive-dot/commit/799f9f03c17e3f01f93847a1f26bb6a4a3e06214) Thanks [@tien](https://github.com/tien)! - Fixed issues where paused observables were not unsubscribing as expected.
+
 ## 0.38.2
 
 ### Patch Changes
