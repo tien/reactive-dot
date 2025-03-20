@@ -1,9 +1,9 @@
 import { QueryOptionsProvider } from "../contexts/query-options.js";
 import { atomWithObservableAndPromise } from "../utils/jotai/atom-with-observable-and-promise.js";
+import { atomWithObservable } from "../utils/jotai/atom-with-observable.js";
 import { useAtomValue } from "./use-atom-value.js";
 import { usePausableAtomValue } from "./use-pausable-atom-value.js";
 import { renderHook } from "@testing-library/react";
-import { atomWithObservable } from "jotai/utils";
 import { act, type PropsWithChildren } from "react";
 import { BehaviorSubject } from "rxjs";
 import { expect, it } from "vitest";

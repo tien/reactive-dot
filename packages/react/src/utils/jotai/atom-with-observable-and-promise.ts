@@ -1,6 +1,6 @@
+import { atomWithObservable } from "./atom-with-observable.js";
 import { atom, type Atom, type Getter } from "jotai";
 import { withAtomEffect } from "jotai-effect";
-import { atomWithObservable } from "jotai/utils";
 import { type Observable } from "rxjs";
 
 type Data<T> = { value: T | Promise<T> } | { error: unknown };
