@@ -44,12 +44,12 @@
     "@testing-library/user-event": "^14.6.1",
     "@tsconfig/recommended": "^1.0.8",
     "@tsconfig/strictest": "^2.0.5",
-    "@types/react": "^19.0.10",
+    "@types/react": "^19.0.12",
     "eslint": "^9.22.0",
     "jsdom": "^26.0.0",
     "react": "^19.0.0",
     "typescript": "^5.8.2",
-    "vitest": "^3.0.8",
+    "vitest": "^3.0.9",
     "wonka": "^6.3.5"
   },
   "peerDependencies": {
