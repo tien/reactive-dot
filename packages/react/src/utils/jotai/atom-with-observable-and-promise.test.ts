@@ -69,8 +69,7 @@ it("should return a promise atom that will be updated from an observable atom mo
   expect(render.result.current).toBe("updated");
 });
 
-// TODO: fix this
-it.skip("should populate the observable atom initial value with result from promise atom", async () => {
+it("should populate the observable atom initial value with result from promise atom", async () => {
   const delay = Promise.withResolvers<void>();
 
   const observable$ = new BehaviorSubject("value").pipe(
