@@ -1,5 +1,11 @@
 # @reactive-dot/react
 
+## 0.38.5
+
+### Patch Changes
+
+- [#576](https://github.com/tien/reactive-dot/pull/576) [`1d30ac6`](https://github.com/tien/reactive-dot/commit/1d30ac65ced522a72656621ed6e3fcbdd39aa7af) Thanks [@tien](https://github.com/tien)! - Fixed mismatched initial value between observable and promise.
+
 ## 0.38.4
 
 ### Patch Changes
