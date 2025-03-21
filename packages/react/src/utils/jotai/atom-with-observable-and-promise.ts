@@ -3,7 +3,9 @@ import { atom, type Atom, type Getter } from "jotai";
 import { withAtomEffect } from "jotai-effect";
 import { firstValueFrom, shareReplay, type Observable } from "rxjs";
 
-type Data<T> = { value: T | Promise<T> } | { error: unknown };
+const empty = Symbol("empty");
+
+type Data<T> = { value: T | Promise<T> | typeof empty } | { error: unknown };
 
 export function atomWithObservableAndPromise<
   TValue,
@@ -21,12 +23,26 @@ export function atomWithObservableAndPromise<
     getObservable(get).pipe(shareReplay({ bufferSize: 1, refCount: true })),
   );
 
-  const { promise: initialPromise } = Promise.withResolvers<TValue>();
+  const dataAtom = atom<Data<TValue>>({ value: empty });
 
-  const dataAtom = atom<Data<TValue>>({ value: initialPromise });
+  const initialDataAtom = atom<{ value: TValue | typeof empty }>({
+    value: empty,
+  });
 
   const observableAtom = withAtomEffect(
-    enhanceAtom(atomWithObservable((get) => get(sourceObservable))),
+    enhanceAtom(
+      atom((get) => {
+        const initialData = get(initialDataAtom);
+        return get(
+          atomWithObservable(
+            (get) => get(sourceObservable),
+            initialData.value === empty
+              ? undefined
+              : { initialValue: initialData.value },
+          ),
+        );
+      }),
+    ),
     (get, set) => {
       try {
         set(dataAtom, { value: get(observableAtom) });
@@ -44,11 +60,16 @@ export function atomWithObservableAndPromise<
         throw data.error;
       }
 
-      if ("value" in data && data.value !== initialPromise) {
+      if (data.value !== empty) {
         return data.value;
       }
 
-      return firstValueFrom(get(sourceObservable));
+      const initialData = get(initialDataAtom);
+
+      return firstValueFrom(get(sourceObservable)).then((value) => {
+        initialData.value = value;
+        return value;
+      });
     }),
   );
 

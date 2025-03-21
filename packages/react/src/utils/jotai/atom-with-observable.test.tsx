@@ -1,9 +1,9 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
+import { atomWithObservable } from "./atom-with-observable.js";
 import { act, render, screen, waitFor } from "@testing-library/react";
 import _userEventOrig from "@testing-library/user-event";
 import { useAtom, useAtomValue, useSetAtom } from "jotai/react";
 import { atom, createStore } from "jotai/vanilla";
-import { atomWithObservable } from "jotai/vanilla/utils";
 import { Component, StrictMode, Suspense, useState } from "react";
 import type { ReactElement, ReactNode } from "react";
 import {
@@ -292,6 +292,48 @@ it("cleanup subscription", async () => {
   expect(activeSubscriptions).toEqual(1);
   rerender!(<div />);
   await waitFor(() => expect(activeSubscriptions).toEqual(0));
+});
+
+it("clean up dangling subscription, if atom won't be mounted", async () => {
+  const subject = new Subject<number>();
+  let activeSubscriptions = 0;
+  const observable = new Observable<number>((subscriber) => {
+    activeSubscriptions++;
+    subject.subscribe(subscriber);
+    return () => {
+      activeSubscriptions--;
+    };
+  }).pipe(delay(1000));
+  const observableAtom = atomWithObservable(() => observable);
+
+  const Counter = () => {
+    const [state] = useAtom(observableAtom);
+    return <>count: {state}</>;
+  };
+
+  let rerender: (ui: ReactNode) => void;
+  await act(async () => {
+    ({ rerender } = render(
+      <StrictMode>
+        <Suspense fallback="loading">
+          <Counter />
+        </Suspense>
+      </StrictMode>,
+    ));
+  });
+
+  await screen.findByText("loading");
+
+  act(() => subject.next(1));
+
+  vi.runAllTimers();
+  expect(activeSubscriptions).toEqual(1);
+
+  rerender!(<div />);
+
+  await waitFor(() => expect(activeSubscriptions).toEqual(0), {
+    timeout: 1250,
+  });
 });
 
 it("resubscribe on remount", async () => {
