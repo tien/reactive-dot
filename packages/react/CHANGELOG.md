@@ -1,5 +1,11 @@
 # @reactive-dot/react
 
+## 0.39.0
+
+### Minor Changes
+
+- [#579](https://github.com/tien/reactive-dot/pull/579) [`2af8d7b`](https://github.com/tien/reactive-dot/commit/2af8d7b57c73b8fce6247c43978472777a9d1055) Thanks [@tien](https://github.com/tien)! - Improved subscription cleanup mechanism for better memory management and performance.
+
 ## 0.38.5
 
 ### Patch Changes
