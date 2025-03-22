@@ -10,7 +10,9 @@ import { expect, it } from "vitest";
 it("should return an atom with the initial value from the observable", async () => {
   const observable$ = of("initial");
   const { observableAtom } = atomWithObservableAndPromise(() => observable$);
-  const render = renderHook(() => useAtomValue(observableAtom));
+  const render = await act(() =>
+    renderHook(() => useAtomValue(observableAtom)),
+  );
 
   expect(render.result.current).toBe("initial");
 });
@@ -18,7 +20,9 @@ it("should return an atom with the initial value from the observable", async () 
 it("should update the atom when the observable emits a new value", async () => {
   const subject$ = new BehaviorSubject("initial");
   const { observableAtom } = atomWithObservableAndPromise(() => subject$);
-  const render = renderHook(() => useAtomValue(observableAtom));
+  const render = await act(() =>
+    renderHook(() => useAtomValue(observableAtom)),
+  );
 
   expect(render.result.current).toBe("initial");
 
@@ -122,7 +126,9 @@ it("should handle errors in the observable", async () => {
   const observable$ = new BehaviorSubject("initial");
   const { observableAtom } = atomWithObservableAndPromise(() => observable$);
 
-  const render = renderHook(() => useAtomValue(observableAtom));
+  const render = await act(() =>
+    renderHook(() => useAtomValue(observableAtom)),
+  );
 
   expect(render.result.current).toBe("initial");
 
@@ -172,7 +178,9 @@ it("should allow enhancing the atom", async () => {
     },
   );
 
-  const render = renderHook(() => useAtomValue(observableAtom));
+  const render = await act(() =>
+    renderHook(() => useAtomValue(observableAtom)),
+  );
 
   expect(render.result.current).toBe("initial");
   expect(enhancedAtoms).toHaveLength(2);
@@ -200,7 +208,9 @@ it("should work with a delayed observable", async () => {
 it("should handle undefined values", async () => {
   const observable$ = of(undefined);
   const { observableAtom } = atomWithObservableAndPromise(() => observable$);
-  const render = renderHook(() => useAtomValue(observableAtom));
+  const render = await act(() =>
+    renderHook(() => useAtomValue(observableAtom)),
+  );
 
   expect(render.result.current).toBe(undefined);
 });

@@ -1,4 +1,7 @@
-import { atomWithObservable } from "./atom-with-observable.js";
+import {
+  atomWithObservable,
+  empty as emptyInitial,
+} from "./atom-with-observable.js";
 import { atom, type Atom, type Getter } from "jotai";
 import { withAtomEffect } from "jotai-effect";
 import { firstValueFrom, shareReplay, type Observable } from "rxjs";
@@ -31,16 +34,11 @@ export function atomWithObservableAndPromise<
 
   const observableAtom = withAtomEffect(
     enhanceAtom(
-      atom((get) => {
-        const initialData = get(initialDataAtom);
-        return get(
-          atomWithObservable(
-            (get) => get(sourceObservable),
-            initialData.value === empty
-              ? undefined
-              : { initialValue: initialData.value },
-          ),
-        );
+      atomWithObservable((get) => get(sourceObservable), {
+        initialValue: (get) => {
+          const value = get(initialDataAtom).value;
+          return value === empty ? emptyInitial : value;
+        },
       }),
     ),
     (get, set) => {

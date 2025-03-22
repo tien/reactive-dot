@@ -99,7 +99,7 @@ it("should catch errors in Observable reads", async () => {
   );
 
   expect(await store.get(myAtomFamily("World"))).toBe("Hello World");
-  expect(() => store.get(myAtomFamily("Error"))).toThrow(
+  await expect(() => store.get(myAtomFamily("Error"))).rejects.toThrow(
     "Intentional Observable Error",
   );
   expect(store.get(atomFamilyErrorsAtom).size).toBe(1);
