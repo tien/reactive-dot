@@ -20,6 +20,7 @@ const { execute: resetError } = useQueryErrorResetter();
 onErrorCaptured(() => (hasError.value = true));
 
 // Useful tracking all submitted transaction, i.e. for toast notification
+// eslint-disable-next-line no-undef
 watchMutationEffect((event) => console.log(event));
 </script>
 
