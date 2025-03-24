@@ -1,10 +1,10 @@
 import { atomFamilyWithErrorCatcher } from "../utils/jotai/atom-family-with-error-catcher.js";
 import type { ChainHookOptions } from "./types.js";
-import { useAtomValue } from "./use-atom-value.js";
 import { internal_useChainId } from "./use-chain-id.js";
 import { clientAtom } from "./use-client.js";
 import { useConfig } from "./use-config.js";
 import type { ChainId, Config } from "@reactive-dot/core";
+import { useAtomValue } from "jotai";
 import { derive } from "jotai-derive";
 
 /**
