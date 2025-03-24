@@ -1,5 +1,11 @@
 # @reactive-dot/react
 
+## 0.39.1
+
+### Patch Changes
+
+- [#583](https://github.com/tien/reactive-dot/pull/583) [`4e47d40`](https://github.com/tien/reactive-dot/commit/4e47d40516862aa54f367110e74a4ff3ebaca637) Thanks [@tien](https://github.com/tien)! - Refactor suspense handling.
+
 ## 0.39.0
 
 ### Minor Changes
