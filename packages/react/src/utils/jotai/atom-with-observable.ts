@@ -11,7 +11,7 @@ export function atomWithObservable<TValue>(
     initialValue?: TValue | ((get: Getter) => TValue | typeof empty);
   },
 ) {
-  const valueAtom = atom((get) => {
+  const observableAtom = atom((get) => {
     const observable = getObservable(get);
 
     const initialValue = (() => {
@@ -30,7 +30,7 @@ export function atomWithObservable<TValue>(
       return options.initialValue;
     })();
 
-    const valueAtom = atom<Data<TValue | Promise<TValue>>>(
+    const dataAtom = atom<Data<TValue | Promise<TValue>>>(
       initialValue !== empty
         ? {
             value: initialValue,
@@ -38,7 +38,7 @@ export function atomWithObservable<TValue>(
         : { value: firstValueFrom(observable) },
     );
 
-    valueAtom.onMount = (update) => {
+    dataAtom.onMount = (update) => {
       const subscription = observable.subscribe({
         next: (value) => update({ value }),
         error: (error) => update({ error }),
@@ -49,11 +49,11 @@ export function atomWithObservable<TValue>(
       };
     };
 
-    return valueAtom;
+    return dataAtom;
   });
 
   return atom((get) => {
-    const data = get(get(valueAtom));
+    const data = get(get(observableAtom));
 
     if ("error" in data) {
       throw data.error;

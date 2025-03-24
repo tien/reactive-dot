@@ -2,6 +2,7 @@ import { findAllIndexes } from "../utils/find-all-indexes.js";
 import { interlace } from "../utils/interlace.js";
 import { atomFamilyWithErrorCatcher } from "../utils/jotai/atom-family-with-error-catcher.js";
 import { atomWithObservableAndPromise } from "../utils/jotai/atom-with-observable-and-promise.js";
+import { atomWithPromise } from "../utils/jotai/atom-with-promise.js";
 import { maybePromiseAll } from "../utils/maybe-promise-all.js";
 import { objectId } from "../utils/object-id.js";
 import type {
@@ -30,7 +31,6 @@ import {
 import { preflight, query } from "@reactive-dot/core/internal/actions.js";
 import { atom } from "jotai";
 import { soon } from "jotai-derive";
-import { atomWithRefresh } from "jotai/utils";
 import { useMemo } from "react";
 import { from, type Observable } from "rxjs";
 import { switchMap } from "rxjs/operators";
@@ -187,7 +187,7 @@ const instructionPayloadAtom = atomFamilyWithErrorCatcher(
     switch (preflight(instruction)) {
       case "promise": {
         const atom = withErrorCatcher(
-          atomWithRefresh((get, { signal }) =>
+          atomWithPromise((get, { signal }) =>
             soon(get(typedApiAtom(config, chainId)), (api) =>
               query(api, instruction, { signal }),
             ),
