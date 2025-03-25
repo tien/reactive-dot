@@ -35,7 +35,7 @@
     "@reactive-dot/core": "workspace:^",
     "jotai": "^2.12.2",
     "jotai-derive": "^0.1.2",
-    "jotai-effect": "^2.0.1"
+    "jotai-effect": "^2.0.2"
   },
   "devDependencies": {
     "@reactive-dot/eslint-config": "workspace:^",
