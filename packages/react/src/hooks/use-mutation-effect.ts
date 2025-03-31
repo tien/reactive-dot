@@ -7,6 +7,7 @@ import { use, useEffect } from "react";
 /**
  * Hook that watches for mutation events.
  *
+ * @group Hooks
  * @param effect - Callback when new mutation event is emitted
  */
 export function useMutationEffect(effect: (event: MutationEvent) => void) {

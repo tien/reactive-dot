@@ -12,6 +12,7 @@ import { getAccounts } from "@reactive-dot/core/internal/actions.js";
 /**
  * Hook for getting currently connected accounts.
  *
+ * @group Hooks
  * @param options - Additional options
  * @returns The currently connected accounts
  */

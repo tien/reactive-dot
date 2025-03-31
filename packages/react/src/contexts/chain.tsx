@@ -10,6 +10,7 @@ export type ChainProviderProps = PropsWithChildren<{
 /**
  * React context provider for scoping to a specific chain.
  *
+ * @group Contexts
  * @param props - Component props
  * @returns React element
  */

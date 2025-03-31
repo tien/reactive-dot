@@ -10,6 +10,7 @@ import { atom, useAtomValue } from "jotai";
 /**
  * Hook for getting Polkadot-API client instance.
  *
+ * @group Hooks
  * @param options - Additional options
  * @returns Polkadot-API client
  */

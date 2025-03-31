@@ -19,6 +19,7 @@ type QueryRendererProps<
  * Component for rendering the result of a query.
  *
  * @experimental
+ * @group Components
  */
 export function QueryRenderer<
   TChainId extends ChainId | undefined,

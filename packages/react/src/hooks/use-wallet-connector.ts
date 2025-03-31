@@ -9,6 +9,7 @@ import { useCallback } from "react";
 /**
  * Hook for connecting wallets
  *
+ * @group Hooks
  * @param wallets - Wallets to connect to, will connect to all available wallets if none is specified
  * @returns The wallet connection state & connect function
  */

@@ -14,6 +14,7 @@ import { useCallback } from "react";
 /**
  * Hook for loading queries without suspending.
  *
+ * @group Hooks
  * @returns The function to load queries
  */
 export function useQueryLoader() {

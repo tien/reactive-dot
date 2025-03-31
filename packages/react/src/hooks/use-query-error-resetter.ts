@@ -5,6 +5,7 @@ import { useCallback } from "react";
 /**
  * Hook for getting function to reset query error caught by error boundary
  *
+ * @group Hooks
  * @returns Function to reset caught query error
  */
 export function useQueryErrorResetter() {

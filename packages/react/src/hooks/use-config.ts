@@ -5,6 +5,7 @@ import { use } from "react";
 /**
  * Hook for getting the current config.
  *
+ * @group Hooks
  * @returns The current config
  */
 export function useConfig() {

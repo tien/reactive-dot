@@ -16,6 +16,7 @@ import type { TypedApi } from "polkadot-api";
 /**
  * Hook for getting Polkadot-API typed API.
  *
+ * @group Hooks
  * @param options - Additional options
  * @returns Polkadot-API typed API
  */

@@ -15,6 +15,7 @@ export type SignerProviderProps = PropsWithChildren<{
 /**
  * React context provider to assign a default signer.
  *
+ * @group Contexts
  * @param props - Component props
  * @returns React element
  */

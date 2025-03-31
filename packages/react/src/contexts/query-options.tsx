@@ -9,6 +9,7 @@ type SubscriptionProps = PropsWithChildren<{
 /**
  * React context to control subscription options.
  *
+ * @group Contexts
  * @param props - Component props
  * @returns React element
  */
