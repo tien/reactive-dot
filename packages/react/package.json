@@ -35,7 +35,7 @@
     "@reactive-dot/core": "workspace:^",
     "jotai": "^2.12.2",
     "jotai-derive": "^0.1.2",
-    "jotai-effect": "^2.0.1"
+    "jotai-effect": "^2.0.2"
   },
   "devDependencies": {
     "@reactive-dot/eslint-config": "workspace:^",
@@ -47,7 +47,7 @@
     "@types/react": "^19.0.12",
     "eslint": "^9.23.0",
     "jsdom": "^26.0.0",
-    "react": "^19.0.0",
+    "react": "^19.1.0",
     "typescript": "^5.8.2",
     "vitest": "^3.0.9",
     "wonka": "^6.3.5"

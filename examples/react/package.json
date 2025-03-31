@@ -18,8 +18,8 @@
     "date-fns": "^4.1.0",
     "jotai-devtools": "^0.11.0",
     "polkadot-api": "^1.9.7",
-    "react": "^19.0.0",
-    "react-dom": "^19.0.0",
+    "react": "^19.1.0",
+    "react-dom": "^19.1.0",
     "react-error-boundary": "^5.0.0",
     "react-hot-toast": "^2.5.2"
   },
@@ -33,6 +33,6 @@
     "@vitejs/plugin-react": "^4.3.4",
     "eslint": "^9.23.0",
     "typescript": "^5.8.2",
-    "vite": "^6.2.2"
+    "vite": "^6.2.3"
   }
 }
