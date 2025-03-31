@@ -15,6 +15,7 @@ export type ReactiveDotProviderProps = PropsWithChildren<{
 /**
  * React context provider for ReactiveDOT.
  *
+ * @group Contexts
  * @param props - Component props
  * @returns React element
  */

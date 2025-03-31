@@ -13,6 +13,7 @@ import { switchMap } from "rxjs/operators";
 /**
  * Hook for fetching information about the latest block.
  *
+ * @group Hooks
  * @param tag - Which block to target
  * @param options - Additional options
  * @returns The latest finalized or best block

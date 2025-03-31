@@ -9,6 +9,7 @@ import { useCallback } from "react";
 /**
  * Hook for disconnecting wallets
  *
+ * @group Hooks
  * @param wallets - Wallets to disconnect from, will disconnect from all connected wallets if none is specified
  * @returns The wallet disconnection state & disconnect function
  */

@@ -12,6 +12,7 @@ import { atom, useAtomValue } from "jotai";
 /**
  * Hook for getting all available wallets.
  *
+ * @group Hooks
  * @returns Available wallets
  */
 export function useWallets() {
@@ -21,6 +22,7 @@ export function useWallets() {
 /**
  * Hook for getting all connected wallets.
  *
+ * @group Hooks
  * @returns Connected wallets
  */
 export function useConnectedWallets() {

@@ -31,6 +31,7 @@ type TxOptions<T extends Transaction<any, any, any, any>> = Parameters<
 /**
  * Hook for sending transactions to chains.
  *
+ * @group Hooks
  * @param action - The function to create the transaction
  * @param options - Additional options
  * @returns The current transaction state & submit function

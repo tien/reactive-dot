@@ -10,6 +10,7 @@ import { useCallback } from "react";
 /**
  * Hook for refreshing cached query.
  *
+ * @group Hooks
  * @param query - The function to create the query
  * @param options - Additional options
  * @returns The function to refresh the query
@@ -37,6 +38,7 @@ export function useQueryRefresher<
 /**
  * Hook for refreshing cached query.
  *
+ * @group Hooks
  * @param query - The function to create the query
  * @param options - Additional options
  * @returns The function to refresh the query

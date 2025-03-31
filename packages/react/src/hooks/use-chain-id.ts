@@ -7,6 +7,7 @@ import { use } from "react";
 /**
  * Hook for getting all configured chain IDs.
  *
+ * @group Hooks
  * @returns All configured chain IDs
  */
 export function useChainIds() {
@@ -16,6 +17,7 @@ export function useChainIds() {
 /**
  * Hook for getting the current chain ID.
  *
+ * @group Hooks
  * @returns The current chain ID
  */
 export function useChainId() {
@@ -30,6 +32,7 @@ export function useChainId() {
 
 /**
  * @internal
+ * @group Hooks
  */
 export function internal_useChainId<TOptionalChainId extends boolean = false>({
   optionalChainId = false as TOptionalChainId,

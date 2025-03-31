@@ -10,6 +10,7 @@ import { derive } from "jotai-derive";
 /**
  * Hook for fetching the [JSON-RPC spec](https://paritytech.github.io/json-rpc-interface-spec/api/chainSpec.html).
  *
+ * @group Hooks
  * @param options - Additional options
  * @returns The [JSON-RPC spec](https://paritytech.github.io/json-rpc-interface-spec/api/chainSpec.html)
  */

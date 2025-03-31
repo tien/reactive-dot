@@ -3,6 +3,10 @@ import type { atomWithObservableAndPromise } from "../utils/jotai/atom-with-obse
 import { useAtomValue } from "jotai";
 import { use } from "react";
 
+/**
+ * @internal
+ * @group Hooks
+ */
 export function usePausableAtomValue<T>(
   pausableAtom: ReturnType<typeof atomWithObservableAndPromise<T, never>>,
   options?: Parameters<typeof useAtomValue>[1],

@@ -27,6 +27,7 @@ type Options = ChainHookOptions & {
 /**
  * Hook for getting an account's spendable balance.
  *
+ * @group Hooks
  * @param address - The account's address
  * @param options - Additional options
  * @returns The account's spendable balance

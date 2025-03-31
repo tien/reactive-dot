@@ -7,6 +7,7 @@ import { useMemo } from "react";
 /**
  * Hook for returning the native token amount from a planck value.
  *
+ * @group Hooks
  * @param planck - The planck value
  * @param options - Additional options
  * @returns The native token amount
@@ -18,6 +19,7 @@ export function useNativeTokenAmountFromPlanck(
 /**
  * Hook for returning a function that converts planck value to native token amount.
  *
+ * @group Hooks
  * @param options - Additional options
  * @returns Function for getting the native token amount from a planck value
  */
@@ -67,6 +69,7 @@ export function useNativeTokenAmountFromPlanck(
 /**
  * Hook for returning the native token amount from a number value
  *
+ * @group Hooks
  * @param number - The number value
  * @param options - Additional options
  * @returns The native token amount
@@ -78,6 +81,7 @@ export function useNativeTokenAmountFromNumber(
 /**
  * Hook for returning a function that converts number value to native token amount
  *
+ * @group Hooks
  * @param options - Additional options
  * @returns Function for getting the native token amount from a number value
  */

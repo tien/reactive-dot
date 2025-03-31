@@ -9,6 +9,7 @@ import type { Observable } from "rxjs";
 
 /**
  * @internal
+ * @group Hooks
  */
 export function useAsyncAction<
   TArgs extends unknown[],

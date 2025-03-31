@@ -38,6 +38,7 @@ import { switchMap } from "rxjs/operators";
 /**
  * Hook for querying data from chain, and returning the response.
  *
+ * @group Hooks
  * @param query - The function to create the query
  * @param options - Additional options
  * @returns The data response
@@ -52,6 +53,7 @@ export function useLazyLoadQuery<
 /**
  * Hook for querying data from chain, and returning the response.
  *
+ * @group Hooks
  * @param options - The query options
  * @returns The data response
  */
@@ -132,6 +134,7 @@ export function useLazyLoadQueryWithRefresh<
 /**
  * Hook for querying data from chain, returning the response & a refresher function.
  *
+ * @group Hooks
  * @param query - The function to create the query
  * @param options - Additional options
  * @returns The data response & a function to refresh it
@@ -157,6 +160,7 @@ export function useLazyLoadQueryWithRefresh<
 /**
  * Hook for querying data from chain, returning the response & a refresher function.
  *
+ * @group Hooks
  * @param query - The function to create the query
  * @param options - Additional options
  * @returns The data response & a function to refresh it

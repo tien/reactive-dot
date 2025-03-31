@@ -5,6 +5,7 @@ import { use, useMemo } from "react";
 
 /**
  * @internal
+ * @group Hooks
  */
 export function useQueryOptions<
   TChainId extends ChainId | undefined,
@@ -19,6 +20,7 @@ export function useQueryOptions<
 }>;
 /**
  * @internal
+ * @group Hooks
  */
 export function useQueryOptions<
   TChainIds extends Array<ChainId | undefined>,
@@ -36,6 +38,7 @@ export function useQueryOptions<
 }>;
 /**
  * @internal
+ * @group Hooks
  */
 export function useQueryOptions(
   queryOrOptions: // eslint-disable-next-line @typescript-eslint/no-explicit-any
