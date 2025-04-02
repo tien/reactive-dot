@@ -6,33 +6,6 @@ import type {
 import type { ChainDefinition, TypedApi } from "polkadot-api";
 import { map } from "rxjs/operators";
 
-export function preflight<TInstruction extends QueryInstruction>(
-  instruction: TInstruction,
-) {
-  type Return = TInstruction["instruction"] extends "get-constant"
-    ? "promise"
-    : TInstruction["instruction"] extends "call-api"
-      ? "promise"
-      : TInstruction["instruction"] extends "read-storage-entries"
-        ? "promise"
-        : TInstruction["instruction"] extends "read-storage"
-          ? "observable"
-          : "promise" | "observable";
-
-  if ("at" in instruction && instruction.at?.startsWith("0x")) {
-    return "promise" as Return;
-  }
-
-  switch (instruction.instruction) {
-    case "get-constant":
-    case "call-api":
-      return "promise" as Return;
-    case "read-storage-entries":
-    case "read-storage":
-      return "observable" as Return;
-  }
-}
-
 export function query<
   TInstruction extends QueryInstruction,
   TDescriptor extends ChainDefinition = CommonDescriptor,
@@ -104,5 +77,20 @@ export function query<
                   ),
               ),
             );
+  }
+}
+
+export function preflight(instruction: QueryInstruction) {
+  if ("at" in instruction && instruction.at?.startsWith("0x")) {
+    return "promise";
+  }
+
+  switch (instruction.instruction) {
+    case "get-constant":
+    case "call-api":
+      return "promise";
+    case "read-storage-entries":
+    case "read-storage":
+      return "observable";
   }
 }
