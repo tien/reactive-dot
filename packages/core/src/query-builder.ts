@@ -55,7 +55,9 @@ type InferPapiConstantEntry<T> = T extends {
   ? Promise<Payload>
   : unknown;
 
-type At = "best" | "finalized" | `0x${string}`;
+type Finality = "best" | "finalized";
+
+type At = Finality | `0x${string}`;
 
 type BaseInstruction<T extends string> = {
   instruction: T;
@@ -109,7 +111,7 @@ export type ApiCallInstruction<
   pallet: TPallet;
   api: TApi;
   args: TArguments;
-  at: At | undefined;
+  at: Finality | undefined;
 };
 
 export type MultiInstruction<TInstruction extends BaseInstruction<string>> =
@@ -211,7 +213,7 @@ export type InferInstructionPayload<
 > = ResponsePayload<InferInstructionResponse<TInstruction, TDescriptor>>;
 
 export type InferInstructionsResponse<
-  TInstructions extends QueryInstruction[],
+  TInstructions extends readonly QueryInstruction[],
   TDescriptor extends ChainDefinition = CommonDescriptor,
 > = {
   [P in keyof TInstructions]: InferInstructionResponse<
@@ -221,7 +223,7 @@ export type InferInstructionsResponse<
 };
 
 export type InferInstructionsPayload<
-  TInstructions extends QueryInstruction[],
+  TInstructions extends readonly QueryInstruction[],
   TDescriptor extends ChainDefinition = CommonDescriptor,
 > = {
   [P in keyof TInstructions]: InferInstructionPayload<
@@ -241,19 +243,20 @@ export type InferQueryPayload<T extends Query> =
     : never;
 
 export class Query<
-  const TInstructions extends QueryInstruction[] = QueryInstruction[],
+  const TInstructions extends
+    readonly QueryInstruction[] = readonly QueryInstruction[],
   TDescriptor extends ChainDefinition = CommonDescriptor,
 > {
-  #instructions: TInstructions;
+  readonly #instructions: TInstructions;
 
   constructor(
-    instructions: TInstructions = [] as QueryInstruction[] as TInstructions,
+    instructions: TInstructions = [] as readonly QueryInstruction[] as TInstructions,
   ) {
     this.#instructions = instructions;
   }
 
   get instructions() {
-    return Object.freeze(this.#instructions.slice()) as Readonly<TInstructions>;
+    return Object.freeze(this.#instructions.slice());
   }
 
   constant<
@@ -367,12 +370,12 @@ export class Query<
     pallet: TPallet,
     api: TApi,
     ...argsAndOptions: TArguments extends []
-      ? [args?: TArguments, options?: { at?: At }]
-      : [args: TArguments, options?: { at?: At }]
+      ? [args?: TArguments, options?: { at?: Finality }]
+      : [args: TArguments, options?: { at?: Finality }]
   ) {
     const [args, options] = argsAndOptions as [
       TArguments | undefined,
-      { at?: At } | undefined,
+      { at?: Finality } | undefined,
     ];
 
     return this.#append({
@@ -395,7 +398,12 @@ export class Query<
     TArguments extends InferPapiRuntimeCall<
       TypedApi<TDescriptor>["apis"][TPallet][TApi]
     >["args"],
-  >(pallet: TPallet, api: TApi, args: TArguments[], options?: { at?: At }) {
+  >(
+    pallet: TPallet,
+    api: TApi,
+    args: TArguments[],
+    options?: { at?: Finality },
+  ) {
     return this.#append({
       instruction: "call-api",
       pallet,
