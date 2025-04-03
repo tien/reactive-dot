@@ -1,5 +1,11 @@
 # @reactive-dot/core
 
+## 0.39.2
+
+### Patch Changes
+
+- [#599](https://github.com/tien/reactive-dot/pull/599) [`82177f4`](https://github.com/tien/reactive-dot/commit/82177f4b31f3fc3874f2538f346409d464e61769) Thanks [@tien](https://github.com/tien)! - Patched query builder type definitions.
+
 ## 0.38.1
 
 ### Patch Changes
