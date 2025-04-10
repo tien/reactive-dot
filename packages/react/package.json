@@ -40,16 +40,16 @@
   "devDependencies": {
     "@reactive-dot/eslint-config": "workspace:^",
     "@testing-library/dom": "^10.4.0",
-    "@testing-library/react": "^16.2.0",
+    "@testing-library/react": "^16.3.0",
     "@testing-library/user-event": "^14.6.1",
     "@tsconfig/recommended": "^1.0.8",
     "@tsconfig/strictest": "^2.0.5",
-    "@types/react": "^19.0.12",
-    "eslint": "^9.23.0",
+    "@types/react": "^19.1.0",
+    "eslint": "^9.24.0",
     "jsdom": "^26.0.0",
     "react": "^19.1.0",
-    "typescript": "^5.8.2",
-    "vitest": "^3.0.9",
+    "typescript": "^5.8.3",
+    "vitest": "^3.1.1",
     "wonka": "^6.3.5"
   },
   "peerDependencies": {
