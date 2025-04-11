@@ -1,5 +1,14 @@
 # @reactive-dot/vue
 
+## 0.39.2
+
+### Patch Changes
+
+- [#607](https://github.com/tien/reactive-dot/pull/607) [`a432a67`](https://github.com/tien/reactive-dot/commit/a432a6740140bbe1f7f17deb91b9e5cb5560ad56) Thanks [@tien](https://github.com/tien)! - Fixed a bug in queries with single multi-instructions.
+
+- Updated dependencies [[`82177f4`](https://github.com/tien/reactive-dot/commit/82177f4b31f3fc3874f2538f346409d464e61769)]:
+  - @reactive-dot/core@0.39.2
+
 ## 0.38.1
 
 ### Patch Changes
