@@ -73,17 +73,6 @@ export function useQueryObservable<
       return;
     }
 
-    if (queryValue.instructions.length === 1) {
-      return [
-        queryInstruction(
-          queryValue.instructions.at(0)!,
-          chainId,
-          typedApiPromise,
-          cache,
-        ),
-      ];
-    }
-
     return queryValue.instructions.map((instruction) => {
       if (!("multi" in instruction)) {
         return queryInstruction(instruction, chainId, typedApiPromise, cache);
