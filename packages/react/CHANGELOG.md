@@ -1,5 +1,47 @@
 # @reactive-dot/react
 
+## 0.40.0
+
+### Minor Changes
+
+- [#609](https://github.com/tien/reactive-dot/pull/609) [`6cbd74a`](https://github.com/tien/reactive-dot/commit/6cbd74afaea1f274ed7a2c2b709b4ca75f94bf4d) Thanks [@tien](https://github.com/tien)! - Added the ability to refresh a query by using the `options.fetchKey` parameter.
+
+  ```tsx
+  import { useState, useTransition } from "react";
+
+  function QueryWithRefresh() {
+    const [fetchCount, setFetchCount] = useState(0);
+    const [isPending, startTransition] = useTransition();
+
+    const pendingRewards = useLazyLoadQuery(
+      (builder) =>
+        builder.runtimeApi("NominationPoolsApi", "pending_rewards", [
+          ACCOUNT_ADDRESS,
+        ]),
+      { fetchKey: fetchCount },
+    );
+
+    return (
+      <div>
+        <p>{pendingRewards.toLocaleString()}</p>
+        <button
+          onClick={() =>
+            startTransition(() => setFetchCount((count) => count + 1))
+          }
+          disabled={isPending}
+        >
+          Refresh
+        </button>
+      </div>
+    );
+  }
+  ```
+
+### Patch Changes
+
+- Updated dependencies [[`98d1ded`](https://github.com/tien/reactive-dot/commit/98d1ded71b14a3faefe009412083775e91599a86), [`d83ad3e`](https://github.com/tien/reactive-dot/commit/d83ad3e7b588b0bacdf6e4eed64f061d2af00fa0)]:
+  - @reactive-dot/core@0.40.0
+
 ## 0.39.2
 
 ### Patch Changes

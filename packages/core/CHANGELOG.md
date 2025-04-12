@@ -1,5 +1,13 @@
 # @reactive-dot/core
 
+## 0.40.0
+
+### Patch Changes
+
+- [#610](https://github.com/tien/reactive-dot/pull/610) [`98d1ded`](https://github.com/tien/reactive-dot/commit/98d1ded71b14a3faefe009412083775e91599a86) Thanks [@tien](https://github.com/tien)! - Renamed `ReactiveDotError` to `BaseError`.
+
+- [#610](https://github.com/tien/reactive-dot/pull/610) [`d83ad3e`](https://github.com/tien/reactive-dot/commit/d83ad3e7b588b0bacdf6e4eed64f061d2af00fa0) Thanks [@tien](https://github.com/tien)! - For wrapper errors, use the original error message unless an overriding message is explicitly specified.
+
 ## 0.39.2
 
 ### Patch Changes
