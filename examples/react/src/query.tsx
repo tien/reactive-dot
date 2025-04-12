@@ -177,10 +177,7 @@ function PendingPoolRewards() {
   return (
     <article>
       <h4>Pending rewards</h4>
-      <button
-        type="button"
-        onClick={() => startTransition(() => refreshPendingRewards())}
-      >
+      <button type="button" onClick={refreshPendingRewards}>
         {isPending ? "Refreshing..." : "Refresh"}
       </button>
       <ul>
