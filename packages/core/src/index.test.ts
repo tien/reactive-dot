@@ -5,6 +5,7 @@ it("should match inline snapshot", () =>
   expect(Object.keys(exports)).toMatchInlineSnapshot(`
     [
       "defineConfig",
+      "BaseError",
       "MutationError",
       "QueryError",
       "ReactiveDotError",
@@ -16,8 +17,8 @@ it("should match inline snapshot", () =>
       "connectWallet",
       "disconnectWallet",
       "getAccounts",
-      "getBlock",
       "unstable_getBlockExtrinsics",
+      "getBlock",
       "getClient",
       "getConnectedWallets",
       "initializeWallets",

@@ -1,5 +1,5 @@
 import { ConfigContext } from "../contexts/config.js";
-import { ReactiveDotError } from "@reactive-dot/core";
+import { BaseError } from "@reactive-dot/core";
 import { use } from "react";
 
 /**
@@ -12,7 +12,7 @@ export function useConfig() {
   const config = use(ConfigContext);
 
   if (config === undefined) {
-    throw new ReactiveDotError("No config provided");
+    throw new BaseError("No config provided");
   }
 
   return config;

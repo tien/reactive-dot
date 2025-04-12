@@ -1,7 +1,7 @@
 import { configKey } from "../keys.js";
 import type { ChainComposableOptions } from "../types.js";
 import { useChainId } from "./use-chain-id.js";
-import { ReactiveDotError } from "@reactive-dot/core";
+import { BaseError } from "@reactive-dot/core";
 import { computed, inject, toValue } from "vue";
 
 /**
@@ -14,7 +14,7 @@ export function useConfig() {
 
   return computed(() => {
     if (config === undefined) {
-      throw new ReactiveDotError("No config provided");
+      throw new BaseError("No config provided");
     }
 
     return toValue(config);
@@ -33,7 +33,7 @@ export function useChainConfig(options?: ChainComposableOptions) {
       config.value.chains[toValue(options?.chainId) ?? chainId.value];
 
     if (chainConfig === undefined) {
-      throw new ReactiveDotError("No chain's config found", {
+      throw new BaseError("No chain's config found", {
         cause: options?.chainId ?? chainId.value,
       });
     }

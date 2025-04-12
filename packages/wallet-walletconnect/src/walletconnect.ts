@@ -1,5 +1,5 @@
 import { getPolkadotSignerFromPjs } from "@polkadot-api/pjs-signer";
-import { ReactiveDotError } from "@reactive-dot/core";
+import { BaseError } from "@reactive-dot/core";
 import {
   DeepLinkWallet,
   type PolkadotSignerAccount,
@@ -82,13 +82,11 @@ export class WalletConnect extends DeepLinkWallet {
     await this.initialize();
 
     if (this.#provider?.client === undefined) {
-      throw new ReactiveDotError(
-        "Wallet connect provider doesn't have any client",
-      );
+      throw new BaseError("Wallet connect provider doesn't have any client");
     }
 
     if (this.#chainIds.length === 0 && this.#optionalChainIds.length === 0) {
-      throw new ReactiveDotError(
+      throw new BaseError(
         "Either chainIds or optionalChainIds must be provided",
       );
     }
@@ -119,7 +117,7 @@ export class WalletConnect extends DeepLinkWallet {
       await this.#provider.client.connect(connectOptions);
 
     if (uri === undefined) {
-      throw new ReactiveDotError("No URI provided by connection");
+      throw new BaseError("No URI provided by connection");
     }
 
     return {
@@ -159,7 +157,7 @@ export class WalletConnect extends DeepLinkWallet {
     const connected = await Promise.race([connectedPromise, modalClosePromise]);
 
     if (!connected) {
-      throw new ReactiveDotError("Modal was closed");
+      throw new BaseError("Modal was closed");
     }
 
     modal.closeModal();

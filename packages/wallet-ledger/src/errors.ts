@@ -1,3 +1,3 @@
-import { ReactiveDotError } from "@reactive-dot/core";
+import { BaseError } from "@reactive-dot/core";
 
-export class AccountMismatchError extends ReactiveDotError {}
+export class AccountMismatchError extends BaseError {}

@@ -3,7 +3,7 @@ import {
   lazyValue,
   useLazyValuesCache,
 } from "./use-lazy-value.js";
-import { ReactiveDotError } from "@reactive-dot/core";
+import { BaseError } from "@reactive-dot/core";
 import { firstValueFrom, Observable, of, throwError } from "rxjs";
 import { beforeEach, expect, it, vi } from "vitest";
 import { inject } from "vue";
@@ -21,7 +21,7 @@ beforeEach(() => {
 
 it("should throw if no cache is provided", () => {
   vi.mocked(inject).mockReturnValue(undefined);
-  expect(() => useLazyValuesCache()).toThrow(ReactiveDotError);
+  expect(() => useLazyValuesCache()).toThrow(BaseError);
 });
 
 it("should handle primitive values", () => {

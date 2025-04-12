@@ -1,5 +1,5 @@
 import { WalletConnect } from "./walletconnect.js";
-import { ReactiveDotError } from "@reactive-dot/core";
+import { BaseError } from "@reactive-dot/core";
 import { WalletConnectModal } from "@walletconnect/modal";
 import { UniversalProvider } from "@walletconnect/universal-provider";
 import { firstValueFrom } from "rxjs";
@@ -92,7 +92,7 @@ describe("initiateConnectionHandshake", () => {
     mockProvider.client = undefined;
 
     await expect(walletConnect.initiateConnectionHandshake()).rejects.toThrow(
-      ReactiveDotError,
+      BaseError,
     );
   });
 
@@ -110,7 +110,7 @@ describe("initiateConnectionHandshake", () => {
     await walletConnect.initialize();
 
     await expect(walletConnect.initiateConnectionHandshake()).rejects.toThrow(
-      ReactiveDotError,
+      BaseError,
     );
   });
 
@@ -150,7 +150,7 @@ describe("initiateConnectionHandshake", () => {
     vi.mocked(mockProvider.client.connect).mockResolvedValue(mockConnectResult);
 
     await expect(walletConnect.initiateConnectionHandshake()).rejects.toThrow(
-      ReactiveDotError,
+      BaseError,
     );
   });
 

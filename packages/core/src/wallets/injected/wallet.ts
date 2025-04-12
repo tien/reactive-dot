@@ -1,4 +1,4 @@
-import { ReactiveDotError } from "../../errors.js";
+import { BaseError } from "../../errors.js";
 import type { PolkadotSignerAccount } from "../account.js";
 import { Wallet, type WalletOptions } from "../wallet.js";
 import {
@@ -73,7 +73,7 @@ export class InjectedWallet extends Wallet<InjectedWalletOptions, "connected"> {
     const extension = this.#extension$.getValue();
 
     if (extension === undefined) {
-      throw new ReactiveDotError("Extension is not connected");
+      throw new BaseError("Extension is not connected");
     }
 
     return this.#withIds(extension.getAccounts());
