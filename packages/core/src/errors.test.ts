@@ -16,6 +16,14 @@ describe("BaseError", () => {
     expect(error.message).toBe("wrapped error");
     expect(error.cause).toBe(originalError);
   });
+
+  it("should reuse message from another error", () => {
+    const originalError = new Error("original error");
+    const error = BaseError.from(originalError);
+
+    expect(error.message).toBe("original error");
+    expect(error.cause).toBe(originalError);
+  });
 });
 
 describe("QueryError", () => {
