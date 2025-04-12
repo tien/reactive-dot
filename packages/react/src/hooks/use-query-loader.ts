@@ -27,10 +27,7 @@ export function useQueryLoader() {
         TChainId extends ChainId | undefined,
         TQuery extends (
           query: Query<[], ChainDescriptorOf<TChainId>>,
-        ) => Query<
-          QueryInstruction<ChainDescriptorOf<TChainId>>[],
-          ChainDescriptorOf<TChainId>
-        >,
+        ) => Query<QueryInstruction[], ChainDescriptorOf<TChainId>>,
       >(
         builder: TQuery,
         options?: ChainHookOptions<TChainId>,

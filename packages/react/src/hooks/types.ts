@@ -23,18 +23,10 @@ export type QueryOptions<TChainId extends ChainId | undefined> =
   ChainOptions<TChainId> & { query: QueryArgument<TChainId> };
 
 export type QueryArgument<TChainId extends ChainId | undefined> =
-  | Query<
-      QueryInstruction<ChainDescriptorOf<TChainId>>[],
-      ChainDescriptorOf<TChainId>
-    >
+  | Query<QueryInstruction[], ChainDescriptorOf<TChainId>>
   | ((
       query: Query<[], ChainDescriptorOf<TChainId>>,
-    ) =>
-      | Query<
-          QueryInstruction<ChainDescriptorOf<TChainId>>[],
-          ChainDescriptorOf<TChainId>
-        >
-      | Falsy)
+    ) => Query<QueryInstruction[], ChainDescriptorOf<TChainId>> | Falsy)
   | Falsy;
 
 export type InferQueryArgumentResult<
