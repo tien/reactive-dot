@@ -1,6 +1,6 @@
 import { ChainIdContext } from "../contexts/chain.js";
 import type { QueryArgument, ChainHookOptions, QueryOptions } from "./types.js";
-import { type ChainId, Query, ReactiveDotError } from "@reactive-dot/core";
+import { type ChainId, Query, BaseError } from "@reactive-dot/core";
 import { use, useMemo } from "react";
 
 /**
@@ -59,7 +59,7 @@ export function useQueryOptions(
         const chainId = options.chainId ?? contextChainId;
 
         if (chainId === undefined) {
-          throw new ReactiveDotError("No chain ID provided");
+          throw new BaseError("No chain ID provided");
         }
 
         return {

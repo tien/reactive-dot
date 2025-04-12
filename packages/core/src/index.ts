@@ -1,7 +1,12 @@
 export type { AsyncValue } from "./async-state.js";
 export type { ChainId } from "./chains.js";
 export { defineConfig, type ChainConfig, type Config } from "./config.js";
-export { MutationError, QueryError, ReactiveDotError } from "./errors.js";
+export {
+  BaseError,
+  MutationError,
+  QueryError,
+  ReactiveDotError,
+} from "./errors.js";
 export { Query } from "./query-builder.js";
 export type { Register } from "./register.js";
 export { Storage } from "./storage.js";
@@ -35,14 +40,14 @@ export {
   /**
    * @deprecated Use the "/internal/actions.js" subpath export instead.
    */
-  getBlock,
-} from "./actions/get-block.js";
+  unstable_getBlockExtrinsics,
+} from "./actions/get-block-extrinsics.js";
 export {
   /**
    * @deprecated Use the "/internal/actions.js" subpath export instead.
    */
-  unstable_getBlockExtrinsics,
-} from "./actions/get-block-extrinsics.js";
+  getBlock,
+} from "./actions/get-block.js";
 export {
   /**
    * @deprecated Use the "/internal/actions.js" subpath export instead.

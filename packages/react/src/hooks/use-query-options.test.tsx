@@ -1,6 +1,6 @@
 import { ChainIdContext } from "../contexts/chain.js";
 import { useQueryOptions } from "./use-query-options.js";
-import { Query, ReactiveDotError } from "@reactive-dot/core";
+import { Query, BaseError } from "@reactive-dot/core";
 import { renderHook } from "@testing-library/react";
 import { expect, it } from "vitest";
 
@@ -8,7 +8,7 @@ it("throws error when no chainId is provided", () => {
   const renderFunction = () =>
     renderHook(() => useQueryOptions((q: Query) => q));
 
-  expect(renderFunction).toThrow(ReactiveDotError);
+  expect(renderFunction).toThrow(BaseError);
   expect(renderFunction).toThrow("No chain ID provided");
 });
 

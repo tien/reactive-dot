@@ -1,6 +1,6 @@
 import type { InjectedAccount } from "@mimirdev/apps-transports";
 import { MimirPAPISigner } from "@mimirdev/papi-signer";
-import { ReactiveDotError } from "@reactive-dot/core";
+import { BaseError } from "@reactive-dot/core";
 import {
   type PolkadotSignerAccount,
   Wallet,
@@ -46,7 +46,7 @@ export class MimirWallet extends Wallet<MimirWalletOptions, "connected"> {
     const mimir = this.#mimir$.getValue();
 
     if (mimir === undefined) {
-      throw new ReactiveDotError("Mimir is not connected");
+      throw new BaseError("Mimir is not connected");
     }
 
     return this.#toPolkadotSignerAccount(mimir, await mimir.getAccounts());
@@ -66,7 +66,7 @@ export class MimirWallet extends Wallet<MimirWalletOptions, "connected"> {
     );
 
     if (!result) {
-      throw new ReactiveDotError("Failed to connect to Mimir");
+      throw new BaseError("Failed to connect to Mimir");
     }
 
     this.#mimir$.next(signer);

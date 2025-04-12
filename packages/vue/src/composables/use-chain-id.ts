@@ -1,7 +1,7 @@
 import { chainIdKey } from "../keys.js";
 import type { ChainComposableOptions } from "../types.js";
 import { useConfig } from "./use-config.js";
-import { type ChainId, ReactiveDotError } from "@reactive-dot/core";
+import { type ChainId, BaseError } from "@reactive-dot/core";
 import { computed, inject, toValue } from "vue";
 
 /**
@@ -25,7 +25,7 @@ export function useChainId() {
     const chainId = toValue(injectedChainId);
 
     if (chainId === undefined) {
-      throw new ReactiveDotError("No chain ID provided");
+      throw new BaseError("No chain ID provided");
     }
 
     return chainId as ChainId;
@@ -47,7 +47,7 @@ export function internal_useChainId<TOptionalChainId extends boolean = false>({
     const chainId = options?.chainId ?? toValue(injectedChainId);
 
     if (!optionalChainId && chainId === undefined) {
-      throw new ReactiveDotError("No chain ID provided");
+      throw new BaseError("No chain ID provided");
     }
 
     return chainId as TOptionalChainId extends false

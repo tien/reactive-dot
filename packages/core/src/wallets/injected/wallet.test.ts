@@ -1,4 +1,4 @@
-import { ReactiveDotError } from "../../errors.js";
+import { BaseError } from "../../errors.js";
 import { Storage as WalletStorage } from "../../storage.js";
 import { InjectedWallet } from "./wallet.js";
 import {
@@ -195,7 +195,7 @@ describe("getAccounts", () => {
   });
 
   it("should throw an error when the extension is not connected", () => {
-    expect(() => wallet.getAccounts()).toThrow(ReactiveDotError);
+    expect(() => wallet.getAccounts()).toThrow(BaseError);
   });
 });
 

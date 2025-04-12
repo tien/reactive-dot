@@ -1,6 +1,6 @@
 import { lazyValuesKey } from "../keys.js";
 import { refreshable } from "../utils/refreshable.js";
-import { ReactiveDotError } from "@reactive-dot/core";
+import { BaseError } from "@reactive-dot/core";
 import { catchError, isObservable } from "rxjs";
 import {
   type MaybeRefOrGetter,
@@ -27,7 +27,7 @@ export function useLazyValuesCache() {
   const cache = inject(lazyValuesKey);
 
   if (cache === undefined) {
-    throw new ReactiveDotError("No lazy values cache provided");
+    throw new BaseError("No lazy values cache provided");
   }
 
   return cache;

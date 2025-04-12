@@ -3,7 +3,7 @@ import type { ChainHookOptions } from "./types.js";
 import { internal_useChainId } from "./use-chain-id.js";
 import { useConfig } from "./use-config.js";
 import type { ChainId, Config } from "@reactive-dot/core";
-import { ReactiveDotError } from "@reactive-dot/core";
+import { BaseError } from "@reactive-dot/core";
 import { getClient } from "@reactive-dot/core/internal/actions.js";
 import { atom, useAtomValue } from "jotai";
 
@@ -28,7 +28,7 @@ export const clientAtom = atomFamilyWithErrorCatcher(
         const chainConfig = config.chains[chainId];
 
         if (chainConfig === undefined) {
-          throw new ReactiveDotError(`No config provided for ${chainId}`);
+          throw new BaseError(`No config provided for ${chainId}`);
         }
 
         return getClient(chainConfig);

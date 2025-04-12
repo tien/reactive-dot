@@ -1,6 +1,6 @@
 import { MimirWallet } from "./mimir-wallet.js";
 import { MimirPAPISigner } from "@mimirdev/papi-signer";
-import { ReactiveDotError, Storage as WalletStorage } from "@reactive-dot/core";
+import { BaseError, Storage as WalletStorage } from "@reactive-dot/core";
 import { firstValueFrom } from "rxjs";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
@@ -72,7 +72,7 @@ describe("connect", () => {
       () => mockSigner as unknown as MimirPAPISigner,
     );
 
-    await expect(wallet.connect()).rejects.toThrow(ReactiveDotError);
+    await expect(wallet.connect()).rejects.toThrow(BaseError);
   });
 });
 

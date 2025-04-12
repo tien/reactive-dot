@@ -1,7 +1,7 @@
 import { ChainIdContext } from "../contexts/chain.js";
 import type { ChainHookOptions } from "./types.js";
 import { useConfig } from "./use-config.js";
-import { type ChainId, ReactiveDotError } from "@reactive-dot/core";
+import { type ChainId, BaseError } from "@reactive-dot/core";
 import { use } from "react";
 
 /**
@@ -24,7 +24,7 @@ export function useChainId() {
   const chainId = use(ChainIdContext);
 
   if (chainId === undefined) {
-    throw new ReactiveDotError("No chain ID provided");
+    throw new BaseError("No chain ID provided");
   }
 
   return chainId as ChainId;
@@ -45,7 +45,7 @@ export function internal_useChainId<TOptionalChainId extends boolean = false>({
   const chainId = options?.chainId ?? contextChainId;
 
   if (!optionalChainId && chainId === undefined) {
-    throw new ReactiveDotError("No chain ID provided");
+    throw new BaseError("No chain ID provided");
   }
 
   return chainId as TOptionalChainId extends false
