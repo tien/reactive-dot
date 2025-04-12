@@ -78,7 +78,7 @@ export function useQueryObservable<
         return queryInstruction(instruction, chainId, typedApiPromise, cache);
       }
 
-      return (instruction.args as unknown[]).map((args) => {
+      return instruction.args.map((args) => {
         const { multi, ...rest } = instruction;
         return queryInstruction(
           { ...rest, args },

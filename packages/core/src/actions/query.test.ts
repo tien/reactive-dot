@@ -58,6 +58,7 @@ describe("preflight", () => {
       pallet: "test",
       api: "foo",
       args: [],
+      at: undefined,
     } as QueryInstruction;
 
     expect(preflight(instruction)).toBe("promise");
@@ -69,6 +70,7 @@ describe("preflight", () => {
       pallet: "test",
       storage: "foo",
       args: [],
+      at: undefined,
     } as QueryInstruction;
 
     expect(preflight(instruction)).toBe("observable");
@@ -80,6 +82,7 @@ describe("preflight", () => {
       pallet: "test",
       storage: "foo",
       args: [],
+      at: undefined,
     } as QueryInstruction;
 
     expect(preflight(instruction)).toBe("observable");

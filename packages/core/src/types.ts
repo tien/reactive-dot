@@ -1,5 +1,7 @@
 import type { Observable } from "rxjs";
 
+export type StringKeyOf<T> = Extract<keyof T, string>;
+
 export type Falsy = undefined | null | false;
 
 export type FalsyGuard<

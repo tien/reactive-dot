@@ -247,7 +247,7 @@ export function getQueryInstructionPayloadAtoms(
       return instructionPayloadAtom(config, chainId, instruction);
     }
 
-    return (instruction.args as unknown[]).map((args) => {
+    return instruction.args.map((args) => {
       const { multi, ...rest } = instruction;
 
       return instructionPayloadAtom(config, chainId, { ...rest, args });

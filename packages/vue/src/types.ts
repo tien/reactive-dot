@@ -48,19 +48,11 @@ export type MutationEvent = BaseMutationEvent &
   );
 
 export type QueryArgument<TChainId extends ChainId | undefined> = MaybeRef<
-  | Query<
-      QueryInstruction<ChainDescriptorOf<TChainId>>[],
-      ChainDescriptorOf<TChainId>
-    >
+  | Query<QueryInstruction[], ChainDescriptorOf<TChainId>>
   | Falsy
   | ((
       query: Query<[], ChainDescriptorOf<TChainId>>,
-    ) =>
-      | Query<
-          QueryInstruction<ChainDescriptorOf<TChainId>>[],
-          ChainDescriptorOf<TChainId>
-        >
-      | Falsy)
+    ) => Query<QueryInstruction[], ChainDescriptorOf<TChainId>> | Falsy)
 >;
 
 type MaybeFalsy<T> = T | Falsy;

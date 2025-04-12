@@ -1,6 +1,5 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import type { CommonDescriptor } from "./chains.js";
-import type { Flatten } from "./types.js";
+import type { Flatten, StringKeyOf } from "./types.js";
 import type { ChainDefinition, TypedApi } from "polkadot-api";
 import type { Observable } from "rxjs";
 
@@ -64,21 +63,17 @@ type BaseInstruction<T extends string> = {
 };
 
 export type ConstantFetchInstruction<
-  TPallet extends keyof TypedApi<TDescriptor>["constants"],
-  TConstant extends keyof TypedApi<TDescriptor>["constants"][TPallet],
-  TDescriptor extends ChainDefinition = CommonDescriptor,
+  TPallet extends string = string,
+  TConstant extends string = string,
 > = BaseInstruction<"get-constant"> & {
   pallet: TPallet;
   constant: TConstant;
 };
 
 export type StorageReadInstruction<
-  TPallet extends keyof TypedApi<TDescriptor>["query"],
-  TStorage extends keyof TypedApi<TDescriptor>["query"][TPallet],
-  TArguments extends InferPapiStorageEntry<
-    TypedApi<TDescriptor>["query"][TPallet][TStorage]
-  >["args"],
-  TDescriptor extends ChainDefinition = CommonDescriptor,
+  TPallet extends string = string,
+  TStorage extends string = string,
+  TArguments extends unknown[] = unknown[],
 > = BaseInstruction<"read-storage"> & {
   pallet: TPallet;
   storage: TStorage;
@@ -87,12 +82,9 @@ export type StorageReadInstruction<
 };
 
 export type StorageEntriesReadInstruction<
-  TPallet extends keyof TypedApi<TDescriptor>["query"],
-  TStorage extends keyof TypedApi<TDescriptor>["query"][TPallet],
-  TArguments extends InferPapiStorageEntries<
-    TypedApi<TDescriptor>["query"][TPallet][TStorage]
-  >["args"],
-  TDescriptor extends ChainDefinition = CommonDescriptor,
+  TPallet extends string = string,
+  TStorage extends string = string,
+  TArguments extends unknown[] = unknown[],
 > = BaseInstruction<"read-storage-entries"> & {
   pallet: TPallet;
   storage: TStorage;
@@ -101,12 +93,9 @@ export type StorageEntriesReadInstruction<
 };
 
 export type ApiCallInstruction<
-  TPallet extends keyof TypedApi<TDescriptor>["apis"],
-  TApi extends keyof TypedApi<TDescriptor>["apis"][TPallet],
-  TArguments extends InferPapiRuntimeCall<
-    TypedApi<TDescriptor>["apis"][TPallet][TApi]
-  >["args"],
-  TDescriptor extends ChainDefinition = CommonDescriptor,
+  TPallet extends string = string,
+  TApi extends string = string,
+  TArguments extends unknown[] = unknown[],
 > = BaseInstruction<"call-api"> & {
   pallet: TPallet;
   api: TApi;
@@ -114,23 +103,23 @@ export type ApiCallInstruction<
   at: Finality | undefined;
 };
 
-export type MultiInstruction<TInstruction extends BaseInstruction<string>> =
-  TInstruction & {
-    multi: true;
-  };
+export type MultiInstruction<
+  TInstruction extends BaseInstruction<string> & { args: unknown[] },
+> = Omit<TInstruction, "args"> & {
+  multi: true;
+  args: unknown[][];
+};
 
-export type QueryInstruction<
-  TDescriptor extends ChainDefinition = CommonDescriptor,
-> =
-  | ConstantFetchInstruction<any, any, TDescriptor>
-  | StorageReadInstruction<any, any, any, TDescriptor>
-  | MultiInstruction<StorageReadInstruction<any, any, any, TDescriptor>>
-  | StorageEntriesReadInstruction<any, any, any, TDescriptor>
-  | ApiCallInstruction<any, any, any, TDescriptor>
-  | MultiInstruction<ApiCallInstruction<any, any, any, TDescriptor>>;
+export type QueryInstruction =
+  | ConstantFetchInstruction
+  | StorageReadInstruction
+  | MultiInstruction<StorageReadInstruction>
+  | StorageEntriesReadInstruction
+  | ApiCallInstruction
+  | MultiInstruction<ApiCallInstruction>;
 
 type ConstantFetchPayload<
-  TInstruction extends ConstantFetchInstruction<any, any, TDescriptor>,
+  TInstruction extends ConstantFetchInstruction,
   TDescriptor extends ChainDefinition = CommonDescriptor,
 > = InferPapiConstantEntry<
   TypedApi<TDescriptor>["constants"][TInstruction["pallet"]][TInstruction["constant"]]
@@ -138,20 +127,15 @@ type ConstantFetchPayload<
 
 type StorageReadResponse<
   TInstruction extends
-    | StorageReadInstruction<any, any, any, TDescriptor>
-    | MultiInstruction<StorageReadInstruction<any, any, any, TDescriptor>>,
+    | StorageReadInstruction
+    | MultiInstruction<StorageReadInstruction>,
   TDescriptor extends ChainDefinition = CommonDescriptor,
 > = InferPapiStorageEntry<
   TypedApi<TDescriptor>["query"][TInstruction["pallet"]][TInstruction["storage"]]
 >["response"];
 
 type StorageEntriesReadResponse<
-  TInstruction extends StorageEntriesReadInstruction<
-    any,
-    any,
-    any,
-    TDescriptor
-  >,
+  TInstruction extends StorageEntriesReadInstruction,
   TDescriptor extends ChainDefinition = CommonDescriptor,
 > = InferPapiStorageEntries<
   TypedApi<TDescriptor>["query"][TInstruction["pallet"]][TInstruction["storage"]]
@@ -159,8 +143,8 @@ type StorageEntriesReadResponse<
 
 type ApiCallResponse<
   TInstruction extends
-    | ApiCallInstruction<any, any, any, TDescriptor>
-    | MultiInstruction<ApiCallInstruction<any, any, any, TDescriptor>>,
+    | ApiCallInstruction
+    | MultiInstruction<ApiCallInstruction>,
   TDescriptor extends ChainDefinition = CommonDescriptor,
 > = InferPapiRuntimeCall<
   TypedApi<TDescriptor>["apis"][TInstruction["pallet"]][TInstruction["api"]]
@@ -169,34 +153,19 @@ type ApiCallResponse<
 export type InferInstructionResponse<
   TInstruction extends QueryInstruction,
   TDescriptor extends ChainDefinition = CommonDescriptor,
-> =
-  TInstruction extends ConstantFetchInstruction<any, any, TDescriptor>
-    ? ConstantFetchPayload<TInstruction, TDescriptor>
-    : TInstruction extends MultiInstruction<
-          StorageReadInstruction<any, any, any, TDescriptor>
-        >
-      ? Array<StorageReadResponse<TInstruction, TDescriptor>>
-      : TInstruction extends StorageReadInstruction<any, any, any, TDescriptor>
-        ? StorageReadResponse<TInstruction, TDescriptor>
-        : TInstruction extends StorageEntriesReadInstruction<
-              any,
-              any,
-              any,
-              TDescriptor
-            >
-          ? StorageEntriesReadResponse<TInstruction, TDescriptor>
-          : TInstruction extends MultiInstruction<
-                ApiCallInstruction<any, any, any, TDescriptor>
-              >
-            ? Array<ApiCallResponse<TInstruction, TDescriptor>>
-            : TInstruction extends ApiCallInstruction<
-                  any,
-                  any,
-                  any,
-                  TDescriptor
-                >
-              ? ApiCallResponse<TInstruction, TDescriptor>
-              : never;
+> = TInstruction extends ConstantFetchInstruction
+  ? ConstantFetchPayload<TInstruction, TDescriptor>
+  : TInstruction extends MultiInstruction<StorageReadInstruction>
+    ? Array<StorageReadResponse<TInstruction, TDescriptor>>
+    : TInstruction extends StorageReadInstruction
+      ? StorageReadResponse<TInstruction, TDescriptor>
+      : TInstruction extends StorageEntriesReadInstruction
+        ? StorageEntriesReadResponse<TInstruction, TDescriptor>
+        : TInstruction extends MultiInstruction<ApiCallInstruction>
+          ? Array<ApiCallResponse<TInstruction, TDescriptor>>
+          : TInstruction extends ApiCallInstruction
+            ? ApiCallResponse<TInstruction, TDescriptor>
+            : never;
 
 type ResponsePayload<T> =
   T extends Promise<infer Payload>
@@ -260,8 +229,8 @@ export class Query<
   }
 
   constant<
-    TPallet extends keyof TypedApi<TDescriptor>["constants"],
-    TConstant extends keyof TypedApi<TDescriptor>["constants"][TPallet],
+    TPallet extends StringKeyOf<TypedApi<TDescriptor>["constants"]>,
+    TConstant extends StringKeyOf<TypedApi<TDescriptor>["constants"][TPallet]>,
   >(pallet: TPallet, constant: TConstant) {
     return this.#append({
       instruction: "get-constant",
@@ -276,8 +245,8 @@ export class Query<
   getConstant = this.constant;
 
   storage<
-    TPallet extends keyof TypedApi<TDescriptor>["query"],
-    TStorage extends keyof TypedApi<TDescriptor>["query"][TPallet],
+    TPallet extends StringKeyOf<TypedApi<TDescriptor>["query"]>,
+    TStorage extends StringKeyOf<TypedApi<TDescriptor>["query"][TPallet]>,
     TArguments extends InferPapiStorageEntry<
       TypedApi<TDescriptor>["query"][TPallet][TStorage]
     >["args"],
@@ -308,8 +277,8 @@ export class Query<
   readStorage = this.storage;
 
   storages<
-    TPallet extends keyof TypedApi<TDescriptor>["query"],
-    TStorage extends keyof TypedApi<TDescriptor>["query"][TPallet],
+    TPallet extends StringKeyOf<TypedApi<TDescriptor>["query"]>,
+    TStorage extends StringKeyOf<TypedApi<TDescriptor>["query"][TPallet]>,
     TArguments extends InferPapiStorageEntry<
       TypedApi<TDescriptor>["query"][TPallet][TStorage]
     >["args"],
@@ -335,8 +304,8 @@ export class Query<
   readStorages = this.storages;
 
   storageEntries<
-    TPallet extends keyof TypedApi<TDescriptor>["query"],
-    TStorage extends keyof TypedApi<TDescriptor>["query"][TPallet],
+    TPallet extends StringKeyOf<TypedApi<TDescriptor>["query"]>,
+    TStorage extends StringKeyOf<TypedApi<TDescriptor>["query"][TPallet]>,
     TArguments extends InferPapiStorageEntries<
       TypedApi<TDescriptor>["query"][TPallet][TStorage]
     >["args"],
@@ -361,8 +330,8 @@ export class Query<
   readStorageEntries = this.storageEntries;
 
   runtimeApi<
-    TPallet extends keyof TypedApi<TDescriptor>["apis"],
-    TApi extends keyof TypedApi<TDescriptor>["apis"][TPallet],
+    TPallet extends StringKeyOf<TypedApi<TDescriptor>["apis"]>,
+    TApi extends StringKeyOf<TypedApi<TDescriptor>["apis"][TPallet]>,
     TArguments extends InferPapiRuntimeCall<
       TypedApi<TDescriptor>["apis"][TPallet][TApi]
     >["args"],
@@ -393,8 +362,8 @@ export class Query<
   callApi = this.runtimeApi;
 
   runtimeApis<
-    TPallet extends keyof TypedApi<TDescriptor>["apis"],
-    TApi extends keyof TypedApi<TDescriptor>["apis"][TPallet],
+    TPallet extends StringKeyOf<TypedApi<TDescriptor>["apis"]>,
+    TApi extends StringKeyOf<TypedApi<TDescriptor>["apis"][TPallet]>,
     TArguments extends InferPapiRuntimeCall<
       TypedApi<TDescriptor>["apis"][TPallet][TApi]
     >["args"],
