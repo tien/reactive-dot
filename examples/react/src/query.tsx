@@ -4,12 +4,11 @@ import {
   useAccounts,
   useBlock,
   useLazyLoadQuery,
-  useLazyLoadQueryWithRefresh,
   useNativeTokenAmountFromPlanck,
   useSpendableBalance,
 } from "@reactive-dot/react";
 import { formatDistance } from "date-fns";
-import { Suspense, useTransition } from "react";
+import { Suspense, useState, useTransition } from "react";
 
 export function Query() {
   const block = useBlock();
@@ -150,14 +149,20 @@ function SpendableBalance({ account }: SpendableBalanceProps) {
 function PendingPoolRewards() {
   const accounts = useAccounts();
 
+  const [fetchCount, setFetchCount] = useState(0);
   const [isPending, startTransition] = useTransition();
-  const [pendingRewards, refreshPendingRewards] = useLazyLoadQueryWithRefresh(
+
+  const refreshPendingRewards = () =>
+    startTransition(() => setFetchCount((count) => count + 1));
+
+  const pendingRewards = useLazyLoadQuery(
     (builder) =>
       builder.runtimeApis(
         "NominationPoolsApi",
         "pending_rewards",
         accounts.map((account) => [account.address] as const),
       ),
+    { fetchKey: fetchCount },
   );
 
   if (accounts.length === 0) {

@@ -15,6 +15,7 @@ import { useConfig } from "./use-config.js";
 import { usePausableAtomValue } from "./use-pausable-atom-value.js";
 import { useQueryOptions } from "./use-query-options.js";
 import { useQueryRefresher } from "./use-query-refresher.js";
+import { useRenderEffect } from "./use-render-effect.js";
 import { typedApiAtom } from "./use-typed-api.js";
 import {
   type ChainId,
@@ -35,6 +36,13 @@ import { useMemo } from "react";
 import { from, type Observable } from "rxjs";
 import { switchMap } from "rxjs/operators";
 
+type FetchOptions = {
+  /**
+   * A unique identifier that, when changed, forces a refresh of the current query.
+   */
+  fetchKey?: string | number;
+};
+
 /**
  * Hook for querying data from chain, and returning the response.
  *
@@ -48,7 +56,7 @@ export function useLazyLoadQuery<
   TQuery extends QueryArgument<TChainId>,
 >(
   query: TQuery,
-  options?: ChainHookOptions<TChainId>,
+  options?: ChainHookOptions<TChainId> & FetchOptions,
 ): InferQueryArgumentResult<TChainId, TQuery>;
 /**
  * Hook for querying data from chain, and returning the response.
@@ -63,9 +71,10 @@ export function useLazyLoadQuery<
     [P in keyof TChainIds]: QueryOptions<TChainIds[P]>;
   },
 >(
-  options: TOptions & {
+  queryOptions: TOptions & {
     [P in keyof TChainIds]: QueryOptions<TChainIds[P]>;
   },
+  options?: FetchOptions,
 ): {
   [P in keyof TOptions]: InferQueryArgumentResult<
     TOptions[P]["chainId"],
@@ -78,13 +87,25 @@ export function useLazyLoadQuery(
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     | Array<ChainHookOptions<any> & { query: QueryArgument<any> }>,
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  mayBeOptions?: ChainHookOptions<any>,
+  mayBeOptions?: ChainHookOptions<any> | FetchOptions,
 ) {
   const options = useQueryOptions(
     // @ts-expect-error complex overload
     queryOrOptions,
     mayBeOptions,
   );
+
+  // @ts-expect-error complex types
+  const refresh = useQueryRefresher(queryOrOptions, mayBeOptions);
+
+  const fetchKey =
+    mayBeOptions !== undefined && "fetchKey" in mayBeOptions
+      ? mayBeOptions.fetchKey
+      : undefined;
+
+  useRenderEffect(() => {
+    refresh();
+  }, fetchKey);
 
   const partialData = usePausableAtomValue(
     queryPayloadAtom(
@@ -120,6 +141,7 @@ export function useLazyLoadQuery(
 /**
  * Hook for querying data from chain, returning the response & a refresher function.
  *
+ * @deprecated Use {@link useLazyLoadQuery} with {@link FetchOptions.fetchKey | options.fetchKey} instead
  * @param query - The function to create the query
  * @param options - Additional options
  * @returns The data response & a function to refresh it
@@ -134,6 +156,7 @@ export function useLazyLoadQueryWithRefresh<
 /**
  * Hook for querying data from chain, returning the response & a refresher function.
  *
+ * @deprecated Use {@link useLazyLoadQuery} with {@link FetchOptions.fetchKey | options.fetchKey} instead
  * @group Hooks
  * @param query - The function to create the query
  * @param options - Additional options
@@ -157,14 +180,6 @@ export function useLazyLoadQueryWithRefresh<
   },
   refresh: () => void,
 ];
-/**
- * Hook for querying data from chain, returning the response & a refresher function.
- *
- * @group Hooks
- * @param query - The function to create the query
- * @param options - Additional options
- * @returns The data response & a function to refresh it
- */
 export function useLazyLoadQueryWithRefresh(
   ...args: unknown[]
 ): [unknown, unknown] {

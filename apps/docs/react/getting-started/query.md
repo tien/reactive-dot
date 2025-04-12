@@ -142,25 +142,30 @@ if (conditionalReturn === idle || conditionalFunction === idle) {
 
 ## Refreshing queries
 
-Certain query, like runtime API calls doesn't create any subscriptions. In order to get the latest data, they must be manually refreshed with the [`useLazyLoadQueryWithRefresh`](/api/react/function/useLazyLoadQueryWithRefresh) hook.
+Certain query, like runtime API calls doesn't create any subscriptions. In order to get the latest data, they must be manually refreshed using `options.fetchKey`.
 
 ```tsx
-import { useTransition } from "react";
+import { useState, useTransition } from "react";
 
 function QueryWithRefresh() {
+  const [fetchCount, setFetchCount] = useState(0);
   const [isPending, startTransition] = useTransition();
-  const [pendingRewards, refreshPendingRewards] = useLazyLoadQueryWithRefresh(
+
+  const pendingRewards = useLazyLoadQuery(
     (builder) =>
       builder.runtimeApi("NominationPoolsApi", "pending_rewards", [
         ACCOUNT_ADDRESS,
       ]),
+    { fetchKey: fetchCount },
   );
 
   return (
     <div>
       <p>{pendingRewards.toLocaleString()}</p>
       <button
-        onClick={() => startTransition(() => refreshPendingRewards())}
+        onClick={() =>
+          startTransition(() => setFetchCount((count) => count + 1))
+        }
         disabled={isPending}
       >
         Refresh
