@@ -33,7 +33,7 @@
   },
   "dependencies": {
     "@reactive-dot/core": "workspace:^",
-    "jotai": "^2.12.2",
+    "jotai": "^2.12.3",
     "jotai-derive": "^0.1.2",
     "jotai-effect": "^2.0.2"
   },
