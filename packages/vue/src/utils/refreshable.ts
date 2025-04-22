@@ -1,5 +1,4 @@
-// TODO: weird TypeScript error
-const refreshSymbol = Symbol("refresh") as unknown as "_refresh";
+const refreshSymbol = Symbol("refresh");
 
 export type Refreshable<T> = T & {
   /**
@@ -9,7 +8,7 @@ export type Refreshable<T> = T & {
 };
 
 export function refreshable<T extends object>(value: T, refresh: () => void) {
-  return Object.assign(value, { [refreshSymbol]: refresh });
+  return Object.assign(value, { [refreshSymbol]: refresh }) as Refreshable<T>;
 }
 
 export function refresh(value: Refreshable<unknown>) {
