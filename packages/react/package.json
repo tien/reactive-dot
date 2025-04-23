@@ -33,7 +33,7 @@
   },
   "dependencies": {
     "@reactive-dot/core": "workspace:^",
-    "jotai": "^2.12.2",
+    "jotai": "^2.12.3",
     "jotai-derive": "^0.1.2",
     "jotai-effect": "^2.0.2"
   },
@@ -44,12 +44,12 @@
     "@testing-library/user-event": "^14.6.1",
     "@tsconfig/recommended": "^1.0.8",
     "@tsconfig/strictest": "^2.0.5",
-    "@types/react": "^19.1.0",
-    "eslint": "^9.24.0",
-    "jsdom": "^26.0.0",
+    "@types/react": "^19.1.2",
+    "eslint": "^9.25.1",
+    "jsdom": "^26.1.0",
     "react": "^19.1.0",
     "typescript": "^5.8.3",
-    "vitest": "^3.1.1",
+    "vitest": "^3.1.2",
     "wonka": "^6.3.5"
   },
   "peerDependencies": {
