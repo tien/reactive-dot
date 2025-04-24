@@ -7,7 +7,10 @@ import { useConfig } from "./use-config.js";
 import { typedApiAtom } from "./use-typed-api.js";
 import type { ChainId } from "@reactive-dot/core";
 import { MutationError, pending } from "@reactive-dot/core";
-import type { ChainDescriptorOf } from "@reactive-dot/core/internal.js";
+import type {
+  ChainDescriptorOf,
+  MaybePromise,
+} from "@reactive-dot/core/internal.js";
 import { useAtomCallback } from "jotai/utils";
 import type {
   PolkadotSigner,
@@ -40,7 +43,7 @@ export function useMutation<
   TAction extends (
     tx: TypedApi<ChainDescriptorOf<TChainId>>["tx"],
   ) => // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  Transaction<any, any, any, any>,
+  MaybePromise<Transaction<any, any, any, any>>,
   TChainId extends ChainId | undefined,
 >(
   action: TAction,
@@ -52,7 +55,7 @@ export function useMutation<
     /**
      * Additional transaction options
      */
-    txOptions?: TxOptions<ReturnType<TAction>>;
+    txOptions?: TxOptions<Awaited<ReturnType<TAction>>>;
   },
 ) {
   const config = useConfig();
@@ -68,7 +71,7 @@ export function useMutation<
           _set,
           submitOptions?: {
             signer?: PolkadotSigner;
-            txOptions?: TxOptions<ReturnType<TAction>>;
+            txOptions?: TxOptions<Awaited<ReturnType<TAction>>>;
           },
         ) => {
           const signer =
@@ -78,13 +81,28 @@ export function useMutation<
             throw new MutationError("No signer provided");
           }
 
-          const id = globalThis.crypto.randomUUID();
+          const baseEventProps = {
+            id: globalThis.crypto.randomUUID(),
+            chainId,
+          };
 
           return from(Promise.resolve(get(typedApiAtom(config, chainId)))).pipe(
-            switchMap((typedApi) => {
-              const transaction = action(typedApi.tx);
+            switchMap(async (typedApi) => {
+              const transactionPromise = action(typedApi.tx);
 
-              const eventProps = { id, chainId, call: transaction.decodedCall };
+              if (transactionPromise instanceof Promise) {
+                mutationEventSubject.next({
+                  ...baseEventProps,
+                  value: pending,
+                });
+              }
+
+              const transaction = await transactionPromise;
+
+              const eventProps = {
+                ...baseEventProps,
+                call: transaction.decodedCall,
+              };
 
               mutationEventSubject.next({ ...eventProps, value: pending });
 
@@ -97,14 +115,21 @@ export function useMutation<
                   tap((value) =>
                     mutationEventSubject.next({ ...eventProps, value }),
                   ),
-                  catchError((error) => {
+                  (error) => {
                     mutationEventSubject.next({
                       ...eventProps,
                       value: MutationError.from(error),
                     });
                     throw error;
-                  }),
+                  },
                 );
+            }),
+            catchError((error) => {
+              mutationEventSubject.next({
+                ...baseEventProps,
+                value: MutationError.from(error),
+              });
+              throw error;
             }),
           );
         },
