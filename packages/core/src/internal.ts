@@ -6,7 +6,7 @@ export {
   type MultiInstruction,
   type QueryInstruction,
 } from "./query-builder.js";
-export type { Falsy, FalsyGuard, FlatHead } from "./types.js";
+export type { Falsy, FalsyGuard, FlatHead, MaybePromise } from "./types.js";
 export { flatHead } from "./utils/flat-head.js";
 export { nativeTokenInfoFromChainSpecData } from "./utils/native-token-info-from-chain-spec-data.js";
 export { stringify } from "./utils/stringify.js";
