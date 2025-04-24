@@ -1,5 +1,12 @@
 import type { CommonDescriptor } from "./chains.js";
-import type { Flatten, StringKeyOf } from "./types.js";
+import type { Contract, DescriptorOfContract } from "./ink/contract.js";
+import {
+  type InferInkInstructionsPayload,
+  InkQuery,
+  type InkQueryInstruction,
+} from "./ink/query-builder.js";
+import type { GenericInkDescriptors } from "./ink/types.js";
+import type { At, Finality, FlatHead, Flatten, StringKeyOf } from "./types.js";
 import type { ChainDefinition, TypedApi } from "polkadot-api";
 import type { Observable } from "rxjs";
 
@@ -54,11 +61,7 @@ type InferPapiConstantEntry<T> = T extends {
   ? Promise<Payload>
   : unknown;
 
-type Finality = "best" | "finalized";
-
-type At = Finality | `0x${string}`;
-
-type BaseInstruction<T extends string> = {
+export type BaseInstruction<T extends string> = {
   instruction: T;
 };
 
@@ -103,6 +106,31 @@ export type ApiCallInstruction<
   at: Finality | undefined;
 };
 
+export type ContractReadInstruction<
+  TContract extends Contract = Contract,
+  TInstructions extends InkQuery<
+    TContract extends Contract<infer Descriptor> ? Descriptor : never
+  >["instructions"] = InkQuery<
+    TContract extends Contract<infer Descriptor> ? Descriptor : never
+  >["instructions"],
+> = BaseInstruction<"read-contract"> & {
+  contract: TContract;
+  address: string;
+  instructions: TInstructions;
+};
+
+export type MultiContractReadInstruction<
+  TContract extends Contract = Contract,
+  TInstructions extends InkQuery<
+    TContract extends Contract<infer Descriptor> ? Descriptor : never
+  >["instructions"] = InkQuery<
+    TContract extends Contract<infer Descriptor> ? Descriptor : never
+  >["instructions"],
+> = Omit<ContractReadInstruction<TContract, TInstructions>, "address"> & {
+  multi: true;
+  addresses: string[];
+};
+
 export type MultiInstruction<
   TInstruction extends BaseInstruction<string> & { args: unknown[] },
 > = Omit<TInstruction, "args"> & {
@@ -110,13 +138,18 @@ export type MultiInstruction<
   args: unknown[][];
 };
 
-export type QueryInstruction =
+export type SimpleQueryInstruction =
   | ConstantFetchInstruction
   | StorageReadInstruction
-  | MultiInstruction<StorageReadInstruction>
   | StorageEntriesReadInstruction
-  | ApiCallInstruction
-  | MultiInstruction<ApiCallInstruction>;
+  | ApiCallInstruction;
+
+export type QueryInstruction =
+  | SimpleQueryInstruction
+  | MultiInstruction<StorageReadInstruction>
+  | MultiInstruction<ApiCallInstruction>
+  | ContractReadInstruction
+  | MultiContractReadInstruction;
 
 type ConstantFetchPayload<
   TInstruction extends ConstantFetchInstruction,
@@ -150,6 +183,13 @@ type ApiCallResponse<
   TypedApi<TDescriptor>["apis"][TInstruction["pallet"]][TInstruction["api"]]
 >["response"];
 
+type InferContractReadResponse<
+  T extends ContractReadInstruction | MultiContractReadInstruction,
+> = InferInkInstructionsPayload<
+  T["instructions"],
+  DescriptorOfContract<T["contract"]>
+>;
+
 export type InferInstructionResponse<
   TInstruction extends QueryInstruction,
   TDescriptor extends ChainDefinition = CommonDescriptor,
@@ -165,16 +205,20 @@ export type InferInstructionResponse<
           ? Array<ApiCallResponse<TInstruction, TDescriptor>>
           : TInstruction extends ApiCallInstruction
             ? ApiCallResponse<TInstruction, TDescriptor>
-            : never;
+            : TInstruction extends MultiContractReadInstruction
+              ? Array<InferContractReadResponse<TInstruction>>
+              : TInstruction extends ContractReadInstruction
+                ? InferContractReadResponse<TInstruction>
+                : never;
 
 type ResponsePayload<T> =
   T extends Promise<infer Payload>
     ? Payload
     : T extends Observable<infer Payload>
       ? Payload
-      : T extends Array<infer Element>
-        ? Array<ResponsePayload<Element>>
-        : unknown;
+      : T extends Array<infer _>
+        ? { [P in keyof T]: ResponsePayload<T[P]> }
+        : T;
 
 export type InferInstructionPayload<
   TInstruction extends QueryInstruction,
@@ -194,12 +238,15 @@ export type InferInstructionsResponse<
 export type InferInstructionsPayload<
   TInstructions extends readonly QueryInstruction[],
   TDescriptor extends ChainDefinition = CommonDescriptor,
-> = {
-  [P in keyof TInstructions]: InferInstructionPayload<
-    TInstructions[P],
-    TDescriptor
-  >;
-};
+> = Extract<
+  {
+    [P in keyof TInstructions]: InferInstructionPayload<
+      TInstructions[P],
+      TDescriptor
+    >;
+  },
+  unknown[]
+>;
 
 export type InferQueryResponse<T extends Query> =
   T extends Query<infer Instructions, infer Descriptor>
@@ -208,7 +255,7 @@ export type InferQueryResponse<T extends Query> =
 
 export type InferQueryPayload<T extends Query> =
   T extends Query<infer Instructions, infer Descriptor>
-    ? InferInstructionsPayload<Instructions, Descriptor>
+    ? FlatHead<InferInstructionsPayload<Instructions, Descriptor>>
     : never;
 
 export class Query<
@@ -225,7 +272,7 @@ export class Query<
   }
 
   get instructions() {
-    return Object.freeze(this.#instructions.slice());
+    return Object.freeze(this.#instructions.slice()) as TInstructions;
   }
 
   constant<
@@ -387,6 +434,43 @@ export class Query<
    * @deprecated Use {@link Query.runtimeApis} instead.
    */
   callApis = this.runtimeApis;
+
+  contract<
+    TContractDescriptor extends GenericInkDescriptors,
+    TContractInstructions extends InkQueryInstruction[],
+  >(
+    contract: Contract<TContractDescriptor>,
+    address: string,
+    builder: (
+      query: InkQuery<TContractDescriptor, []>,
+    ) => InkQuery<TContractDescriptor, TContractInstructions>,
+  ) {
+    return this.#append({
+      instruction: "read-contract",
+      contract,
+      address,
+      instructions: builder(new InkQuery()).instructions,
+    });
+  }
+
+  contracts<
+    TContractDescriptor extends GenericInkDescriptors,
+    TContractInstructions extends InkQueryInstruction[],
+  >(
+    contract: Contract<TContractDescriptor>,
+    addresses: string[],
+    builder: (
+      query: InkQuery<TContractDescriptor, []>,
+    ) => InkQuery<TContractDescriptor, TContractInstructions>,
+  ) {
+    return this.#append({
+      instruction: "read-contract",
+      multi: true,
+      contract,
+      addresses,
+      instructions: builder(new InkQuery()).instructions,
+    });
+  }
 
   concat<TQueries extends Query[]>(...queries: TQueries) {
     return new Query(

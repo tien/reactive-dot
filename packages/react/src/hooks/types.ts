@@ -4,7 +4,6 @@ import type {
   ChainDescriptorOf,
   Falsy,
   FalsyGuard,
-  FlatHead,
   InferQueryPayload,
 } from "@reactive-dot/core/internal.js";
 
@@ -23,10 +22,12 @@ export type QueryOptions<TChainId extends ChainId | undefined> =
   ChainOptions<TChainId> & { query: QueryArgument<TChainId> };
 
 export type QueryArgument<TChainId extends ChainId | undefined> =
-  | Query<QueryInstruction[], ChainDescriptorOf<TChainId>>
+  | Query<readonly QueryInstruction[], ChainDescriptorOf<TChainId>>
   | ((
       query: Query<[], ChainDescriptorOf<TChainId>>,
-    ) => Query<QueryInstruction[], ChainDescriptorOf<TChainId>> | Falsy)
+    ) =>
+      | Query<readonly QueryInstruction[], ChainDescriptorOf<TChainId>>
+      | Falsy)
   | Falsy;
 
 export type InferQueryArgumentResult<
@@ -35,13 +36,11 @@ export type InferQueryArgumentResult<
 > = TQuery extends Falsy
   ? typeof idle
   : TQuery extends Query
-    ? FlatHead<InferQueryPayload<TQuery>>
+    ? InferQueryPayload<TQuery>
     : FalsyGuard<
         ReturnType<Exclude<TQuery, Falsy | Query>>,
-        FlatHead<
-          InferQueryPayload<
-            Exclude<ReturnType<Exclude<TQuery, Falsy | Query>>, Falsy>
-          >
+        InferQueryPayload<
+          Exclude<ReturnType<Exclude<TQuery, Falsy | Query>>, Falsy>
         >,
         typeof idle
       >;

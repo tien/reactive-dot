@@ -71,7 +71,7 @@ export function useQueryRefresher(
             config,
             chainId,
             query,
-          ).flat();
+          ).flat(3);
 
           for (const atom of atoms) {
             if ("write" in atom.promiseAtom) {

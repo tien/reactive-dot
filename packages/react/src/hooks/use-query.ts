@@ -24,14 +24,21 @@ import {
   type Query,
 } from "@reactive-dot/core";
 import {
+  type Contract,
   flatHead,
-  type MultiInstruction,
-  type QueryInstruction,
+  getContractConfig,
+  type InkQueryInstruction,
+  type SimpleInkQueryInstruction,
+  type SimpleQueryInstruction,
   stringify,
 } from "@reactive-dot/core/internal.js";
-import { preflight, query } from "@reactive-dot/core/internal/actions.js";
-import { atom } from "jotai";
-import { soon } from "jotai-derive";
+import {
+  preflight,
+  query,
+  queryInk,
+} from "@reactive-dot/core/internal/actions.js";
+import { atom, type Getter } from "jotai";
+import { soon, soonAll } from "jotai-derive";
 import { useMemo } from "react";
 import { from, type Observable } from "rxjs";
 import { switchMap } from "rxjs/operators";
@@ -191,17 +198,58 @@ export function useLazyLoadQueryWithRefresh(
   return [data, refresh];
 }
 
+const inkClientPayloadAtom = atomFamilyWithErrorCatcher(
+  (withErrorCatcher, contract: Contract) =>
+    withErrorCatcher(
+      atom(() =>
+        import("polkadot-api/ink").then(({ getInkClient }) =>
+          getInkClient(getContractConfig(contract).descriptor),
+        ),
+      ),
+    ),
+  (contract) => contract.valueOf(),
+);
+
+const inkInstructionPayloadAtom = atomFamilyWithErrorCatcher(
+  (
+    withErrorCatcher,
+    config: Config,
+    chainId: ChainId,
+    contract: Contract,
+    address: string,
+    instruction: SimpleInkQueryInstruction,
+  ) => {
+    const promiseAtom = withErrorCatcher(
+      atomWithPromise((get, { signal }) =>
+        soon(
+          soonAll([
+            get(typedApiAtom(config, chainId)),
+            get(inkClientPayloadAtom(contract)),
+          ]),
+          ([api, inkClient]) =>
+            queryInk(api, inkClient, address, instruction, { signal }),
+        ),
+      ),
+    );
+
+    return { promiseAtom, observableAtom: promiseAtom };
+  },
+  (config, chainId, contract, address, instruction) =>
+    [
+      objectId(config),
+      chainId,
+      contract.valueOf(),
+      address,
+      stringify(instruction),
+    ].join(),
+);
+
 const instructionPayloadAtom = atomFamilyWithErrorCatcher(
   (
     withErrorCatcher,
     config: Config,
     chainId: ChainId,
-    instruction: Exclude<
-      QueryInstruction,
-      MultiInstruction<// @ts-expect-error need any empty object here
-      // eslint-disable-next-line @typescript-eslint/no-empty-object-type
-      {}>
-    >,
+    instruction: SimpleQueryInstruction,
   ) => {
     switch (preflight(instruction)) {
       case "promise": {
@@ -243,6 +291,78 @@ export function getQueryInstructionPayloadAtoms(
   query: Query,
 ) {
   return query.instructions.map((instruction) => {
+    if (instruction.instruction === "read-contract") {
+      const processInkInstructions = (
+        address: string,
+        instructions: readonly InkQueryInstruction[],
+      ) => {
+        return flatHead(
+          instructions.map((instruction) => {
+            if (!("multi" in instruction)) {
+              return inkInstructionPayloadAtom(
+                config,
+                chainId,
+                contract,
+                address,
+                instruction,
+              );
+            }
+
+            const { multi, ...rest } = instruction;
+
+            switch (rest.instruction) {
+              case "read-storage": {
+                const { keys, ..._rest } = rest;
+
+                return keys.map((key) =>
+                  inkInstructionPayloadAtom(
+                    config,
+                    chainId,
+                    contract,
+                    address,
+                    {
+                      ..._rest,
+                      key,
+                    },
+                  ),
+                );
+              }
+              case "send-message": {
+                const { bodies, ..._rest } = rest;
+
+                return bodies.map((body) =>
+                  inkInstructionPayloadAtom(
+                    config,
+                    chainId,
+                    contract,
+                    address,
+                    {
+                      ..._rest,
+                      body,
+                    },
+                  ),
+                );
+              }
+            }
+          }),
+        );
+      };
+
+      const { contract } = instruction;
+
+      if (!("multi" in instruction)) {
+        return processInkInstructions(
+          instruction.address,
+          instruction.instructions,
+        );
+      }
+
+      const { addresses, ...rest } = instruction;
+      return addresses.map((address) =>
+        processInkInstructions(address, rest.instructions),
+      );
+    }
+
     if (!("multi" in instruction)) {
       return instructionPayloadAtom(config, chainId, instruction);
     }
@@ -270,40 +390,14 @@ export const queryPayloadAtom = atomFamilyWithErrorCatcher(
       getQueryInstructionPayloadAtoms(config, param.chainId, param.query),
     );
 
-    const unwrap = (
-      atoms: ReturnType<typeof atomWithObservableAndPromise>,
-      asObservable: boolean,
-    ) => (asObservable ? atoms.observableAtom : atoms.promiseAtom);
-
-    const createAtom = (asObservable: boolean) =>
-      withErrorCatcher(
-        atom((get) => {
-          return maybePromiseAll(
-            atoms.map((atomOrAtoms) =>
-              !Array.isArray(atomOrAtoms)
-                ? atomOrAtoms
-                : soon(
-                    maybePromiseAll(
-                      atomOrAtoms.map((atomOrAtoms) => {
-                        if (Array.isArray(atomOrAtoms)) {
-                          return maybePromiseAll(
-                            atomOrAtoms.map((atom) =>
-                              get(unwrap(atom, asObservable)),
-                            ),
-                          );
-                        }
-
-                        return get(unwrap(atomOrAtoms, asObservable));
-                      }),
-                    ),
-                    flatHead,
-                  ),
-            ),
-          );
-        }),
-      );
-
-    return { promiseAtom: createAtom(false), observableAtom: createAtom(true) };
+    return {
+      promiseAtom: withErrorCatcher(
+        atom((get) => flatHead(getNestedAtoms(get, atoms, false))),
+      ),
+      observableAtom: withErrorCatcher(
+        atom((get) => flatHead(getNestedAtoms(get, atoms, false))),
+      ),
+    };
   },
   (config, params) =>
     [
@@ -314,3 +408,41 @@ export const queryPayloadAtom = atomFamilyWithErrorCatcher(
       ]),
     ].join(),
 );
+
+function unwrapObservableOrPromiseAtom(
+  atoms: ReturnType<typeof atomWithObservableAndPromise>,
+  asObservable: boolean,
+) {
+  return asObservable ? atoms.observableAtom : atoms.promiseAtom;
+}
+
+type UnwrapObservableOrPromiseAtoms<T extends unknown[]> = {
+  [P in keyof T]: T[P] extends ReturnType<
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    typeof atomWithObservableAndPromise<infer Value, any>
+  >
+    ? Value
+    : T[P] extends unknown[]
+      ? UnwrapObservableOrPromiseAtoms<T[P]>
+      : unknown;
+};
+
+function getNestedAtoms<T extends unknown[]>(
+  get: Getter,
+  nestedAtomArray: T,
+  asObservable: boolean,
+): UnwrapObservableOrPromiseAtoms<T> {
+  return maybePromiseAll(
+    nestedAtomArray.map((_atom) => {
+      const atom = _atom as
+        | ReturnType<typeof atomWithObservableAndPromise>
+        | Array<ReturnType<typeof atomWithObservableAndPromise>>;
+
+      if (!Array.isArray(atom)) {
+        return get(unwrapObservableOrPromiseAtom(atom, asObservable));
+      }
+
+      return getNestedAtoms(get, atom, asObservable);
+    }),
+  ) as UnwrapObservableOrPromiseAtoms<T>;
+}
