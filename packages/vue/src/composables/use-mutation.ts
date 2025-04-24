@@ -6,7 +6,10 @@ import { useSigner } from "./use-signer.js";
 import { useTypedApiPromise } from "./use-typed-api.js";
 import type { ChainId } from "@reactive-dot/core";
 import { MutationError } from "@reactive-dot/core";
-import type { ChainDescriptorOf } from "@reactive-dot/core/internal.js";
+import type {
+  ChainDescriptorOf,
+  MaybePromise,
+} from "@reactive-dot/core/internal.js";
 import type {
   PolkadotSigner,
   Transaction,
@@ -37,7 +40,7 @@ export function useMutation<
   TAction extends (
     tx: TypedApi<ChainDescriptorOf<TChainId>>["tx"],
   ) => // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  Transaction<any, any, any, any>,
+  MaybePromise<Transaction<any, any, any, any>>,
   TChainId extends ChainId | undefined,
 >(
   action: TAction,
@@ -49,7 +52,9 @@ export function useMutation<
     /**
      * Additional transaction options
      */
-    txOptions?: MaybeRefOrGetter<TxOptions<ReturnType<TAction>> | undefined>;
+    txOptions?: MaybeRefOrGetter<
+      TxOptions<Awaited<ReturnType<TAction>>> | undefined
+    >;
   },
 ) {
   const injectedSigner = useSigner();
@@ -67,7 +72,7 @@ export function useMutation<
   return useAsyncAction(
     (submitOptions?: {
       signer: PolkadotSigner;
-      txOptions: TxOptions<ReturnType<TAction>>;
+      txOptions: TxOptions<Awaited<ReturnType<TAction>>>;
     }) => {
       const signer =
         submitOptions?.signer ?? toValue(options?.signer) ?? injectedSigner;
@@ -76,15 +81,26 @@ export function useMutation<
         throw new MutationError("No signer provided");
       }
 
-      const id = globalThis.crypto.randomUUID();
+      const baseEventProps = {
+        id: globalThis.crypto.randomUUID(),
+        chainId: toValue(chainId),
+      };
 
       return from(typedApiPromise.value).pipe(
-        switchMap((typedApi) => {
-          const transaction = action(typedApi.tx);
+        switchMap(async (typedApi) => {
+          const transactionPromise = action(typedApi.tx);
+
+          if (transactionPromise instanceof Promise) {
+            mutationEventRef.value = {
+              ...baseEventProps,
+              status: "pending",
+            };
+          }
+
+          const transaction = await transactionPromise;
 
           const eventProps = {
-            id,
-            chainId: chainId.value,
+            ...baseEventProps,
             call: transaction.decodedCall,
           };
 
@@ -113,6 +129,14 @@ export function useMutation<
                 throw error;
               }),
             );
+        }),
+        catchError((error) => {
+          mutationEventRef.value = {
+            ...baseEventProps,
+            status: "error",
+            error: MutationError.from(error),
+          };
+          throw error;
         }),
       );
     },
