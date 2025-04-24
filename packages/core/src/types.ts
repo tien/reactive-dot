@@ -29,3 +29,7 @@ export type Flatten<T extends unknown[]> = T extends [
     ? Flatten<[...First, ...Rest]>
     : [First, ...Rest]
   : [];
+
+export type Finality = "best" | "finalized";
+
+export type At = Finality | `0x${string}`;

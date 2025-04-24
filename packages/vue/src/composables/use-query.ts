@@ -14,18 +14,21 @@ import { lazyValue, useLazyValuesCache } from "./use-lazy-value.js";
 import { useTypedApiPromise } from "./use-typed-api.js";
 import { type ChainId, Query } from "@reactive-dot/core";
 import {
-  type FlatHead,
+  type Contract,
   flatHead,
-  type MultiInstruction,
-  type QueryInstruction,
+  getContractConfig,
+  type InkQueryInstruction,
+  type SimpleInkQueryInstruction,
+  type SimpleQueryInstruction,
   stringify,
 } from "@reactive-dot/core/internal.js";
 import {
   query as executeQuery,
   preflight,
+  queryInk,
 } from "@reactive-dot/core/internal/actions.js";
 import type { ChainDefinition, TypedApi } from "polkadot-api";
-import { combineLatest, from, type Observable, of } from "rxjs";
+import { combineLatest, from, isObservable, type Observable, of } from "rxjs";
 import { map, switchMap } from "rxjs/operators";
 import {
   computed,
@@ -74,6 +77,74 @@ export function useQueryObservable<
     }
 
     return queryValue.instructions.map((instruction) => {
+      if (instruction.instruction === "read-contract") {
+        const contract = instruction.contract;
+
+        const processInkInstructions = (
+          address: string,
+          instructions: readonly InkQueryInstruction[],
+        ) =>
+          flatHead(
+            instructions.map((instruction) => {
+              if (!("multi" in instruction)) {
+                return queryInkInstruction(
+                  chainId,
+                  typedApiPromise,
+                  contract,
+                  address,
+                  instruction,
+                  cache,
+                );
+              }
+
+              const { multi, ...rest } = instruction;
+
+              switch (rest.instruction) {
+                case "read-storage": {
+                  const { keys, ..._rest } = rest;
+
+                  return keys.map((key) =>
+                    queryInkInstruction(
+                      chainId,
+                      typedApiPromise,
+                      contract,
+                      address,
+                      { ..._rest, key },
+                      cache,
+                    ),
+                  );
+                }
+                case "send-message": {
+                  const { bodies, ..._rest } = rest;
+
+                  return bodies.map((body) =>
+                    queryInkInstruction(
+                      chainId,
+                      typedApiPromise,
+                      contract,
+                      address,
+                      { ..._rest, body },
+                      cache,
+                    ),
+                  );
+                }
+              }
+            }),
+          );
+
+        if (!("multi" in instruction)) {
+          return processInkInstructions(
+            instruction.address,
+            instruction.instructions,
+          );
+        }
+
+        const { addresses, ...rest } = instruction;
+        return addresses.map((address) =>
+          processInkInstructions(address, rest.instructions),
+        );
+      }
+
       if (!("multi" in instruction)) {
         return queryInstruction(instruction, chainId, typedApiPromise, cache);
       }
@@ -96,23 +167,50 @@ export function useQueryObservable<
         return;
       }
 
-      return combineLatest(
-        responses.value.map((response) => {
-          if (!Array.isArray(response)) {
-            return from(response.value);
+      const combineLatestNested = (
+        array: ComputedRef<Promise<unknown> | Observable<unknown>>[],
+      ): Observable<unknown> => {
+        if (array.length === 0) {
+          return of([]);
+        }
+
+        const observables = array.map((value) => {
+          const nestedValue = toValue(value);
+
+          if (isObservable(nestedValue)) {
+            return nestedValue;
           }
 
-          const responses = response.map((response) => response.value);
-
-          if (responses.length === 0) {
-            return of([]);
+          if (Array.isArray(nestedValue)) {
+            return combineLatestNested(nestedValue);
           }
 
-          return combineLatest(response.map((response) => response.value));
-        }),
+          return of(nestedValue) as Observable<unknown>;
+        });
+
+        return combineLatest(observables);
+      };
+      return combineLatestNested(
+        responses.value as unknown as ComputedRef<
+          Promise<unknown> | Observable<unknown>
+        >[],
       ).pipe(map(flatHead));
     }),
     () => {
+      const recursiveRefresh = (
+        refreshables:
+          | Refreshable<ComputedRef<Promise<unknown>>>
+          | Refreshable<ComputedRef<Promise<unknown>>>[],
+      ) => {
+        if (!Array.isArray(refreshables)) {
+          refresh(refreshables);
+        } else {
+          for (const refreshable of refreshables) {
+            recursiveRefresh(refreshable);
+          }
+        }
+      };
+
       if (!responses.value) {
         return;
       }
@@ -121,32 +219,19 @@ export function useQueryObservable<
         return void refresh(responses.value);
       }
 
-      for (const response of responses.value) {
-        if (!Array.isArray(response)) {
-          refresh(response);
-        } else {
-          for (const subResponse of response) {
-            refresh(subResponse);
-          }
-        }
-      }
+      recursiveRefresh(
+        responses.value as unknown as Refreshable<
+          ComputedRef<Promise<unknown>>
+        >[],
+      );
     },
   ) as Refreshable<
-    ComputedRef<
-      Observable<FlatHead<InferQueryArgumentResult<TChainId, TQuery>>>
-    >
+    ComputedRef<Observable<InferQueryArgumentResult<TChainId, TQuery>>>
   >;
 }
 
 function queryInstruction(
-  instruction: MaybeRefOrGetter<
-    Exclude<
-      QueryInstruction,
-      MultiInstruction<// @ts-expect-error need any empty object here
-      // eslint-disable-next-line @typescript-eslint/no-empty-object-type
-      {}>
-    >
-  >,
+  instruction: SimpleQueryInstruction,
   chainId: MaybeRefOrGetter<ChainId>,
   typedApiPromise: MaybeRefOrGetter<Promise<TypedApi<ChainDefinition>>>,
   cache: MaybeRefOrGetter<Map<string, ShallowRef<unknown>>>,
@@ -176,6 +261,48 @@ function queryInstruction(
           );
       }
     },
+    cache,
+  );
+}
+
+function queryInkInstruction(
+  chainId: MaybeRefOrGetter<ChainId>,
+  typedApiPromise: MaybeRefOrGetter<Promise<TypedApi<ChainDefinition>>>,
+  contract: Contract,
+  address: MaybeRefOrGetter<string>,
+  instruction: SimpleInkQueryInstruction,
+  cache: MaybeRefOrGetter<Map<string, ShallowRef<unknown>>>,
+) {
+  const inkClient = getInkClient(contract, cache);
+
+  return lazyValue(
+    computed(() => [
+      "ink-query",
+      toValue(chainId),
+      contract.valueOf(),
+      stringify(instruction),
+    ]),
+    async () =>
+      queryInk(
+        await toValue(typedApiPromise),
+        await toValue(inkClient),
+        toValue(address),
+        instruction,
+      ),
+    cache,
+  );
+}
+
+function getInkClient(
+  contract: Contract,
+  cache: MaybeRefOrGetter<Map<string, ShallowRef<unknown>>>,
+) {
+  return lazyValue(
+    computed(() => ["ink-client", contract.valueOf()]),
+    () =>
+      import("polkadot-api/ink").then(({ getInkClient }) =>
+        getInkClient(getContractConfig(contract).descriptor),
+      ),
     cache,
   );
 }
