@@ -1,6 +1,11 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import type { BaseInstruction } from "../query-builder.js";
-import type { Finality, FlatHead } from "../types.js";
+import type {
+  ExcludeProperties,
+  Finality,
+  FlatHead,
+  StringKeyOf,
+} from "../types.js";
 import type { UnwrapResult } from "./result.js";
 import type { GenericInkDescriptors } from "./types.js";
 
@@ -117,10 +122,7 @@ export class InkQuery<
   }
 
   storage<
-    TPath extends Exclude<
-      Extract<keyof TDescriptor["__types"]["storage"], string>,
-      ""
-    >,
+    TPath extends Exclude<StringKeyOf<TDescriptor["__types"]["storage"]>, "">,
     TKey extends TDescriptor["__types"]["storage"][TPath]["key"],
   >(
     path: TPath,
@@ -137,10 +139,7 @@ export class InkQuery<
   }
 
   storages<
-    TPath extends Exclude<
-      Extract<keyof TDescriptor["__types"]["storage"], string>,
-      ""
-    >,
+    TPath extends Exclude<StringKeyOf<TDescriptor["__types"]["storage"]>, "">,
     TKey extends TDescriptor["__types"]["storage"][TPath]["key"],
   >(path: TPath, keys: TKey[], options?: { at?: Finality }) {
     return this.#append({
@@ -153,7 +152,9 @@ export class InkQuery<
   }
 
   message<
-    TName extends Extract<keyof TDescriptor["__types"]["messages"], string>,
+    TName extends StringKeyOf<
+      ExcludeProperties<TDescriptor["__types"]["messages"], { mutates: true }>
+    >,
     TBody extends TDescriptor["__types"]["messages"][TName]["message"],
   >(
     name: TName,
@@ -171,7 +172,9 @@ export class InkQuery<
   }
 
   messages<
-    TName extends Extract<keyof TDescriptor["__types"]["messages"], string>,
+    TName extends StringKeyOf<
+      ExcludeProperties<TDescriptor["__types"]["messages"], { mutates: true }>
+    >,
     TBody extends TDescriptor["__types"]["messages"][TName]["message"],
   >(name: TName, bodies: TBody[], options?: { at?: Finality }) {
     return this.#append({
