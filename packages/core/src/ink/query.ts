@@ -49,6 +49,12 @@ export async function queryInk<
     case "send-message": {
       const message = client.message(instruction.name);
 
+      if (message.attributes.mutates) {
+        throw new QueryError(
+          `Mutating message ${instruction.name} cannot be used in a readonly query`,
+        );
+      }
+
       const response = await api.apis.ContractsApi.call(
         address,
         address,

@@ -11,6 +11,7 @@ export { Query } from "./query-builder.js";
 export type { Register } from "./register.js";
 export { Storage } from "./storage.js";
 export { idle, pending } from "./symbols.js";
+export { defineContract } from "./ink/contract.js";
 
 export {
   /**

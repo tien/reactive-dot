@@ -1,10 +1,10 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable @typescript-eslint/no-empty-object-type */
 import type {
+  Event,
   InkCallableDescriptor,
   InkDescriptors,
   InkStorageDescriptor,
-  Event,
 } from "@polkadot-api/ink-contracts";
 import type {
   ApisTypedef,

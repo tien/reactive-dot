@@ -30,6 +30,14 @@ export type Flatten<T extends unknown[]> = T extends [
     : [First, ...Rest]
   : [];
 
+export type ExtractProperties<T extends object, U> = {
+  [P in keyof T as T[P] extends U ? P : never]: T[P];
+};
+
+export type ExcludeProperties<T extends object, U> = {
+  [P in keyof T as T[P] extends U ? never : P]: T[P];
+};
+
 export type Finality = "best" | "finalized";
 
 export type At = Finality | `0x${string}`;
