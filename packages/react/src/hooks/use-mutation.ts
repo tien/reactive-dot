@@ -7,26 +7,15 @@ import { useConfig } from "./use-config.js";
 import { typedApiAtom } from "./use-typed-api.js";
 import type { ChainId } from "@reactive-dot/core";
 import { MutationError, pending } from "@reactive-dot/core";
-import type { ChainDescriptorOf } from "@reactive-dot/core/internal.js";
-import { useAtomCallback } from "jotai/utils";
 import type {
-  PolkadotSigner,
-  Transaction,
-  TxObservable,
-  TypedApi,
-} from "polkadot-api";
+  ChainDescriptorOf,
+  TxOptionsOf,
+} from "@reactive-dot/core/internal.js";
+import { useAtomCallback } from "jotai/utils";
+import type { PolkadotSigner, Transaction, TypedApi } from "polkadot-api";
 import { use, useCallback } from "react";
 import { from } from "rxjs";
 import { catchError, switchMap, tap } from "rxjs/operators";
-
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-type TxOptions<T extends Transaction<any, any, any, any>> = Parameters<
-  TxObservable<
-    T extends Transaction<infer _Args, infer _Pallet, infer _Tx, infer Asset>
-      ? Asset
-      : void
-  >
->[1];
 
 /**
  * Hook for sending transactions to chains.
@@ -52,7 +41,7 @@ export function useMutation<
     /**
      * Additional transaction options
      */
-    txOptions?: TxOptions<ReturnType<TAction>>;
+    txOptions?: TxOptionsOf<ReturnType<TAction>>;
   },
 ) {
   const config = useConfig();
@@ -68,7 +57,7 @@ export function useMutation<
           _set,
           submitOptions?: {
             signer?: PolkadotSigner;
-            txOptions?: TxOptions<ReturnType<TAction>>;
+            txOptions?: TxOptionsOf<ReturnType<TAction>>;
           },
         ) => {
           const signer =
