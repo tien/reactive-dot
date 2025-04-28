@@ -1,3 +1,5 @@
+export { getInkContractTx } from "../ink/get-contract-tx.js";
+export { getInkClient } from "../ink/get-ink-client.js";
 export { queryInk } from "../ink/query.js";
 export { aggregateWallets } from "./aggregate-wallets.js";
 export { connectWallet } from "./connect-wallet.js";

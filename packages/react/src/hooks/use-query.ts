@@ -12,6 +12,7 @@ import type {
   QueryOptions,
 } from "./types.js";
 import { useConfig } from "./use-config.js";
+import { inkClientAtom } from "./use-ink-client.js";
 import { usePausableAtomValue } from "./use-pausable-atom-value.js";
 import { useQueryOptions } from "./use-query-options.js";
 import { useQueryRefresher } from "./use-query-refresher.js";
@@ -26,7 +27,6 @@ import {
 import {
   type Contract,
   flatHead,
-  getContractConfig,
   type InkQueryInstruction,
   type SimpleInkQueryInstruction,
   type SimpleQueryInstruction,
@@ -198,18 +198,6 @@ export function useLazyLoadQueryWithRefresh(
   return [data, refresh];
 }
 
-const inkClientPayloadAtom = atomFamilyWithErrorCatcher(
-  (withErrorCatcher, contract: Contract) =>
-    withErrorCatcher(
-      atom(() =>
-        import("polkadot-api/ink").then(({ getInkClient }) =>
-          getInkClient(getContractConfig(contract).descriptor),
-        ),
-      ),
-    ),
-  (contract) => contract.valueOf(),
-);
-
 const inkInstructionPayloadAtom = atomFamilyWithErrorCatcher(
   (
     withErrorCatcher,
@@ -224,7 +212,7 @@ const inkInstructionPayloadAtom = atomFamilyWithErrorCatcher(
         soon(
           soonAll([
             get(typedApiAtom(config, chainId)),
-            get(inkClientPayloadAtom(contract)),
+            get(inkClientAtom(contract)),
           ]),
           ([api, inkClient]) =>
             queryInk(api, inkClient, address, instruction, { signal }),
