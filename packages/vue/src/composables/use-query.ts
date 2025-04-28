@@ -10,13 +10,13 @@ import {
 } from "../utils/refreshable.js";
 import { useAsyncData } from "./use-async-data.js";
 import { internal_useChainId } from "./use-chain-id.js";
+import { getInkClient } from "./use-ink-client.js";
 import { lazyValue, useLazyValuesCache } from "./use-lazy-value.js";
 import { useTypedApiPromise } from "./use-typed-api.js";
 import { type ChainId, Query } from "@reactive-dot/core";
 import {
   type Contract,
   flatHead,
-  getContractConfig,
   type InkQueryInstruction,
   type SimpleInkQueryInstruction,
   type SimpleQueryInstruction,
@@ -288,20 +288,6 @@ function queryInkInstruction(
         await toValue(inkClient),
         toValue(address),
         instruction,
-      ),
-    cache,
-  );
-}
-
-function getInkClient(
-  contract: Contract,
-  cache: MaybeRefOrGetter<Map<string, ShallowRef<unknown>>>,
-) {
-  return lazyValue(
-    computed(() => ["ink-client", contract.valueOf()]),
-    () =>
-      import("polkadot-api/ink").then(({ getInkClient }) =>
-        getInkClient(getContractConfig(contract).descriptor),
       ),
     cache,
   );

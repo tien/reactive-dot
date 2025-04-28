@@ -1,4 +1,7 @@
-import { MutationEventSubjectContext } from "../contexts/mutation.js";
+import {
+  type MutationEvent,
+  MutationEventSubjectContext,
+} from "../contexts/mutation.js";
 import { SignerContext } from "../contexts/signer.js";
 import type { ChainHookOptions } from "./types.js";
 import { useAsyncAction } from "./use-async-action.js";
@@ -9,12 +12,23 @@ import type { ChainId } from "@reactive-dot/core";
 import { MutationError, pending } from "@reactive-dot/core";
 import type {
   ChainDescriptorOf,
+  GenericTransaction,
   TxOptionsOf,
 } from "@reactive-dot/core/internal.js";
 import { useAtomCallback } from "jotai/utils";
-import type { PolkadotSigner, Transaction, TypedApi } from "polkadot-api";
+import type {
+  PolkadotSigner,
+  Transaction,
+  TxEvent,
+  TypedApi,
+} from "polkadot-api";
 import { use, useCallback } from "react";
-import { from } from "rxjs";
+import {
+  from,
+  type Observable,
+  type Subject,
+  type MonoTypeOperatorFunction,
+} from "rxjs";
 import { catchError, switchMap, tap } from "rxjs/operators";
 
 /**
@@ -67,33 +81,16 @@ export function useMutation<
             throw new MutationError("No signer provided");
           }
 
-          const id = globalThis.crypto.randomUUID();
-
           return from(Promise.resolve(get(typedApiAtom(config, chainId)))).pipe(
             switchMap((typedApi) => {
               const transaction = action(typedApi.tx);
-
-              const eventProps = { id, chainId, call: transaction.decodedCall };
-
-              mutationEventSubject.next({ ...eventProps, value: pending });
 
               return transaction
                 .signSubmitAndWatch(
                   signer,
                   submitOptions?.txOptions ?? options?.txOptions,
                 )
-                .pipe(
-                  tap((value) =>
-                    mutationEventSubject.next({ ...eventProps, value }),
-                  ),
-                  catchError((error) => {
-                    mutationEventSubject.next({
-                      ...eventProps,
-                      value: MutationError.from(error),
-                    });
-                    throw error;
-                  }),
-                );
+                .pipe(tapTx(mutationEventSubject, chainId, transaction));
             }),
           );
         },
@@ -109,4 +106,34 @@ export function useMutation<
       ),
     ),
   );
+}
+
+/**
+ * @internal
+ */
+export function tapTx<T extends TxEvent>(
+  mutationEventSubject: Subject<MutationEvent>,
+  chainId: ChainId,
+  transaction: GenericTransaction,
+): MonoTypeOperatorFunction<T> {
+  return (source: Observable<T>) => {
+    const eventProps = {
+      id: globalThis.crypto.randomUUID(),
+      chainId,
+      call: transaction.decodedCall,
+    };
+
+    mutationEventSubject.next({ ...eventProps, value: pending });
+
+    return source.pipe(
+      tap((value) => mutationEventSubject.next({ ...eventProps, value })),
+      catchError((error) => {
+        mutationEventSubject.next({
+          ...eventProps,
+          value: MutationError.from(error),
+        });
+        throw error;
+      }),
+    );
+  };
 }

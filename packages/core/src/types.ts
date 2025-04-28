@@ -30,13 +30,40 @@ export type Flatten<T extends unknown[]> = T extends [
     : [First, ...Rest]
   : [];
 
-export type ExtractProperties<T extends object, U> = {
+export type ExtractProperties<T, U> = {
+  [P in keyof T as U extends T[P] ? P : never]: T[P];
+};
+
+export type ExtractExactProperties<T, U> = {
   [P in keyof T as T[P] extends U ? P : never]: T[P];
 };
 
-export type ExcludeProperties<T extends object, U> = {
+export type ExcludeProperties<T, U> = {
+  [P in keyof T as U extends T[P] ? never : P]: T[P];
+};
+
+export type ExcludeExactProperties<T, U> = {
   [P in keyof T as T[P] extends U ? never : P]: T[P];
 };
+
+export type UndefinedToOptional<T> = {
+  [P in keyof T as T[P] extends undefined
+    ? never
+    : undefined extends T[P]
+      ? P
+      : never]?: Exclude<T[P], undefined>;
+} & {
+  [P in keyof T as undefined extends T[P] ? never : P]: T[P];
+};
+
+// https://github.com/microsoft/TypeScript/issues/55667
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export type PatchedReturnType<T extends (...args: never) => any> = T extends (
+  ...args: never
+) => infer R
+  ? R
+  : // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    any;
 
 export type Finality = "best" | "finalized";
 
