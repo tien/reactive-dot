@@ -1,7 +1,6 @@
 import type { ChainHookOptions } from "./types.js";
 import { useNativeTokenAmountFromPlanck } from "./use-native-token-amount.js";
 import { useLazyLoadQuery } from "./use-query.js";
-import { flatHead } from "@reactive-dot/core/internal.js";
 import { spendableBalance } from "@reactive-dot/core/internal/maths.js";
 import { type DenominatedNumber } from "@reactive-dot/utils";
 import type { SS58String } from "polkadot-api";
@@ -67,19 +66,17 @@ export function useSpendableBalance(
 
   const nativeTokenFromPlanck = useNativeTokenAmountFromPlanck(options);
 
-  return useMemo(
+  const balances = useMemo(
     () =>
-      flatHead(
-        accounts.map(({ data: { free, reserved, frozen } }) =>
-          nativeTokenFromPlanck(
-            spendableBalance({
-              free,
-              reserved,
-              frozen,
-              existentialDeposit,
-              includesExistentialDeposit,
-            }),
-          ),
+      accounts.map(({ data: { free, reserved, frozen } }) =>
+        nativeTokenFromPlanck(
+          spendableBalance({
+            free,
+            reserved,
+            frozen,
+            existentialDeposit,
+            includesExistentialDeposit,
+          }),
         ),
       ),
     [
@@ -89,4 +86,6 @@ export function useSpendableBalance(
       nativeTokenFromPlanck,
     ],
   );
+
+  return Array.isArray(addressOrAddresses) ? balances : balances[0]!;
 }

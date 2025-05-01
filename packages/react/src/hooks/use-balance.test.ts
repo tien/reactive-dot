@@ -91,6 +91,16 @@ it("should return spendable balances array for multiple addresses", () => {
   );
 });
 
+it("should return spendable balances array for an array of one address", () => {
+  const { result } = renderHook(() =>
+    useSpendableBalance(["5GrwvaEF5zXb26Fz9rcQpDWS57CtERHpNehXCPcNoHGKutQY"]),
+  );
+
+  expect(result.current).toEqual(
+    expect.arrayContaining([expect.any(DenominatedNumber)]),
+  );
+});
+
 it("should handle includesExistentialDeposit option", () => {
   const { result } = renderHook(() =>
     useSpendableBalance("5GrwvaEF5zXb26Fz9rcQpDWS57CtERHpNehXCPcNoHGKutQY", {
