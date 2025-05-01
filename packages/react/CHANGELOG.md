@@ -1,5 +1,11 @@
 # @reactive-dot/react
 
+## 0.40.1
+
+### Patch Changes
+
+- [#640](https://github.com/tien/reactive-dot/pull/640) [`1d8b7cb`](https://github.com/tien/reactive-dot/commit/1d8b7cb53477270bb6d138375a43d27b45803730) Thanks [@tien](https://github.com/tien)! - Fixed incorrect `useBalance` on array of one address.
+
 ## 0.40.0
 
 ### Minor Changes
