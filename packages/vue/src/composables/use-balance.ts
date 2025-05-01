@@ -111,6 +111,11 @@ export function useSpendableBalance(
                 ),
             ),
           ),
+          map((balances) =>
+            Array.isArray(toValue(addressOrAddresses))
+              ? balances
+              : balances[0]!,
+          ),
         );
       },
     ),
