@@ -35,11 +35,6 @@ function isResult(maybeResult: unknown): maybeResult is Result<unknown> {
     maybeResult !== null &&
     "success" in maybeResult &&
     typeof maybeResult["success"] === "boolean" &&
-    "value" in maybeResult &&
-    typeof maybeResult["value"] === "object" &&
-    maybeResult["value"] !== null &&
-    "type" in maybeResult["value"] &&
-    typeof maybeResult["value"]["type"] === "string" &&
-    "value" in maybeResult["value"]
+    "value" in maybeResult
   );
 }
