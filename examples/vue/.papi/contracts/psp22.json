@@ -1,0 +1,1240 @@
+{
+  "source": {
+    "hash": "0x1cf33aae2310b186ee73eece40a542e4ab774d3b4596221dea633406d389edc8",
+    "language": "ink! 5.1.1",
+    "compiler": "rustc 1.85.1",
+    "build_info": {
+      "rust_toolchain": "stable-aarch64-apple-darwin",
+      "cargo_contract_version": "5.0.2",
+      "build_mode": "Release",
+      "wasm_opt_settings": {
+        "optimization_passes": "Z",
+        "keep_debug_symbols": false
+      }
+    }
+  },
+  "contract": {
+    "name": "test_psp22_token",
+    "version": "2.0.0",
+    "authors": ["Cardinal"],
+    "description": "Minimal implementation of PSP22 token standard in pure ink!",
+    "repository": "https://github.com/Cardinal-Cryptography/PSP22",
+    "homepage": "https://github.com/Cardinal-Cryptography/PSP22",
+    "license": "Apache-2.0"
+  },
+  "image": null,
+  "version": 5,
+  "types": [
+    {
+      "id": 0,
+      "type": {
+        "def": {
+          "primitive": "u128"
+        }
+      }
+    },
+    {
+      "id": 1,
+      "type": {
+        "path": ["ink_storage", "lazy", "mapping", "Mapping"],
+        "params": [
+          {
+            "name": "K",
+            "type": 2
+          },
+          {
+            "name": "V",
+            "type": 0
+          },
+          {
+            "name": "KeyType",
+            "type": 5
+          }
+        ],
+        "def": {
+          "composite": {}
+        }
+      }
+    },
+    {
+      "id": 2,
+      "type": {
+        "path": ["ink_primitives", "types", "AccountId"],
+        "def": {
+          "composite": {
+            "fields": [
+              {
+                "type": 3,
+                "typeName": "[u8; 32]"
+              }
+            ]
+          }
+        }
+      }
+    },
+    {
+      "id": 3,
+      "type": {
+        "def": {
+          "array": {
+            "len": 32,
+            "type": 4
+          }
+        }
+      }
+    },
+    {
+      "id": 4,
+      "type": {
+        "def": {
+          "primitive": "u8"
+        }
+      }
+    },
+    {
+      "id": 5,
+      "type": {
+        "path": ["ink_storage_traits", "impls", "ResolverKey"],
+        "params": [
+          {
+            "name": "L",
+            "type": 6
+          },
+          {
+            "name": "R",
+            "type": 7
+          }
+        ],
+        "def": {
+          "composite": {}
+        }
+      }
+    },
+    {
+      "id": 6,
+      "type": {
+        "path": ["ink_storage_traits", "impls", "AutoKey"],
+        "def": {
+          "composite": {}
+        }
+      }
+    },
+    {
+      "id": 7,
+      "type": {
+        "path": ["ink_storage_traits", "impls", "ManualKey"],
+        "params": [
+          {
+            "name": "ParentKey",
+            "type": 8
+          }
+        ],
+        "def": {
+          "composite": {}
+        }
+      }
+    },
+    {
+      "id": 8,
+      "type": {
+        "def": {
+          "tuple": []
+        }
+      }
+    },
+    {
+      "id": 9,
+      "type": {
+        "path": ["ink_storage", "lazy", "mapping", "Mapping"],
+        "params": [
+          {
+            "name": "K",
+            "type": 10
+          },
+          {
+            "name": "V",
+            "type": 0
+          },
+          {
+            "name": "KeyType",
+            "type": 11
+          }
+        ],
+        "def": {
+          "composite": {}
+        }
+      }
+    },
+    {
+      "id": 10,
+      "type": {
+        "def": {
+          "tuple": [2, 2]
+        }
+      }
+    },
+    {
+      "id": 11,
+      "type": {
+        "path": ["ink_storage_traits", "impls", "ResolverKey"],
+        "params": [
+          {
+            "name": "L",
+            "type": 6
+          },
+          {
+            "name": "R",
+            "type": 12
+          }
+        ],
+        "def": {
+          "composite": {}
+        }
+      }
+    },
+    {
+      "id": 12,
+      "type": {
+        "path": ["ink_storage_traits", "impls", "ManualKey"],
+        "params": [
+          {
+            "name": "ParentKey",
+            "type": 8
+          }
+        ],
+        "def": {
+          "composite": {}
+        }
+      }
+    },
+    {
+      "id": 13,
+      "type": {
+        "def": {
+          "primitive": "str"
+        }
+      }
+    },
+    {
+      "id": 14,
+      "type": {
+        "path": ["test_psp22_token", "token", "Token"],
+        "def": {
+          "composite": {
+            "fields": [
+              {
+                "name": "data",
+                "type": 15,
+                "typeName": "<PSP22Data as::ink::storage::traits::AutoStorableHint<::ink::\nstorage::traits::ManualKey<1355527684u32, ()>,>>::Type"
+              },
+              {
+                "name": "name",
+                "type": 16,
+                "typeName": "<Option<String> as::ink::storage::traits::AutoStorableHint<::\nink::storage::traits::ManualKey<2459941612u32, ()>,>>::Type"
+              },
+              {
+                "name": "symbol",
+                "type": 16,
+                "typeName": "<Option<String> as::ink::storage::traits::AutoStorableHint<::\nink::storage::traits::ManualKey<1189101269u32, ()>,>>::Type"
+              },
+              {
+                "name": "decimals",
+                "type": 4,
+                "typeName": "<u8 as::ink::storage::traits::AutoStorableHint<::ink::storage::\ntraits::ManualKey<2233024958u32, ()>,>>::Type"
+              }
+            ]
+          }
+        }
+      }
+    },
+    {
+      "id": 15,
+      "type": {
+        "path": ["test_psp22_token", "data", "PSP22Data"],
+        "def": {
+          "composite": {
+            "fields": [
+              {
+                "name": "total_supply",
+                "type": 0,
+                "typeName": "<u128 as::ink::storage::traits::AutoStorableHint<::ink::storage\n::traits::ManualKey<2948691470u32, ()>,>>::Type"
+              },
+              {
+                "name": "balances",
+                "type": 1,
+                "typeName": "<Mapping<AccountId, u128> as::ink::storage::traits::\nAutoStorableHint<::ink::storage::traits::ManualKey<1170687700u32,\n()>,>>::Type"
+              },
+              {
+                "name": "allowances",
+                "type": 9,
+                "typeName": "<Mapping<(AccountId, AccountId), u128> as::ink::storage::traits::\nAutoStorableHint<::ink::storage::traits::ManualKey<15709089u32, ()\n>,>>::Type"
+              }
+            ]
+          }
+        }
+      }
+    },
+    {
+      "id": 16,
+      "type": {
+        "path": ["Option"],
+        "params": [
+          {
+            "name": "T",
+            "type": 13
+          }
+        ],
+        "def": {
+          "variant": {
+            "variants": [
+              {
+                "name": "None",
+                "index": 0
+              },
+              {
+                "name": "Some",
+                "fields": [
+                  {
+                    "type": 13
+                  }
+                ],
+                "index": 1
+              }
+            ]
+          }
+        }
+      }
+    },
+    {
+      "id": 17,
+      "type": {
+        "path": ["Result"],
+        "params": [
+          {
+            "name": "T",
+            "type": 8
+          },
+          {
+            "name": "E",
+            "type": 18
+          }
+        ],
+        "def": {
+          "variant": {
+            "variants": [
+              {
+                "name": "Ok",
+                "fields": [
+                  {
+                    "type": 8
+                  }
+                ],
+                "index": 0
+              },
+              {
+                "name": "Err",
+                "fields": [
+                  {
+                    "type": 18
+                  }
+                ],
+                "index": 1
+              }
+            ]
+          }
+        }
+      }
+    },
+    {
+      "id": 18,
+      "type": {
+        "path": ["ink_primitives", "LangError"],
+        "def": {
+          "variant": {
+            "variants": [
+              {
+                "name": "CouldNotReadInput",
+                "index": 1
+              }
+            ]
+          }
+        }
+      }
+    },
+    {
+      "id": 19,
+      "type": {
+        "path": ["Result"],
+        "params": [
+          {
+            "name": "T",
+            "type": 0
+          },
+          {
+            "name": "E",
+            "type": 18
+          }
+        ],
+        "def": {
+          "variant": {
+            "variants": [
+              {
+                "name": "Ok",
+                "fields": [
+                  {
+                    "type": 0
+                  }
+                ],
+                "index": 0
+              },
+              {
+                "name": "Err",
+                "fields": [
+                  {
+                    "type": 18
+                  }
+                ],
+                "index": 1
+              }
+            ]
+          }
+        }
+      }
+    },
+    {
+      "id": 20,
+      "type": {
+        "def": {
+          "sequence": {
+            "type": 4
+          }
+        }
+      }
+    },
+    {
+      "id": 21,
+      "type": {
+        "path": ["Result"],
+        "params": [
+          {
+            "name": "T",
+            "type": 22
+          },
+          {
+            "name": "E",
+            "type": 18
+          }
+        ],
+        "def": {
+          "variant": {
+            "variants": [
+              {
+                "name": "Ok",
+                "fields": [
+                  {
+                    "type": 22
+                  }
+                ],
+                "index": 0
+              },
+              {
+                "name": "Err",
+                "fields": [
+                  {
+                    "type": 18
+                  }
+                ],
+                "index": 1
+              }
+            ]
+          }
+        }
+      }
+    },
+    {
+      "id": 22,
+      "type": {
+        "path": ["Result"],
+        "params": [
+          {
+            "name": "T",
+            "type": 8
+          },
+          {
+            "name": "E",
+            "type": 23
+          }
+        ],
+        "def": {
+          "variant": {
+            "variants": [
+              {
+                "name": "Ok",
+                "fields": [
+                  {
+                    "type": 8
+                  }
+                ],
+                "index": 0
+              },
+              {
+                "name": "Err",
+                "fields": [
+                  {
+                    "type": 23
+                  }
+                ],
+                "index": 1
+              }
+            ]
+          }
+        }
+      }
+    },
+    {
+      "id": 23,
+      "type": {
+        "path": ["test_psp22_token", "errors", "PSP22Error"],
+        "def": {
+          "variant": {
+            "variants": [
+              {
+                "name": "Custom",
+                "fields": [
+                  {
+                    "type": 13,
+                    "typeName": "String"
+                  }
+                ],
+                "index": 0
+              },
+              {
+                "name": "InsufficientBalance",
+                "index": 1
+              },
+              {
+                "name": "InsufficientAllowance",
+                "index": 2
+              },
+              {
+                "name": "ZeroRecipientAddress",
+                "index": 3
+              },
+              {
+                "name": "ZeroSenderAddress",
+                "index": 4
+              },
+              {
+                "name": "SafeTransferCheckFailed",
+                "fields": [
+                  {
+                    "type": 13,
+                    "typeName": "String"
+                  }
+                ],
+                "index": 5
+              }
+            ]
+          }
+        }
+      }
+    },
+    {
+      "id": 24,
+      "type": {
+        "path": ["Result"],
+        "params": [
+          {
+            "name": "T",
+            "type": 16
+          },
+          {
+            "name": "E",
+            "type": 18
+          }
+        ],
+        "def": {
+          "variant": {
+            "variants": [
+              {
+                "name": "Ok",
+                "fields": [
+                  {
+                    "type": 16
+                  }
+                ],
+                "index": 0
+              },
+              {
+                "name": "Err",
+                "fields": [
+                  {
+                    "type": 18
+                  }
+                ],
+                "index": 1
+              }
+            ]
+          }
+        }
+      }
+    },
+    {
+      "id": 25,
+      "type": {
+        "path": ["Result"],
+        "params": [
+          {
+            "name": "T",
+            "type": 4
+          },
+          {
+            "name": "E",
+            "type": 18
+          }
+        ],
+        "def": {
+          "variant": {
+            "variants": [
+              {
+                "name": "Ok",
+                "fields": [
+                  {
+                    "type": 4
+                  }
+                ],
+                "index": 0
+              },
+              {
+                "name": "Err",
+                "fields": [
+                  {
+                    "type": 18
+                  }
+                ],
+                "index": 1
+              }
+            ]
+          }
+        }
+      }
+    },
+    {
+      "id": 26,
+      "type": {
+        "path": ["Option"],
+        "params": [
+          {
+            "name": "T",
+            "type": 2
+          }
+        ],
+        "def": {
+          "variant": {
+            "variants": [
+              {
+                "name": "None",
+                "index": 0
+              },
+              {
+                "name": "Some",
+                "fields": [
+                  {
+                    "type": 2
+                  }
+                ],
+                "index": 1
+              }
+            ]
+          }
+        }
+      }
+    },
+    {
+      "id": 27,
+      "type": {
+        "path": ["ink_primitives", "types", "Hash"],
+        "def": {
+          "composite": {
+            "fields": [
+              {
+                "type": 3,
+                "typeName": "[u8; 32]"
+              }
+            ]
+          }
+        }
+      }
+    },
+    {
+      "id": 28,
+      "type": {
+        "def": {
+          "primitive": "u64"
+        }
+      }
+    },
+    {
+      "id": 29,
+      "type": {
+        "def": {
+          "primitive": "u32"
+        }
+      }
+    },
+    {
+      "id": 30,
+      "type": {
+        "path": ["ink_env", "types", "NoChainExtension"],
+        "def": {
+          "variant": {}
+        }
+      }
+    }
+  ],
+  "storage": {
+    "root": {
+      "root_key": "0x00000000",
+      "layout": {
+        "struct": {
+          "name": "Token",
+          "fields": [
+            {
+              "name": "data",
+              "layout": {
+                "struct": {
+                  "name": "PSP22Data",
+                  "fields": [
+                    {
+                      "name": "total_supply",
+                      "layout": {
+                        "leaf": {
+                          "key": "0x00000000",
+                          "ty": 0
+                        }
+                      }
+                    },
+                    {
+                      "name": "balances",
+                      "layout": {
+                        "root": {
+                          "root_key": "0xd446c745",
+                          "layout": {
+                            "leaf": {
+                              "key": "0xd446c745",
+                              "ty": 0
+                            }
+                          },
+                          "ty": 1
+                        }
+                      }
+                    },
+                    {
+                      "name": "allowances",
+                      "layout": {
+                        "root": {
+                          "root_key": "0xa1b3ef00",
+                          "layout": {
+                            "leaf": {
+                              "key": "0xa1b3ef00",
+                              "ty": 0
+                            }
+                          },
+                          "ty": 9
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            },
+            {
+              "name": "name",
+              "layout": {
+                "enum": {
+                  "name": "Option",
+                  "dispatchKey": "0x00000000",
+                  "variants": {
+                    "0": {
+                      "name": "None",
+                      "fields": []
+                    },
+                    "1": {
+                      "name": "Some",
+                      "fields": [
+                        {
+                          "name": "0",
+                          "layout": {
+                            "leaf": {
+                              "key": "0x00000000",
+                              "ty": 13
+                            }
+                          }
+                        }
+                      ]
+                    }
+                  }
+                }
+              }
+            },
+            {
+              "name": "symbol",
+              "layout": {
+                "enum": {
+                  "name": "Option",
+                  "dispatchKey": "0x00000000",
+                  "variants": {
+                    "0": {
+                      "name": "None",
+                      "fields": []
+                    },
+                    "1": {
+                      "name": "Some",
+                      "fields": [
+                        {
+                          "name": "0",
+                          "layout": {
+                            "leaf": {
+                              "key": "0x00000000",
+                              "ty": 13
+                            }
+                          }
+                        }
+                      ]
+                    }
+                  }
+                }
+              }
+            },
+            {
+              "name": "decimals",
+              "layout": {
+                "leaf": {
+                  "key": "0x00000000",
+                  "ty": 4
+                }
+              }
+            }
+          ]
+        }
+      },
+      "ty": 14
+    }
+  },
+  "spec": {
+    "constructors": [
+      {
+        "label": "new",
+        "selector": "0x9bae9d5e",
+        "payable": false,
+        "args": [
+          {
+            "label": "supply",
+            "type": {
+              "type": 0,
+              "displayName": ["u128"]
+            }
+          },
+          {
+            "label": "name",
+            "type": {
+              "type": 16,
+              "displayName": ["Option"]
+            }
+          },
+          {
+            "label": "symbol",
+            "type": {
+              "type": 16,
+              "displayName": ["Option"]
+            }
+          },
+          {
+            "label": "decimals",
+            "type": {
+              "type": 4,
+              "displayName": ["u8"]
+            }
+          }
+        ],
+        "returnType": {
+          "type": 17,
+          "displayName": ["ink_primitives", "ConstructorResult"]
+        },
+        "docs": [],
+        "default": false
+      }
+    ],
+    "messages": [
+      {
+        "label": "PSP22::total_supply",
+        "selector": "0x162df8c2",
+        "mutates": false,
+        "payable": false,
+        "args": [],
+        "returnType": {
+          "type": 19,
+          "displayName": ["ink", "MessageResult"]
+        },
+        "docs": [],
+        "default": false
+      },
+      {
+        "label": "PSP22::balance_of",
+        "selector": "0x6568382f",
+        "mutates": false,
+        "payable": false,
+        "args": [
+          {
+            "label": "owner",
+            "type": {
+              "type": 2,
+              "displayName": ["AccountId"]
+            }
+          }
+        ],
+        "returnType": {
+          "type": 19,
+          "displayName": ["ink", "MessageResult"]
+        },
+        "docs": [],
+        "default": false
+      },
+      {
+        "label": "PSP22::allowance",
+        "selector": "0x4d47d921",
+        "mutates": false,
+        "payable": false,
+        "args": [
+          {
+            "label": "owner",
+            "type": {
+              "type": 2,
+              "displayName": ["AccountId"]
+            }
+          },
+          {
+            "label": "spender",
+            "type": {
+              "type": 2,
+              "displayName": ["AccountId"]
+            }
+          }
+        ],
+        "returnType": {
+          "type": 19,
+          "displayName": ["ink", "MessageResult"]
+        },
+        "docs": [],
+        "default": false
+      },
+      {
+        "label": "PSP22::transfer",
+        "selector": "0xdb20f9f5",
+        "mutates": true,
+        "payable": false,
+        "args": [
+          {
+            "label": "to",
+            "type": {
+              "type": 2,
+              "displayName": ["AccountId"]
+            }
+          },
+          {
+            "label": "value",
+            "type": {
+              "type": 0,
+              "displayName": ["u128"]
+            }
+          },
+          {
+            "label": "_data",
+            "type": {
+              "type": 20,
+              "displayName": ["Vec"]
+            }
+          }
+        ],
+        "returnType": {
+          "type": 21,
+          "displayName": ["ink", "MessageResult"]
+        },
+        "docs": [],
+        "default": false
+      },
+      {
+        "label": "PSP22::transfer_from",
+        "selector": "0x54b3c76e",
+        "mutates": true,
+        "payable": false,
+        "args": [
+          {
+            "label": "from",
+            "type": {
+              "type": 2,
+              "displayName": ["AccountId"]
+            }
+          },
+          {
+            "label": "to",
+            "type": {
+              "type": 2,
+              "displayName": ["AccountId"]
+            }
+          },
+          {
+            "label": "value",
+            "type": {
+              "type": 0,
+              "displayName": ["u128"]
+            }
+          },
+          {
+            "label": "_data",
+            "type": {
+              "type": 20,
+              "displayName": ["Vec"]
+            }
+          }
+        ],
+        "returnType": {
+          "type": 21,
+          "displayName": ["ink", "MessageResult"]
+        },
+        "docs": [],
+        "default": false
+      },
+      {
+        "label": "PSP22::approve",
+        "selector": "0xb20f1bbd",
+        "mutates": true,
+        "payable": false,
+        "args": [
+          {
+            "label": "spender",
+            "type": {
+              "type": 2,
+              "displayName": ["AccountId"]
+            }
+          },
+          {
+            "label": "value",
+            "type": {
+              "type": 0,
+              "displayName": ["u128"]
+            }
+          }
+        ],
+        "returnType": {
+          "type": 21,
+          "displayName": ["ink", "MessageResult"]
+        },
+        "docs": [],
+        "default": false
+      },
+      {
+        "label": "PSP22::increase_allowance",
+        "selector": "0x96d6b57a",
+        "mutates": true,
+        "payable": false,
+        "args": [
+          {
+            "label": "spender",
+            "type": {
+              "type": 2,
+              "displayName": ["AccountId"]
+            }
+          },
+          {
+            "label": "delta_value",
+            "type": {
+              "type": 0,
+              "displayName": ["u128"]
+            }
+          }
+        ],
+        "returnType": {
+          "type": 21,
+          "displayName": ["ink", "MessageResult"]
+        },
+        "docs": [],
+        "default": false
+      },
+      {
+        "label": "PSP22::decrease_allowance",
+        "selector": "0xfecb57d5",
+        "mutates": true,
+        "payable": false,
+        "args": [
+          {
+            "label": "spender",
+            "type": {
+              "type": 2,
+              "displayName": ["AccountId"]
+            }
+          },
+          {
+            "label": "delta_value",
+            "type": {
+              "type": 0,
+              "displayName": ["u128"]
+            }
+          }
+        ],
+        "returnType": {
+          "type": 21,
+          "displayName": ["ink", "MessageResult"]
+        },
+        "docs": [],
+        "default": false
+      },
+      {
+        "label": "PSP22Metadata::token_name",
+        "selector": "0x3d261bd4",
+        "mutates": false,
+        "payable": false,
+        "args": [],
+        "returnType": {
+          "type": 24,
+          "displayName": ["ink", "MessageResult"]
+        },
+        "docs": [],
+        "default": false
+      },
+      {
+        "label": "PSP22Metadata::token_symbol",
+        "selector": "0x34205be5",
+        "mutates": false,
+        "payable": false,
+        "args": [],
+        "returnType": {
+          "type": 24,
+          "displayName": ["ink", "MessageResult"]
+        },
+        "docs": [],
+        "default": false
+      },
+      {
+        "label": "PSP22Metadata::token_decimals",
+        "selector": "0x7271b782",
+        "mutates": false,
+        "payable": false,
+        "args": [],
+        "returnType": {
+          "type": 25,
+          "displayName": ["ink", "MessageResult"]
+        },
+        "docs": [],
+        "default": false
+      }
+    ],
+    "events": [
+      {
+        "label": "Approval",
+        "module_path": "test_psp22_token::events",
+        "signature_topic": "0x25cdb6c93882e925abbfc9a8b7c85884b73c038c03a2492f238a5e5ba3fbff8c",
+        "args": [
+          {
+            "label": "owner",
+            "indexed": true,
+            "type": {
+              "type": 2,
+              "displayName": ["AccountId"]
+            },
+            "docs": ["Account providing allowance."]
+          },
+          {
+            "label": "spender",
+            "indexed": true,
+            "type": {
+              "type": 2,
+              "displayName": ["AccountId"]
+            },
+            "docs": ["Allowance beneficiary."]
+          },
+          {
+            "label": "amount",
+            "indexed": false,
+            "type": {
+              "type": 0,
+              "displayName": ["u128"]
+            },
+            "docs": ["New allowance amount."]
+          }
+        ],
+        "docs": [
+          "Event emitted when allowance by `owner` to `spender` changes."
+        ]
+      },
+      {
+        "label": "Transfer",
+        "module_path": "test_psp22_token::events",
+        "signature_topic": "0x990df076cb1e9527aa102cd100c1481efe393eeabb5825f9af1f5e58221864de",
+        "args": [
+          {
+            "label": "from",
+            "indexed": true,
+            "type": {
+              "type": 26,
+              "displayName": ["Option"]
+            },
+            "docs": ["Transfer sender. `None` in case of minting new tokens."]
+          },
+          {
+            "label": "to",
+            "indexed": true,
+            "type": {
+              "type": 26,
+              "displayName": ["Option"]
+            },
+            "docs": ["Transfer recipient. `None` in case of burning tokens."]
+          },
+          {
+            "label": "value",
+            "indexed": false,
+            "type": {
+              "type": 0,
+              "displayName": ["u128"]
+            },
+            "docs": ["Amount of tokens transferred (or minted/burned)."]
+          }
+        ],
+        "docs": ["Event emitted when transfer of tokens occurs."]
+      }
+    ],
+    "docs": [],
+    "lang_error": {
+      "type": 18,
+      "displayName": ["ink", "LangError"]
+    },
+    "environment": {
+      "accountId": {
+        "type": 2,
+        "displayName": ["AccountId"]
+      },
+      "balance": {
+        "type": 0,
+        "displayName": ["Balance"]
+      },
+      "hash": {
+        "type": 27,
+        "displayName": ["Hash"]
+      },
+      "timestamp": {
+        "type": 28,
+        "displayName": ["Timestamp"]
+      },
+      "blockNumber": {
+        "type": 29,
+        "displayName": ["BlockNumber"]
+      },
+      "chainExtension": {
+        "type": 30,
+        "displayName": ["ChainExtension"]
+      },
+      "maxEventTopics": 4,
+      "staticBufferSize": 16384
+    }
+  }
+}

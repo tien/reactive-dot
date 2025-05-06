@@ -185,11 +185,12 @@ export function useQueryObservable<
             return combineLatestNested(nestedValue);
           }
 
-          return of(nestedValue) as Observable<unknown>;
+          return from(nestedValue) as Observable<unknown>;
         });
 
         return combineLatest(observables);
       };
+
       return combineLatestNested(
         responses.value as unknown as ComputedRef<
           Promise<unknown> | Observable<unknown>

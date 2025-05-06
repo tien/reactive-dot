@@ -1,19 +1,28 @@
 import {
   kusama,
+  kusama_asset_hub,
   polkadot,
   polkadot_asset_hub,
   polkadot_people,
+  pop_testnet,
   westend,
+  westend_asset_hub,
 } from "@polkadot-api/descriptors";
 import { defineConfig } from "@reactive-dot/core";
 import { createLightClientProvider } from "@reactive-dot/core/providers/light-client.js";
 import { InjectedWalletProvider } from "@reactive-dot/core/wallets.js";
 import { LedgerWallet } from "@reactive-dot/wallet-ledger";
+import { MimirWalletProvider } from "@reactive-dot/wallet-mimir";
 import { WalletConnect } from "@reactive-dot/wallet-walletconnect";
+import { getWsProvider } from "polkadot-api/ws-provider/web";
 
 const lightClientProvider = createLightClientProvider();
 
 const polkadotProvider = lightClientProvider.addRelayChain({ id: "polkadot" });
+
+const kusamaProvider = lightClientProvider.addRelayChain({ id: "kusama" });
+
+const westendProvider = lightClientProvider.addRelayChain({ id: "westend" });
 
 export const config = defineConfig({
   chains: {
@@ -31,16 +40,29 @@ export const config = defineConfig({
     },
     kusama: {
       descriptor: kusama,
-      provider: lightClientProvider.addRelayChain({ id: "kusama" }),
+      provider: kusamaProvider,
+    },
+    kusama_asset_hub: {
+      descriptor: kusama_asset_hub,
+      provider: kusamaProvider.addParachain({ id: "kusama_asset_hub" }),
     },
     westend: {
       descriptor: westend,
-      provider: lightClientProvider.addRelayChain({ id: "westend" }),
+      provider: westendProvider,
+    },
+    westend_asset_hub: {
+      descriptor: westend_asset_hub,
+      provider: westendProvider.addParachain({ id: "westend_asset_hub" }),
+    },
+    pop_testnet: {
+      descriptor: pop_testnet,
+      provider: () => getWsProvider("wss://rpc2.paseo.popnetwork.xyz"),
     },
   },
   targetChains: ["polkadot", "kusama", "westend"],
   wallets: [
-    new InjectedWalletProvider({ originName: "ReactiveDOT React Example" }),
+    new InjectedWalletProvider({ originName: "ReactiveDOT Vue Example" }),
+    new MimirWalletProvider({ originName: "ReactiveDOT Vue Example" }),
     new LedgerWallet(),
     new WalletConnect({
       projectId: "68f5b7e972a51cf379b127f51a791c34",
