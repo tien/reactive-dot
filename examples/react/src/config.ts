@@ -1,4 +1,5 @@
 import {
+  contracts,
   kusama,
   kusama_asset_hub,
   polkadot,
@@ -8,7 +9,7 @@ import {
   westend,
   westend_asset_hub,
 } from "@polkadot-api/descriptors";
-import { defineConfig } from "@reactive-dot/core";
+import { defineConfig, defineContract } from "@reactive-dot/core";
 import { createLightClientProvider } from "@reactive-dot/core/providers/light-client.js";
 import { InjectedWalletProvider } from "@reactive-dot/core/wallets.js";
 import { LedgerWallet } from "@reactive-dot/wallet-ledger";
@@ -82,3 +83,7 @@ export const config = defineConfig({
     }),
   ],
 });
+
+export const psp22 = defineContract({ descriptor: contracts.psp22 });
+
+export const flipper = defineContract({ descriptor: contracts.flipper });

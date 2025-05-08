@@ -52,7 +52,7 @@ export function useContractMutation<
 
   return useAsyncAction(
     useAtomCallback(
-      async (
+      (
         get,
         _,
         submitOptions?: {
@@ -69,8 +69,8 @@ export function useContractMutation<
 
         return from(
           Promise.resolve(
-            action(async (contract, address, message, body) => {
-              return getInkContractTx(
+            action(async (contract, address, message, body) =>
+              getInkContractTx(
                 ...(await Promise.all([
                   get(typedApiAtom(config, chainId)),
                   get(inkClientAtom(contract)),
@@ -79,8 +79,8 @@ export function useContractMutation<
                 address,
                 message,
                 body,
-              );
-            }),
+              ),
+            ),
           ),
         ).pipe(
           switchMap((tx) =>

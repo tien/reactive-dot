@@ -24,11 +24,14 @@ export function useAsyncAction<
 
   const [state, setState] = useState<AsyncValue<Value, MutationError>>(idle);
 
+  const setError = useCallback((reason?: unknown) => {
+    setState(MutationError.from(reason));
+    globalThis.reportError(reason);
+  }, []);
+
   const execute = useCallback(
     (...args: TArgs) => {
       const resolve = (value: unknown) => setState(value as Value);
-
-      const reject = (reason?: unknown) => setState(MutationError.from(reason));
 
       try {
         setState(pending);
@@ -36,17 +39,16 @@ export function useAsyncAction<
         const result = action(...args);
 
         if (result instanceof Promise) {
-          return result.then(resolve).catch(reject);
+          return result.then(resolve).catch(setError);
         } else {
-          return result.subscribe({ next: resolve, error: reject });
+          return result.subscribe({ next: resolve, error: setError });
         }
       } catch (error) {
-        const mutationError = MutationError.from(error);
-        setState(mutationError);
-        throw mutationError;
+        setError(error);
+        throw error;
       }
     },
-    [action, setState],
+    [action, setError],
   );
 
   return [state, execute] as [state: typeof state, execute: typeof execute];

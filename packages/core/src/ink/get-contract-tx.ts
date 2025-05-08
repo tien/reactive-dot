@@ -31,7 +31,10 @@ export async function getInkContractTx<
       `Readonly message ${String(messageName)} cannot be used in a mutating transaction`,
     );
   }
-  const dest = { type: "Id" as const, value: toSs58(signer.publicKey) };
+
+  const origin = { type: "Id" as const, value: toSs58(signer.publicKey) };
+
+  const dest = { type: "Id" as const, value: contract };
 
   const data = message.encode(
     "data" in body
@@ -48,8 +51,8 @@ export async function getInkContractTx<
       : 0n;
 
   const dryRunResult = await api.apis.ContractsApi.call(
+    origin.value,
     dest.value,
-    contract,
     value,
     undefined,
     undefined,
