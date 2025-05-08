@@ -44,6 +44,7 @@
     }
   },
   "ink": {
+    "flipper": ".papi/contracts/flipper.json",
     "psp22": ".papi/contracts/psp22.json"
   }
 }

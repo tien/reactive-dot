@@ -39,11 +39,11 @@ export type ExtractExactProperties<T, U> = {
 };
 
 export type ExcludeProperties<T, U> = {
-  [P in keyof T as U extends T[P] ? never : P]: T[P];
+  [P in keyof T as T[P] extends U ? never : P]: T[P];
 };
 
 export type ExcludeExactProperties<T, U> = {
-  [P in keyof T as T[P] extends U ? never : P]: T[P];
+  [P in keyof T as U extends T[P] ? never : P]: T[P];
 };
 
 export type UndefinedToOptional<T> = {

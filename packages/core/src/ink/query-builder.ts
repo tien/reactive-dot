@@ -80,19 +80,21 @@ export type InferQueryInstructionPayload<
 export type InferInkInstructionsPayload<
   TInstructions extends readonly InkQueryInstruction[],
   TDescriptor extends GenericInkDescriptors,
-> = Extract<
-  {
-    [Index in keyof TInstructions]: InferQueryInstructionPayload<
-      TInstructions[Index],
-      TDescriptor
-    >;
-  },
-  unknown[]
+> = FlatHead<
+  Extract<
+    {
+      [Index in keyof TInstructions]: InferQueryInstructionPayload<
+        TInstructions[Index],
+        TDescriptor
+      >;
+    },
+    unknown[]
+  >
 >;
 
 export type InferInkQueryPayload<T extends InkQuery> =
   T extends InkQuery<infer Descriptor, infer Instructions>
-    ? FlatHead<InferInkInstructionsPayload<Instructions, Descriptor>>
+    ? InferInkInstructionsPayload<Instructions, Descriptor>
     : never;
 
 export class InkQuery<
