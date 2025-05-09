@@ -1,4 +1,5 @@
 import base from "./index.js";
+import eslintConfigPrettier from "eslint-config-prettier/flat";
 import pluginVue from "eslint-plugin-vue";
 import globals from "globals";
 import tseslint from "typescript-eslint";
@@ -6,6 +7,7 @@ import tseslint from "typescript-eslint";
 export default tseslint.config(
   ...base,
   ...pluginVue.configs["flat/recommended"],
+  eslintConfigPrettier,
   {
     languageOptions: {
       parserOptions: {
@@ -15,10 +17,6 @@ export default tseslint.config(
           ...globals.browser,
         },
       },
-    },
-    rules: {
-      "vue/max-attributes-per-line": "off",
-      "vue/singleline-html-element-content-newline": "off",
     },
   },
 );
