@@ -24,10 +24,10 @@ export function useAsyncAction<
 
   const [state, setState] = useState<AsyncValue<Value, MutationError>>(idle);
 
-  const setError = useCallback((reason?: unknown) => {
-    setState(MutationError.from(reason));
-    globalThis.reportError(reason);
-  }, []);
+  const setError = useCallback(
+    (reason?: unknown) => setState(MutationError.from(reason)),
+    [],
+  );
 
   const execute = useCallback(
     (...args: TArgs) => {
