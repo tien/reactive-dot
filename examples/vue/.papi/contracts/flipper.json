@@ -16,9 +16,7 @@
   "contract": {
     "name": "flipper",
     "version": "0.1.0",
-    "authors": [
-      "[your_name] <[your_email]>"
-    ]
+    "authors": ["[your_name] <[your_email]>"]
   },
   "image": null,
   "version": 5,
@@ -34,11 +32,7 @@
     {
       "id": 1,
       "type": {
-        "path": [
-          "flipper",
-          "flipper",
-          "Flipper"
-        ],
+        "path": ["flipper", "flipper", "Flipper"],
         "def": {
           "composite": {
             "fields": [
@@ -55,9 +49,7 @@
     {
       "id": 2,
       "type": {
-        "path": [
-          "Result"
-        ],
+        "path": ["Result"],
         "params": [
           {
             "name": "T",
@@ -105,10 +97,7 @@
     {
       "id": 4,
       "type": {
-        "path": [
-          "ink_primitives",
-          "LangError"
-        ],
+        "path": ["ink_primitives", "LangError"],
         "def": {
           "variant": {
             "variants": [
@@ -124,9 +113,7 @@
     {
       "id": 5,
       "type": {
-        "path": [
-          "Result"
-        ],
+        "path": ["Result"],
         "params": [
           {
             "name": "T",
@@ -166,11 +153,7 @@
     {
       "id": 6,
       "type": {
-        "path": [
-          "ink_primitives",
-          "types",
-          "AccountId"
-        ],
+        "path": ["ink_primitives", "types", "AccountId"],
         "def": {
           "composite": {
             "fields": [
@@ -213,11 +196,7 @@
     {
       "id": 10,
       "type": {
-        "path": [
-          "ink_primitives",
-          "types",
-          "Hash"
-        ],
+        "path": ["ink_primitives", "types", "Hash"],
         "def": {
           "composite": {
             "fields": [
@@ -249,11 +228,7 @@
     {
       "id": 13,
       "type": {
-        "path": [
-          "ink_env",
-          "types",
-          "NoChainExtension"
-        ],
+        "path": ["ink_env", "types", "NoChainExtension"],
         "def": {
           "variant": {}
         }
@@ -293,18 +268,13 @@
             "label": "init_value",
             "type": {
               "type": 0,
-              "displayName": [
-                "bool"
-              ]
+              "displayName": ["bool"]
             }
           }
         ],
         "returnType": {
           "type": 2,
-          "displayName": [
-            "ink_primitives",
-            "ConstructorResult"
-          ]
+          "displayName": ["ink_primitives", "ConstructorResult"]
         },
         "docs": [
           "Constructor that initializes the `bool` value to the given `init_value`."
@@ -318,10 +288,7 @@
         "args": [],
         "returnType": {
           "type": 2,
-          "displayName": [
-            "ink_primitives",
-            "ConstructorResult"
-          ]
+          "displayName": ["ink_primitives", "ConstructorResult"]
         },
         "docs": [
           "Constructor that initializes the `bool` value to `false`.",
@@ -340,10 +307,7 @@
         "args": [],
         "returnType": {
           "type": 2,
-          "displayName": [
-            "ink",
-            "MessageResult"
-          ]
+          "displayName": ["ink", "MessageResult"]
         },
         "docs": [
           " A message that can be called on instantiated contracts.",
@@ -360,14 +324,9 @@
         "args": [],
         "returnType": {
           "type": 5,
-          "displayName": [
-            "ink",
-            "MessageResult"
-          ]
+          "displayName": ["ink", "MessageResult"]
         },
-        "docs": [
-          " Simply returns the current value of our `bool`."
-        ],
+        "docs": [" Simply returns the current value of our `bool`."],
         "default": false
       }
     ],
@@ -375,47 +334,32 @@
     "docs": [],
     "lang_error": {
       "type": 4,
-      "displayName": [
-        "ink",
-        "LangError"
-      ]
+      "displayName": ["ink", "LangError"]
     },
     "environment": {
       "accountId": {
         "type": 6,
-        "displayName": [
-          "AccountId"
-        ]
+        "displayName": ["AccountId"]
       },
       "balance": {
         "type": 9,
-        "displayName": [
-          "Balance"
-        ]
+        "displayName": ["Balance"]
       },
       "hash": {
         "type": 10,
-        "displayName": [
-          "Hash"
-        ]
+        "displayName": ["Hash"]
       },
       "timestamp": {
         "type": 11,
-        "displayName": [
-          "Timestamp"
-        ]
+        "displayName": ["Timestamp"]
       },
       "blockNumber": {
         "type": 12,
-        "displayName": [
-          "BlockNumber"
-        ]
+        "displayName": ["BlockNumber"]
       },
       "chainExtension": {
         "type": 13,
-        "displayName": [
-          "ChainExtension"
-        ]
+        "displayName": ["ChainExtension"]
       },
       "maxEventTopics": 4,
       "staticBufferSize": 16384
