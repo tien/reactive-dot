@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { psp22 } from "./contracts";
 import { useQuery } from "@reactive-dot/vue";
-import { defineProps, toRefs } from "vue";
+import { toRefs } from "vue";
 
 const { address } = defineProps<{
   address: string;
