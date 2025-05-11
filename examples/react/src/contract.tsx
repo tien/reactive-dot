@@ -23,18 +23,16 @@ type ContractProps = {
 
 function Psp22TokenInfo({ address }: ContractProps) {
   const [timestamp, [tokenName, tokenDecimals, tokenSymbol, totalSupply]] =
-    useLazyLoadQuery(
-      (builder) =>
-        builder
-          .storage("Timestamp", "Now")
-          .contract(psp22, address, (builder) =>
-            builder
-              .message("PSP22Metadata::token_name")
-              .message("PSP22Metadata::token_decimals")
-              .message("PSP22Metadata::token_symbol")
-              .message("PSP22::total_supply"),
-          ),
-      { chainId: "pop_testnet" },
+    useLazyLoadQuery((builder) =>
+      builder
+        .storage("Timestamp", "Now")
+        .contract(psp22, address, (builder) =>
+          builder
+            .message("PSP22Metadata::token_name")
+            .message("PSP22Metadata::token_decimals")
+            .message("PSP22Metadata::token_symbol")
+            .message("PSP22::total_supply"),
+        ),
     );
 
   return (
@@ -67,7 +65,7 @@ function Flipper({ address }: ContractProps) {
   const flipped = useLazyLoadQuery(
     (builder) =>
       builder.contract(flipper, address, (builder) => builder.message("get")),
-    { chainId: "pop_testnet", fetchKey },
+    { fetchKey },
   );
 
   return (
@@ -97,9 +95,8 @@ type FlipProps = ContractProps & {
 };
 
 function Flip({ address, onFlipped }: FlipProps) {
-  const [flipStatus, flip] = useContractMutation(
-    (mutate) => mutate(flipper, address, "flip", {}),
-    { chainId: "pop_testnet" },
+  const [flipStatus, flip] = useContractMutation((mutate) =>
+    mutate(flipper, address, "flip", {}),
   );
 
   useEffect(() => {
