@@ -42,7 +42,7 @@ describe("rootStorage", () => {
 
 describe("storage", () => {
   it("should add storage read instruction without key", () => {
-    const query = new InkQuery().storage("test-path");
+    const query = new InkQuery().storage("test-path", undefined);
     expect(query.instructions).toEqual([
       {
         instruction: "read-storage",
