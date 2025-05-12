@@ -32,7 +32,7 @@
     "test": "vitest"
   },
   "dependencies": {
-    "@mimirdev/apps-inject": "^3.1.1",
+    "@mimirdev/apps-inject": "^3.2.0",
     "@mimirdev/papi-signer": "^3.1.0",
     "@reactive-dot/core": "workspace:^"
   },
