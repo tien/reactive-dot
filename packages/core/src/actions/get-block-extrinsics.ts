@@ -9,6 +9,7 @@ import {
   metadata as metadataCodec,
   Struct,
   u8,
+  unifyMetadata,
   type V15,
 } from "@polkadot-api/substrate-bindings";
 import type {
@@ -219,7 +220,7 @@ async function getOrCreateDynamicBuilder(
     return dynamicBuilders.get(client)!;
   }
 
-  const lookup = getLookupFn(metadata);
+  const lookup = getLookupFn(unifyMetadata(metadata));
   const dynamicBuilder = getDynamicBuilder(lookup);
 
   return dynamicBuilders.set(client, dynamicBuilder).get(client)!;
