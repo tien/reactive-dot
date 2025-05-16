@@ -1,5 +1,11 @@
 # @reactive-dot/react
 
+## 0.40.3
+
+### Patch Changes
+
+- [#658](https://github.com/tien/reactive-dot/pull/658) [`fd8bc9a`](https://github.com/tien/reactive-dot/commit/fd8bc9a4aef7cd6d58c2e8efbd51b5b8cb73f20c) Thanks [@tien](https://github.com/tien)! - Fixed intermittent suspense flickers.
+
 ## 0.40.2
 
 ### Patch Changes
