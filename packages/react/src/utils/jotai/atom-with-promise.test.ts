@@ -1,7 +1,8 @@
+import { useAtomValue } from "../../hooks/use-atom-value.js";
 import { atomWithPromise } from "./atom-with-promise.js";
 import { act, renderHook } from "@testing-library/react";
 import { atom, createStore } from "jotai";
-import { useAtom, useAtomValue } from "jotai/react";
+import { useAtom } from "jotai";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
 describe("atomWithPromise", () => {

@@ -1,11 +1,12 @@
 import { atomFamilyWithErrorCatcher } from "../utils/jotai/atom-family-with-error-catcher.js";
 import type { ChainHookOptions } from "./types.js";
+import { useAtomValue } from "./use-atom-value.js";
 import { internal_useChainId } from "./use-chain-id.js";
 import { useConfig } from "./use-config.js";
 import type { ChainId, Config } from "@reactive-dot/core";
 import { BaseError } from "@reactive-dot/core";
 import { getClient } from "@reactive-dot/core/internal/actions.js";
-import { atom, useAtomValue } from "jotai";
+import { atom } from "jotai";
 
 /**
  * Hook for getting Polkadot-API client instance.

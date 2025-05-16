@@ -1,6 +1,7 @@
+import { useAtomValue } from "../../hooks/use-atom-value.js";
 import { atomWithObservable } from "./atom-with-observable.js";
 import { act, renderHook } from "@testing-library/react";
-import { createStore, useAtomValue } from "jotai";
+import { createStore } from "jotai";
 import { Observable, Subject, throwError } from "rxjs";
 import { beforeEach, expect, it, vi } from "vitest";
 
