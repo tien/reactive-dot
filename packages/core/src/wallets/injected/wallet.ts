@@ -1,10 +1,9 @@
 import { BaseError } from "../../errors.js";
 import type { PolkadotSignerAccount } from "../account.js";
 import { Wallet, type WalletOptions } from "../wallet.js";
-import {
-  connectInjectedExtension,
-  type InjectedExtension,
-  type InjectedPolkadotAccount,
+import type {
+  InjectedExtension,
+  InjectedPolkadotAccount,
 } from "polkadot-api/pjs-signer";
 import { BehaviorSubject, Observable, of } from "rxjs";
 import { map, switchMap } from "rxjs/operators";
@@ -39,6 +38,10 @@ export class InjectedWallet extends Wallet<InjectedWalletOptions, "connected"> {
 
   async connect() {
     if (this.#extension$.getValue() === undefined) {
+      const { connectInjectedExtension } = await import(
+        "polkadot-api/pjs-signer"
+      );
+
       this.#extension$.next(
         await connectInjectedExtension(this.name, this.options?.originName),
       );
