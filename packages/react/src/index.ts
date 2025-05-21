@@ -1,3 +1,5 @@
+"use client";
+
 export { QueryRenderer } from "./components/query-renderer.js";
 export { ChainProvider } from "./contexts/chain.js";
 export { ReactiveDotProvider } from "./contexts/provider.js";
