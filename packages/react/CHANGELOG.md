@@ -1,5 +1,18 @@
 # @reactive-dot/react
 
+## 0.40.4
+
+### Patch Changes
+
+- [#673](https://github.com/tien/reactive-dot/pull/673) [`2c37021`](https://github.com/tien/reactive-dot/commit/2c37021f97085ad4919f19fdff7cf4d6b68d0e45) Thanks [@tien](https://github.com/tien)! - Resolved an issue where wallets were incorrectly fetched during server-side rendering (SSR).
+
+- [#667](https://github.com/tien/reactive-dot/pull/667) [`013f026`](https://github.com/tien/reactive-dot/commit/013f02681ee6f1ddb7a75e1496b522560b20898f) Thanks [@tien](https://github.com/tien)! - Marked the module as client-only by adding the `'use client'` directive to ensure proper client-side rendering behavior.
+
+- [#668](https://github.com/tien/reactive-dot/pull/668) [`af0d7cc`](https://github.com/tien/reactive-dot/commit/af0d7cc17335c050593284ecc3cd415b686485e3) Thanks [@tien](https://github.com/tien)! - Fixed a potential issue where states could leak in a Server-Side Rendering (SSR) environment.
+
+- Updated dependencies [[`2b632ff`](https://github.com/tien/reactive-dot/commit/2b632ff111610ca0505a4a1fbf59d03386c5a9b6), [`1a96cbe`](https://github.com/tien/reactive-dot/commit/1a96cbe51e4891733bb4497f18ea2341e68bf3ba)]:
+  - @reactive-dot/core@0.40.4
+
 ## 0.40.3
 
 ### Patch Changes
