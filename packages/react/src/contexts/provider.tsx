@@ -2,6 +2,7 @@ import { useWalletsInitializer } from "../hooks/use-wallets-initializer.js";
 import { ConfigContext } from "./config.js";
 import { MutationEventSubjectContext } from "./mutation.js";
 import type { Config } from "@reactive-dot/core";
+import { Provider as JotaiProvider } from "jotai";
 import { type PropsWithChildren, Suspense, useEffect, useMemo } from "react";
 import { Subject } from "rxjs";
 
@@ -24,14 +25,16 @@ export function ReactiveDotProvider({
   children,
 }: ReactiveDotProviderProps) {
   return (
-    <ConfigContext value={config}>
-      <MutationEventSubjectContext value={useMemo(() => new Subject(), [])}>
-        <Suspense>
-          <WalletsInitializer />
-        </Suspense>
-        {children}
-      </MutationEventSubjectContext>
-    </ConfigContext>
+    <JotaiProvider>
+      <ConfigContext value={config}>
+        <MutationEventSubjectContext value={useMemo(() => new Subject(), [])}>
+          <Suspense>
+            <WalletsInitializer />
+          </Suspense>
+          {children}
+        </MutationEventSubjectContext>
+      </ConfigContext>
+    </JotaiProvider>
   );
 }
 
