@@ -1,3 +1,4 @@
+import { useLocalStore } from "../hooks/use-local-store.js";
 import { useWalletsInitializer } from "../hooks/use-wallets-initializer.js";
 import { ConfigContext } from "./config.js";
 import { MutationEventSubjectContext } from "./mutation.js";
@@ -25,7 +26,7 @@ export function ReactiveDotProvider({
   children,
 }: ReactiveDotProviderProps) {
   return (
-    <JotaiProvider>
+    <JotaiProvider store={useLocalStore()}>
       <ConfigContext value={config}>
         <MutationEventSubjectContext value={useMemo(() => new Subject(), [])}>
           <Suspense>
