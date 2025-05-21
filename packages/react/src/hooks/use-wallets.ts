@@ -1,3 +1,4 @@
+import { isSsr } from "../utils/is-ssr.js";
 import { atomFamilyWithErrorCatcher } from "../utils/jotai/atom-family-with-error-catcher.js";
 import { atomWithObservableAndPromise } from "../utils/jotai/atom-with-observable-and-promise.js";
 import { useAtomValue } from "./use-atom-value.js";
@@ -35,7 +36,9 @@ export function useConnectedWallets() {
  */
 export const walletsAtom = atomFamilyWithErrorCatcher(
   (withErrorCatcher, config: Config) =>
-    withErrorCatcher(atom(() => aggregateWallets(config.wallets ?? []))),
+    isSsr()
+      ? atom(Promise.resolve([]))
+      : withErrorCatcher(atom(() => aggregateWallets(config.wallets ?? []))),
 );
 
 /**
