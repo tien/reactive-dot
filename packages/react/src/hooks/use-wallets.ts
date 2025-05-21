@@ -1,15 +1,16 @@
-import { isSsr } from "../utils/is-ssr.js";
+import { emptyArrayAtom } from "../constants/empty-array-atom.js";
 import { atomFamilyWithErrorCatcher } from "../utils/jotai/atom-family-with-error-catcher.js";
-import { atomWithObservableAndPromise } from "../utils/jotai/atom-with-observable-and-promise.js";
+import { atomWithObservable } from "../utils/jotai/atom-with-observable.js";
 import { useAtomValue } from "./use-atom-value.js";
 import { useConfig } from "./use-config.js";
-import { usePausableAtomValue } from "./use-pausable-atom-value.js";
+import { useSsrValue } from "./use-ssr-value.js";
 import type { Config } from "@reactive-dot/core";
 import {
   aggregateWallets,
   getConnectedWallets,
 } from "@reactive-dot/core/internal/actions.js";
-import { atom } from "jotai";
+import type { Wallet } from "@reactive-dot/core/wallets.js";
+import { type Atom, atom } from "jotai";
 
 /**
  * Hook for getting all available wallets.
@@ -18,7 +19,12 @@ import { atom } from "jotai";
  * @returns Available wallets
  */
 export function useWallets() {
-  return useAtomValue(walletsAtom(useConfig()));
+  return useAtomValue(
+    useSsrValue<Atom<Wallet[] | Promise<Wallet[]>>>(
+      walletsAtom(useConfig()),
+      emptyArrayAtom,
+    ),
+  );
 }
 
 /**
@@ -28,7 +34,9 @@ export function useWallets() {
  * @returns Connected wallets
  */
 export function useConnectedWallets() {
-  return usePausableAtomValue(connectedWalletsAtom(useConfig()));
+  return useAtomValue(
+    useSsrValue(connectedWalletsAtom(useConfig()), emptyArrayAtom),
+  );
 }
 
 /**
@@ -36,9 +44,7 @@ export function useConnectedWallets() {
  */
 export const walletsAtom = atomFamilyWithErrorCatcher(
   (withErrorCatcher, config: Config) =>
-    isSsr()
-      ? atom(Promise.resolve([]))
-      : withErrorCatcher(atom(() => aggregateWallets(config.wallets ?? []))),
+    withErrorCatcher(atom(() => aggregateWallets(config.wallets ?? []))),
 );
 
 /**
@@ -46,8 +52,9 @@ export const walletsAtom = atomFamilyWithErrorCatcher(
  */
 export const connectedWalletsAtom = atomFamilyWithErrorCatcher(
   (withErrorCatcher, config: Config) =>
-    atomWithObservableAndPromise(
-      (get) => getConnectedWallets(get(walletsAtom(config))),
-      withErrorCatcher,
+    withErrorCatcher(
+      atomWithObservable((get) =>
+        getConnectedWallets(get(walletsAtom(config))),
+      ),
     ),
 );
