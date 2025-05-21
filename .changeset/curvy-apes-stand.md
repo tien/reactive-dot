@@ -2,4 +2,4 @@
 "@reactive-dot/react": patch
 ---
 
-Fixed incorrect attempt to fetch wallets in SSR environment.
+Resolved an issue where wallets were incorrectly fetched during server-side rendering (SSR).
