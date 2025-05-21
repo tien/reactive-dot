@@ -1,5 +1,13 @@
 # @reactive-dot/core
 
+## 0.40.4
+
+### Patch Changes
+
+- [#666](https://github.com/tien/reactive-dot/pull/666) [`2b632ff`](https://github.com/tien/reactive-dot/commit/2b632ff111610ca0505a4a1fbf59d03386c5a9b6) Thanks [@tien](https://github.com/tien)! - Removed artificial delay previously implemented as a workaround for a [Polkadot.js extension bug](https://github.com/polkadot-js/extension/issues/1475).
+
+- [#664](https://github.com/tien/reactive-dot/pull/664) [`1a96cbe`](https://github.com/tien/reactive-dot/commit/1a96cbe51e4891733bb4497f18ea2341e68bf3ba) Thanks [@tien](https://github.com/tien)! - Improved performance by loading injected extension functionalities only when necessary.
+
 ## 0.40.2
 
 ### Patch Changes

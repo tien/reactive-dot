@@ -1,5 +1,12 @@
 # @reactive-dot/vue
 
+## 0.40.4
+
+### Patch Changes
+
+- Updated dependencies [[`2b632ff`](https://github.com/tien/reactive-dot/commit/2b632ff111610ca0505a4a1fbf59d03386c5a9b6), [`1a96cbe`](https://github.com/tien/reactive-dot/commit/1a96cbe51e4891733bb4497f18ea2341e68bf3ba)]:
+  - @reactive-dot/core@0.40.4
+
 ## 0.40.2
 
 ### Patch Changes
