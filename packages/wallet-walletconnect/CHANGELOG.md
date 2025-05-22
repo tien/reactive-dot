@@ -1,5 +1,12 @@
 # @reactive-dot/wallet-walletconnect
 
+## 0.17.18
+
+### Patch Changes
+
+- Updated dependencies [[`bf36c59`](https://github.com/tien/reactive-dot/commit/bf36c594da0cf996cde4adb6d706d759f2f73ad3)]:
+  - @reactive-dot/core@0.41.0
+
 ## 0.17.17
 
 ### Patch Changes

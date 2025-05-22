@@ -1,5 +1,11 @@
 # @reactive-dot/core
 
+## 0.41.0
+
+### Minor Changes
+
+- [#675](https://github.com/tien/reactive-dot/pull/675) [`bf36c59`](https://github.com/tien/reactive-dot/commit/bf36c594da0cf996cde4adb6d706d759f2f73ad3) Thanks [@tien](https://github.com/tien)! - Introduced an option to enable experimental Server-Side Rendering (SSR) optimizations.
+
 ## 0.40.4
 
 ### Patch Changes
