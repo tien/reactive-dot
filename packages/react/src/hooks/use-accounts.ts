@@ -1,13 +1,15 @@
+import { emptyArrayAtom } from "../constants/empty-array-atom.js";
 import { atomFamilyWithErrorCatcher } from "../utils/jotai/atom-family-with-error-catcher.js";
-import { atomWithObservableAndPromise } from "../utils/jotai/atom-with-observable-and-promise.js";
+import { atomWithObservable } from "../utils/jotai/atom-with-observable.js";
 import type { ChainHookOptions } from "./types.js";
 import { internal_useChainId } from "./use-chain-id.js";
 import { chainSpecDataAtom } from "./use-chain-spec-data.js";
 import { useConfig } from "./use-config.js";
-import { usePausableAtomValue } from "./use-pausable-atom-value.js";
+import { useSsrValue } from "./use-ssr-value.js";
 import { connectedWalletsAtom } from "./use-wallets.js";
 import { type ChainId, type Config } from "@reactive-dot/core";
 import { getAccounts } from "@reactive-dot/core/internal/actions.js";
+import { useAtomValue } from "jotai";
 
 /**
  * Hook for getting currently connected accounts.
@@ -17,10 +19,13 @@ import { getAccounts } from "@reactive-dot/core/internal/actions.js";
  * @returns The currently connected accounts
  */
 export function useAccounts(options?: ChainHookOptions) {
-  return usePausableAtomValue(
-    accountsAtom(
-      useConfig(),
-      internal_useChainId({ ...options, optionalChainId: true }),
+  return useAtomValue(
+    useSsrValue(
+      accountsAtom(
+        useConfig(),
+        internal_useChainId({ ...options, optionalChainId: true }),
+      ),
+      emptyArrayAtom,
     ),
   );
 }
@@ -30,14 +35,14 @@ export function useAccounts(options?: ChainHookOptions) {
  */
 export const accountsAtom = atomFamilyWithErrorCatcher(
   (withErrorCatcher, config: Config, chainId: ChainId | undefined) =>
-    atomWithObservableAndPromise(
-      (get) =>
+    withErrorCatcher(
+      atomWithObservable((get) =>
         getAccounts(
-          get(connectedWalletsAtom(config).observableAtom),
+          get(connectedWalletsAtom(config)),
           chainId === undefined
             ? undefined
             : get(chainSpecDataAtom(config, chainId)),
         ),
-      withErrorCatcher,
+      ),
     ),
 );

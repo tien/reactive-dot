@@ -20,6 +20,12 @@ export type Config<
   readonly chains: TChains;
   readonly targetChains?: TTargetChainIds;
   readonly wallets?: ReadonlyArray<WalletProvider | Wallet>;
+  /**
+   * Enable SSR support & optimizations
+   *
+   * @experimental
+   */
+  readonly ssr?: boolean;
 };
 
 export function defineConfig<
