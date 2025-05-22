@@ -13,6 +13,7 @@ it("should match inline snapshot", () =>
       "Storage",
       "idle",
       "pending",
+      "defineContract",
       "aggregateWallets",
       "connectWallet",
       "disconnectWallet",

@@ -12,6 +12,7 @@ it("should match inline snapshot", () =>
       "useChainSpecData",
       "useClient",
       "useConfig",
+      "useContractMutation",
       "useMutation",
       "useNativeToken",
       "useQueryErrorResetter",

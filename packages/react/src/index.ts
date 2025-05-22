@@ -3,8 +3,8 @@
 export { QueryRenderer } from "./components/query-renderer.js";
 export { ChainProvider } from "./contexts/chain.js";
 export { ReactiveDotProvider } from "./contexts/provider.js";
-export { SignerProvider } from "./contexts/signer.js";
 export { QueryOptionsProvider } from "./contexts/query-options.js";
+export { SignerProvider } from "./contexts/signer.js";
 export { useAccounts } from "./hooks/use-accounts.js";
 export { useSpendableBalance } from "./hooks/use-balance.js";
 export { useBlock } from "./hooks/use-block.js";
@@ -12,6 +12,7 @@ export { useChainId, useChainIds } from "./hooks/use-chain-id.js";
 export { useChainSpecData } from "./hooks/use-chain-spec-data.js";
 export { useClient } from "./hooks/use-client.js";
 export { useConfig } from "./hooks/use-config.js";
+export { useContractMutation } from "./hooks/use-contract-mutation.js";
 export { useMutationEffect } from "./hooks/use-mutation-effect.js";
 export { useMutation } from "./hooks/use-mutation.js";
 export {
