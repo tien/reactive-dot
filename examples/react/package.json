@@ -27,10 +27,10 @@
     "@reactive-dot/eslint-config": "workspace:^",
     "@tsconfig/recommended": "^1.0.8",
     "@tsconfig/strictest": "^2.0.5",
-    "@tsconfig/vite-react": "^3.4.0",
-    "@types/react": "^19.1.4",
+    "@tsconfig/vite-react": "^6.3.5",
+    "@types/react": "^19.1.5",
     "@types/react-dom": "^19.1.5",
-    "@vitejs/plugin-react": "^4.4.1",
+    "@vitejs/plugin-react": "^4.5.0",
     "eslint": "^9.27.0",
     "typescript": "^5.8.3",
     "vite": "^6.3.5"
