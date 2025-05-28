@@ -9,9 +9,7 @@ provideChain("pop_testnet");
 <template>
   <section>
     <h2>Contracts</h2>
-    <Psp22Token address="16dg7W38UBuVZQMZkTVYmYPLuaFQ3bfE9ZLS4jAeKJzC2E7d" />
-    <FlipperContract
-      address="14MRHYDcgWmeEsJbfjvjrnyeDrTaF1pAK4UkQEbAyDvP2UqF"
-    />
+    <Psp22Token address="0xE7Fc69D1cE67F2902845F5Ffd2b454597ded5547" />
+    <FlipperContract address="0x4522Ead38243CA6C50F47f1CbEE46c9d8735255A" />
   </section>
 </template>

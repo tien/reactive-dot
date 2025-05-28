@@ -1,4 +1,5 @@
 import type { ExtractExactProperties, StringKeyOf } from "../types.js";
+import { toH160Bytes } from "./address.js";
 import type {
   GenericInkDescriptors,
   InkCompatApi,
@@ -32,9 +33,9 @@ export async function getInkContractTx<
     );
   }
 
-  const origin = { type: "Id" as const, value: toSs58(signer.publicKey) };
+  const origin = toSs58(signer.publicKey);
 
-  const dest = { type: "Id" as const, value: contract };
+  const dest = toH160Bytes(contract);
 
   const data = message.encode(
     "data" in body
@@ -50,9 +51,9 @@ export async function getInkContractTx<
         (body.value as bigint)
       : 0n;
 
-  const dryRunResult = await api.apis.ContractsApi.call(
-    origin.value,
-    dest.value,
+  const dryRunResult = await api.apis.ReviveApi.call(
+    origin,
+    dest,
     value,
     undefined,
     undefined,
@@ -60,11 +61,11 @@ export async function getInkContractTx<
     !options?.signal ? {} : { signal: options?.signal },
   );
 
-  return api.tx.Contracts.call({
+  return api.tx.Revive.call({
     dest,
     value,
     gas_limit: dryRunResult.gas_required,
-    storage_deposit_limit: undefined,
+    storage_deposit_limit: dryRunResult.storage_deposit.value,
     data,
   });
 }

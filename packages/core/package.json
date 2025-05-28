@@ -38,6 +38,7 @@
     "test": "vitest"
   },
   "dependencies": {
+    "@noble/hashes": "^1.8.0",
     "@reactive-dot/utils": "workspace:^",
     "@substrate/smoldot-discovery": "^2.0.2"
   },

@@ -1,10 +1,15 @@
 import { QueryError } from "../errors.js";
+import { toH160Bytes, toSs58Address } from "./address.js";
 import type {
   InferQueryInstructionPayload,
   SimpleInkQueryInstruction,
 } from "./query-builder.js";
 import { unwrapResult } from "./result.js";
-import type { GenericInkDescriptors, InkCompatApi } from "./types.js";
+import type {
+  ContractAddress,
+  GenericInkDescriptors,
+  InkCompatApi,
+} from "./types.js";
 import type { InkClient } from "@polkadot-api/ink-contracts";
 
 export async function queryInk<
@@ -13,7 +18,7 @@ export async function queryInk<
 >(
   api: InkCompatApi,
   client: InkClient<GenericInkDescriptors>,
-  address: string,
+  address: ContractAddress,
   instruction: Instruction,
   options?: { signal?: AbortSignal },
 ) {
@@ -29,14 +34,16 @@ export async function queryInk<
           ? client.storage()
           : client.storage(instruction.path);
 
-      const response = await api.apis.ContractsApi.get_storage(
-        address,
-        storage.encode(instruction.key),
+      const key = storage.encode(instruction.key);
+
+      const response = await api.apis.ReviveApi.get_storage_var_key(
+        toH160Bytes(address),
+        key,
         apiOptions,
       );
 
       if (!response.success) {
-        throw QueryError.from(response.value);
+        throw QueryError.from(response.value, response.value.type);
       }
 
       return response.value === undefined
@@ -55,9 +62,9 @@ export async function queryInk<
         );
       }
 
-      const response = await api.apis.ContractsApi.call(
-        address,
-        address,
+      const response = await api.apis.ReviveApi.call(
+        toSs58Address(address, undefined, 238),
+        toH160Bytes(address),
         0n,
         undefined,
         undefined,

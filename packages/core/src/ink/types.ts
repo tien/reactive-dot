@@ -25,13 +25,7 @@ import type {
   TypedApi,
 } from "polkadot-api";
 
-export type MultiAddress = Enum<{
-  Id: SS58String;
-  Index: undefined;
-  Raw: Binary;
-  Address32: FixedSizeBinary<32>;
-  Address20: FixedSizeBinary<20>;
-}>;
+export type ContractAddress = SS58String | `0x${string}` | FixedSizeBinary<20>;
 
 export type Gas = {
   ref_time: bigint;
@@ -45,11 +39,16 @@ export type StorageError = Enum<{
 }>;
 
 export type InkApis<TEvent = any, TError = any> = ApisTypedef<{
-  ContractsApi: {
+  ReviveApi: {
+    /**
+     * Perform a call from a specified account to a given contract.
+     *
+     * See [`crate::Pallet::bare_call`].
+     */
     call: RuntimeDescriptor<
       [
         origin: SS58String,
-        dest: SS58String,
+        dest: FixedSizeBinary<20>,
         value: bigint,
         gas_limit: Gas | undefined,
         storage_deposit_limit: bigint | undefined,
@@ -62,7 +61,6 @@ export type InkApis<TEvent = any, TError = any> = ApisTypedef<{
           Refund: bigint;
           Charge: bigint;
         }>;
-        debug_message: Binary;
         result: ResultPayload<
           {
             flags: number;
@@ -73,87 +71,144 @@ export type InkApis<TEvent = any, TError = any> = ApisTypedef<{
         events?: Array<TEvent>;
       }
     >;
-    instantiate: RuntimeDescriptor<
-      [
-        origin: SS58String,
-        value: bigint,
-        gas_limit: Gas | undefined,
-        storage_deposit_limit: bigint | undefined,
-        code: Enum<{
-          Upload: Binary;
-          Existing: FixedSizeBinary<32>;
-        }>,
-        data: Binary,
-        salt: Binary,
-      ],
-      {
-        gas_consumed: Gas;
-        gas_required: Gas;
-        storage_deposit: Enum<{
-          Refund: bigint;
-          Charge: bigint;
-        }>;
-        debug_message: Binary;
-        result: ResultPayload<
-          {
-            result: {
-              flags: number;
-              data: Binary;
-            };
-            account_id: SS58String;
-          },
-          TError
-        >;
-        events?: Array<TEvent>;
-      }
-    >;
+    /**
+     * Query a given storage key in a given contract.
+     *
+     * Returns `Ok(Some(Vec<u8>))` if the storage value exists under the given key in the
+     * specified account and `Ok(None)` if it doesn't. If the account specified by the address
+     * doesn't exist, or doesn't have a contract then `Err` is returned.
+     */
     get_storage: RuntimeDescriptor<
-      [address: SS58String, key: Binary],
-      ResultPayload<Binary | undefined, StorageError>
+      [address: FixedSizeBinary<20>, key: FixedSizeBinary<32>],
+      ResultPayload<
+        Binary | undefined,
+        Enum<{
+          DoesntExist: undefined;
+          KeyDecodingFailed: undefined;
+        }>
+      >
+    >;
+    /**
+     * Query a given variable-sized storage key in a given contract.
+     *
+     * Returns `Ok(Some(Vec<u8>))` if the storage value exists under the given key in the
+     * specified account and `Ok(None)` if it doesn't. If the account specified by the address
+     * doesn't exist, or doesn't have a contract then `Err` is returned.
+     */
+    get_storage_var_key: RuntimeDescriptor<
+      [address: FixedSizeBinary<20>, key: Binary],
+      ResultPayload<
+        Binary | undefined,
+        Enum<{
+          DoesntExist: undefined;
+          KeyDecodingFailed: undefined;
+        }>
+      >
     >;
   };
 }>;
 
 export type InkPallets = PalletsTypedef<
   {
-    Contracts: {
-      ContractInfoOf: StorageDescriptor<
-        [Key: SS58String],
+    Revive: {
+      /**
+       * A mapping from a contract's code hash to its code.
+       */
+      PristineCode: StorageDescriptor<
+        [Key: FixedSizeBinary<32>],
+        Binary,
+        true,
+        never
+      >;
+      /**
+       * A mapping from a contract's code hash to its code info.
+       */
+      CodeInfoOf: StorageDescriptor<
+        [Key: FixedSizeBinary<32>],
         {
-          code_hash: FixedSizeBinary<32>;
+          owner: SS58String;
+          deposit: bigint;
+          refcount: bigint;
+          code_len: number;
+          behaviour_version: number;
         },
+        true,
+        never
+      >;
+      /**
+       * The code associated with a given account.
+       */
+      ContractInfoOf: StorageDescriptor<
+        [Key: FixedSizeBinary<20>],
+        {
+          trie_id: Binary;
+          code_hash: FixedSizeBinary<32>;
+          storage_bytes: number;
+          storage_items: number;
+          storage_byte_deposit: bigint;
+          storage_item_deposit: bigint;
+          storage_base_deposit: bigint;
+          immutable_data_len: number;
+        },
+        true,
+        never
+      >;
+      /**
+       * The immutable data associated with a given account.
+       */
+      ImmutableDataOf: StorageDescriptor<
+        [Key: FixedSizeBinary<20>],
+        Binary,
+        true,
+        never
+      >;
+      /**
+       * Evicted contracts that await child trie deletion.
+       *
+       * Child trie deletion is a heavy operation depending on the amount of storage items
+       * stored in said trie. Therefore this operation is performed lazily in `on_idle`.
+       */
+      DeletionQueue: StorageDescriptor<[Key: number], Binary, true, never>;
+      /**
+       * A pair of monotonic counters used to track the latest contract marked for deletion
+       * and the latest deleted contract in queue.
+       */
+      DeletionQueueCounter: StorageDescriptor<
+        [],
+        {
+          insert_counter: number;
+          delete_counter: number;
+        },
+        false,
+        never
+      >;
+      /**
+       * Map a Ethereum address to its original `AccountId32`.
+       *
+       * Stores the last 12 byte for addresses that were originally an `AccountId32` instead
+       * of an `H160`. Register your `AccountId32` using [`Pallet::map_account`] in order to
+       * use it with this pallet.
+       */
+      AddressSuffix: StorageDescriptor<
+        [Key: FixedSizeBinary<20>],
+        FixedSizeBinary<12>,
         true,
         never
       >;
     };
   },
   {
-    Contracts: {
+    Revive: {
       call: TxDescriptor<{
-        dest: MultiAddress;
+        dest: FixedSizeBinary<20>;
         value: bigint;
         gas_limit: Gas;
-        storage_deposit_limit: bigint | undefined;
+        storage_deposit_limit: bigint;
         data: Binary;
-      }>;
-      instantiate: TxDescriptor<{
-        value: bigint;
-        gas_limit: Gas;
-        storage_deposit_limit: bigint | undefined;
-        code_hash: FixedSizeBinary<32>;
-        data: Binary;
-        salt: Binary;
-      }>;
-      instantiate_with_code: TxDescriptor<{
-        value: bigint;
-        gas_limit: Gas;
-        storage_deposit_limit: bigint | undefined;
-        code: Binary;
-        data: Binary;
-        salt: Binary;
       }>;
     };
   },
+  {},
   {},
   {},
   {}

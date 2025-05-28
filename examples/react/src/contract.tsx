@@ -11,8 +11,8 @@ import { useEffect, useState, useTransition } from "react";
 export function Contracts() {
   return (
     <section>
-      <Psp22TokenInfo address="16dg7W38UBuVZQMZkTVYmYPLuaFQ3bfE9ZLS4jAeKJzC2E7d" />
-      <Flipper address="14MRHYDcgWmeEsJbfjvjrnyeDrTaF1pAK4UkQEbAyDvP2UqF" />
+      <Psp22TokenInfo address="0xE7Fc69D1cE67F2902845F5Ffd2b454597ded5547" />
+      <Flipper address="0x4522Ead38243CA6C50F47f1CbEE46c9d8735255A" />
     </section>
   );
 }
