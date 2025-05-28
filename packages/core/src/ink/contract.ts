@@ -25,6 +25,7 @@ export class Contract<
 export type DescriptorOfContract<TContract extends Contract> =
   TContract extends Contract<infer TDescriptor> ? TDescriptor : never;
 
+/** @experimental */
 export function defineContract<TDescriptor extends GenericInkDescriptors>(
   config: ContractConfig<TDescriptor>,
 ) {

@@ -435,6 +435,7 @@ export class Query<
    */
   callApis = this.runtimeApis;
 
+  /** @experimental */
   contract<
     TContractDescriptor extends GenericInkDescriptors,
     TContractInstructions extends InkQueryInstruction[],
@@ -453,6 +454,7 @@ export class Query<
     });
   }
 
+  /** @experimental */
   contracts<
     TContractDescriptor extends GenericInkDescriptors,
     TContractInstructions extends InkQueryInstruction[],

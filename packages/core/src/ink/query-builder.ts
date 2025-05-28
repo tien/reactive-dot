@@ -114,6 +114,7 @@ export class InkQuery<
     return Object.freeze(this.#instructions.slice()) as TInstructions;
   }
 
+  /** @experimental */
   rootStorage(options?: { at?: Finality }) {
     return this.#append({
       instruction: "read-storage",
@@ -123,6 +124,7 @@ export class InkQuery<
     });
   }
 
+  /** @experimental */
   storage<
     TPath extends Exclude<StringKeyOf<TDescriptor["__types"]["storage"]>, "">,
     TKey extends TDescriptor["__types"]["storage"][TPath]["key"],
@@ -140,6 +142,7 @@ export class InkQuery<
     });
   }
 
+  /** @experimental */
   storages<
     TPath extends Exclude<StringKeyOf<TDescriptor["__types"]["storage"]>, "">,
     TKey extends TDescriptor["__types"]["storage"][TPath]["key"],
@@ -153,6 +156,7 @@ export class InkQuery<
     });
   }
 
+  /** @experimental */
   message<
     TName extends StringKeyOf<
       ExcludeProperties<TDescriptor["__types"]["messages"], { mutates: true }>
@@ -173,6 +177,7 @@ export class InkQuery<
     });
   }
 
+  /** @experimental */
   messages<
     TName extends StringKeyOf<
       ExcludeProperties<TDescriptor["__types"]["messages"], { mutates: true }>

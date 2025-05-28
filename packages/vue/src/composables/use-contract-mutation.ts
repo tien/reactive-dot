@@ -22,6 +22,7 @@ import { inject, toValue } from "vue";
 /**
  * Composable for mutating (writing to) a contract.
  *
+ * @experimental
  * @param action - The function to create the transaction
  * @param options - Additional options
  * @returns The current transaction state & submit function

@@ -23,6 +23,7 @@ import { switchMap } from "rxjs/operators";
 /**
  * Hook for mutating (writing to) a contract.
  *
+ * @experimental
  * @group Hooks
  * @param action - The function to create the transaction
  * @param options - Additional options
