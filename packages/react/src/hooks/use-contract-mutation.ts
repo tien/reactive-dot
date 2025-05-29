@@ -70,6 +70,7 @@ export function useContractMutation<
 
         return from(
           Promise.resolve(
+            // @ts-expect-error TODO: fix this
             action(async (contract, address, message, body) =>
               getInkContractTx(
                 ...(await Promise.all([
@@ -78,6 +79,7 @@ export function useContractMutation<
                 ])),
                 signer,
                 address,
+                // @ts-expect-error TODO: fix this
                 message,
                 body,
               ),

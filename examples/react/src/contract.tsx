@@ -96,7 +96,7 @@ type FlipProps = ContractProps & {
 
 function Flip({ address, onFlipped }: FlipProps) {
   const [flipStatus, flip] = useContractMutation((mutate) =>
-    mutate(flipper, address, "flip", {}),
+    mutate(flipper, address, "flip"),
   );
 
   useEffect(() => {

@@ -19,5 +19,8 @@ export type InkMutationBuilder = <
   contract: Contract<TDescriptor>,
   address: string,
   message: TMessageName,
-  body: InkTxBody<TDescriptor, TMessageName>,
+  // eslint-disable-next-line @typescript-eslint/no-empty-object-type
+  ...rest: InkTxBody<TDescriptor, TMessageName> extends {}
+    ? [body?: InkTxBody<TDescriptor, TMessageName>]
+    : [body: InkTxBody<TDescriptor, TMessageName>]
 ) => MaybePromise<GenericTransaction>;

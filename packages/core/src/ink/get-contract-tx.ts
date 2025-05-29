@@ -22,7 +22,7 @@ export async function getInkContractTx<
   signer: PolkadotSigner,
   contract: string,
   messageName: TMessageName,
-  body: InkTxBody<TDescriptor, TMessageName>,
+  body?: InkTxBody<TDescriptor, TMessageName> | undefined,
   options?: { signal?: AbortSignal },
 ) {
   const message = inkClient.message(messageName);
@@ -38,7 +38,7 @@ export async function getInkContractTx<
   const dest = toH160Bytes(contract);
 
   const data = message.encode(
-    "data" in body
+    body !== undefined && "data" in body
       ? // TODO: fix this
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
         (body.data as any)
@@ -46,7 +46,7 @@ export async function getInkContractTx<
   );
 
   const value =
-    "value" in body
+    body !== undefined && "value" in body
       ? // TODO: fix this
         (body.value as bigint)
       : 0n;
