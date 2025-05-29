@@ -16,7 +16,7 @@ const {
 } = useContractMutation((mutate) => mutate(flipper, address, "flip", {}));
 
 watchEffect(() => {
-  if (status.value === "success" && data.value?.type === "txBestBlocksState") {
+  if (status.value === "success" && data.value?.type === "finalized") {
     emit("flip");
   }
 });

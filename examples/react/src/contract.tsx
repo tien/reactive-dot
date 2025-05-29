@@ -103,7 +103,7 @@ function Flip({ address, onFlipped }: FlipProps) {
     if (
       typeof flipStatus !== "symbol" &&
       !(flipStatus instanceof Error) &&
-      flipStatus.type === "txBestBlocksState"
+      flipStatus.type === "finalized"
     ) {
       onFlipped();
     }
