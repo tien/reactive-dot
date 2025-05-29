@@ -1,11 +1,11 @@
 import { MutationEventSubjectContext } from "../contexts/mutation.js";
 import { SignerContext } from "../contexts/signer.js";
+import { tapTx } from "../utils/tap-tx.js";
 import type { ChainHookOptions } from "./types.js";
 import { useAsyncAction } from "./use-async-action.js";
 import { internal_useChainId } from "./use-chain-id.js";
 import { useConfig } from "./use-config.js";
 import { inkClientAtom } from "./use-ink-client.js";
-import { tapTx } from "./use-mutation.js";
 import { typedApiAtom } from "./use-typed-api.js";
 import { MutationError } from "@reactive-dot/core";
 import type {

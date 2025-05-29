@@ -1,10 +1,10 @@
 import { mutationEventKey } from "../keys.js";
 import type { ChainComposableOptions } from "../types.js";
+import { tapTx } from "../utils/tap-tx.js";
 import { useAsyncAction } from "./use-async-action.js";
 import { useChainId } from "./use-chain-id.js";
 import { getInkClient } from "./use-ink-client.js";
 import { useLazyValuesCache } from "./use-lazy-value.js";
-import { tapTx } from "./use-mutation.js";
 import { useSigner } from "./use-signer.js";
 import { useTypedApiPromise } from "./use-typed-api.js";
 import { MutationError } from "@reactive-dot/core";
