@@ -1,5 +1,11 @@
 # @reactive-dot/core
 
+## 0.42.0
+
+### Minor Changes
+
+- [#632](https://github.com/tien/reactive-dot/pull/632) [`f102c65`](https://github.com/tien/reactive-dot/commit/f102c65a65548fe7c77dd75caa2a83f1a22ea080) Thanks [@tien](https://github.com/tien)! - Added experimental support for Ink! contracts.
+
 ## 0.41.0
 
 ### Minor Changes
