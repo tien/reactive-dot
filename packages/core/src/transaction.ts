@@ -1,11 +1,10 @@
 import type { Transaction, TxObservable } from "polkadot-api";
 
 export type GenericTransaction = Transaction<
-  Record<string, unknown>,
+  NonNullable<unknown>,
   string,
   string,
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  any
+  unknown
 >;
 
 export type TxOptionsOf<T extends GenericTransaction> = Parameters<

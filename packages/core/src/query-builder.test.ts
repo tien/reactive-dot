@@ -1,3 +1,6 @@
+import { defineContract } from "./ink/contract.js";
+import type { InkQuery } from "./ink/query-builder.js";
+import type { GenericInkDescriptors } from "./ink/types.js";
 import { Query } from "./query-builder.js";
 import { expect, it } from "vitest";
 
@@ -101,6 +104,67 @@ it("should append a multi call-api instruction using runtimeApis", () => {
     api: "TestApi",
     args: [["arg1"], ["arg2"]],
     at: "finalized",
+    multi: true,
+  });
+});
+
+const mockContractDescriptor = {} as unknown as GenericInkDescriptors;
+
+const mockContract = defineContract({ descriptor: mockContractDescriptor });
+
+const mockInkQueryBuilder = (
+  query: InkQuery<typeof mockContractDescriptor, []>,
+) => {
+  return query.message("testMessage", {});
+};
+
+it("should append a read-contract instruction", () => {
+  const query = new Query();
+  const newQuery = query.contract(
+    mockContract,
+    "contractAddress123",
+    mockInkQueryBuilder,
+  );
+  const instructions = newQuery.instructions;
+
+  expect(instructions).toHaveLength(1);
+  expect(instructions[0]).toEqual({
+    address: "contractAddress123",
+    contract: {},
+    instruction: "read-contract",
+    instructions: [
+      {
+        at: undefined,
+        body: {},
+        instruction: "send-message",
+        name: "testMessage",
+      },
+    ],
+  });
+});
+
+it("should append a multi read-contract instruction using contracts", () => {
+  const query = new Query();
+  const newQuery = query.contracts(
+    mockContract,
+    ["address1", "address2"],
+    mockInkQueryBuilder,
+  );
+  const instructions = newQuery.instructions;
+
+  expect(instructions).toHaveLength(1);
+  expect(instructions[0]).toEqual({
+    addresses: ["address1", "address2"],
+    contract: {},
+    instruction: "read-contract",
+    instructions: [
+      {
+        at: undefined,
+        body: {},
+        instruction: "send-message",
+        name: "testMessage",
+      },
+    ],
     multi: true,
   });
 });

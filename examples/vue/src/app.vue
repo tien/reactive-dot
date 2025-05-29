@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import ContractsSection from "./contracts-section.vue";
 import MutationSection from "./mutation-section.vue";
 import QuerySection from "./query-section.vue";
 import WalletConnection from "./wallet-connection.vue";
@@ -54,6 +55,10 @@ watchMutationEffect((event) => console.log(event));
       <QuerySection />
       <MutationSection />
     </div>
-    <template #fallback>Loading...</template>
+    <template #fallback><p>Loading chain...</p></template>
+  </Suspense>
+  <Suspense>
+    <ContractsSection />
+    <template #fallback><p>Loading contracts...</p></template>
   </Suspense>
 </template>

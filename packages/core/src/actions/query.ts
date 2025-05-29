@@ -1,13 +1,13 @@
 import type { CommonDescriptor } from "../chains.js";
 import type {
   InferInstructionResponse,
-  QueryInstruction,
+  SimpleQueryInstruction,
 } from "../query-builder.js";
 import type { ChainDefinition, TypedApi } from "polkadot-api";
 import { map } from "rxjs/operators";
 
 export function query<
-  TInstruction extends QueryInstruction,
+  TInstruction extends SimpleQueryInstruction,
   TDescriptor extends ChainDefinition = CommonDescriptor,
 >(
   api: TypedApi<TDescriptor>,
@@ -80,7 +80,7 @@ export function query<
   }
 }
 
-export function preflight(instruction: QueryInstruction) {
+export function preflight(instruction: SimpleQueryInstruction) {
   if ("at" in instruction && instruction.at?.startsWith("0x")) {
     return "promise";
   }

@@ -1,18 +1,21 @@
 import {
+  contracts,
   kusama,
   kusama_asset_hub,
   polkadot,
   polkadot_asset_hub,
   polkadot_people,
+  pop_testnet,
   westend,
   westend_asset_hub,
 } from "@polkadot-api/descriptors";
-import { defineConfig } from "@reactive-dot/core";
+import { defineConfig, defineContract } from "@reactive-dot/core";
 import { createLightClientProvider } from "@reactive-dot/core/providers/light-client.js";
 import { InjectedWalletProvider } from "@reactive-dot/core/wallets.js";
 import { LedgerWallet } from "@reactive-dot/wallet-ledger";
 import { MimirWalletProvider } from "@reactive-dot/wallet-mimir";
 import { WalletConnect } from "@reactive-dot/wallet-walletconnect";
+import { getWsProvider } from "polkadot-api/ws-provider/web";
 
 const lightClientProvider = createLightClientProvider();
 
@@ -52,6 +55,10 @@ export const config = defineConfig({
       descriptor: westend_asset_hub,
       provider: westendProvider.addParachain({ id: "westend_asset_hub" }),
     },
+    pop_testnet: {
+      descriptor: pop_testnet,
+      provider: () => getWsProvider("wss://rpc2.paseo.popnetwork.xyz"),
+    },
   },
   targetChains: ["polkadot", "kusama", "westend"],
   wallets: [
@@ -76,3 +83,7 @@ export const config = defineConfig({
     }),
   ],
 });
+
+export const psp22 = defineContract({ descriptor: contracts.psp22 });
+
+export const flipper = defineContract({ descriptor: contracts.flipper });

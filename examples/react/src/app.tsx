@@ -1,4 +1,5 @@
 import { config } from "./config";
+import { Contracts } from "./contract";
 import { MultichainQuery } from "./multichain-query";
 import { Mutation } from "./mutation";
 import { Query } from "./query";
@@ -29,6 +30,12 @@ export function App() {
       </ChainProvider>
       <ChainProvider chainId="westend">
         <Example chainName="Westend" />
+      </ChainProvider>
+      <ChainProvider chainId="pop_testnet">
+        <Suspense fallback={<h2>Loading Pop Testnet...</h2>}>
+          <h2>Pop Testnet</h2>
+          <Contracts />
+        </Suspense>
       </ChainProvider>
       <Toaster />
       <DevTools />

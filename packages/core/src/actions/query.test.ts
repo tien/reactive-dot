@@ -1,4 +1,4 @@
-import type { QueryInstruction } from "../query-builder.js";
+import type { SimpleQueryInstruction } from "../query-builder.js";
 import { preflight, query } from "./query.js";
 import type { ChainDefinition, TypedApi } from "polkadot-api";
 import { of, firstValueFrom } from "rxjs";
@@ -47,7 +47,7 @@ describe("preflight", () => {
       instruction: "get-constant",
       pallet: "test",
       constant: "foo",
-    } as QueryInstruction;
+    } as SimpleQueryInstruction;
 
     expect(preflight(instruction)).toBe("promise");
   });
@@ -59,7 +59,7 @@ describe("preflight", () => {
       api: "foo",
       args: [],
       at: undefined,
-    } as QueryInstruction;
+    } as SimpleQueryInstruction;
 
     expect(preflight(instruction)).toBe("promise");
   });
@@ -71,7 +71,7 @@ describe("preflight", () => {
       storage: "foo",
       args: [],
       at: undefined,
-    } as QueryInstruction;
+    } as SimpleQueryInstruction;
 
     expect(preflight(instruction)).toBe("observable");
   });
@@ -83,7 +83,7 @@ describe("preflight", () => {
       storage: "foo",
       args: [],
       at: undefined,
-    } as QueryInstruction;
+    } as SimpleQueryInstruction;
 
     expect(preflight(instruction)).toBe("observable");
   });
@@ -95,7 +95,7 @@ describe("preflight", () => {
       storage: "foo",
       args: [1],
       at: "0x1234",
-    } as QueryInstruction;
+    } as SimpleQueryInstruction;
 
     expect(preflight(instruction)).toBe("promise");
   });
@@ -106,7 +106,7 @@ it('should handle "get-constant" instruction', async () => {
     instruction: "get-constant",
     pallet: "test",
     constant: "foo",
-  } as QueryInstruction;
+  } as SimpleQueryInstruction;
 
   const result = await query(fakeApi, instruction);
 
@@ -119,7 +119,7 @@ it('should handle "call-api" instruction', async () => {
     pallet: "test",
     api: "foo",
     args: [1, 2],
-  } as QueryInstruction;
+  } as SimpleQueryInstruction;
 
   const result = await query(fakeApi, instruction);
 
@@ -136,7 +136,7 @@ it('should handle "read-storage" instruction with at starting with "0x" (using g
     storage: "foo",
     args: [3],
     at: "0xabc",
-  } as QueryInstruction;
+  } as SimpleQueryInstruction;
 
   const result = await query(fakeApi, instruction);
 
@@ -153,7 +153,7 @@ it('should handle "read-storage" instruction without at or non-hex at (using wat
     pallet: "test",
     storage: "foo",
     args: [3],
-  } as QueryInstruction;
+  } as SimpleQueryInstruction;
 
   const result = await firstValueFrom(
     // @ts-expect-error this is an observable
@@ -170,7 +170,7 @@ it('should handle "read-storage-entries" instruction with at starting with "0x" 
     storage: "foo",
     args: [3],
     at: "0xabc",
-  } as QueryInstruction;
+  } as SimpleQueryInstruction;
 
   const result = await query(fakeApi, instruction);
 
@@ -185,7 +185,7 @@ it('should handle "read-storage-entries" instruction without at or non-hex at (u
     pallet: "test",
     storage: "foo",
     args: [3],
-  } as QueryInstruction;
+  } as SimpleQueryInstruction;
 
   const result = await firstValueFrom(
     // @ts-expect-error this is an observable

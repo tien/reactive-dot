@@ -1,5 +1,6 @@
 import { mutationEventKey } from "../keys.js";
 import type { ChainComposableOptions } from "../types.js";
+import { tapTx } from "../utils/tap-tx.js";
 import { useAsyncAction } from "./use-async-action.js";
 import { useChainId } from "./use-chain-id.js";
 import { useSigner } from "./use-signer.js";
@@ -12,7 +13,7 @@ import type {
 } from "@reactive-dot/core/internal.js";
 import type { PolkadotSigner, Transaction, TypedApi } from "polkadot-api";
 import { from } from "rxjs";
-import { catchError, switchMap, tap } from "rxjs/operators";
+import { switchMap } from "rxjs/operators";
 import { inject, type MaybeRefOrGetter, toValue } from "vue";
 
 /**
@@ -84,24 +85,7 @@ export function useMutation<
               signer,
               submitOptions?.txOptions ?? toValue(options?.txOptions),
             )
-            .pipe(
-              tap(
-                (value) =>
-                  (mutationEventRef.value = {
-                    ...eventProps,
-                    status: "success",
-                    data: value,
-                  }),
-              ),
-              catchError((error) => {
-                mutationEventRef.value = {
-                  ...eventProps,
-                  status: "error",
-                  error: MutationError.from(error),
-                };
-                throw error;
-              }),
-            );
+            .pipe(tapTx(mutationEventRef, chainId.value, transaction));
         }),
       );
     },

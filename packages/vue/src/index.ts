@@ -5,6 +5,7 @@ export { useChainId, useChainIds } from "./composables/use-chain-id.js";
 export { useChainSpecData } from "./composables/use-chain-spec-data.js";
 export { useClient } from "./composables/use-client.js";
 export { useConfig } from "./composables/use-config.js";
+export { useContractMutation } from "./composables/use-contract-mutation.js";
 export { useMutation } from "./composables/use-mutation.js";
 export { useNativeToken } from "./composables/use-native-token.js";
 export { useQueryErrorResetter } from "./composables/use-query-error-resetter.js";
