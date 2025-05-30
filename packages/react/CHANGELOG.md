@@ -1,5 +1,11 @@
 # @reactive-dot/react
 
+## 0.42.2
+
+### Patch Changes
+
+- [#689](https://github.com/tien/reactive-dot/pull/689) [`3041301`](https://github.com/tien/reactive-dot/commit/3041301dd26c1ed39261468632dabaa75bb12a14) Thanks [@tien](https://github.com/tien)! - Fixed query subscriptions.
+
 ## 0.42.1
 
 ### Patch Changes
