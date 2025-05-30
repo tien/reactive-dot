@@ -1,5 +1,11 @@
 # @reactive-dot/react
 
+## 0.42.1
+
+### Patch Changes
+
+- [#687](https://github.com/tien/reactive-dot/pull/687) [`c72782e`](https://github.com/tien/reactive-dot/commit/c72782e14079c5cabb09e27ea7144dad5b96bcb0) Thanks [@tien](https://github.com/tien)! - Fixed incorrect data returned for queries with one single instruction.
+
 ## 0.42.0
 
 ### Minor Changes
