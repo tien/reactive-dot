@@ -137,7 +137,7 @@ export function useLazyLoadQuery(
       findAllIndexes(options, (options) => options.query === undefined).map(
         (index) => [idle as unknown, index] as const,
       ),
-    ).map(flatHead);
+    );
 
     return !Array.isArray(queryOrOptions)
       ? flatHead(unflattenedData)
@@ -380,10 +380,10 @@ export const queryPayloadAtom = atomFamilyWithErrorCatcher(
 
     return {
       promiseAtom: withErrorCatcher(
-        atom((get) => flatHead(getNestedAtoms(get, atoms, false))),
+        atom((get) => soon(getNestedAtoms(get, atoms, false), flatHead)),
       ),
       observableAtom: withErrorCatcher(
-        atom((get) => flatHead(getNestedAtoms(get, atoms, false))),
+        atom((get) => soon(getNestedAtoms(get, atoms, true), flatHead)),
       ),
     };
   },
