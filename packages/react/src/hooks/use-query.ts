@@ -137,7 +137,7 @@ export function useLazyLoadQuery(
       findAllIndexes(options, (options) => options.query === undefined).map(
         (index) => [idle as unknown, index] as const,
       ),
-    );
+    ).map(flatHead);
 
     return !Array.isArray(queryOrOptions)
       ? flatHead(unflattenedData)
