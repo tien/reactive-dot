@@ -38,10 +38,10 @@
     "@reactive-dot/eslint-config": "workspace:^",
     "@tsconfig/recommended": "^1.0.8",
     "@tsconfig/strictest": "^2.0.5",
-    "eslint": "^9.27.0",
+    "eslint": "^9.28.0",
     "typescript": "^5.8.3",
-    "vitest": "^3.1.4",
-    "vue": "^3.5.14"
+    "vitest": "^3.2.1",
+    "vue": "^3.5.16"
   },
   "peerDependencies": {
     "vue": "3.x"
