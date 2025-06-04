@@ -33,7 +33,7 @@
   },
   "dependencies": {
     "@ledgerhq/hw-transport-webusb": "^6.29.5",
-    "@polkadot-api/ledger-signer": "^0.2.1",
+    "@polkadot-api/ledger-signer": "^0.2.2",
     "@reactive-dot/core": "workspace:^",
     "buffer": "^6.0.3"
   },
@@ -41,8 +41,8 @@
     "@reactive-dot/eslint-config": "workspace:^",
     "@tsconfig/recommended": "^1.0.8",
     "@tsconfig/strictest": "^2.0.5",
-    "eslint": "^9.27.0",
+    "eslint": "^9.28.0",
     "typescript": "^5.8.3",
-    "vitest": "^3.1.4"
+    "vitest": "^3.2.1"
   }
 }
