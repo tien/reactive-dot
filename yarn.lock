@@ -3966,46 +3966,46 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@ledgerhq/devices@npm:^8.4.4":
-  version: 8.4.4
-  resolution: "@ledgerhq/devices@npm:8.4.4"
+"@ledgerhq/devices@npm:8.4.5":
+  version: 8.4.5
+  resolution: "@ledgerhq/devices@npm:8.4.5"
   dependencies:
-    "@ledgerhq/errors": "npm:^6.19.1"
+    "@ledgerhq/errors": "npm:^6.21.0"
     "@ledgerhq/logs": "npm:^6.12.0"
     rxjs: "npm:^7.8.1"
     semver: "npm:^7.3.5"
-  checksum: 10c0/ea4c3dada124c5c0aad59837e1c399bf2f41f8b4da5c996aaf73bbf8719082598808947c505dc728266ff83fc5fea71170d3f0d18a9b5d59e6e2737ae8a38f39
+  checksum: 10c0/f56b6b05876d15dc45720dda3cf973bf69b66243cd1c4aed1e5d3bac78d18a08286c235f489dc7d406e5e365fe8be4aab06bacf18411c1b39b4072feed32a396
   languageName: node
   linkType: hard
 
-"@ledgerhq/errors@npm:^6.19.1":
-  version: 6.19.1
-  resolution: "@ledgerhq/errors@npm:6.19.1"
-  checksum: 10c0/5cfbd5ff5e4316afc88c456a74d3dc0e0032dafd88f656e80a5cb5b297a75ba6701c53ce38ef3f38a84a8591c499b0b9248cdf352ff34c97a550440cdaddd8d2
+"@ledgerhq/errors@npm:^6.21.0":
+  version: 6.21.0
+  resolution: "@ledgerhq/errors@npm:6.21.0"
+  checksum: 10c0/44c599d0c3a6cd36ea461ca19019c62d95e159952990ec660a702b197ca63d253bc02223851b9f016703b4d9cc233a2af06b0f058406000b538fd4bcd45005e7
   languageName: node
   linkType: hard
 
-"@ledgerhq/hw-transport-webusb@npm:^6.29.4":
-  version: 6.29.4
-  resolution: "@ledgerhq/hw-transport-webusb@npm:6.29.4"
+"@ledgerhq/hw-transport-webusb@npm:^6.29.5":
+  version: 6.29.5
+  resolution: "@ledgerhq/hw-transport-webusb@npm:6.29.5"
   dependencies:
-    "@ledgerhq/devices": "npm:^8.4.4"
-    "@ledgerhq/errors": "npm:^6.19.1"
-    "@ledgerhq/hw-transport": "npm:^6.31.4"
+    "@ledgerhq/devices": "npm:8.4.5"
+    "@ledgerhq/errors": "npm:^6.21.0"
+    "@ledgerhq/hw-transport": "npm:^6.31.5"
     "@ledgerhq/logs": "npm:^6.12.0"
-  checksum: 10c0/cddd324c12de64e755422c6dc0d509bc344f2f048c2b743bc5737db9c097ffb6c201fc577d971543e196ccb34a72507450ed3262a2b6d39c753424d299fafc2f
+  checksum: 10c0/4906ac24b2d308aec0ccdab81ddf367f5f719de0b9f3d785ad483a1e06db4c96cc5d469c744e5c6d60e445be03cefa75bd36057eab9a743f061a31618ffc115b
   languageName: node
   linkType: hard
 
-"@ledgerhq/hw-transport@npm:^6.31.4":
-  version: 6.31.4
-  resolution: "@ledgerhq/hw-transport@npm:6.31.4"
+"@ledgerhq/hw-transport@npm:^6.31.5":
+  version: 6.31.5
+  resolution: "@ledgerhq/hw-transport@npm:6.31.5"
   dependencies:
-    "@ledgerhq/devices": "npm:^8.4.4"
-    "@ledgerhq/errors": "npm:^6.19.1"
+    "@ledgerhq/devices": "npm:8.4.5"
+    "@ledgerhq/errors": "npm:^6.21.0"
     "@ledgerhq/logs": "npm:^6.12.0"
     events: "npm:^3.3.0"
-  checksum: 10c0/033acb802d991788efcda9223356528d0987a268e94c34cbafde499541722363e7cfa6e2734365ef3282c0a80a69f4964a6d728690ff7494662a650516530b02
+  checksum: 10c0/29ef563a88d6f1e966f63c9f7b8628319c4bf65e84f135b14026c497a4e26d64d026ea5302f95d6b8a2d56c664a9f221db28f423d9634331bed2ae96bc7db725
   languageName: node
   linkType: hard
 
@@ -5076,7 +5076,7 @@ __metadata:
     "@tsconfig/strictest": "npm:^2.0.5"
     "@types/react": "npm:^19.1.4"
     eslint: "npm:^9.27.0"
-    jotai: "npm:^2.12.4"
+    jotai: "npm:^2.12.5"
     jotai-derive: "npm:^0.1.3"
     jotai-effect: "npm:^2.0.2"
     jsdom: "npm:^26.1.0"
@@ -5123,7 +5123,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@reactive-dot/wallet-ledger@workspace:packages/wallet-ledger"
   dependencies:
-    "@ledgerhq/hw-transport-webusb": "npm:^6.29.4"
+    "@ledgerhq/hw-transport-webusb": "npm:^6.29.5"
     "@polkadot-api/ledger-signer": "npm:^0.2.1"
     "@reactive-dot/core": "workspace:^"
     "@reactive-dot/eslint-config": "workspace:^"
@@ -5161,7 +5161,7 @@ __metadata:
     "@tsconfig/recommended": "npm:^1.0.8"
     "@tsconfig/strictest": "npm:^2.0.5"
     "@walletconnect/modal": "npm:^2.7.0"
-    "@walletconnect/universal-provider": "npm:^2.20.3"
+    "@walletconnect/universal-provider": "npm:^2.21.1"
     eslint: "npm:^9.27.0"
     typescript: "npm:^5.8.3"
     vitest: "npm:^3.1.4"
@@ -7160,9 +7160,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@walletconnect/core@npm:2.20.3":
-  version: 2.20.3
-  resolution: "@walletconnect/core@npm:2.20.3"
+"@walletconnect/core@npm:2.21.1":
+  version: 2.21.1
+  resolution: "@walletconnect/core@npm:2.21.1"
   dependencies:
     "@walletconnect/heartbeat": "npm:1.2.2"
     "@walletconnect/jsonrpc-provider": "npm:1.0.14"
@@ -7175,13 +7175,13 @@ __metadata:
     "@walletconnect/relay-auth": "npm:1.1.0"
     "@walletconnect/safe-json": "npm:1.0.2"
     "@walletconnect/time": "npm:1.0.2"
-    "@walletconnect/types": "npm:2.20.3"
-    "@walletconnect/utils": "npm:2.20.3"
+    "@walletconnect/types": "npm:2.21.1"
+    "@walletconnect/utils": "npm:2.21.1"
     "@walletconnect/window-getters": "npm:1.0.1"
     es-toolkit: "npm:1.33.0"
     events: "npm:3.3.0"
     uint8arrays: "npm:3.1.0"
-  checksum: 10c0/f6d614ec7827989d5552f7f18884f7b077c92b666cb3ecc5a0cd997203ed0609b1f3e2fcad5abf63966aa5544a020199f0361375e2d7fc7e7bb85dc7cc6797f3
+  checksum: 10c0/78664ab17591cd023dfe497e89db2e1d330354ce1b88fe4a75a700ee5a581eaa1ad0a61549b0c269587cc5d8d932155ff01ce98d74b506c41b9c172ca2ec252e
   languageName: node
   linkType: hard
 
@@ -7359,20 +7359,20 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@walletconnect/sign-client@npm:2.20.3":
-  version: 2.20.3
-  resolution: "@walletconnect/sign-client@npm:2.20.3"
+"@walletconnect/sign-client@npm:2.21.1":
+  version: 2.21.1
+  resolution: "@walletconnect/sign-client@npm:2.21.1"
   dependencies:
-    "@walletconnect/core": "npm:2.20.3"
+    "@walletconnect/core": "npm:2.21.1"
     "@walletconnect/events": "npm:1.0.1"
     "@walletconnect/heartbeat": "npm:1.2.2"
     "@walletconnect/jsonrpc-utils": "npm:1.0.8"
     "@walletconnect/logger": "npm:2.1.2"
     "@walletconnect/time": "npm:1.0.2"
-    "@walletconnect/types": "npm:2.20.3"
-    "@walletconnect/utils": "npm:2.20.3"
+    "@walletconnect/types": "npm:2.21.1"
+    "@walletconnect/utils": "npm:2.21.1"
     events: "npm:3.3.0"
-  checksum: 10c0/42a914cb5611e3940ddaf9a3543ad8f4ba5194841707cb431af54887f901317c67cb10d3d06f7dd7af45526c674693d6ea75f795f2606442c5e1bd1493c2c955
+  checksum: 10c0/ed33f8150a4d9966ca80c6455557fb2aa8f396c48ca4e4f56ff0bd0f97d53dafcc3609073d7c31f54d3ea87392045ddfbca2d7a0b8544eaa5c618a3a92f90b66
   languageName: node
   linkType: hard
 
@@ -7385,9 +7385,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@walletconnect/types@npm:2.20.3":
-  version: 2.20.3
-  resolution: "@walletconnect/types@npm:2.20.3"
+"@walletconnect/types@npm:2.21.1":
+  version: 2.21.1
+  resolution: "@walletconnect/types@npm:2.21.1"
   dependencies:
     "@walletconnect/events": "npm:1.0.1"
     "@walletconnect/heartbeat": "npm:1.2.2"
@@ -7395,13 +7395,13 @@ __metadata:
     "@walletconnect/keyvaluestorage": "npm:1.1.1"
     "@walletconnect/logger": "npm:2.1.2"
     events: "npm:3.3.0"
-  checksum: 10c0/c8f25e8199ebff0a6a10641c891276cb6026b5e4e647b035318cc76fd3f1e193ec53e6aaa141486cd510472863b5bf3d3fe2d74ab1ec97404c81d364923a0088
+  checksum: 10c0/60468f50ea7c95ac5269a9e53a0417d50302978a927c042a0376d4dcb0d336f2187a129e8c602a173ccf020a193a4dde50f3f9f74d5b8da0a9801aa9d672458e
   languageName: node
   linkType: hard
 
-"@walletconnect/universal-provider@npm:^2.20.3":
-  version: 2.20.3
-  resolution: "@walletconnect/universal-provider@npm:2.20.3"
+"@walletconnect/universal-provider@npm:^2.21.1":
+  version: 2.21.1
+  resolution: "@walletconnect/universal-provider@npm:2.21.1"
   dependencies:
     "@walletconnect/events": "npm:1.0.1"
     "@walletconnect/jsonrpc-http-connection": "npm:1.0.8"
@@ -7410,18 +7410,18 @@ __metadata:
     "@walletconnect/jsonrpc-utils": "npm:1.0.8"
     "@walletconnect/keyvaluestorage": "npm:1.1.1"
     "@walletconnect/logger": "npm:2.1.2"
-    "@walletconnect/sign-client": "npm:2.20.3"
-    "@walletconnect/types": "npm:2.20.3"
-    "@walletconnect/utils": "npm:2.20.3"
+    "@walletconnect/sign-client": "npm:2.21.1"
+    "@walletconnect/types": "npm:2.21.1"
+    "@walletconnect/utils": "npm:2.21.1"
     es-toolkit: "npm:1.33.0"
     events: "npm:3.3.0"
-  checksum: 10c0/fe2fd3cfb40e799bc838e20c26bf87fc5bdc0a7b6663a6a07eb571437165bcd610e373ecfb0c628c53e926908be94e28177f69424b048ede77f3d06d2c4891fe
+  checksum: 10c0/75e97c9a52025b18c05d2e029384492c8a9f82044971be6fef1856962984ff6dc48805fc732d1cd748979ab19a6eb688c9e8ed7a0944f57efd384d1ab6375252
   languageName: node
   linkType: hard
 
-"@walletconnect/utils@npm:2.20.3":
-  version: 2.20.3
-  resolution: "@walletconnect/utils@npm:2.20.3"
+"@walletconnect/utils@npm:2.21.1":
+  version: 2.21.1
+  resolution: "@walletconnect/utils@npm:2.21.1"
   dependencies:
     "@noble/ciphers": "npm:1.2.1"
     "@noble/curves": "npm:1.8.1"
@@ -7432,7 +7432,7 @@ __metadata:
     "@walletconnect/relay-auth": "npm:1.1.0"
     "@walletconnect/safe-json": "npm:1.0.2"
     "@walletconnect/time": "npm:1.0.2"
-    "@walletconnect/types": "npm:2.20.3"
+    "@walletconnect/types": "npm:2.21.1"
     "@walletconnect/window-getters": "npm:1.0.1"
     "@walletconnect/window-metadata": "npm:1.0.1"
     bs58: "npm:6.0.0"
@@ -7440,7 +7440,7 @@ __metadata:
     query-string: "npm:7.1.3"
     uint8arrays: "npm:3.1.0"
     viem: "npm:2.23.2"
-  checksum: 10c0/994709b18ab2a15fbc9ddffe3432e3200fd3da7719853a66b071e46e69c4657a9cc9e10d13a654b6ea894bcc692a174b16a1cf9a70e67c7e2c28fa8700178c7a
+  checksum: 10c0/367cf46f2534805fd4555564f2b1056fcc927464b9f1b9be495e1f1c599ec43cf5cc75ea1f01bec92a0e85fba029b6298a77820b1e9e61a7bf7e1bbde3525811
   languageName: node
   linkType: hard
 
@@ -13533,9 +13533,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"jotai@npm:^2.12.4":
-  version: 2.12.4
-  resolution: "jotai@npm:2.12.4"
+"jotai@npm:^2.12.5":
+  version: 2.12.5
+  resolution: "jotai@npm:2.12.5"
   peerDependencies:
     "@types/react": ">=17.0.0"
     react: ">=17.0.0"
@@ -13544,7 +13544,7 @@ __metadata:
       optional: true
     react:
       optional: true
-  checksum: 10c0/b03cbfe1f5b6a1065bf0f73aba1aaa0dc46843f4bfc1a54aa9cc24ca1c9416535c40c1de143f67c8de77622f6f24298dd47286557bd52f94af2109b4120d3bb3
+  checksum: 10c0/5075b2c78f3e170d84a14b9f69a5903a5aa5b61242ee9acebc5665ce5a5fb13724748107dfd1069d00fe45b3a4ed15e07c40c0861dc817effc10532b733afabe
   languageName: node
   linkType: hard
 
