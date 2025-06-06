@@ -12,6 +12,12 @@ Contract support via PolkaVM on Polkadot is still in alpha.
 
 :::
 
+:::tip
+
+If you're new to ReactiveDOT, we strongly recommend starting with the [“Getting started guide”](/react/category/getting-started). This guide covers essential topics such as connecting to a blockchain, setting up wallets, querying data, and handling errors effectively.
+
+:::
+
 ## Defining contract
 
 ReactiveDOT utilizes Ink! [metadata](https://use.ink/docs/v6/basics/metadata/ink) to interact with and provide types for contracts. Metadata files typically end with `.json` or `.contract` and can be obtained by [compiling](https://use.ink/docs/v6/getting-started/building-your-contract) the contract yourself or from the contract developers.
