@@ -3791,15 +3791,15 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@ledgerhq/devices@npm:8.4.5":
-  version: 8.4.5
-  resolution: "@ledgerhq/devices@npm:8.4.5"
+"@ledgerhq/devices@npm:8.4.6":
+  version: 8.4.6
+  resolution: "@ledgerhq/devices@npm:8.4.6"
   dependencies:
     "@ledgerhq/errors": "npm:^6.21.0"
-    "@ledgerhq/logs": "npm:^6.12.0"
+    "@ledgerhq/logs": "npm:^6.13.0"
     rxjs: "npm:^7.8.1"
     semver: "npm:^7.3.5"
-  checksum: 10c0/f56b6b05876d15dc45720dda3cf973bf69b66243cd1c4aed1e5d3bac78d18a08286c235f489dc7d406e5e365fe8be4aab06bacf18411c1b39b4072feed32a396
+  checksum: 10c0/3b2a2af3ba3d6a0019d96c1f0f14b7d14b2c4472f0daa162b6c071258ea55afec61281e71f17178919190c978d9a555a13235837d569281d98d28cbedc321f21
   languageName: node
   linkType: hard
 
@@ -3810,34 +3810,34 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@ledgerhq/hw-transport-webusb@npm:^6.29.5":
-  version: 6.29.5
-  resolution: "@ledgerhq/hw-transport-webusb@npm:6.29.5"
+"@ledgerhq/hw-transport-webusb@npm:^6.29.6":
+  version: 6.29.6
+  resolution: "@ledgerhq/hw-transport-webusb@npm:6.29.6"
   dependencies:
-    "@ledgerhq/devices": "npm:8.4.5"
+    "@ledgerhq/devices": "npm:8.4.6"
     "@ledgerhq/errors": "npm:^6.21.0"
-    "@ledgerhq/hw-transport": "npm:^6.31.5"
-    "@ledgerhq/logs": "npm:^6.12.0"
-  checksum: 10c0/4906ac24b2d308aec0ccdab81ddf367f5f719de0b9f3d785ad483a1e06db4c96cc5d469c744e5c6d60e445be03cefa75bd36057eab9a743f061a31618ffc115b
+    "@ledgerhq/hw-transport": "npm:^6.31.6"
+    "@ledgerhq/logs": "npm:^6.13.0"
+  checksum: 10c0/cd03ffab67be0dfb962339e7b002c2d8e1761808b2887e812e44bef791ae2ab726568724bd0f4f788ece7bd850a0ec57aa1ff8061b2236103d824b39b18eef6d
   languageName: node
   linkType: hard
 
-"@ledgerhq/hw-transport@npm:^6.31.5":
-  version: 6.31.5
-  resolution: "@ledgerhq/hw-transport@npm:6.31.5"
+"@ledgerhq/hw-transport@npm:^6.31.6":
+  version: 6.31.6
+  resolution: "@ledgerhq/hw-transport@npm:6.31.6"
   dependencies:
-    "@ledgerhq/devices": "npm:8.4.5"
+    "@ledgerhq/devices": "npm:8.4.6"
     "@ledgerhq/errors": "npm:^6.21.0"
-    "@ledgerhq/logs": "npm:^6.12.0"
+    "@ledgerhq/logs": "npm:^6.13.0"
     events: "npm:^3.3.0"
-  checksum: 10c0/29ef563a88d6f1e966f63c9f7b8628319c4bf65e84f135b14026c497a4e26d64d026ea5302f95d6b8a2d56c664a9f221db28f423d9634331bed2ae96bc7db725
+  checksum: 10c0/f7b2c29cf254936b67a6b82fa4ed7913d88cc0653c3dfd85b24e0cde7358aaf56c78932c398e4b6cfce332a8508af4481198d71dca509fd601aa54421e825364
   languageName: node
   linkType: hard
 
-"@ledgerhq/logs@npm:^6.12.0":
-  version: 6.12.0
-  resolution: "@ledgerhq/logs@npm:6.12.0"
-  checksum: 10c0/573122867ae807a60c3218234019ba7c4b35c14551b90c291fd589d7c2e7f002c2e84151868e67801c9f89a33d8a5569da77aef83b5f5e03b5faa2811cab6a86
+"@ledgerhq/logs@npm:^6.13.0":
+  version: 6.13.0
+  resolution: "@ledgerhq/logs@npm:6.13.0"
+  checksum: 10c0/8b40a7af64a9526b441394e84f05afc42552b4d3d1e45c33dd262d669c77e2351e06bd354929ffdf6cfe0e0404b0042b8b5da610016232a0eb516f1daa73f39f
   languageName: node
   linkType: hard
 
@@ -4948,7 +4948,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@reactive-dot/wallet-ledger@workspace:packages/wallet-ledger"
   dependencies:
-    "@ledgerhq/hw-transport-webusb": "npm:^6.29.5"
+    "@ledgerhq/hw-transport-webusb": "npm:^6.29.6"
     "@polkadot-api/ledger-signer": "npm:^0.2.2"
     "@reactive-dot/core": "workspace:^"
     "@reactive-dot/eslint-config": "workspace:^"
