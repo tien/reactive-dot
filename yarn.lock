@@ -4944,6 +4944,7 @@ __metadata:
   dependencies:
     "@reactive-dot/core": "workspace:^"
     "@reactive-dot/eslint-config": "workspace:^"
+    "@reactive-dot/test": "workspace:^"
     "@testing-library/dom": "npm:^10.4.0"
     "@testing-library/react": "npm:^16.3.0"
     "@testing-library/user-event": "npm:^14.6.1"
@@ -4961,6 +4962,20 @@ __metadata:
     wonka: "npm:^6.3.5"
   peerDependencies:
     react: 19.x
+  languageName: unknown
+  linkType: soft
+
+"@reactive-dot/test@workspace:^, @reactive-dot/test@workspace:packages/test":
+  version: 0.0.0-use.local
+  resolution: "@reactive-dot/test@workspace:packages/test"
+  dependencies:
+    "@reactive-dot/core": "workspace:^"
+    "@reactive-dot/eslint-config": "workspace:^"
+    "@tsconfig/recommended": "npm:^1.0.8"
+    "@tsconfig/strictest": "npm:^2.0.5"
+    eslint: "npm:^9.28.0"
+    typescript: "npm:^5.8.3"
+    vitest: "npm:^3.2.3"
   languageName: unknown
   linkType: soft
 

@@ -9,6 +9,7 @@ export default defineConfig({
       exclude: [
         "**/build/**",
         "packages/eslint-config",
+        "packages/test",
         ...coverageConfigDefaults.exclude,
       ],
     },
