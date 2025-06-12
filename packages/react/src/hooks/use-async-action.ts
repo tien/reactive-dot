@@ -1,11 +1,11 @@
 import {
-  type AsyncValue,
   idle,
   MutationError,
   pending,
+  type AsyncValue,
 } from "@reactive-dot/core";
 import { useCallback, useState } from "react";
-import type { Observable } from "rxjs";
+import { Subject, type Observable } from "rxjs";
 
 /**
  * @internal
@@ -29,8 +29,15 @@ export function useAsyncAction<
     [],
   );
 
+  type ExecuteReturn =
+    TReturn extends Promise<infer Value>
+      ? Promise<Value>
+      : TReturn extends Observable<infer Value>
+        ? Subject<Value>
+        : never;
+
   const execute = useCallback(
-    (...args: TArgs) => {
+    (...args: TArgs): ExecuteReturn => {
       const resolve = (value: unknown) => setState(value as Value);
 
       try {
@@ -39,9 +46,23 @@ export function useAsyncAction<
         const result = action(...args);
 
         if (result instanceof Promise) {
-          return result.then(resolve).catch(setError);
+          return result.then(resolve).catch(setError) as ExecuteReturn;
         } else {
-          return result.subscribe({ next: resolve, error: setError });
+          const subject = new Subject();
+
+          result.subscribe({
+            next: (value) => {
+              resolve(value);
+              subject.next(value);
+            },
+            error: (error) => {
+              setError(error);
+              subject.error(error);
+            },
+            complete: () => subject.complete(),
+          });
+
+          return subject as ExecuteReturn;
         }
       } catch (error) {
         setError(error);
