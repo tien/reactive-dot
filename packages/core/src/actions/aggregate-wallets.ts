@@ -1,12 +1,9 @@
 import { Wallet, type WalletProvider } from "../wallets/index.js";
 
-const providerWallets = new WeakMap<
-  WalletProvider,
-  Promise<readonly Wallet[]>
->();
+const providerWallets = new WeakMap<WalletProvider, Promise<Wallet[]>>();
 
 export function aggregateWallets(
-  providersOrWallets: ReadonlyArray<Wallet | WalletProvider>,
+  providersOrWallets: Array<Wallet | WalletProvider>,
 ) {
   return Promise.all(
     providersOrWallets.map((walletOrProvider) =>

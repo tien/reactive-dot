@@ -22,12 +22,10 @@ export type QueryOptions<TChainId extends ChainId | undefined> =
   ChainOptions<TChainId> & { query: QueryArgument<TChainId> };
 
 export type QueryArgument<TChainId extends ChainId | undefined> =
-  | Query<readonly QueryInstruction[], ChainDescriptorOf<TChainId>>
+  | Query<QueryInstruction[], ChainDescriptorOf<TChainId>>
   | ((
       query: Query<[], ChainDescriptorOf<TChainId>>,
-    ) =>
-      | Query<readonly QueryInstruction[], ChainDescriptorOf<TChainId>>
-      | Falsy)
+    ) => Query<QueryInstruction[], ChainDescriptorOf<TChainId>> | Falsy)
   | Falsy;
 
 export type InferQueryArgumentResult<

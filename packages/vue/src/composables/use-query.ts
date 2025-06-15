@@ -82,7 +82,7 @@ export function useQueryObservable<
 
         const processInkInstructions = (
           address: string,
-          instructions: readonly InkQueryInstruction[],
+          instructions: InkQueryInstruction[],
         ) =>
           flatHead(
             instructions.map((instruction) => {

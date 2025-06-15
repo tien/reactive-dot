@@ -39,7 +39,7 @@ it("returns accounts from connected wallets", async () => {
       ],
       true,
     ),
-  ] as const;
+  ];
 
   const config = defineConfig({
     chains: { "test-chain": {} as ChainConfig },

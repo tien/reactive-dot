@@ -5,10 +5,7 @@
  * @param itemsWithIndexes - The items to interlace into the array, along with their indexes.
  * @returns The array with the items interlaced into it.
  */
-export function interlace<T>(
-  array: readonly T[],
-  itemsWithIndexes: ReadonlyArray<readonly [T, number]>,
-): T[] {
+export function interlace<T>(array: T[], itemsWithIndexes: [T, number][]): T[] {
   const result = array.slice();
 
   for (const [item, index] of itemsWithIndexes) {

@@ -282,7 +282,7 @@ export function getQueryInstructionPayloadAtoms(
     if (instruction.instruction === "read-contract") {
       const processInkInstructions = (
         address: string,
-        instructions: readonly InkQueryInstruction[],
+        instructions: InkQueryInstruction[],
       ) => {
         return flatHead(
           instructions.map((instruction) => {
