@@ -78,7 +78,7 @@ export type InferQueryInstructionPayload<
         : never;
 
 export type InferInkInstructionsPayload<
-  TInstructions extends readonly InkQueryInstruction[],
+  TInstructions extends InkQueryInstruction[],
   TDescriptor extends GenericInkDescriptors,
 > = FlatHead<
   Extract<
@@ -99,13 +99,12 @@ export type InferInkQueryPayload<T extends InkQuery> =
 
 export class InkQuery<
   TDescriptor extends GenericInkDescriptors = GenericInkDescriptors,
-  const TInstructions extends
-    readonly InkQueryInstruction[] = readonly InkQueryInstruction[],
+  const TInstructions extends InkQueryInstruction[] = InkQueryInstruction[],
 > {
   readonly #instructions: TInstructions;
 
   constructor(
-    instructions: TInstructions = [] as readonly InkQueryInstruction[] as TInstructions,
+    instructions: TInstructions = [] as InkQueryInstruction[] as TInstructions,
   ) {
     this.#instructions = instructions;
   }

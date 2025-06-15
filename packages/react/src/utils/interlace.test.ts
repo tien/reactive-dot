@@ -7,7 +7,7 @@ it.each([
     itemsWithIndexes: [
       [4, 1],
       [5, 3],
-    ],
+    ] satisfies [number, number][],
     expected: [1, 4, 2, 5, 3],
   },
   {
@@ -15,12 +15,12 @@ it.each([
     itemsWithIndexes: [
       [1, 0],
       [2, 1],
-    ],
+    ] satisfies [number, number][],
     expected: [1, 2],
   },
   {
     array: [1, 2, 3],
-    itemsWithIndexes: [],
+    itemsWithIndexes: [] satisfies [number, number][],
     expected: [1, 2, 3],
   },
   {
@@ -28,7 +28,7 @@ it.each([
     itemsWithIndexes: [
       [4, 1],
       [5, 1],
-    ],
+    ] satisfies [number, number][],
     expected: [1, 5, 4, 2, 3],
   },
   {
@@ -38,10 +38,10 @@ it.each([
       ["y", 2],
       ["z", 4],
       ["@", 6],
-    ],
+    ] satisfies [string, number][],
     expected: ["x", "a", "y", "b", "z", "c", "@"],
   },
-] as const)(
+])(
   "should produce the following: $itemsWithIndexes -> $array = $expected",
   ({ array, itemsWithIndexes, expected }) => {
     expect(interlace<string | number>(array, itemsWithIndexes)).toEqual(

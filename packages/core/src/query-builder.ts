@@ -15,7 +15,7 @@ type PapiCallOptions = Partial<{
   signal: AbortSignal;
 }>;
 
-type OmitCallOptions<T extends readonly unknown[]> = T extends [
+type OmitCallOptions<T extends unknown[]> = T extends [
   infer Head,
   ...infer Tail,
 ]
@@ -226,7 +226,7 @@ export type InferInstructionPayload<
 > = ResponsePayload<InferInstructionResponse<TInstruction, TDescriptor>>;
 
 export type InferInstructionsResponse<
-  TInstructions extends readonly QueryInstruction[],
+  TInstructions extends QueryInstruction[],
   TDescriptor extends ChainDefinition = CommonDescriptor,
 > = {
   [P in keyof TInstructions]: InferInstructionResponse<
@@ -236,7 +236,7 @@ export type InferInstructionsResponse<
 };
 
 export type InferInstructionsPayload<
-  TInstructions extends readonly QueryInstruction[],
+  TInstructions extends QueryInstruction[],
   TDescriptor extends ChainDefinition = CommonDescriptor,
 > = Extract<
   {
@@ -259,14 +259,13 @@ export type InferQueryPayload<T extends Query> =
     : never;
 
 export class Query<
-  const TInstructions extends
-    readonly QueryInstruction[] = readonly QueryInstruction[],
+  const TInstructions extends QueryInstruction[] = QueryInstruction[],
   TDescriptor extends ChainDefinition = CommonDescriptor,
 > {
   readonly #instructions: TInstructions;
 
   constructor(
-    instructions: TInstructions = [] as readonly QueryInstruction[] as TInstructions,
+    instructions: TInstructions = [] as QueryInstruction[] as TInstructions,
   ) {
     this.#instructions = instructions;
   }

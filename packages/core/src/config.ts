@@ -13,13 +13,14 @@ export type Config<
   TChains extends Readonly<Record<string, ChainConfig>> = Readonly<
     Record<string, ChainConfig>
   >,
-  TTargetChainIds extends ReadonlyArray<
-    Extract<keyof TChains, string>
-  > = ReadonlyArray<Extract<keyof TChains, string>>,
+  TTargetChainIds extends Extract<keyof TChains, string>[] = Extract<
+    keyof TChains,
+    string
+  >[],
 > = {
   readonly chains: TChains;
   readonly targetChains?: TTargetChainIds;
-  readonly wallets?: ReadonlyArray<WalletProvider | Wallet>;
+  readonly wallets?: Array<WalletProvider | Wallet>;
   /**
    * Enable SSR support & optimizations
    *
@@ -30,7 +31,7 @@ export type Config<
 
 export function defineConfig<
   const TChains extends Readonly<Record<string, ChainConfig>>,
-  const TTargetChainIds extends ReadonlyArray<Extract<keyof TChains, string>>,
+  const TTargetChainIds extends Extract<keyof TChains, string>[],
 >(config: Config<TChains, TTargetChainIds>) {
   return config;
 }

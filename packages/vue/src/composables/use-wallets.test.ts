@@ -19,7 +19,7 @@ it("fetches wallets from the config", async () => {
 });
 
 it("fetches connected wallets", async () => {
-  const wallets = [new MockWallet([]), new MockWallet([])] as const;
+  const wallets = [new MockWallet([]), new MockWallet([])];
   const config = defineConfig({ chains: {}, wallets });
 
   const { result } = withSetup(() => useConnectedWallets(), {
@@ -30,7 +30,7 @@ it("fetches connected wallets", async () => {
 
   expect(data.value).toHaveLength(0);
 
-  wallets[0].connect();
+  wallets[0]!.connect();
 
   expect(data.value).toHaveLength(1);
   expect(data.value[0]).toBe(wallets[0]);
