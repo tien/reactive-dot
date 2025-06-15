@@ -1,5 +1,11 @@
 # @reactive-dot/vue
 
+## 0.43.0
+
+### Minor Changes
+
+- [#712](https://github.com/tien/reactive-dot/pull/712) [`cc6e89d`](https://github.com/tien/reactive-dot/commit/cc6e89dc3d7b1fdf01e00d7f5ed4881aeebbe690) Thanks [@tien](https://github.com/tien)! - Return a subscribable subject for asynchronous actions that execute an observable.
+
 ## 0.42.0
 
 ### Minor Changes
