@@ -294,20 +294,26 @@ export class Query<
   storage<
     TPallet extends StringKeyOf<TypedApi<TDescriptor>["query"]>,
     TStorage extends StringKeyOf<TypedApi<TDescriptor>["query"][TPallet]>,
-    TArguments extends InferPapiStorageEntry<
-      TypedApi<TDescriptor>["query"][TPallet][TStorage]
-    >["args"],
   >(
     pallet: TPallet,
     storage: TStorage,
-    ...argsAndOptions: TArguments extends []
-      ? [args?: TArguments, options?: { at?: At }]
-      : [args: TArguments, options?: { at?: At }]
+    ...argsAndOptions: InferPapiStorageEntry<
+      TypedApi<TDescriptor>["query"][TPallet][TStorage]
+    >["args"] extends []
+      ? [
+          args?: InferPapiStorageEntry<
+            TypedApi<TDescriptor>["query"][TPallet][TStorage]
+          >["args"],
+          options?: { at?: At },
+        ]
+      : [
+          args: InferPapiStorageEntry<
+            TypedApi<TDescriptor>["query"][TPallet][TStorage]
+          >["args"],
+          options?: { at?: At },
+        ]
   ) {
-    const [args, options] = argsAndOptions as [
-      TArguments | undefined,
-      { at?: At } | undefined,
-    ];
+    const [args, options] = argsAndOptions;
 
     return this.#append({
       instruction: "read-storage",
@@ -326,13 +332,14 @@ export class Query<
   storages<
     TPallet extends StringKeyOf<TypedApi<TDescriptor>["query"]>,
     TStorage extends StringKeyOf<TypedApi<TDescriptor>["query"][TPallet]>,
-    TArguments extends InferPapiStorageEntry<
-      TypedApi<TDescriptor>["query"][TPallet][TStorage]
-    >["args"],
   >(
     pallet: TPallet,
     storage: TStorage,
-    args: TArguments[],
+    args: Array<
+      InferPapiStorageEntry<
+        TypedApi<TDescriptor>["query"][TPallet][TStorage]
+      >["args"]
+    >,
     options?: { at?: At },
   ) {
     return this.#append({
@@ -353,13 +360,12 @@ export class Query<
   storageEntries<
     TPallet extends StringKeyOf<TypedApi<TDescriptor>["query"]>,
     TStorage extends StringKeyOf<TypedApi<TDescriptor>["query"][TPallet]>,
-    TArguments extends InferPapiStorageEntries<
-      TypedApi<TDescriptor>["query"][TPallet][TStorage]
-    >["args"],
   >(
     pallet: TPallet,
     storage: TStorage,
-    args?: TArguments,
+    args?: InferPapiStorageEntries<
+      TypedApi<TDescriptor>["query"][TPallet][TStorage]
+    >["args"],
     options?: { at?: At },
   ) {
     return this.#append({
@@ -379,20 +385,26 @@ export class Query<
   runtimeApi<
     TPallet extends StringKeyOf<TypedApi<TDescriptor>["apis"]>,
     TApi extends StringKeyOf<TypedApi<TDescriptor>["apis"][TPallet]>,
-    TArguments extends InferPapiRuntimeCall<
-      TypedApi<TDescriptor>["apis"][TPallet][TApi]
-    >["args"],
   >(
     pallet: TPallet,
     api: TApi,
-    ...argsAndOptions: TArguments extends []
-      ? [args?: TArguments, options?: { at?: Finality }]
-      : [args: TArguments, options?: { at?: Finality }]
+    ...argsAndOptions: InferPapiRuntimeCall<
+      TypedApi<TDescriptor>["apis"][TPallet][TApi]
+    >["args"] extends []
+      ? [
+          args?: InferPapiRuntimeCall<
+            TypedApi<TDescriptor>["apis"][TPallet][TApi]
+          >["args"],
+          options?: { at?: Finality },
+        ]
+      : [
+          args: InferPapiRuntimeCall<
+            TypedApi<TDescriptor>["apis"][TPallet][TApi]
+          >["args"],
+          options?: { at?: Finality },
+        ]
   ) {
-    const [args, options] = argsAndOptions as [
-      TArguments | undefined,
-      { at?: Finality } | undefined,
-    ];
+    const [args, options] = argsAndOptions;
 
     return this.#append({
       instruction: "call-api",
@@ -411,13 +423,12 @@ export class Query<
   runtimeApis<
     TPallet extends StringKeyOf<TypedApi<TDescriptor>["apis"]>,
     TApi extends StringKeyOf<TypedApi<TDescriptor>["apis"][TPallet]>,
-    TArguments extends InferPapiRuntimeCall<
-      TypedApi<TDescriptor>["apis"][TPallet][TApi]
-    >["args"],
   >(
     pallet: TPallet,
     api: TApi,
-    args: TArguments[],
+    args: Array<
+      InferPapiRuntimeCall<TypedApi<TDescriptor>["apis"][TPallet][TApi]>["args"]
+    >,
     options?: { at?: Finality },
   ) {
     return this.#append({
