@@ -127,12 +127,17 @@ export class InkQuery<
   /** @experimental */
   storage<
     TPath extends Exclude<StringKeyOf<TDescriptor["__types"]["storage"]>, "">,
-    TKey extends TDescriptor["__types"]["storage"][TPath]["key"],
   >(
     path: TPath,
-    ...keyAndOptions: TKey extends undefined
-      ? [key?: TKey, options?: { at?: Finality }]
-      : [key: TKey, options?: { at?: Finality }]
+    ...keyAndOptions: TDescriptor["__types"]["storage"][TPath]["key"] extends undefined
+      ? [
+          key?: TDescriptor["__types"]["storage"][TPath]["key"],
+          options?: { at?: Finality },
+        ]
+      : [
+          key: TDescriptor["__types"]["storage"][TPath]["key"],
+          options?: { at?: Finality },
+        ]
   ) {
     return this.#append({
       instruction: "read-storage",
@@ -145,8 +150,11 @@ export class InkQuery<
   /** @experimental */
   storages<
     TPath extends Exclude<StringKeyOf<TDescriptor["__types"]["storage"]>, "">,
-    TKey extends TDescriptor["__types"]["storage"][TPath]["key"],
-  >(path: TPath, keys: TKey[], options?: { at?: Finality }) {
+  >(
+    path: TPath,
+    keys: Array<TDescriptor["__types"]["storage"][TPath]["key"]>,
+    options?: { at?: Finality },
+  ) {
     return this.#append({
       instruction: "read-storage",
       multi: true,
@@ -161,13 +169,21 @@ export class InkQuery<
     TName extends StringKeyOf<
       ExcludeProperties<TDescriptor["__types"]["messages"], { mutates: true }>
     >,
-    TBody extends TDescriptor["__types"]["messages"][TName]["message"],
   >(
     name: TName,
-    // eslint-disable-next-line @typescript-eslint/no-empty-object-type
-    ...bodyAndOptions: Extract<undefined | {}, TBody> extends never
-      ? [body: TBody, options?: { at?: Finality }]
-      : [body?: TBody, options?: { at?: Finality }]
+    ...bodyAndOptions: Extract<
+      // eslint-disable-next-line @typescript-eslint/no-empty-object-type
+      undefined | {},
+      TDescriptor["__types"]["messages"][TName]["message"]
+    > extends never
+      ? [
+          body: TDescriptor["__types"]["messages"][TName]["message"],
+          options?: { at?: Finality },
+        ]
+      : [
+          body?: TDescriptor["__types"]["messages"][TName]["message"],
+          options?: { at?: Finality },
+        ]
   ) {
     return this.#append({
       instruction: "send-message",
@@ -182,8 +198,11 @@ export class InkQuery<
     TName extends StringKeyOf<
       ExcludeProperties<TDescriptor["__types"]["messages"], { mutates: true }>
     >,
-    TBody extends TDescriptor["__types"]["messages"][TName]["message"],
-  >(name: TName, bodies: TBody[], options?: { at?: Finality }) {
+  >(
+    name: TName,
+    bodies: Array<TDescriptor["__types"]["messages"][TName]["message"]>,
+    options?: { at?: Finality },
+  ) {
     return this.#append({
       instruction: "send-message",
       multi: true,
