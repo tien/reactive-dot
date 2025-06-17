@@ -39,9 +39,9 @@
   },
   "devDependencies": {
     "@reactive-dot/eslint-config": "workspace:^",
-    "@tsconfig/recommended": "^1.0.8",
+    "@tsconfig/recommended": "^1.0.9",
     "@tsconfig/strictest": "^2.0.5",
-    "eslint": "^9.28.0",
+    "eslint": "^9.29.0",
     "typescript": "^5.8.3",
     "vitest": "^3.2.3"
   }
