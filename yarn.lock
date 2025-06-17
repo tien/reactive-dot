@@ -4198,21 +4198,21 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@noble/curves@npm:1.9.2, @noble/curves@npm:~1.9.0":
+  version: 1.9.2
+  resolution: "@noble/curves@npm:1.9.2"
+  dependencies:
+    "@noble/hashes": "npm:1.8.0"
+  checksum: 10c0/21d049ae4558beedbf5da0004407b72db84360fa29d64822d82dc9e80251e1ecb46023590cc4b20e70eed697d1b87279b4911dc39f8694c51c874289cfc8e9a7
+  languageName: node
+  linkType: hard
+
 "@noble/curves@npm:^1.6.0, @noble/curves@npm:~1.8.1":
   version: 1.8.1
   resolution: "@noble/curves@npm:1.8.1"
   dependencies:
     "@noble/hashes": "npm:1.7.1"
   checksum: 10c0/84902c7af93338373a95d833f77981113e81c48d4bec78f22f63f1f7fdd893bc1d3d7a3ee78f01b9a8ad3dec812a1232866bf2ccbeb2b1560492e5e7d690ab1f
-  languageName: node
-  linkType: hard
-
-"@noble/curves@npm:~1.9.0":
-  version: 1.9.2
-  resolution: "@noble/curves@npm:1.9.2"
-  dependencies:
-    "@noble/hashes": "npm:1.8.0"
-  checksum: 10c0/21d049ae4558beedbf5da0004407b72db84360fa29d64822d82dc9e80251e1ecb46023590cc4b20e70eed697d1b87279b4911dc39f8694c51c874289cfc8e9a7
   languageName: node
   linkType: hard
 
@@ -5051,7 +5051,7 @@ __metadata:
     "@tsconfig/recommended": "npm:^1.0.8"
     "@tsconfig/strictest": "npm:^2.0.5"
     "@walletconnect/modal": "npm:^2.7.0"
-    "@walletconnect/universal-provider": "npm:^2.21.2"
+    "@walletconnect/universal-provider": "npm:^2.21.3"
     eslint: "npm:^9.28.0"
     typescript: "npm:^5.8.3"
     vitest: "npm:^3.2.3"
@@ -7151,9 +7151,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@walletconnect/core@npm:2.21.2":
-  version: 2.21.2
-  resolution: "@walletconnect/core@npm:2.21.2"
+"@walletconnect/core@npm:2.21.3":
+  version: 2.21.3
+  resolution: "@walletconnect/core@npm:2.21.3"
   dependencies:
     "@walletconnect/heartbeat": "npm:1.2.2"
     "@walletconnect/jsonrpc-provider": "npm:1.0.14"
@@ -7166,13 +7166,13 @@ __metadata:
     "@walletconnect/relay-auth": "npm:1.1.0"
     "@walletconnect/safe-json": "npm:1.0.2"
     "@walletconnect/time": "npm:1.0.2"
-    "@walletconnect/types": "npm:2.21.2"
-    "@walletconnect/utils": "npm:2.21.2"
+    "@walletconnect/types": "npm:2.21.3"
+    "@walletconnect/utils": "npm:2.21.3"
     "@walletconnect/window-getters": "npm:1.0.1"
-    es-toolkit: "npm:1.38.0"
+    es-toolkit: "npm:1.39.3"
     events: "npm:3.3.0"
     uint8arrays: "npm:3.1.1"
-  checksum: 10c0/eb52d42f1571962102272e0217d66672718d867893181a1e2906be33016a0acf9a1c1dc6ffbf14492a355604a58ad37017164b254542756f3d80c77790a15081
+  checksum: 10c0/ac79553046409d4f01e5a83f31bcb999abe1b23c43679cd0716fb867099d0278cce2d8e6405ec9d6fa0d30716c97d8fd4c83859122930f5f0775e297e05585b2
   languageName: node
   linkType: hard
 
@@ -7350,20 +7350,20 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@walletconnect/sign-client@npm:2.21.2":
-  version: 2.21.2
-  resolution: "@walletconnect/sign-client@npm:2.21.2"
+"@walletconnect/sign-client@npm:2.21.3":
+  version: 2.21.3
+  resolution: "@walletconnect/sign-client@npm:2.21.3"
   dependencies:
-    "@walletconnect/core": "npm:2.21.2"
+    "@walletconnect/core": "npm:2.21.3"
     "@walletconnect/events": "npm:1.0.1"
     "@walletconnect/heartbeat": "npm:1.2.2"
     "@walletconnect/jsonrpc-utils": "npm:1.0.8"
     "@walletconnect/logger": "npm:2.1.2"
     "@walletconnect/time": "npm:1.0.2"
-    "@walletconnect/types": "npm:2.21.2"
-    "@walletconnect/utils": "npm:2.21.2"
+    "@walletconnect/types": "npm:2.21.3"
+    "@walletconnect/utils": "npm:2.21.3"
     events: "npm:3.3.0"
-  checksum: 10c0/e7d63bd7bd8fef005864a42a3cefdd374d934d070a3617d49af56ab44f93b1da984951f99b18fe78c2f14c4707e61a11c94e9d178ddc409e551d15d9adbb5d97
+  checksum: 10c0/40d04474896ca8b3291457b8746a6e8fa85aa50a52dc121f6e8a95d82947010a859b7649317555a3503cd861667f966389599cb7edf5ab20d41acbea1c040b45
   languageName: node
   linkType: hard
 
@@ -7376,9 +7376,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@walletconnect/types@npm:2.21.2":
-  version: 2.21.2
-  resolution: "@walletconnect/types@npm:2.21.2"
+"@walletconnect/types@npm:2.21.3":
+  version: 2.21.3
+  resolution: "@walletconnect/types@npm:2.21.3"
   dependencies:
     "@walletconnect/events": "npm:1.0.1"
     "@walletconnect/heartbeat": "npm:1.2.2"
@@ -7386,13 +7386,13 @@ __metadata:
     "@walletconnect/keyvaluestorage": "npm:1.1.1"
     "@walletconnect/logger": "npm:2.1.2"
     events: "npm:3.3.0"
-  checksum: 10c0/432b176f86fba4472576644149ff951e57649546e443888c14ca15dbd8d0218cf6900d78c750f1ce43e58d4a28f19e9e9615ad08f94763dbd8654ba8e2be3b9b
+  checksum: 10c0/0ae35ad796388412a836eba8e50f6a234d038ea51172546d11f282d6d6042faab0b3e3e8485410aaccf0be4c8fd42868403e3fbd2d907ba5a474304a245ca47b
   languageName: node
   linkType: hard
 
-"@walletconnect/universal-provider@npm:^2.21.2":
-  version: 2.21.2
-  resolution: "@walletconnect/universal-provider@npm:2.21.2"
+"@walletconnect/universal-provider@npm:^2.21.3":
+  version: 2.21.3
+  resolution: "@walletconnect/universal-provider@npm:2.21.3"
   dependencies:
     "@walletconnect/events": "npm:1.0.1"
     "@walletconnect/jsonrpc-http-connection": "npm:1.0.8"
@@ -7401,22 +7401,22 @@ __metadata:
     "@walletconnect/jsonrpc-utils": "npm:1.0.8"
     "@walletconnect/keyvaluestorage": "npm:1.1.1"
     "@walletconnect/logger": "npm:2.1.2"
-    "@walletconnect/sign-client": "npm:2.21.2"
-    "@walletconnect/types": "npm:2.21.2"
-    "@walletconnect/utils": "npm:2.21.2"
-    es-toolkit: "npm:1.38.0"
+    "@walletconnect/sign-client": "npm:2.21.3"
+    "@walletconnect/types": "npm:2.21.3"
+    "@walletconnect/utils": "npm:2.21.3"
+    es-toolkit: "npm:1.39.3"
     events: "npm:3.3.0"
-  checksum: 10c0/98762dba69b50ef2154b8e16d0a496858fe58862742907d120e9eea8eb60adf4624cb0dbc6a6ab5c5612f3a407fc392d4bcff1237d152d2fca9aa7838a5e578b
+  checksum: 10c0/bb62a92dbafa33149a285b434b49b1f0d73237191cb001330afd3b3b02e2182d13b44d39db6d3d5cf693ad4476e4341a30bad09d4ad7be29bb9d8cddc003ea18
   languageName: node
   linkType: hard
 
-"@walletconnect/utils@npm:2.21.2":
-  version: 2.21.2
-  resolution: "@walletconnect/utils@npm:2.21.2"
+"@walletconnect/utils@npm:2.21.3":
+  version: 2.21.3
+  resolution: "@walletconnect/utils@npm:2.21.3"
   dependencies:
     "@msgpack/msgpack": "npm:3.1.2"
     "@noble/ciphers": "npm:1.3.0"
-    "@noble/curves": "npm:1.9.1"
+    "@noble/curves": "npm:1.9.2"
     "@noble/hashes": "npm:1.8.0"
     "@scure/base": "npm:1.2.6"
     "@walletconnect/jsonrpc-utils": "npm:1.0.8"
@@ -7425,7 +7425,7 @@ __metadata:
     "@walletconnect/relay-auth": "npm:1.1.0"
     "@walletconnect/safe-json": "npm:1.0.2"
     "@walletconnect/time": "npm:1.0.2"
-    "@walletconnect/types": "npm:2.21.2"
+    "@walletconnect/types": "npm:2.21.3"
     "@walletconnect/window-getters": "npm:1.0.1"
     "@walletconnect/window-metadata": "npm:1.0.1"
     blakejs: "npm:1.2.1"
@@ -7433,8 +7433,8 @@ __metadata:
     detect-browser: "npm:5.3.0"
     query-string: "npm:7.1.3"
     uint8arrays: "npm:3.1.1"
-    viem: "npm:2.30.6"
-  checksum: 10c0/b321827c4c3bd633e8d42bcfe8a7258b9835b6c7b45410fde7cd9a978719d936af97edf32cbf8fbc63209f6e7af598d0637d3010b55bf2cedcfca4b121d3975d
+    viem: "npm:2.31.0"
+  checksum: 10c0/13e67c73b8923bdfd906f302a130f3534675f1174cce3cb79ccb8988772165822d5137c3fc1b6d26a5f894e385e49d1bfd3f693a304788d57a759cffa2335484
   languageName: node
   linkType: hard
 
@@ -10404,15 +10404,15 @@ __metadata:
   languageName: node
   linkType: hard
 
-"es-toolkit@npm:1.38.0":
-  version: 1.38.0
-  resolution: "es-toolkit@npm:1.38.0"
+"es-toolkit@npm:1.39.3":
+  version: 1.39.3
+  resolution: "es-toolkit@npm:1.39.3"
   dependenciesMeta:
     "@trivago/prettier-plugin-sort-imports@4.3.0":
       unplugged: true
     prettier-plugin-sort-re-exports@0.0.1:
       unplugged: true
-  checksum: 10c0/1bffc2d8dbe8db45969cf6674a674bdf9d40d803c923b01645b8a433f43f9304b1d369b6cde2a6ef3889a5aa71ddc741bf8e4103b4d4b48a366e04b4b3d30519
+  checksum: 10c0/1c85e518b1d129d38fdc5796af353f45e8dcb8a20968ff25da1ae1749fc4a36f914570fcd992df33b47c7bca9f3866d53e4e6fa6411c21eb424e99a3e479c96e
   languageName: node
   linkType: hard
 
@@ -20674,9 +20674,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"viem@npm:2.30.6":
-  version: 2.30.6
-  resolution: "viem@npm:2.30.6"
+"viem@npm:2.31.0":
+  version: 2.31.0
+  resolution: "viem@npm:2.31.0"
   dependencies:
     "@noble/curves": "npm:1.9.1"
     "@noble/hashes": "npm:1.8.0"
@@ -20691,7 +20691,7 @@ __metadata:
   peerDependenciesMeta:
     typescript:
       optional: true
-  checksum: 10c0/9b4b85c953363fc97dbba7d46a5fd0e5a81df16f83e82899d6092f5406b0efa2ad51aba1c4c2f084ae6421c0f1be598491473573523ef07a7d12d5fc3a087d7a
+  checksum: 10c0/4f327af609d41720f94664546eae1b8a892ae787630c0259a95ca145f7b07ef82387975b6ab8c223decd34ead69650119226af360d02ac7c17dbc4b60cfdf523
   languageName: node
   linkType: hard
 
