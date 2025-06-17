@@ -17,7 +17,7 @@
     "@reactive-dot/wallet-walletconnect": "workspace:^",
     "date-fns": "^4.1.0",
     "jotai-devtools": "^0.12.0",
-    "polkadot-api": "^1.13.1",
+    "polkadot-api": "^1.14.0",
     "react": "^19.1.0",
     "react-dom": "^19.1.0",
     "react-error-boundary": "^6.0.0",
@@ -25,13 +25,13 @@
   },
   "devDependencies": {
     "@reactive-dot/eslint-config": "workspace:^",
-    "@tsconfig/recommended": "^1.0.8",
+    "@tsconfig/recommended": "^1.0.9",
     "@tsconfig/strictest": "^2.0.5",
-    "@tsconfig/vite-react": "^6.3.5",
-    "@types/react": "^19.1.7",
+    "@tsconfig/vite-react": "^6.3.6",
+    "@types/react": "^19.1.8",
     "@types/react-dom": "^19.1.6",
     "@vitejs/plugin-react": "^4.5.2",
-    "eslint": "^9.28.0",
+    "eslint": "^9.29.0",
     "typescript": "^5.8.3",
     "vite": "^6.3.5"
   }
