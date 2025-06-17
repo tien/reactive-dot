@@ -3,7 +3,10 @@
   "version": "0.0.0",
   "private": true,
   "type": "module",
-  "exports": "./src/index.ts",
+  "exports": {
+    ".": "./src/index.ts",
+    "./tests/*": "./src/tests/*"
+  },
   "devDependencies": {
     "@reactive-dot/core": "workspace:^",
     "@reactive-dot/eslint-config": "workspace:^",

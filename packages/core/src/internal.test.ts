@@ -8,6 +8,7 @@ it("should match inline snapshot", () =>
       "getContractConfig",
       "flatHead",
       "nativeTokenInfoFromChainSpecData",
+      "omit",
       "stringify",
       "toObservable",
     ]

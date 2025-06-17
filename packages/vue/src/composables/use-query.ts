@@ -18,6 +18,7 @@ import {
   type Contract,
   flatHead,
   type InkQueryInstruction,
+  omit,
   type SimpleInkQueryInstruction,
   type SimpleQueryInstruction,
   stringify,
@@ -241,7 +242,9 @@ function queryInstruction(
     computed(() => [
       "query",
       toValue(chainId),
-      stringify(toValue(instruction)),
+      stringify(
+        toValue(omit(instruction, ["directives" as keyof typeof instruction])),
+      ),
     ]),
     () => {
       switch (preflight(toValue(instruction))) {
@@ -281,7 +284,7 @@ function queryInkInstruction(
       "ink-query",
       toValue(chainId),
       contract.valueOf(),
-      stringify(instruction),
+      stringify(omit(instruction, ["directives" as keyof typeof instruction])),
     ]),
     async () =>
       queryInk(

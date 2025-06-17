@@ -1,7 +1,11 @@
 import { findAllIndexes } from "../utils/find-all-indexes.js";
 import { interlace } from "../utils/interlace.js";
 import { atomFamilyWithErrorCatcher } from "../utils/jotai/atom-family-with-error-catcher.js";
-import { atomWithObservableAndPromise } from "../utils/jotai/atom-with-observable-and-promise.js";
+import {
+  atomWithObservableAndPromise,
+  mapAtomWithObservableAndPromise,
+  type ObservableAndPromiseAtom,
+} from "../utils/jotai/atom-with-observable-and-promise.js";
 import { atomWithPromise } from "../utils/jotai/atom-with-promise.js";
 import { maybePromiseAll } from "../utils/maybe-promise-all.js";
 import { objectId } from "../utils/object-id.js";
@@ -22,12 +26,14 @@ import {
   type ChainId,
   type Config,
   idle,
+  pending,
   type Query,
 } from "@reactive-dot/core";
 import {
   type Contract,
   flatHead,
   type InkQueryInstruction,
+  omit,
   type SimpleInkQueryInstruction,
   type SimpleQueryInstruction,
   stringify,
@@ -39,6 +45,7 @@ import {
 } from "@reactive-dot/core/internal/actions.js";
 import { atom, type Getter } from "jotai";
 import { soon, soonAll } from "jotai-derive";
+import { unwrap } from "jotai/utils";
 import { useMemo } from "react";
 import { from, type Observable } from "rxjs";
 import { switchMap } from "rxjs/operators";
@@ -228,7 +235,7 @@ const inkInstructionPayloadAtom = atomFamilyWithErrorCatcher(
       chainId,
       contract.valueOf(),
       address,
-      stringify(instruction),
+      stringify(omit(instruction, ["directives" as keyof typeof instruction])),
     ].join(),
 );
 
@@ -267,7 +274,11 @@ const instructionPayloadAtom = atomFamilyWithErrorCatcher(
     }
   },
   (config, chainId, instruction) =>
-    [objectId(config), chainId, stringify(instruction)].join(),
+    [
+      objectId(config),
+      chainId,
+      stringify(omit(instruction, ["directives" as keyof typeof instruction])),
+    ].join(),
 );
 
 /**
@@ -296,14 +307,14 @@ export function getQueryInstructionPayloadAtoms(
               );
             }
 
-            const { multi, ...rest } = instruction;
+            const { multi, directives, ...rest } = instruction;
 
             switch (rest.instruction) {
               case "read-storage": {
                 const { keys, ..._rest } = rest;
 
-                return keys.map((key) =>
-                  inkInstructionPayloadAtom(
+                return keys.map((key) => {
+                  const atom = inkInstructionPayloadAtom(
                     config,
                     chainId,
                     contract,
@@ -312,14 +323,16 @@ export function getQueryInstructionPayloadAtoms(
                       ..._rest,
                       key,
                     },
-                  ),
-                );
+                  );
+
+                  return directives.stream ? asStream(atom) : atom;
+                });
               }
               case "send-message": {
                 const { bodies, ..._rest } = rest;
 
-                return bodies.map((body) =>
-                  inkInstructionPayloadAtom(
+                return bodies.map((body) => {
+                  const atom = inkInstructionPayloadAtom(
                     config,
                     chainId,
                     contract,
@@ -328,8 +341,10 @@ export function getQueryInstructionPayloadAtoms(
                       ..._rest,
                       body,
                     },
-                  ),
-                );
+                  );
+
+                  return directives.stream ? asStream(atom) : atom;
+                });
               }
             }
           }),
@@ -345,10 +360,24 @@ export function getQueryInstructionPayloadAtoms(
         );
       }
 
-      const { addresses, ...rest } = instruction;
-      return addresses.map((address) =>
-        processInkInstructions(address, rest.instructions),
-      );
+      const { addresses, multi, directives, ...rest } = instruction;
+
+      return addresses.map((address) => {
+        const atoms = processInkInstructions(address, rest.instructions);
+
+        if (!directives.stream) {
+          return atoms;
+        }
+
+        if (!Array.isArray(atoms)) {
+          return asStream(atoms);
+        }
+
+        return asStream({
+          promiseAtom: atom((get) => getNestedAtoms(get, atoms, false)),
+          observableAtom: atom((get) => getNestedAtoms(get, atoms, true)),
+        });
+      });
     }
 
     if (!("multi" in instruction)) {
@@ -356,9 +385,15 @@ export function getQueryInstructionPayloadAtoms(
     }
 
     return instruction.args.map((args) => {
-      const { multi, ...rest } = instruction;
+      const { multi, directives, ...rest } = instruction;
 
-      return instructionPayloadAtom(config, chainId, { ...rest, args });
+      const atom = instructionPayloadAtom(config, chainId, { ...rest, args });
+
+      if (!directives.stream) {
+        return atom;
+      }
+
+      return asStream(atom);
     });
   });
 }
@@ -433,4 +468,14 @@ function getNestedAtoms<T extends unknown[]>(
       return getNestedAtoms(get, atom, asObservable);
     }),
   ) as UnwrapObservableOrPromiseAtoms<T>;
+}
+
+function asStream<
+  TAtom extends
+    ObservableAndPromiseAtom<// eslint-disable-next-line @typescript-eslint/no-explicit-any
+    any>,
+>(atom: TAtom) {
+  return mapAtomWithObservableAndPromise(atom, (atom) =>
+    unwrap(atom, () => pending),
+  );
 }

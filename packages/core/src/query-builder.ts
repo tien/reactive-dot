@@ -6,6 +6,7 @@ import {
   type InkQueryInstruction,
 } from "./ink/query-builder.js";
 import type { GenericInkDescriptors } from "./ink/types.js";
+import type { pending } from "./symbols.js";
 import type { At, Finality, FlatHead, Flatten, StringKeyOf } from "./types.js";
 import type { ChainDefinition, TypedApi } from "polkadot-api";
 import type { Observable } from "rxjs";
@@ -61,82 +62,63 @@ type InferPapiConstantEntry<T> = T extends {
   ? Promise<Payload>
   : unknown;
 
-export type BaseInstruction<T extends string> = {
-  instruction: T;
-};
-
-export type ConstantFetchInstruction<
-  TPallet extends string = string,
-  TConstant extends string = string,
-> = BaseInstruction<"get-constant"> & {
-  pallet: TPallet;
-  constant: TConstant;
-};
-
-export type StorageReadInstruction<
-  TPallet extends string = string,
-  TStorage extends string = string,
-  TArguments extends unknown[] = unknown[],
-> = BaseInstruction<"read-storage"> & {
-  pallet: TPallet;
-  storage: TStorage;
-  args: TArguments;
-  at: At | undefined;
-};
-
-export type StorageEntriesReadInstruction<
-  TPallet extends string = string,
-  TStorage extends string = string,
-  TArguments extends unknown[] = unknown[],
-> = BaseInstruction<"read-storage-entries"> & {
-  pallet: TPallet;
-  storage: TStorage;
-  args: TArguments;
-  at: At | undefined;
-};
-
-export type ApiCallInstruction<
-  TPallet extends string = string,
-  TApi extends string = string,
-  TArguments extends unknown[] = unknown[],
-> = BaseInstruction<"call-api"> & {
-  pallet: TPallet;
-  api: TApi;
-  args: TArguments;
-  at: Finality | undefined;
-};
-
-export type ContractReadInstruction<
-  TContract extends Contract = Contract,
-  TInstructions extends InkQuery<
-    TContract extends Contract<infer Descriptor> ? Descriptor : never
-  >["instructions"] = InkQuery<
-    TContract extends Contract<infer Descriptor> ? Descriptor : never
-  >["instructions"],
-> = BaseInstruction<"read-contract"> & {
-  contract: TContract;
-  address: string;
-  instructions: TInstructions;
-};
-
-export type MultiContractReadInstruction<
-  TContract extends Contract = Contract,
-  TInstructions extends InkQuery<
-    TContract extends Contract<infer Descriptor> ? Descriptor : never
-  >["instructions"] = InkQuery<
-    TContract extends Contract<infer Descriptor> ? Descriptor : never
-  >["instructions"],
-> = Omit<ContractReadInstruction<TContract, TInstructions>, "address"> & {
-  multi: true;
-  addresses: string[];
+export type BaseInstruction<TName extends string> = {
+  instruction: TName;
 };
 
 export type MultiInstruction<
-  TInstruction extends BaseInstruction<string> & { args: unknown[] },
-> = Omit<TInstruction, "args"> & {
+  TInstruction extends BaseInstruction<string>,
+  TMultiProperty extends string = "args",
+  TMultiPropertyToName extends string = TMultiProperty,
+> = Omit<TInstruction, TMultiProperty> & {
   multi: true;
-  args: unknown[][];
+  directives: {
+    stream: boolean | undefined;
+  };
+} & {
+  [P in TMultiProperty as TMultiPropertyToName]: TMultiProperty extends keyof TInstruction
+    ? TInstruction[TMultiProperty][]
+    : never;
 };
+
+export type ConstantFetchInstruction = BaseInstruction<"get-constant"> & {
+  pallet: string;
+  constant: string;
+};
+
+export type StorageReadInstruction = BaseInstruction<"read-storage"> & {
+  pallet: string;
+  storage: string;
+  args: unknown[];
+  at: At | undefined;
+};
+
+export type StorageEntriesReadInstruction =
+  BaseInstruction<"read-storage-entries"> & {
+    pallet: string;
+    storage: string;
+    args: unknown[];
+    at: At | undefined;
+  };
+
+export type ApiCallInstruction = BaseInstruction<"call-api"> & {
+  pallet: string;
+  api: string;
+  args: unknown[];
+  at: Finality | undefined;
+};
+
+export type ContractReadInstruction = BaseInstruction<"read-contract"> & {
+  contract: Contract;
+  address: string;
+  instructions: InkQuery["instructions"];
+};
+
+export type MultiContractReadInstruction = MultiInstruction<
+  ContractReadInstruction,
+  "address",
+  "addresses"
+>;
 
 export type SimpleQueryInstruction =
   | ConstantFetchInstruction
@@ -196,17 +178,29 @@ export type InferInstructionResponse<
 > = TInstruction extends ConstantFetchInstruction
   ? ConstantFetchPayload<TInstruction, TDescriptor>
   : TInstruction extends MultiInstruction<StorageReadInstruction>
-    ? Array<StorageReadResponse<TInstruction, TDescriptor>>
+    ? Array<
+        true extends TInstruction["directives"]["stream"]
+          ? StorageReadResponse<TInstruction, TDescriptor> | typeof pending
+          : StorageReadResponse<TInstruction, TDescriptor>
+      >
     : TInstruction extends StorageReadInstruction
       ? StorageReadResponse<TInstruction, TDescriptor>
       : TInstruction extends StorageEntriesReadInstruction
         ? StorageEntriesReadResponse<TInstruction, TDescriptor>
         : TInstruction extends MultiInstruction<ApiCallInstruction>
-          ? Array<ApiCallResponse<TInstruction, TDescriptor>>
+          ? Array<
+              true extends TInstruction["directives"]["stream"]
+                ? ApiCallResponse<TInstruction, TDescriptor> | typeof pending
+                : ApiCallResponse<TInstruction, TDescriptor>
+            >
           : TInstruction extends ApiCallInstruction
             ? ApiCallResponse<TInstruction, TDescriptor>
             : TInstruction extends MultiContractReadInstruction
-              ? Array<InferContractReadResponse<TInstruction>>
+              ? Array<
+                  true extends TInstruction["directives"]["stream"]
+                    ? InferContractReadResponse<TInstruction> | typeof pending
+                    : InferContractReadResponse<TInstruction>
+                >
               : TInstruction extends ContractReadInstruction
                 ? InferContractReadResponse<TInstruction>
                 : never;
@@ -259,7 +253,7 @@ export type InferQueryPayload<T extends Query> =
     : never;
 
 export class Query<
-  const TInstructions extends QueryInstruction[] = QueryInstruction[],
+  TInstructions extends QueryInstruction[] = QueryInstruction[],
   TDescriptor extends ChainDefinition = CommonDescriptor,
 > {
   readonly #instructions: TInstructions;
@@ -275,8 +269,10 @@ export class Query<
   }
 
   constant<
-    TPallet extends StringKeyOf<TypedApi<TDescriptor>["constants"]>,
-    TConstant extends StringKeyOf<TypedApi<TDescriptor>["constants"][TPallet]>,
+    const TPallet extends StringKeyOf<TypedApi<TDescriptor>["constants"]>,
+    const TConstant extends StringKeyOf<
+      TypedApi<TDescriptor>["constants"][TPallet]
+    >,
   >(pallet: TPallet, constant: TConstant) {
     return this.#append({
       instruction: "get-constant",
@@ -291,8 +287,8 @@ export class Query<
   getConstant = this.constant;
 
   storage<
-    TPallet extends StringKeyOf<TypedApi<TDescriptor>["query"]>,
-    TStorage extends StringKeyOf<TypedApi<TDescriptor>["query"][TPallet]>,
+    const TPallet extends StringKeyOf<TypedApi<TDescriptor>["query"]>,
+    const TStorage extends StringKeyOf<TypedApi<TDescriptor>["query"][TPallet]>,
   >(
     pallet: TPallet,
     storage: TStorage,
@@ -320,7 +316,7 @@ export class Query<
       storage,
       args: args ?? [],
       at: options?.at,
-    });
+    } satisfies StorageReadInstruction);
   }
 
   /**
@@ -329,8 +325,9 @@ export class Query<
   readStorage = this.storage;
 
   storages<
-    TPallet extends StringKeyOf<TypedApi<TDescriptor>["query"]>,
-    TStorage extends StringKeyOf<TypedApi<TDescriptor>["query"][TPallet]>,
+    const TPallet extends StringKeyOf<TypedApi<TDescriptor>["query"]>,
+    const TStorage extends StringKeyOf<TypedApi<TDescriptor>["query"][TPallet]>,
+    const TStream extends boolean = false,
   >(
     pallet: TPallet,
     storage: TStorage,
@@ -339,7 +336,7 @@ export class Query<
         TypedApi<TDescriptor>["query"][TPallet][TStorage]
       >["args"]
     >,
-    options?: { at?: At },
+    options?: { at?: At; stream?: TStream },
   ) {
     return this.#append({
       instruction: "read-storage",
@@ -348,7 +345,10 @@ export class Query<
       args,
       at: options?.at,
       multi: true,
-    });
+      directives: {
+        stream: options?.stream as NoInfer<TStream>,
+      },
+    } satisfies MultiInstruction<StorageReadInstruction>);
   }
 
   /**
@@ -357,8 +357,8 @@ export class Query<
   readStorages = this.storages;
 
   storageEntries<
-    TPallet extends StringKeyOf<TypedApi<TDescriptor>["query"]>,
-    TStorage extends StringKeyOf<TypedApi<TDescriptor>["query"][TPallet]>,
+    const TPallet extends StringKeyOf<TypedApi<TDescriptor>["query"]>,
+    const TStorage extends StringKeyOf<TypedApi<TDescriptor>["query"][TPallet]>,
   >(
     pallet: TPallet,
     storage: TStorage,
@@ -373,7 +373,7 @@ export class Query<
       storage,
       args: args ?? [],
       at: options?.at,
-    });
+    } satisfies StorageEntriesReadInstruction);
   }
 
   /**
@@ -382,8 +382,8 @@ export class Query<
   readStorageEntries = this.storageEntries;
 
   runtimeApi<
-    TPallet extends StringKeyOf<TypedApi<TDescriptor>["apis"]>,
-    TApi extends StringKeyOf<TypedApi<TDescriptor>["apis"][TPallet]>,
+    const TPallet extends StringKeyOf<TypedApi<TDescriptor>["apis"]>,
+    const TApi extends StringKeyOf<TypedApi<TDescriptor>["apis"][TPallet]>,
   >(
     pallet: TPallet,
     api: TApi,
@@ -411,7 +411,7 @@ export class Query<
       api,
       args: args ?? [],
       at: options?.at,
-    });
+    } satisfies ApiCallInstruction);
   }
 
   /**
@@ -420,15 +420,16 @@ export class Query<
   callApi = this.runtimeApi;
 
   runtimeApis<
-    TPallet extends StringKeyOf<TypedApi<TDescriptor>["apis"]>,
-    TApi extends StringKeyOf<TypedApi<TDescriptor>["apis"][TPallet]>,
+    const TPallet extends StringKeyOf<TypedApi<TDescriptor>["apis"]>,
+    const TApi extends StringKeyOf<TypedApi<TDescriptor>["apis"][TPallet]>,
+    const TStream extends boolean = false,
   >(
     pallet: TPallet,
     api: TApi,
     args: Array<
       InferPapiRuntimeCall<TypedApi<TDescriptor>["apis"][TPallet][TApi]>["args"]
     >,
-    options?: { at?: Finality },
+    options?: { at?: Finality; stream?: TStream },
   ) {
     return this.#append({
       instruction: "call-api",
@@ -437,7 +438,10 @@ export class Query<
       args,
       at: options?.at,
       multi: true,
-    });
+      directives: {
+        stream: options?.stream as NoInfer<TStream>,
+      },
+    } satisfies MultiInstruction<ApiCallInstruction>);
   }
 
   /**
@@ -461,27 +465,34 @@ export class Query<
       contract,
       address,
       instructions: builder(new InkQuery()).instructions,
-    });
+    } satisfies ContractReadInstruction);
   }
 
   /** @experimental */
   contracts<
     TContractDescriptor extends GenericInkDescriptors,
     TContractInstructions extends InkQueryInstruction[],
+    const TStream extends boolean = false,
   >(
     contract: Contract<TContractDescriptor>,
     addresses: string[],
     builder: (
       query: InkQuery<TContractDescriptor, []>,
     ) => InkQuery<TContractDescriptor, TContractInstructions>,
+    options?: {
+      stream?: TStream;
+    },
   ) {
     return this.#append({
       instruction: "read-contract",
       multi: true,
+      directives: {
+        stream: options?.stream as NoInfer<TStream>,
+      },
       contract,
       addresses,
       instructions: builder(new InkQuery()).instructions,
-    });
+    } satisfies MultiContractReadInstruction);
   }
 
   concat<TQueries extends Query[]>(...queries: TQueries) {
@@ -504,9 +515,7 @@ export class Query<
     >;
   }
 
-  #append<const TInstruction extends QueryInstruction>(
-    instruction: TInstruction,
-  ) {
+  #append<TInstruction extends QueryInstruction>(instruction: TInstruction) {
     return new Query([...this.#instructions, instruction]) as Query<
       [...TInstructions, TInstruction],
       TDescriptor

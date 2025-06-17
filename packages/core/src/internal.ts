@@ -22,5 +22,6 @@ export type {
 } from "./types.js";
 export { flatHead } from "./utils/flat-head.js";
 export { nativeTokenInfoFromChainSpecData } from "./utils/native-token-info-from-chain-spec-data.js";
+export { omit } from "./utils/omit.js";
 export { stringify } from "./utils/stringify.js";
 export { toObservable } from "./utils/to-observable.js";
