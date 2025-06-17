@@ -380,8 +380,8 @@ describe("useLazyLoadQuery", () => {
     expect(result.current).toMatchInlineSnapshot(`
       [
         [
-          undefined,
-          undefined,
+          "storage-value",
+          "storage-value",
         ],
         [
           "api-value-Symbol(delay)",

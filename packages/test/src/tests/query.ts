@@ -1,6 +1,7 @@
 import { defineContract, Query } from "@reactive-dot/core";
 import type { SimpleInkQueryInstruction } from "@reactive-dot/core/internal.js";
-import { of } from "rxjs";
+import { from, of } from "rxjs";
+import { map } from "rxjs";
 import { vi } from "vitest";
 
 export const delay = Promise.withResolvers<void>();
@@ -19,14 +20,17 @@ export const mockedTypedApi = {
   query: {
     test_pallet: {
       test_storage: {
-        watchValue: (key?: unknown) =>
-          of(
-            key === delayKey
-              ? delay.promise
-              : key === undefined
-                ? "storage-value"
-                : `storage-value-${String(key)}`,
-          ),
+        watchValue: (key?: unknown) => {
+          if (key === delayKey) {
+            return from(delay.promise).pipe(map(() => "storage-value"));
+          }
+
+          return of(
+            key === undefined
+              ? "storage-value"
+              : `storage-value-${String(key)}`,
+          );
+        },
       },
     },
   },

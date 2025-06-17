@@ -1,8 +1,13 @@
 import { lazyValuesKey } from "../keys.js";
-import { refreshable } from "../utils/refreshable.js";
+import {
+  refresh,
+  type Refreshable,
+  refreshable,
+} from "../utils/refreshable.js";
 import { BaseError } from "@reactive-dot/core";
 import { catchError, isObservable } from "rxjs";
 import {
+  type ComputedRef,
   type MaybeRefOrGetter,
   type ShallowRef,
   computed,
@@ -86,5 +91,15 @@ export function lazyValue<T>(
   return refreshable(
     computed(() => put()),
     () => void put(true),
+  );
+}
+
+export function mapLazyValue<T, U>(
+  value: Refreshable<ComputedRef<T>>,
+  mapper: (value: T) => U,
+) {
+  return refreshable(
+    computed(() => mapper(value.value)),
+    () => refresh(value),
   );
 }

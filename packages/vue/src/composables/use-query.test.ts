@@ -89,9 +89,6 @@ describe("useQuery", () => {
             [
               "contract-0x",
               {
-                "directives": {
-                  "stream": undefined,
-                },
                 "instruction": "read-storage",
                 "key": "test_key1",
                 "path": "test_storage",
@@ -100,9 +97,6 @@ describe("useQuery", () => {
             [
               "contract-0x",
               {
-                "directives": {
-                  "stream": undefined,
-                },
                 "instruction": "read-storage",
                 "key": "test_key2",
                 "path": "test_storage",
@@ -126,9 +120,6 @@ describe("useQuery", () => {
                 "body": {
                   "data": "test-data1",
                 },
-                "directives": {
-                  "stream": undefined,
-                },
                 "instruction": "send-message",
                 "name": "test_message",
               },
@@ -138,9 +129,6 @@ describe("useQuery", () => {
               {
                 "body": {
                   "data": "test-data2",
-                },
-                "directives": {
-                  "stream": undefined,
                 },
                 "instruction": "send-message",
                 "name": "test_message",
@@ -154,9 +142,6 @@ describe("useQuery", () => {
                 "body": {
                   "data": "test-data1",
                 },
-                "directives": {
-                  "stream": undefined,
-                },
                 "instruction": "send-message",
                 "name": "test_message",
               },
@@ -166,9 +151,6 @@ describe("useQuery", () => {
               {
                 "body": {
                   "data": "test-data2",
-                },
-                "directives": {
-                  "stream": undefined,
                 },
                 "instruction": "send-message",
                 "name": "test_message",
@@ -197,9 +179,6 @@ describe("useQuery", () => {
               [
                 "contract-0x",
                 {
-                  "directives": {
-                    "stream": undefined,
-                  },
                   "instruction": "read-storage",
                   "key": "test_key1",
                   "path": "test_storage",
@@ -208,9 +187,6 @@ describe("useQuery", () => {
               [
                 "contract-0x",
                 {
-                  "directives": {
-                    "stream": undefined,
-                  },
                   "instruction": "read-storage",
                   "key": "test_key2",
                   "path": "test_storage",
@@ -234,9 +210,6 @@ describe("useQuery", () => {
                   "body": {
                     "data": "test-data1",
                   },
-                  "directives": {
-                    "stream": undefined,
-                  },
                   "instruction": "send-message",
                   "name": "test_message",
                 },
@@ -246,9 +219,6 @@ describe("useQuery", () => {
                 {
                   "body": {
                     "data": "test-data2",
-                  },
-                  "directives": {
-                    "stream": undefined,
                   },
                   "instruction": "send-message",
                   "name": "test_message",
@@ -276,9 +246,6 @@ describe("useQuery", () => {
               [
                 "contract-0x",
                 {
-                  "directives": {
-                    "stream": undefined,
-                  },
                   "instruction": "read-storage",
                   "key": "test_key1",
                   "path": "test_storage",
@@ -287,9 +254,6 @@ describe("useQuery", () => {
               [
                 "contract-0x",
                 {
-                  "directives": {
-                    "stream": undefined,
-                  },
                   "instruction": "read-storage",
                   "key": "test_key2",
                   "path": "test_storage",
@@ -313,9 +277,6 @@ describe("useQuery", () => {
                   "body": {
                     "data": "test-data1",
                   },
-                  "directives": {
-                    "stream": undefined,
-                  },
                   "instruction": "send-message",
                   "name": "test_message",
                 },
@@ -325,9 +286,6 @@ describe("useQuery", () => {
                 {
                   "body": {
                     "data": "test-data2",
-                  },
-                  "directives": {
-                    "stream": undefined,
                   },
                   "instruction": "send-message",
                   "name": "test_message",
@@ -340,170 +298,55 @@ describe("useQuery", () => {
     `);
   });
 
-  it.skip("streams queries", async () => {
+  it("streams queries", async () => {
     const { result } = withSetup(() => useQuery(streamingQueries), {
       [chainIdKey]: "test-chain",
     });
 
-    const data = (await result).data;
+    await vi.waitUntil(() => result.data.value !== undefined, {
+      timeout: 10_000,
+    });
 
-    expect(data.value).toMatchInlineSnapshot(`
+    expect(result.data.value).toMatchInlineSnapshot(`
       [
         [
-          "storage-value-Symbol(delay)",
-          "storage-value-Symbol(delay)",
+          Symbol(pending),
+          Symbol(pending),
         ],
         [
-          "api-value-Symbol(delay)",
-          "api-value-Symbol(delay)",
-        ],
-        [
-          [
-            [
-              "contract-0x",
-              {
-                "directives": {
-                  "stream": true,
-                },
-                "instruction": "read-storage",
-                "key": Symbol(delay),
-                "path": "test_storage",
-              },
-            ],
-            [
-              "contract-0x",
-              {
-                "directives": {
-                  "stream": true,
-                },
-                "instruction": "read-storage",
-                "key": Symbol(delay),
-                "path": "test_storage",
-              },
-            ],
-          ],
-          [
-            [
-              "contract-0x",
-              {
-                "body": Symbol(delay),
-                "directives": {
-                  "stream": true,
-                },
-                "instruction": "send-message",
-                "name": "test_message",
-              },
-            ],
-            [
-              "contract-0x",
-              {
-                "body": Symbol(delay),
-                "directives": {
-                  "stream": true,
-                },
-                "instruction": "send-message",
-                "name": "test_message",
-              },
-            ],
-          ],
+          Symbol(pending),
+          Symbol(pending),
         ],
         [
           [
-            [
-              "contract-0x",
-              {
-                "directives": {
-                  "stream": true,
-                },
-                "instruction": "read-storage",
-                "key": Symbol(delay),
-                "path": "test_storage",
-              },
-            ],
+            Symbol(pending),
+            Symbol(pending),
           ],
           [
-            [
-              "contract-0x",
-              {
-                "directives": {
-                  "stream": true,
-                },
-                "instruction": "read-storage",
-                "key": Symbol(delay),
-                "path": "test_storage",
-              },
-            ],
+            Symbol(pending),
+            Symbol(pending),
           ],
         ],
         [
-          [
-            [
-              [
-                "contract-0x",
-                {
-                  "directives": {
-                    "stream": true,
-                  },
-                  "instruction": "read-storage",
-                  "key": Symbol(delay),
-                  "path": "test_storage",
-                },
-              ],
-            ],
-            [
-              [
-                "contract-0x",
-                {
-                  "directives": {
-                    "stream": true,
-                  },
-                  "instruction": "read-storage",
-                  "key": Symbol(delay),
-                  "path": "test_storage",
-                },
-              ],
-            ],
-          ],
-          [
-            [
-              [
-                "contract-0x",
-                {
-                  "directives": {
-                    "stream": true,
-                  },
-                  "instruction": "read-storage",
-                  "key": Symbol(delay),
-                  "path": "test_storage",
-                },
-              ],
-            ],
-            [
-              [
-                "contract-0x",
-                {
-                  "directives": {
-                    "stream": true,
-                  },
-                  "instruction": "read-storage",
-                  "key": Symbol(delay),
-                  "path": "test_storage",
-                },
-              ],
-            ],
-          ],
+          Symbol(pending),
+          Symbol(pending),
+        ],
+        [
+          Symbol(pending),
+          Symbol(pending),
         ],
       ]
     `);
 
     delay.resolve();
     await delay.promise;
+    await new Promise((resolve) => setImmediate(resolve));
 
-    expect(data.value).toMatchInlineSnapshot(`
+    expect(result.data.value).toMatchInlineSnapshot(`
       [
         [
-          "storage-value-Symbol(delay)",
-          "storage-value-Symbol(delay)",
+          "storage-value",
+          "storage-value",
         ],
         [
           "api-value-Symbol(delay)",
@@ -514,9 +357,6 @@ describe("useQuery", () => {
             [
               "contract-0x",
               {
-                "directives": {
-                  "stream": true,
-                },
                 "instruction": "read-storage",
                 "key": Symbol(delay),
                 "path": "test_storage",
@@ -525,9 +365,6 @@ describe("useQuery", () => {
             [
               "contract-0x",
               {
-                "directives": {
-                  "stream": true,
-                },
                 "instruction": "read-storage",
                 "key": Symbol(delay),
                 "path": "test_storage",
@@ -539,9 +376,6 @@ describe("useQuery", () => {
               "contract-0x",
               {
                 "body": Symbol(delay),
-                "directives": {
-                  "stream": true,
-                },
                 "instruction": "send-message",
                 "name": "test_message",
               },
@@ -550,9 +384,6 @@ describe("useQuery", () => {
               "contract-0x",
               {
                 "body": Symbol(delay),
-                "directives": {
-                  "stream": true,
-                },
                 "instruction": "send-message",
                 "name": "test_message",
               },
@@ -564,9 +395,6 @@ describe("useQuery", () => {
             [
               "contract-0x",
               {
-                "directives": {
-                  "stream": true,
-                },
                 "instruction": "read-storage",
                 "key": Symbol(delay),
                 "path": "test_storage",
@@ -577,9 +405,6 @@ describe("useQuery", () => {
             [
               "contract-0x",
               {
-                "directives": {
-                  "stream": true,
-                },
                 "instruction": "read-storage",
                 "key": Symbol(delay),
                 "path": "test_storage",
@@ -593,9 +418,6 @@ describe("useQuery", () => {
               [
                 "contract-0x",
                 {
-                  "directives": {
-                    "stream": true,
-                  },
                   "instruction": "read-storage",
                   "key": Symbol(delay),
                   "path": "test_storage",
@@ -606,9 +428,6 @@ describe("useQuery", () => {
               [
                 "contract-0x",
                 {
-                  "directives": {
-                    "stream": true,
-                  },
                   "instruction": "read-storage",
                   "key": Symbol(delay),
                   "path": "test_storage",
@@ -621,9 +440,6 @@ describe("useQuery", () => {
               [
                 "contract-0x",
                 {
-                  "directives": {
-                    "stream": true,
-                  },
                   "instruction": "read-storage",
                   "key": Symbol(delay),
                   "path": "test_storage",
@@ -634,9 +450,6 @@ describe("useQuery", () => {
               [
                 "contract-0x",
                 {
-                  "directives": {
-                    "stream": true,
-                  },
                   "instruction": "read-storage",
                   "key": Symbol(delay),
                   "path": "test_storage",

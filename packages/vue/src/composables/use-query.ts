@@ -11,9 +11,13 @@ import {
 import { useAsyncData } from "./use-async-data.js";
 import { internal_useChainId } from "./use-chain-id.js";
 import { getInkClient } from "./use-ink-client.js";
-import { lazyValue, useLazyValuesCache } from "./use-lazy-value.js";
+import {
+  lazyValue,
+  mapLazyValue,
+  useLazyValuesCache,
+} from "./use-lazy-value.js";
 import { useTypedApiPromise } from "./use-typed-api.js";
-import { type ChainId, Query } from "@reactive-dot/core";
+import { type ChainId, pending, Query } from "@reactive-dot/core";
 import {
   type Contract,
   flatHead,
@@ -30,7 +34,7 @@ import {
 } from "@reactive-dot/core/internal/actions.js";
 import type { ChainDefinition, TypedApi } from "polkadot-api";
 import { combineLatest, from, isObservable, type Observable, of } from "rxjs";
-import { map, switchMap } from "rxjs/operators";
+import { map, startWith, switchMap } from "rxjs/operators";
 import {
   computed,
   type ComputedRef,
@@ -98,13 +102,13 @@ export function useQueryObservable<
                 );
               }
 
-              const { multi, ...rest } = instruction;
+              const { multi, directives, ...rest } = instruction;
 
               switch (rest.instruction) {
                 case "read-storage": {
                   const { keys, ..._rest } = rest;
 
-                  return keys.map((key) =>
+                  const responses = keys.map((key) =>
                     queryInkInstruction(
                       chainId,
                       typedApiPromise,
@@ -114,11 +118,17 @@ export function useQueryObservable<
                       cache,
                     ),
                   );
+
+                  if (!directives.stream) {
+                    return responses;
+                  }
+
+                  return responses.map(asStream);
                 }
                 case "send-message": {
                   const { bodies, ..._rest } = rest;
 
-                  return bodies.map((body) =>
+                  const responses = bodies.map((body) =>
                     queryInkInstruction(
                       chainId,
                       typedApiPromise,
@@ -128,6 +138,12 @@ export function useQueryObservable<
                       cache,
                     ),
                   );
+
+                  if (!directives.stream) {
+                    return responses;
+                  }
+
+                  return responses.map(asStream);
                 }
               }
             }),
@@ -140,10 +156,33 @@ export function useQueryObservable<
           );
         }
 
-        const { addresses, ...rest } = instruction;
-        return addresses.map((address) =>
-          processInkInstructions(address, rest.instructions),
-        );
+        const { addresses, directives, ...rest } = instruction;
+
+        return addresses.map((address) => {
+          const response = processInkInstructions(address, rest.instructions);
+
+          if (!directives.stream) {
+            return response;
+          }
+
+          return asStream(
+            refreshable(
+              computed(() =>
+                combineLatestNested(
+                  response as unknown as ComputedRef<
+                    Promise<unknown> | Observable<unknown>
+                  >[],
+                ),
+              ),
+              () =>
+                recursiveRefresh(
+                  response as unknown as Refreshable<
+                    ComputedRef<Promise<unknown> | Observable<unknown>>
+                  >[],
+                ),
+            ),
+          );
+        });
       }
 
       if (!("multi" in instruction)) {
@@ -151,13 +190,20 @@ export function useQueryObservable<
       }
 
       return instruction.args.map((args) => {
-        const { multi, ...rest } = instruction;
-        return queryInstruction(
+        const { multi, directives, ...rest } = instruction;
+
+        const response = queryInstruction(
           { ...rest, args },
           chainId,
           typedApiPromise,
           cache,
         );
+
+        if (!directives.stream) {
+          return response;
+        }
+
+        return asStream(response);
       });
     });
   });
@@ -168,30 +214,6 @@ export function useQueryObservable<
         return;
       }
 
-      const combineLatestNested = (
-        array: ComputedRef<Promise<unknown> | Observable<unknown>>[],
-      ): Observable<unknown> => {
-        if (array.length === 0) {
-          return of([]);
-        }
-
-        const observables = array.map((value) => {
-          const nestedValue = toValue(value);
-
-          if (isObservable(nestedValue)) {
-            return nestedValue;
-          }
-
-          if (Array.isArray(nestedValue)) {
-            return combineLatestNested(nestedValue);
-          }
-
-          return from(nestedValue) as Observable<unknown>;
-        });
-
-        return combineLatest(observables);
-      };
-
       return combineLatestNested(
         responses.value as unknown as ComputedRef<
           Promise<unknown> | Observable<unknown>
@@ -199,20 +221,6 @@ export function useQueryObservable<
       ).pipe(map(flatHead));
     }),
     () => {
-      const recursiveRefresh = (
-        refreshables:
-          | Refreshable<ComputedRef<Promise<unknown>>>
-          | Refreshable<ComputedRef<Promise<unknown>>>[],
-      ) => {
-        if (!Array.isArray(refreshables)) {
-          refresh(refreshables);
-        } else {
-          for (const refreshable of refreshables) {
-            recursiveRefresh(refreshable);
-          }
-        }
-      };
-
       if (!responses.value) {
         return;
       }
@@ -223,7 +231,7 @@ export function useQueryObservable<
 
       recursiveRefresh(
         responses.value as unknown as Refreshable<
-          ComputedRef<Promise<unknown>>
+          ComputedRef<Promise<unknown> | Observable<unknown>>
         >[],
       );
     },
@@ -296,3 +304,58 @@ function queryInkInstruction(
     cache,
   );
 }
+
+// const streams = new WeakSet<Promise<unknown> | Observable<unknown>>();
+
+function asStream<T>(
+  promiseOrObservable: Refreshable<ComputedRef<Promise<T> | Observable<T>>>,
+) {
+  return mapLazyValue(promiseOrObservable, (promiseOrObservable) =>
+    (promiseOrObservable instanceof Promise
+      ? from(promiseOrObservable)
+      : promiseOrObservable
+    ).pipe(startWith(pending)),
+  );
+}
+
+function combineLatestNested(
+  array: ComputedRef<Promise<unknown> | Observable<unknown>>[],
+): Observable<unknown> {
+  if (array.length === 0) {
+    return of([]);
+  }
+
+  const observables = array.map((value) => {
+    const nestedValue = toValue(value);
+
+    if (Array.isArray(nestedValue)) {
+      return combineLatestNested(nestedValue);
+    }
+
+    const future = (() => {
+      if (isObservable(nestedValue)) {
+        return nestedValue;
+      }
+
+      return from(nestedValue) as Observable<unknown>;
+    })();
+
+    return future;
+  });
+
+  return combineLatest(observables);
+}
+
+const recursiveRefresh = (
+  refreshables:
+    | Refreshable<ComputedRef<Promise<unknown> | Observable<unknown>>>
+    | Refreshable<ComputedRef<Promise<unknown> | Observable<unknown>>>[],
+) => {
+  if (!Array.isArray(refreshables)) {
+    refresh(refreshables);
+  } else {
+    for (const refreshable of refreshables) {
+      recursiveRefresh(refreshable);
+    }
+  }
+};
