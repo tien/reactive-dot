@@ -4998,6 +4998,7 @@ __metadata:
   dependencies:
     "@reactive-dot/core": "workspace:^"
     "@reactive-dot/eslint-config": "workspace:^"
+    "@reactive-dot/test": "workspace:^"
     "@tsconfig/recommended": "npm:^1.0.9"
     "@tsconfig/strictest": "npm:^2.0.5"
     eslint: "npm:^9.29.0"

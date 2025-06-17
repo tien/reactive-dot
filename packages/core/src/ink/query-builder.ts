@@ -1,5 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import type { BaseInstruction } from "../query-builder.js";
+import type { BaseInstruction, MultiInstruction } from "../query-builder.js";
+import type { pending } from "../symbols.js";
 import type {
   ExcludeProperties,
   Finality,
@@ -9,44 +10,40 @@ import type {
 import type { UnwrapResult } from "./result.js";
 import type { GenericInkDescriptors } from "./types.js";
 
-type StorageReadInstruction<
-  TPath extends string = string,
-  TKey = any,
-> = BaseInstruction<"read-storage"> & {
-  path: TPath;
-  key: TKey | undefined;
+type StorageReadInstruction = BaseInstruction<"read-storage"> & {
+  path: string;
+  key: unknown | undefined;
   at: Finality | undefined;
 };
 
-type MultiStorageReadInstruction<
-  TPath extends string = string,
-  TKey = any,
-> = Omit<StorageReadInstruction<TPath, TKey>, "key"> & {
-  multi: true;
-  keys: TKey[];
-};
+type MultiStorageReadInstruction = MultiInstruction<
+  StorageReadInstruction,
+  "key",
+  "keys"
+>;
 
 export type InferStorageReadInstructionPayload<
   TInstruction extends StorageReadInstruction | MultiStorageReadInstruction,
   TDescriptor extends GenericInkDescriptors,
 > = TDescriptor["__types"]["storage"][TInstruction["path"]]["value"];
 
-type MessageSendInstruction<
-  TName extends string = string,
-  TBody = any,
-> = BaseInstruction<"send-message"> & {
-  name: TName;
-  body: TBody | undefined;
+type MessageSendInstruction = BaseInstruction<"send-message"> & {
+  name: string;
+  body:
+    | {
+        [Sym: symbol]: never;
+        [Num: number]: never;
+        [Str: string]: unknown;
+      }
+    | undefined;
   at: Finality | undefined;
 };
 
-type MultiMessageSendInstruction<
-  TName extends string = string,
-  TBody = any,
-> = Omit<MessageSendInstruction<TName, TBody>, "body"> & {
-  multi: true;
-  bodies: TBody[];
-};
+type MultiMessageSendInstruction = MultiInstruction<
+  MessageSendInstruction,
+  "body",
+  "bodies"
+>;
 
 export type InferMessageSendInstructionPayload<
   TInstruction extends MessageSendInstruction | MultiMessageSendInstruction,
@@ -68,11 +65,23 @@ export type InferQueryInstructionPayload<
   TInstruction extends InkQueryInstruction,
   TDescriptor extends GenericInkDescriptors,
 > = TInstruction extends MultiStorageReadInstruction
-  ? Array<InferStorageReadInstructionPayload<TInstruction, TDescriptor>>
+  ? Array<
+      true extends TInstruction["directives"]["stream"]
+        ?
+            | InferStorageReadInstructionPayload<TInstruction, TDescriptor>
+            | typeof pending
+        : InferStorageReadInstructionPayload<TInstruction, TDescriptor>
+    >
   : TInstruction extends StorageReadInstruction
     ? InferStorageReadInstructionPayload<TInstruction, TDescriptor>
     : TInstruction extends MultiMessageSendInstruction
-      ? Array<InferMessageSendInstructionPayload<TInstruction, TDescriptor>>
+      ? Array<
+          true extends TInstruction["directives"]["stream"]
+            ?
+                | InferMessageSendInstructionPayload<TInstruction, TDescriptor>
+                | typeof pending
+            : InferMessageSendInstructionPayload<TInstruction, TDescriptor>
+        >
       : TInstruction extends MessageSendInstruction
         ? InferMessageSendInstructionPayload<TInstruction, TDescriptor>
         : never;
@@ -120,12 +129,15 @@ export class InkQuery<
       path: "" as const,
       key: undefined,
       at: options?.at,
-    });
+    } satisfies StorageReadInstruction);
   }
 
   /** @experimental */
   storage<
-    TPath extends Exclude<StringKeyOf<TDescriptor["__types"]["storage"]>, "">,
+    const TPath extends Exclude<
+      StringKeyOf<TDescriptor["__types"]["storage"]>,
+      ""
+    >,
   >(
     path: TPath,
     ...keyAndOptions: TDescriptor["__types"]["storage"][TPath]["key"] extends undefined
@@ -143,29 +155,36 @@ export class InkQuery<
       path,
       key: keyAndOptions[0] as any,
       at: keyAndOptions[1]?.at,
-    });
+    } satisfies StorageReadInstruction);
   }
 
   /** @experimental */
   storages<
-    TPath extends Exclude<StringKeyOf<TDescriptor["__types"]["storage"]>, "">,
+    const TPath extends Exclude<
+      StringKeyOf<TDescriptor["__types"]["storage"]>,
+      ""
+    >,
+    const TStream extends boolean = false,
   >(
     path: TPath,
     keys: Array<TDescriptor["__types"]["storage"][TPath]["key"]>,
-    options?: { at?: Finality },
+    options?: { at?: Finality; stream?: TStream },
   ) {
     return this.#append({
       instruction: "read-storage",
       multi: true,
+      directives: {
+        stream: options?.stream as NoInfer<TStream>,
+      },
       path,
       keys,
       at: options?.at,
-    });
+    } satisfies MultiStorageReadInstruction);
   }
 
   /** @experimental */
   message<
-    TName extends StringKeyOf<
+    const TName extends StringKeyOf<
       ExcludeProperties<TDescriptor["__types"]["messages"], { mutates: true }>
     >,
   >(
@@ -186,29 +205,35 @@ export class InkQuery<
   ) {
     return this.#append({
       instruction: "send-message",
-      name,
+      // TODO: this is needed for some reason
+      name: name as typeof name,
       body: bodyAndOptions[0] as any,
       at: bodyAndOptions[1]?.at,
-    });
+    } satisfies MessageSendInstruction);
   }
 
   /** @experimental */
   messages<
-    TName extends StringKeyOf<
+    const TName extends StringKeyOf<
       ExcludeProperties<TDescriptor["__types"]["messages"], { mutates: true }>
     >,
+    const TStream extends boolean = false,
   >(
     name: TName,
     bodies: Array<TDescriptor["__types"]["messages"][TName]["message"]>,
-    options?: { at?: Finality },
+    options?: { at?: Finality; stream?: TStream },
   ) {
     return this.#append({
       instruction: "send-message",
       multi: true,
-      name,
+      directives: {
+        stream: options?.stream as NoInfer<TStream>,
+      },
+      // TODO: this is needed for some reason
+      name: name as typeof name,
       bodies,
       at: options?.at,
-    });
+    } satisfies MultiMessageSendInstruction);
   }
 
   #append<const TInstruction extends InkQueryInstruction>(

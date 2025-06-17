@@ -25,13 +25,17 @@ it("should append a read-storage instruction", () => {
   const instructions = newQuery.instructions;
 
   expect(instructions).toHaveLength(1);
-  expect(instructions[0]).toEqual({
-    instruction: "read-storage",
-    pallet: "TestPallet",
-    storage: "TestStorage",
-    args: ["arg1"],
-    at: "finalized",
-  });
+  expect(instructions[0]).toMatchInlineSnapshot(`
+    {
+      "args": [
+        "arg1",
+      ],
+      "at": "finalized",
+      "instruction": "read-storage",
+      "pallet": "TestPallet",
+      "storage": "TestStorage",
+    }
+  `);
 });
 
 it("should append a multi read-storage instruction using storages", () => {
@@ -43,14 +47,26 @@ it("should append a multi read-storage instruction using storages", () => {
   const instructions = newQuery.instructions;
 
   expect(instructions).toHaveLength(1);
-  expect(instructions[0]).toEqual({
-    instruction: "read-storage",
-    pallet: "TestPallet",
-    storage: "TestStorage",
-    args: [["arg1"], ["arg2"]],
-    at: undefined,
-    multi: true,
-  });
+  expect(instructions[0]).toMatchInlineSnapshot(`
+    {
+      "args": [
+        [
+          "arg1",
+        ],
+        [
+          "arg2",
+        ],
+      ],
+      "at": undefined,
+      "directives": {
+        "stream": undefined,
+      },
+      "instruction": "read-storage",
+      "multi": true,
+      "pallet": "TestPallet",
+      "storage": "TestStorage",
+    }
+  `);
 });
 
 it("should append a read-storage-entries instruction", () => {
@@ -61,13 +77,17 @@ it("should append a read-storage-entries instruction", () => {
   const instructions = newQuery.instructions;
 
   expect(instructions).toHaveLength(1);
-  expect(instructions[0]).toEqual({
-    instruction: "read-storage-entries",
-    pallet: "TestPallet",
-    storage: "TestStorage",
-    args: ["arg1"],
-    at: "best",
-  });
+  expect(instructions[0]).toMatchInlineSnapshot(`
+    {
+      "args": [
+        "arg1",
+      ],
+      "at": "best",
+      "instruction": "read-storage-entries",
+      "pallet": "TestPallet",
+      "storage": "TestStorage",
+    }
+  `);
 });
 
 it("should append a call-api instruction", () => {
@@ -78,13 +98,17 @@ it("should append a call-api instruction", () => {
   const instructions = newQuery.instructions;
 
   expect(instructions).toHaveLength(1);
-  expect(instructions[0]).toEqual({
-    instruction: "call-api",
-    pallet: "TestPallet",
-    api: "TestApi",
-    args: ["arg1"],
-    at: "best",
-  });
+  expect(instructions[0]).toMatchInlineSnapshot(`
+    {
+      "api": "TestApi",
+      "args": [
+        "arg1",
+      ],
+      "at": "best",
+      "instruction": "call-api",
+      "pallet": "TestPallet",
+    }
+  `);
 });
 
 it("should append a multi call-api instruction using runtimeApis", () => {
@@ -98,14 +122,26 @@ it("should append a multi call-api instruction using runtimeApis", () => {
   const instructions = newQuery.instructions;
 
   expect(instructions).toHaveLength(1);
-  expect(instructions[0]).toEqual({
-    instruction: "call-api",
-    pallet: "TestPallet",
-    api: "TestApi",
-    args: [["arg1"], ["arg2"]],
-    at: "finalized",
-    multi: true,
-  });
+  expect(instructions[0]).toMatchInlineSnapshot(`
+    {
+      "api": "TestApi",
+      "args": [
+        [
+          "arg1",
+        ],
+        [
+          "arg2",
+        ],
+      ],
+      "at": "finalized",
+      "directives": {
+        "stream": undefined,
+      },
+      "instruction": "call-api",
+      "multi": true,
+      "pallet": "TestPallet",
+    }
+  `);
 });
 
 const mockContractDescriptor = {} as unknown as GenericInkDescriptors;
@@ -128,19 +164,21 @@ it("should append a read-contract instruction", () => {
   const instructions = newQuery.instructions;
 
   expect(instructions).toHaveLength(1);
-  expect(instructions[0]).toEqual({
-    address: "contractAddress123",
-    contract: {},
-    instruction: "read-contract",
-    instructions: [
-      {
-        at: undefined,
-        body: {},
-        instruction: "send-message",
-        name: "testMessage",
-      },
-    ],
-  });
+  expect(instructions[0]).toMatchInlineSnapshot(`
+    {
+      "address": "contractAddress123",
+      "contract": Contract {},
+      "instruction": "read-contract",
+      "instructions": [
+        {
+          "at": undefined,
+          "body": {},
+          "instruction": "send-message",
+          "name": "testMessage",
+        },
+      ],
+    }
+  `);
 });
 
 it("should append a multi read-contract instruction using contracts", () => {
@@ -153,20 +191,28 @@ it("should append a multi read-contract instruction using contracts", () => {
   const instructions = newQuery.instructions;
 
   expect(instructions).toHaveLength(1);
-  expect(instructions[0]).toEqual({
-    addresses: ["address1", "address2"],
-    contract: {},
-    instruction: "read-contract",
-    instructions: [
-      {
-        at: undefined,
-        body: {},
-        instruction: "send-message",
-        name: "testMessage",
+  expect(instructions[0]).toMatchInlineSnapshot(`
+    {
+      "addresses": [
+        "address1",
+        "address2",
+      ],
+      "contract": Contract {},
+      "directives": {
+        "stream": undefined,
       },
-    ],
-    multi: true,
-  });
+      "instruction": "read-contract",
+      "instructions": [
+        {
+          "at": undefined,
+          "body": {},
+          "instruction": "send-message",
+          "name": "testMessage",
+        },
+      ],
+      "multi": true,
+    }
+  `);
 });
 
 it("should return a frozen instructions array", () => {

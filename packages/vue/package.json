@@ -36,6 +36,7 @@
   },
   "devDependencies": {
     "@reactive-dot/eslint-config": "workspace:^",
+    "@reactive-dot/test": "workspace:^",
     "@tsconfig/recommended": "^1.0.9",
     "@tsconfig/strictest": "^2.0.5",
     "eslint": "^9.29.0",

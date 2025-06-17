@@ -10,6 +10,11 @@ const empty = Symbol("empty");
 
 type Data<T> = { value: T | Promise<T> | typeof empty } | { error: unknown };
 
+export type ObservableAndPromiseAtom<T> = {
+  observableAtom: Atom<T | Promise<T>>;
+  promiseAtom: Atom<T | Promise<T>>;
+};
+
 export function atomWithObservableAndPromise<
   TValue,
   TAtomEnhancer extends <TAtomType extends Atom<unknown>>(
@@ -18,10 +23,7 @@ export function atomWithObservableAndPromise<
 >(
   getObservable: (get: Getter) => Observable<TValue>,
   enhanceAtom: TAtomEnhancer = ((atomCreator) => atomCreator) as TAtomEnhancer,
-): {
-  observableAtom: Atom<TValue | Promise<TValue>>;
-  promiseAtom: Atom<TValue | Promise<TValue>>;
-} {
+): ObservableAndPromiseAtom<TValue> {
   const sourceObservable = atom((get) =>
     getObservable(get).pipe(shareReplay({ bufferSize: 1, refCount: true })),
   );
@@ -72,4 +74,19 @@ export function atomWithObservableAndPromise<
   );
 
   return { promiseAtom, observableAtom };
+}
+
+export function mapAtomWithObservableAndPromise<
+  TAtom extends
+    ObservableAndPromiseAtom<// eslint-disable-next-line @typescript-eslint/no-explicit-any
+    any>,
+  TOut,
+>(
+  atom: TAtom,
+  mapper: (atom: TAtom["observableAtom"] | TAtom["promiseAtom"]) => TOut,
+) {
+  return {
+    promiseAtom: mapper(atom.promiseAtom),
+    observableAtom: mapper(atom.observableAtom),
+  };
 }
