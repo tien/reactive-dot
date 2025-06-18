@@ -50,7 +50,7 @@
     "jsdom": "^26.1.0",
     "react": "^19.1.0",
     "typescript": "^5.8.3",
-    "vitest": "^3.2.3",
+    "vitest": "^3.2.4",
     "wonka": "^6.3.5"
   },
   "peerDependencies": {
