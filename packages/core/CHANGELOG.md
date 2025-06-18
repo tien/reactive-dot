@@ -1,5 +1,11 @@
 # @reactive-dot/core
 
+## 0.43.0
+
+### Minor Changes
+
+- [#727](https://github.com/tien/reactive-dot/pull/727) [`b847f5b`](https://github.com/tien/reactive-dot/commit/b847f5b8c85cfc9802b9eb041c5025487a8b884f) Thanks [@tien](https://github.com/tien)! - Added support for streaming multi-query responses, allowing results to be processed incrementally instead of waiting for all queries to complete.
+
 ## 0.42.0
 
 ### Minor Changes

@@ -1,5 +1,18 @@
 # @reactive-dot/react
 
+## 0.43.0
+
+### Minor Changes
+
+- [#727](https://github.com/tien/reactive-dot/pull/727) [`b847f5b`](https://github.com/tien/reactive-dot/commit/b847f5b8c85cfc9802b9eb041c5025487a8b884f) Thanks [@tien](https://github.com/tien)! - Added support for streaming multi-query responses, allowing results to be processed incrementally instead of waiting for all queries to complete.
+
+- [#712](https://github.com/tien/reactive-dot/pull/712) [`cc6e89d`](https://github.com/tien/reactive-dot/commit/cc6e89dc3d7b1fdf01e00d7f5ed4881aeebbe690) Thanks [@tien](https://github.com/tien)! - Return a subscribable subject for asynchronous actions that execute an observable.
+
+### Patch Changes
+
+- Updated dependencies [[`b847f5b`](https://github.com/tien/reactive-dot/commit/b847f5b8c85cfc9802b9eb041c5025487a8b884f)]:
+  - @reactive-dot/core@0.43.0
+
 ## 0.42.4
 
 ### Patch Changes
