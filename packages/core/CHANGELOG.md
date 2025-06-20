@@ -1,5 +1,11 @@
 # @reactive-dot/core
 
+## 0.43.1
+
+### Patch Changes
+
+- [#743](https://github.com/tien/reactive-dot/pull/743) [`16020b2`](https://github.com/tien/reactive-dot/commit/16020b2d00675ddb96d73a10d57b425c52180474) Thanks [@tien](https://github.com/tien)! - Fixed an issue where wallets could be detected prematurely before the document finished loading.
+
 ## 0.43.0
 
 ### Minor Changes
