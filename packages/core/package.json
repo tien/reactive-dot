@@ -44,12 +44,12 @@
   },
   "devDependencies": {
     "@reactive-dot/eslint-config": "workspace:^",
-    "@tsconfig/recommended": "^1.0.9",
+    "@tsconfig/recommended": "^1.0.10",
     "@tsconfig/strictest": "^2.0.5",
-    "eslint": "^9.29.0",
+    "eslint": "^9.30.0",
     "polkadot-api": "^1.14.0",
     "typescript": "^5.8.3",
-    "vitest": "^3.2.3"
+    "vitest": "^3.2.4"
   },
   "peerDependencies": {
     "polkadot-api": ">=1.11.x"
