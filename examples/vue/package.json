@@ -13,7 +13,7 @@
     "@polkadot-api/descriptors": "portal:.papi/descriptors",
     "@reactive-dot/vue": "workspace:^",
     "polkadot-api": "^1.14.0",
-    "vue": "^3.5.16"
+    "vue": "^3.5.17"
   },
   "devDependencies": {
     "@reactive-dot/eslint-config": "workspace:^",
