@@ -32,7 +32,7 @@
     "test": "vitest"
   },
   "dependencies": {
-    "@ledgerhq/hw-transport-webusb": "^6.29.6",
+    "@ledgerhq/hw-transport-webusb": "^6.29.7",
     "@polkadot-api/ledger-signer": "^0.2.2",
     "@reactive-dot/core": "workspace:^",
     "buffer": "^6.0.3"
