@@ -1,6 +1,6 @@
 @font-face {
-  font-family: "Inter";
-  src: url("/font/Inter.ttf");
+  font-family: "Manrope";
+  src: url("/font/Manrope.ttf");
 }
 
 @font-face {
@@ -9,8 +9,8 @@
 }
 
 @font-face {
-  font-family: "Fira Code";
-  src: url("/font/FiraCode.ttf");
+  font-family: "Roboto Mono";
+  src: url("/font/RobotoMono.ttf");
 }
 
 :root {
@@ -22,11 +22,9 @@
   --ifm-color-primary-light: #cf006e;
   --ifm-color-primary-lighter: #c40068;
   --ifm-color-primary-lightest: #a10055;
-  --ifm-code-font-size: 95%;
-  --ifm-font-family-monospace: "Fira Code";
+  --ifm-font-family-base: "Manrope", sans-serif;
   --ifm-heading-font-family: "Unbounded", sans-serif;
-
-  font-family: "Inter", sans-serif;
+  --ifm-font-family-monospace: "Roboto Mono", monospace;
 }
 
 /* For readability concerns, you should choose a lighter palette in dark mode. */
