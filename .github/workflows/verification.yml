@@ -2,6 +2,11 @@ name: Verification
 
 on: [workflow_call]
 
+permissions:
+  contents: read
+  actions: read
+  id-token: write
+
 jobs:
   verify:
     runs-on: ubuntu-latest
