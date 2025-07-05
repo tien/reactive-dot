@@ -1,5 +1,6 @@
 import type * as Preset from "@docusaurus/preset-classic";
 import type { Config } from "@docusaurus/types";
+import type { PluginOptions as LlmsTxtPluginOptions } from "@signalwire/docusaurus-plugin-llms-txt";
 import path from "node:path";
 import { themes as prismThemes } from "prism-react-renderer";
 
@@ -74,6 +75,13 @@ const config: Config = {
           "packages/utils",
         ],
       },
+    ],
+    [
+      "@signalwire/docusaurus-plugin-llms-txt",
+      {
+        depth: 2,
+        content: { enableLlmsFullTxt: true },
+      } satisfies LlmsTxtPluginOptions,
     ],
   ],
 
