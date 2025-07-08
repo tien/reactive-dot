@@ -19,7 +19,7 @@ const { addresses } = defineProps<{
 }>();
 
 const { data: ledgers } = await useLazyLoadQuery((query) =>
-  query.readStorages(
+  query.storages(
     "Staking",
     "Ledger",
     addresses.map((address) => [address] as const),
@@ -59,7 +59,7 @@ const { addresses } = defineProps<{
 }>();
 
 const { data: ledgers } = await useLazyLoadQuery((query) =>
-  query.readStorages(
+  query.storages(
     "Staking",
     "Ledger",
     addresses.map((address) => [address] as const),

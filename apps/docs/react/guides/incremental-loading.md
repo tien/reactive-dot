@@ -15,7 +15,7 @@ import { useLazyLoadQuery } from "@reactive-dot/react";
 
 export function TotalStaked({ addresses }: { addresses: string[] }) {
   const ledgers = useLazyLoadQuery((query) =>
-    query.readStorages(
+    query.storages(
       "Staking",
       "Ledger",
       addresses.map((address) => [address] as const),
@@ -47,7 +47,7 @@ import { useLazyLoadQuery } from "@reactive-dot/react";
 
 export function TotalStaked({ addresses }: { addresses: string[] }) {
   const ledgers = useLazyLoadQuery((query) =>
-    query.readStorages(
+    query.storages(
       "Staking",
       "Ledger",
       addresses.map((address) => [address] as const),
