@@ -28,7 +28,12 @@ export class InjectedWallet extends Wallet<InjectedWalletOptions, "connected"> {
 
   async initialize() {
     if (this.storage.getItem("connected") !== null) {
-      await this.connect();
+      try {
+        await this.connect();
+      } catch (error) {
+        this.storage.removeItem("connected");
+        throw error;
+      }
     }
   }
 

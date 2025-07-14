@@ -214,4 +214,18 @@ describe("initialize", () => {
 
     expect(connectInjectedExtension).not.toHaveBeenCalled();
   });
+
+  it("stops trying to reconnect after failure", async () => {
+    // @ts-expect-error for testing purposes
+    wallet.storage.setItem("connected", JSON.stringify(true));
+
+    const error = new Error("Connection failed");
+    vi.mocked(connectInjectedExtension).mockRejectedValue(error);
+
+    await expect(wallet.initialize()).rejects.toThrow(error);
+    expect(vi.mocked(connectInjectedExtension)).toHaveBeenCalledOnce();
+
+    await expect(wallet.initialize()).resolves.not.toThrow();
+    expect(vi.mocked(connectInjectedExtension)).toHaveBeenCalledOnce();
+  });
 });
