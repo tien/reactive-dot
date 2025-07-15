@@ -1,6 +1,6 @@
 {
   "name": "@reactive-dot/wallet-ledger",
-  "version": "0.16.42",
+  "version": "0.16.43",
   "description": "Ledger adapter for Reactive DOT",
   "keywords": [
     "substrate",
