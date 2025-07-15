@@ -1,5 +1,11 @@
 # @reactive-dot/core
 
+## 0.43.2
+
+### Patch Changes
+
+- [#767](https://github.com/tien/reactive-dot/pull/767) [`68c6328`](https://github.com/tien/reactive-dot/commit/68c6328039038a80f7f03d1fa27d454d9f8f8626) Thanks [@tien](https://github.com/tien)! - Fixed repeated reconnection attempts after failure. The injected wallet will no longer continue trying to reconnect after the first failed attempt.
+
 ## 0.43.1
 
 ### Patch Changes
