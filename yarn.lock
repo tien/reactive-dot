@@ -4955,7 +4955,7 @@ __metadata:
     eslint: "npm:^9.30.1"
     jotai: "npm:^2.12.5"
     jotai-derive: "npm:^0.1.3"
-    jotai-effect: "npm:^2.0.4"
+    jotai-effect: "npm:^2.0.5"
     jsdom: "npm:^26.1.0"
     react: "npm:^19.1.0"
     typescript: "npm:^5.8.3"
@@ -13591,12 +13591,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"jotai-effect@npm:^2.0.4":
-  version: 2.0.4
-  resolution: "jotai-effect@npm:2.0.4"
+"jotai-effect@npm:^2.0.5":
+  version: 2.0.5
+  resolution: "jotai-effect@npm:2.0.5"
   peerDependencies:
     jotai: ">=2.12.1"
-  checksum: 10c0/11b0054dc1e1ae5cbc39bc7ea3303819052322e23ea313fc3aa5b7a585ff221efc76b0f84de2d1bcc2799ffe00949c2f00d6c53a77bbc107cf90871afc4c65ba
+  checksum: 10c0/62f38d2615da17a5c3c718d32493a8bde1a2d9be24fe2cef6da5df7e2e388d604ddb162e8c2b35bed322851259ca8ac36bbce439d0a81487ed9a576e03371fe2
   languageName: node
   linkType: hard
 
