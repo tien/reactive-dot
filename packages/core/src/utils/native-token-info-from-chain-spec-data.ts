@@ -1,8 +1,10 @@
 import type { ChainSpecData } from "@polkadot-api/substrate-client";
 
-export function nativeTokenInfoFromChainSpecData(chainSpecData: ChainSpecData) {
-  const symbol = chainSpecData.properties.tokenSymbol;
-  const decimals = chainSpecData.properties.tokenDecimals;
+export function nativeTokenInfoFromChainSpecData(
+  chainSpecData: Partial<ChainSpecData>,
+) {
+  const symbol = chainSpecData.properties?.tokenSymbol;
+  const decimals = chainSpecData.properties?.tokenDecimals;
 
   return {
     code:
