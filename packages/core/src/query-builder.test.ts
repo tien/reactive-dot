@@ -175,6 +175,7 @@ it("should append a read-contract instruction", () => {
           "body": {},
           "instruction": "send-message",
           "name": "testMessage",
+          "origin": undefined,
         },
       ],
     }
@@ -208,6 +209,7 @@ it("should append a multi read-contract instruction using contracts", () => {
           "body": {},
           "instruction": "send-message",
           "name": "testMessage",
+          "origin": undefined,
         },
       ],
       "multi": true,

@@ -63,7 +63,7 @@ export async function queryInk<
       }
 
       const response = await api.apis.ReviveApi.call(
-        toSs58Address(address, undefined, 238),
+        toSs58Address(instruction.origin ?? address, undefined, 238),
         toH160Bytes(address),
         0n,
         undefined,
