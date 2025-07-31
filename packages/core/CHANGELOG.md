@@ -1,5 +1,11 @@
 # @reactive-dot/core
 
+## 0.44.0
+
+### Minor Changes
+
+- [#781](https://github.com/tien/reactive-dot/pull/781) [`cfe99f2`](https://github.com/tien/reactive-dot/commit/cfe99f263ad2306a4a7e413ee54b0a27c189e657) Thanks [@tien](https://github.com/tien)! - Added support for specifying an `origin` (caller) when invoking a read-message on an Ink! contract.
+
 ## 0.43.2
 
 ### Patch Changes
