@@ -146,6 +146,7 @@ describe("message", () => {
           "body": undefined,
           "instruction": "send-message",
           "name": "test-message",
+          "origin": undefined,
         },
       ]
     `);
@@ -162,6 +163,7 @@ describe("message", () => {
           },
           "instruction": "send-message",
           "name": "test-message",
+          "origin": undefined,
         },
       ]
     `);
@@ -182,6 +184,7 @@ describe("message", () => {
           },
           "instruction": "send-message",
           "name": "test-message",
+          "origin": undefined,
         },
       ]
     `);
@@ -212,6 +215,7 @@ describe("messages", () => {
           "instruction": "send-message",
           "multi": true,
           "name": "test-message",
+          "origin": undefined,
         },
       ]
     `);
@@ -241,6 +245,7 @@ describe("messages", () => {
           "instruction": "send-message",
           "multi": true,
           "name": "test-message",
+          "origin": undefined,
         },
       ]
     `);

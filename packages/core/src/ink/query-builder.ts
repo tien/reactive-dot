@@ -8,7 +8,7 @@ import type {
   StringKeyOf,
 } from "../types.js";
 import type { UnwrapResult } from "./result.js";
-import type { GenericInkDescriptors } from "./types.js";
+import type { ContractAddress, GenericInkDescriptors } from "./types.js";
 
 type StorageReadInstruction = BaseInstruction<"read-storage"> & {
   path: string;
@@ -36,6 +36,7 @@ type MessageSendInstruction = BaseInstruction<"send-message"> & {
         [Str: string]: unknown;
       }
     | undefined;
+  origin: ContractAddress | undefined;
   at: Finality | undefined;
 };
 
@@ -196,11 +197,11 @@ export class InkQuery<
     > extends never
       ? [
           body: TDescriptor["__types"]["messages"][TName]["message"],
-          options?: { at?: Finality },
+          options?: { origin?: ContractAddress; at?: Finality },
         ]
       : [
           body?: TDescriptor["__types"]["messages"][TName]["message"],
-          options?: { at?: Finality },
+          options?: { origin?: ContractAddress; at?: Finality },
         ]
   ) {
     return this.#append({
@@ -208,6 +209,7 @@ export class InkQuery<
       // TODO: this is needed for some reason
       name: name as typeof name,
       body: bodyAndOptions[0] as any,
+      origin: bodyAndOptions[1]?.origin,
       at: bodyAndOptions[1]?.at,
     } satisfies MessageSendInstruction);
   }
@@ -221,7 +223,7 @@ export class InkQuery<
   >(
     name: TName,
     bodies: Array<TDescriptor["__types"]["messages"][TName]["message"]>,
-    options?: { at?: Finality; stream?: TStream },
+    options?: { origin?: ContractAddress; at?: Finality; stream?: TStream },
   ) {
     return this.#append({
       instruction: "send-message",
@@ -232,6 +234,7 @@ export class InkQuery<
       // TODO: this is needed for some reason
       name: name as typeof name,
       bodies,
+      origin: options?.origin,
       at: options?.at,
     } satisfies MultiMessageSendInstruction);
   }
