@@ -1,5 +1,11 @@
 # @reactive-dot/core
 
+## 0.44.1
+
+### Patch Changes
+
+- [#790](https://github.com/tien/reactive-dot/pull/790) [`5c85a5c`](https://github.com/tien/reactive-dot/commit/5c85a5ceee29bbfbc6f73f3e4db56284ffcee3b4) Thanks [@tien](https://github.com/tien)! - Resolved an issue where unexpected EVM accounts were being returned from injected wallets.
+
 ## 0.44.0
 
 ### Minor Changes
