@@ -53,6 +53,11 @@ export function getAccounts(
                     return undefined;
                   }
 
+                  // TODO: EVM accounts are getting mixed in here, which is not expected.
+                  if (polkadotSigner.publicKey.length === 20) {
+                    return undefined;
+                  }
+
                   return {
                     ...account,
                     polkadotSigner,
