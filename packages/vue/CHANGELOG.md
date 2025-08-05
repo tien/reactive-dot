@@ -1,5 +1,11 @@
 # @reactive-dot/vue
 
+## 0.45.0
+
+### Minor Changes
+
+- [#793](https://github.com/tien/reactive-dot/pull/793) [`4e2d46d`](https://github.com/tien/reactive-dot/commit/4e2d46df07b756de5cc89bb3548d0152bede8bc0) Thanks [@tien](https://github.com/tien)! - Added dedicated `useSpendableBalances` hook/composable.
+
 ## 0.44.0
 
 ### Patch Changes
