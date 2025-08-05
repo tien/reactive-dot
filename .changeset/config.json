@@ -4,7 +4,7 @@
   "baseBranch": "main",
   "changelog": [
     "@changesets/changelog-github",
-    { "repo": "tien/reactive-dot" }
+    { "repo": "buffed-labs/reactive-dot" }
   ],
   "privatePackages": false,
   "linked": [["@reactive-dot/core", "@reactive-dot/react", "@reactive-dot/vue"]]
