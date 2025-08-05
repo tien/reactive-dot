@@ -69,17 +69,17 @@ console.log(nativeToken.value.amountFromNumber(1).toLocaleString("en-NZ")); // D
 
 ## Spendable balance
 
-The [`useSpendableBalance`](/api/vue/function/useSpendableBalance) composable can be used to get the [spendable balance](https://wiki.polkadot.network/docs/learn-account-balances) of an account(s).
+The [`useSpendableBalance`](/api/react/function/useSpendableBalance) & [`useSpendableBalances`](/api/react/function/useSpendableBalances) composable can be used to get the [spendable balance](https://wiki.polkadot.network/docs/learn-account-balances) of an account(s).
 
 ```vue
 <script setup lang="ts">
-import { useSpendableBalance } from "@reactive-dot/vue";
+import { useSpendableBalance, useSpendableBalances } from "@reactive-dot/vue";
 
 const { data: spendableBalance } = await useSpendableBalance(ACCOUNT_ADDRESS);
 
 console.log(spendableBalance.toLocaleString("en-NZ")); // DOT 10.00
 
-const { data: spendableBalances } = await useSpendableBalance([
+const { data: spendableBalances } = await useSpendableBalances([
   ACCOUNT_ADDRESS_1,
   ACCOUNT_ADDRESS_2,
   ACCOUNT_ADDRESS_3,

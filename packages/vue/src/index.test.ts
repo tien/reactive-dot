@@ -6,6 +6,7 @@ it("should match inline snapshot", () =>
     [
       "useAccounts",
       "useSpendableBalance",
+      "useSpendableBalances",
       "useBlock",
       "useChainId",
       "useChainIds",

@@ -1,5 +1,5 @@
 import { DenominatedNumber } from "../../../utils/build/denominated-number.js";
-import { useSpendableBalance } from "./use-balance.js";
+import { useSpendableBalance, useSpendableBalances } from "./use-balance.js";
 import { useNativeTokenAmountFromPlanck } from "./use-native-token-amount.js";
 import { useLazyLoadQuery } from "./use-query.js";
 import { idle, Query } from "@reactive-dot/core";
@@ -77,7 +77,7 @@ it("should return spendable balance for single address", () => {
 
 it("should return spendable balances array for multiple addresses", () => {
   const { result } = renderHook(() =>
-    useSpendableBalance([
+    useSpendableBalances([
       "5GrwvaEF5zXb26Fz9rcQpDWS57CtERHpNehXCPcNoHGKutQY",
       "5FHneW46xGXgs5mUiveU4sbTyGBzmstUspZC92UhjJM694ty",
     ]),
@@ -93,7 +93,7 @@ it("should return spendable balances array for multiple addresses", () => {
 
 it("should return spendable balances array for an array of one address", () => {
   const { result } = renderHook(() =>
-    useSpendableBalance(["5GrwvaEF5zXb26Fz9rcQpDWS57CtERHpNehXCPcNoHGKutQY"]),
+    useSpendableBalances(["5GrwvaEF5zXb26Fz9rcQpDWS57CtERHpNehXCPcNoHGKutQY"]),
   );
 
   expect(result.current).toEqual(

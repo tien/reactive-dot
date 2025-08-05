@@ -38,6 +38,7 @@ export function useSpendableBalance(
 /**
  * Hook for getting accounts’ spendable balances.
  *
+ * @deprecated Use {@link useSpendableBalances} instead.
  * @param addresses  - The account-addresses
  * @param options - Additional options
  * @returns The accounts’ spendable balances
@@ -88,4 +89,18 @@ export function useSpendableBalance(
   );
 
   return Array.isArray(addressOrAddresses) ? balances : balances[0]!;
+}
+
+/**
+ * Hook for getting accounts’ spendable balances.
+ *
+ * @param addresses  - The account-addresses
+ * @param options - Additional options
+ * @returns The accounts’ spendable balances
+ */
+export function useSpendableBalances(
+  addresses: SS58String[],
+  options?: Options,
+) {
+  return useSpendableBalance(addresses, options);
 }

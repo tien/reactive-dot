@@ -80,16 +80,16 @@ const amountFromPlanck = useNativeTokenAmountFromPlanck();
 
 ## Spendable balance
 
-The [`useSpendableBalance`](/api/react/function/useSpendableBalance) hook can be used to get the [spendable balance](https://wiki.polkadot.network/docs/learn-account-balances) of an account(s).
+The [`useSpendableBalance`](/api/react/function/useSpendableBalance) & [`useSpendableBalances`](/api/react/function/useSpendableBalances) hooks can be used to get the [spendable balance](https://wiki.polkadot.network/docs/learn-account-balances) of an account(s).
 
 ```ts
-import { useSpendableBalance } from "@reactive-dot/react";
+import { useSpendableBalance, useSpendableBalances } from "@reactive-dot/react";
 
 const spendableBalance = useSpendableBalance(ACCOUNT_ADDRESS);
 
 console.log(spendableBalance.toLocaleString("en-NZ")); // DOT 10.00
 
-const spendableBalances = useSpendableBalance([
+const spendableBalances = useSpendableBalances([
   ACCOUNT_ADDRESS_1,
   ACCOUNT_ADDRESS_2,
   ACCOUNT_ADDRESS_3,
