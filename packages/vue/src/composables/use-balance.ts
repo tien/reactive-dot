@@ -45,6 +45,7 @@ export function useSpendableBalance(
 /**
  * Composable for getting accounts’ spendable balances.
  *
+ * @deprecated Use {@link useSpendableBalances} instead.
  * @param addresses  - The account-addresses
  * @param options - Additional options
  * @returns The accounts’ spendable balances
@@ -120,4 +121,18 @@ export function useSpendableBalance(
       },
     ),
   );
+}
+
+/**
+ * Composable for getting accounts’ spendable balances.
+ *
+ * @param addresses  - The account-addresses
+ * @param options - Additional options
+ * @returns The accounts’ spendable balances
+ */
+export function useSpendableBalances(
+  addresses: MaybeRefOrGetter<SS58String[]>,
+  options?: Options,
+) {
+  return useSpendableBalance(addresses, options);
 }

@@ -1,7 +1,7 @@
 import { DenominatedNumber } from "../../../utils/build/denominated-number.js";
 import { chainIdKey } from "../keys.js";
 import { withSetup } from "../test-utils.js";
-import { useSpendableBalance } from "./use-balance.js";
+import { useSpendableBalance, useSpendableBalances } from "./use-balance.js";
 import { useNativeTokenPromise } from "./use-native-token.js";
 import { useQueryObservable } from "./use-query.js";
 import { Query } from "@reactive-dot/core";
@@ -82,7 +82,7 @@ it("should return spendable balance for single address", async () => {
 it("should return spendable balances array for multiple addresses", async () => {
   const { result } = withSetup(
     () =>
-      useSpendableBalance([
+      useSpendableBalances([
         "5GrwvaEF5zXb26Fz9rcQpDWS57CtERHpNehXCPcNoHGKutQY",
         "5FHneW46xGXgs5mUiveU4sbTyGBzmstUspZC92UhjJM694ty",
       ]),
@@ -100,7 +100,9 @@ it("should return spendable balances array for multiple addresses", async () => 
 it("should return spendable balances array for an array of one address", async () => {
   const { result } = withSetup(
     () =>
-      useSpendableBalance(["5GrwvaEF5zXb26Fz9rcQpDWS57CtERHpNehXCPcNoHGKutQY"]),
+      useSpendableBalances([
+        "5GrwvaEF5zXb26Fz9rcQpDWS57CtERHpNehXCPcNoHGKutQY",
+      ]),
     { [chainIdKey]: "test-chain-id" },
   );
 

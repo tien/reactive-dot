@@ -11,6 +11,7 @@ it("should match inline snapshot", () =>
       "SignerProvider",
       "useAccounts",
       "useSpendableBalance",
+      "useSpendableBalances",
       "useBlock",
       "useChainId",
       "useChainIds",
