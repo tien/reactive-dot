@@ -12,7 +12,7 @@ const config: Config = {
   url: "https://reactivedot.dev",
   baseUrl: "/",
 
-  organizationName: "tien",
+  organizationName: "buffed-labs",
   projectName: "reactive-dot",
 
   onBrokenLinks: "throw",
