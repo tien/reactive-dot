@@ -31,7 +31,8 @@ const config: Config = {
           path: "react",
           routeBasePath: "react",
           sidebarPath: "./sidebars.ts",
-          editUrl: "https://github.com/tien/reactive-dot/tree/main/apps/docs",
+          editUrl:
+            "https://github.com/buffed-labs/reactive-dot/tree/main/apps/docs",
           remarkPlugins: [
             [require("@docusaurus/remark-plugin-npm2yarn"), { sync: true }],
           ],
@@ -51,7 +52,8 @@ const config: Config = {
         path: "vue",
         routeBasePath: "vue",
         sidebarPath: "./sidebars.ts",
-        editUrl: "https://github.com/tien/reactive-dot/tree/main/apps/docs",
+        editUrl:
+          "https://github.com/buffed-labs/reactive-dot/tree/main/apps/docs",
         remarkPlugins: [
           [require("@docusaurus/remark-plugin-npm2yarn"), { sync: true }],
         ],
@@ -111,7 +113,7 @@ const config: Config = {
           label: "API",
         },
         {
-          href: "https://github.com/tien/reactive-dot",
+          href: "https://github.com/buffed-labs/reactive-dot",
           label: "GitHub",
           position: "right",
         },

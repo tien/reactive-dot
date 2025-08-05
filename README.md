@@ -1,4 +1,4 @@
-[![codecov](https://codecov.io/gh/tien/reactive-dot/graph/badge.svg?token=Q97JBVAD19)](https://codecov.io/gh/tien/reactive-dot)
+[![codecov](https://codecov.io/gh/buffed-labs/reactive-dot/graph/badge.svg?token=Q97JBVAD19)](https://codecov.io/gh/buffed-labs/reactive-dot)
 
 # ReactiveDOT
 

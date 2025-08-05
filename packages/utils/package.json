@@ -8,14 +8,14 @@
   ],
   "homepage": "https://reactivedot.dev/",
   "bugs": {
-    "url": "https://github.com/tien/reactive-dot/issues",
+    "url": "https://github.com/buffed-labs/reactive-dot/issues",
     "email": "tien.nguyenkhac@icloud.com"
   },
   "license": "LGPL-3.0-or-later",
   "author": "Tiến Nguyễn Khắc <tien.nguyenkhac@icloud.com> (https://tien.zone/)",
   "repository": {
     "type": "git",
-    "url": "https://github.com/tien/reactive-dot.git",
+    "url": "https://github.com/buffed-labs/reactive-dot.git",
     "directory": "packages/utils"
   },
   "type": "module",
