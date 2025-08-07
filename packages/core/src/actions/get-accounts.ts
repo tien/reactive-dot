@@ -11,9 +11,14 @@ import { map, switchMap } from "rxjs/operators";
 export function getAccounts(
   wallets: MaybeAsync<Wallet[]>,
   chainSpec?: MaybeAsync<ChainSpecData>,
+  fallbackChainSpec?: MaybeAsync<ChainSpecData>,
 ) {
-  return combineLatest([toObservable(wallets), toObservable(chainSpec)]).pipe(
-    switchMap(([wallets, chainSpec]) => {
+  return combineLatest([
+    toObservable(wallets),
+    toObservable(chainSpec),
+    toObservable(fallbackChainSpec),
+  ]).pipe(
+    switchMap(([wallets, chainSpec, fallbackChainSpec]) => {
       if (wallets.length === 0) {
         return of([]);
       }
@@ -36,12 +41,14 @@ export function getAccounts(
                       return account.polkadotSigner;
                     }
 
-                    if (chainSpec === undefined) {
+                    const safeChainSpec = chainSpec ?? fallbackChainSpec;
+
+                    if (safeChainSpec === undefined) {
                       return undefined;
                     }
 
                     const nativeTokenInfo =
-                      nativeTokenInfoFromChainSpecData(chainSpec);
+                      nativeTokenInfoFromChainSpecData(safeChainSpec);
 
                     return account.polkadotSigner({
                       tokenSymbol: nativeTokenInfo.code ?? "",
