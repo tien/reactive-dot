@@ -1,5 +1,12 @@
 # @reactive-dot/wallet-ledger
 
+## 0.16.46
+
+### Patch Changes
+
+- Updated dependencies [[`2d7be44`](https://github.com/buffed-labs/reactive-dot/commit/2d7be4468ab0e66b6c26e9bfa9c92be0054c3c16)]:
+  - @reactive-dot/core@0.46.0
+
 ## 0.16.45
 
 ### Patch Changes

@@ -1,5 +1,11 @@
 # @reactive-dot/core
 
+## 0.46.0
+
+### Minor Changes
+
+- [#798](https://github.com/buffed-labs/reactive-dot/pull/798) [`2d7be44`](https://github.com/buffed-labs/reactive-dot/commit/2d7be4468ab0e66b6c26e9bfa9c92be0054c3c16) Thanks [@tien](https://github.com/tien)! - Added a fallback mechanism for chainspec when fetching accounts. This improves compatibility with wallets that require a chainspec, such as Ledger devices.
+
 ## 0.44.1
 
 ### Patch Changes
