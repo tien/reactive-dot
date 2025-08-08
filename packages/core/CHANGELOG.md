@@ -1,5 +1,11 @@
 # @reactive-dot/core
 
+## 0.46.1
+
+### Patch Changes
+
+- [#802](https://github.com/buffed-labs/reactive-dot/pull/802) [`09da71c`](https://github.com/buffed-labs/reactive-dot/commit/09da71c7d72a276e70c001b16e33d90298c9ae86) Thanks [@tien](https://github.com/tien)! - Fixed incorrect type optionality in Ink! TX body.
+
 ## 0.46.0
 
 ### Minor Changes
