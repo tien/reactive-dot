@@ -47,7 +47,7 @@
     "@tsconfig/recommended": "^1.0.10",
     "@tsconfig/strictest": "^2.0.5",
     "eslint": "^9.32.0",
-    "polkadot-api": "^1.15.1",
+    "polkadot-api": "^1.15.4",
     "typescript": "^5.8.3",
     "vitest": "^3.2.4"
   },
