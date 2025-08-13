@@ -3028,16 +3028,16 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@docusaurus/remark-plugin-npm2yarn@npm:^3.5.2":
-  version: 3.5.2
-  resolution: "@docusaurus/remark-plugin-npm2yarn@npm:3.5.2"
+"@docusaurus/remark-plugin-npm2yarn@npm:^3.8.1":
+  version: 3.8.1
+  resolution: "@docusaurus/remark-plugin-npm2yarn@npm:3.8.1"
   dependencies:
     mdast-util-mdx: "npm:^3.0.0"
-    npm-to-yarn: "npm:^2.2.1"
+    npm-to-yarn: "npm:^3.0.0"
     tslib: "npm:^2.6.0"
     unified: "npm:^11.0.3"
     unist-util-visit: "npm:^5.0.0"
-  checksum: 10c0/a9a7f212e0fad41c9c74184259eca37a838b6637b382f4ddee47f533036c292b0d6bdfcde93d8d7bed259baf8d4a36c7dd1456bfeb8bde5c4d92d3b4c7a99db7
+  checksum: 10c0/607b11246f8267b1568325fd2a1f6002cf03f6214f8314070ce8f749b5002e09a314ac5325efed9f95f84853ade23ffa44f7ea23be4086c228ed8a86edd9d0af
   languageName: node
   linkType: hard
 
@@ -3138,10 +3138,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@docusaurus/tsconfig@npm:3.5.2":
-  version: 3.5.2
-  resolution: "@docusaurus/tsconfig@npm:3.5.2"
-  checksum: 10c0/1cde5cfadfc94605ba9a1ec8484bc58700bcff99944fa20c6f6d93599126914dc33f15c3464ee3279cf6becafcea86909d1d25a20f8f97e95c8ddf6b1122eac8
+"@docusaurus/tsconfig@npm:3.8.1":
+  version: 3.8.1
+  resolution: "@docusaurus/tsconfig@npm:3.8.1"
+  checksum: 10c0/137aad26f2f3cf7b36a80b36f25170cdb00f51d03e8aa10d4c7eaa2550770ec48d269ce016d852f13c9390176b70bbbb87af4946c4ca891d4be1f61a745a95a5
   languageName: node
   linkType: hard
 
@@ -4958,8 +4958,8 @@ __metadata:
     "@docusaurus/core": "npm:^3.5.2"
     "@docusaurus/module-type-aliases": "npm:3.5.2"
     "@docusaurus/preset-classic": "npm:^3.5.2"
-    "@docusaurus/remark-plugin-npm2yarn": "npm:^3.5.2"
-    "@docusaurus/tsconfig": "npm:3.5.2"
+    "@docusaurus/remark-plugin-npm2yarn": "npm:^3.8.1"
+    "@docusaurus/tsconfig": "npm:3.8.1"
     "@docusaurus/types": "npm:3.5.2"
     "@mdx-js/react": "npm:^3.1.0"
     "@signalwire/docusaurus-plugin-llms-txt": "npm:^1.2.2"
@@ -15769,10 +15769,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"npm-to-yarn@npm:^2.2.1":
-  version: 2.2.1
-  resolution: "npm-to-yarn@npm:2.2.1"
-  checksum: 10c0/65c696a3e595facad802b6b13c04e504806ea88fd4f87ab758f8042c19f65b4c4822815a47095df944b0809a95e574c27323c33cca5533f8454515eaa6e14fac
+"npm-to-yarn@npm:^3.0.0":
+  version: 3.0.1
+  resolution: "npm-to-yarn@npm:3.0.1"
+  checksum: 10c0/f0a72bfc0ed2ad50c5995511ff6442520d259aee5a58e1b0914572a33d29c07090a684a1d8ce95d2399dfe9bc51e649e8d029b0118ecf941f40212053693caca
   languageName: node
   linkType: hard
 
