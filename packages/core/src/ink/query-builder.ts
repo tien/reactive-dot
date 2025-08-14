@@ -141,7 +141,10 @@ export class InkQuery<
     >,
   >(
     path: TPath,
-    ...keyAndOptions: TDescriptor["__types"]["storage"][TPath]["key"] extends undefined
+    ...[
+      key,
+      options,
+    ]: TDescriptor["__types"]["storage"][TPath]["key"] extends undefined
       ? [
           key?: TDescriptor["__types"]["storage"][TPath]["key"],
           options?: { at?: Finality },
@@ -154,8 +157,8 @@ export class InkQuery<
     return this.#append({
       instruction: "read-storage",
       path,
-      key: keyAndOptions[0] as any,
-      at: keyAndOptions[1]?.at,
+      key: key as any,
+      at: options?.at,
     } satisfies StorageReadInstruction);
   }
 
@@ -190,7 +193,7 @@ export class InkQuery<
     >,
   >(
     name: TName,
-    ...bodyAndOptions: Extract<
+    ...[body, options]: Extract<
       // eslint-disable-next-line @typescript-eslint/no-empty-object-type
       undefined | {},
       TDescriptor["__types"]["messages"][TName]["message"]
@@ -208,9 +211,9 @@ export class InkQuery<
       instruction: "send-message",
       // TODO: this is needed for some reason
       name: name as typeof name,
-      body: bodyAndOptions[0] as any,
-      origin: bodyAndOptions[1]?.origin,
-      at: bodyAndOptions[1]?.at,
+      body,
+      origin: options?.origin,
+      at: options?.at,
     } satisfies MessageSendInstruction);
   }
 

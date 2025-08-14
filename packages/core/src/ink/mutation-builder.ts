@@ -19,7 +19,7 @@ export type InkMutationBuilder = <
   contract: Contract<TDescriptor>,
   address: string,
   message: TMessageName,
-  ..._: InkTxBody<TDescriptor, TMessageName> extends Record<string, never>
+  ...[body]: InkTxBody<TDescriptor, TMessageName> extends Record<string, never>
     ? [body?: InkTxBody<TDescriptor, TMessageName>]
     : [body: InkTxBody<TDescriptor, TMessageName>]
 ) => MaybePromise<GenericTransaction>;
