@@ -292,7 +292,7 @@ export class Query<
   >(
     pallet: TPallet,
     storage: TStorage,
-    ...argsAndOptions: InferPapiStorageEntry<
+    ...[args, options]: InferPapiStorageEntry<
       TypedApi<TDescriptor>["query"][TPallet][TStorage]
     >["args"] extends []
       ? [
@@ -308,8 +308,6 @@ export class Query<
           options?: { at?: At },
         ]
   ) {
-    const [args, options] = argsAndOptions;
-
     return this.#append({
       instruction: "read-storage",
       pallet,
@@ -387,7 +385,7 @@ export class Query<
   >(
     pallet: TPallet,
     api: TApi,
-    ...argsAndOptions: InferPapiRuntimeCall<
+    ...[args, options]: InferPapiRuntimeCall<
       TypedApi<TDescriptor>["apis"][TPallet][TApi]
     >["args"] extends []
       ? [
@@ -403,8 +401,6 @@ export class Query<
           options?: { at?: Finality },
         ]
   ) {
-    const [args, options] = argsAndOptions;
-
     return this.#append({
       instruction: "call-api",
       pallet,
