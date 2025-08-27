@@ -4362,6 +4362,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@noble/hashes@npm:^2.0.0":
+  version: 2.0.0
+  resolution: "@noble/hashes@npm:2.0.0"
+  checksum: 10c0/4c619df392164ea8655c630e753e791e1afb5f38cb746463d36509f684a197c3c653858b6a78135a0b54c80270a66f28003d5999ec1ad06cec0d658bf720a03f
+  languageName: node
+  linkType: hard
+
 "@nodelib/fs.scandir@npm:2.1.5":
   version: 2.1.5
   resolution: "@nodelib/fs.scandir@npm:2.1.5"
@@ -4972,7 +4979,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@reactive-dot/core@workspace:packages/core"
   dependencies:
-    "@noble/hashes": "npm:^1.8.0"
+    "@noble/hashes": "npm:^2.0.0"
     "@reactive-dot/eslint-config": "workspace:^"
     "@reactive-dot/utils": "workspace:^"
     "@substrate/smoldot-discovery": "npm:^2.0.2"
